@@ -43,3 +43,31 @@ body {
 .table-wrapper tbody tr:hover {
   background-color: #48a8001a;
 }
+.ant-tabs-tab,
+.ant-tabs-tab-active {
+  font-weight: 600;
+  min-width: 200px;
+  text-align: center;
+  @apply flex items-center justify-center;
+  border: none !important;
+  font-size: 16px !important;
+  padding: 15px 20px !important;
+}
+.ant-tabs-tab {
+  background: white !important;
+  color: #8181a5 !important;
+}
+.ant-tabs-tab-active {
+  background: #48a8001a !important;
+}
+.ant-tabs-tab-active .ant-tabs-tab-btn,
+.ant-tabs-tab:hover .ant-tabs-tab-btn {
+  color: #48a800 !important;
+}
+.ant-tabs-nav {
+  padding: 20px 20px 0 20px;
+  margin: 0 !important;
+}
+.ant-tabs-nav::before {
+  border-bottom: none !important;
+}

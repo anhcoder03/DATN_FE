@@ -52,6 +52,29 @@ const menuProduct: TMenu[] = [
   },
 ];
 
+const menuConfiguration: TMenu[] = [
+  {
+    path: "/configuration/user",
+    title: "Nhân viên",
+    icon: <IconProduct />,
+  },
+  {
+    path: "/configuration/title",
+    title: "Chức danh",
+    icon: <IconFolder />,
+  },
+  {
+    path: "/configuration/department",
+    title: "Phòng khám",
+    icon: <IconFolder />,
+  },
+  {
+    path: "/configuration/service",
+    title: "Dịch vụ",
+    icon: <IconFolder />,
+  },
+];
+
 const Sidebar = () => {
   const NavLinkClass = "block font-medium py-3 pl-10  border-l-[5px] text-sm";
   return (
@@ -128,6 +151,28 @@ const Sidebar = () => {
             <h4 className="font-medium px-5 py-3 text-xs">SẢN PHẨM</h4>
             <div className="flex flex-col ">
               {menuProduct?.map((item) => (
+                <NavLink
+                  key={item.title}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    isActive
+                      ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
+                      : `hover:text-primary ${NavLinkClass}`
+                  }
+                >
+                  <div className="flex items-center gap-x-3">
+                    <span>{item.icon}</span>
+                    <span>{item.title}</span>
+                  </div>
+                </NavLink>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-medium px-5 py-3 text-xs">CẤU HÌNH</h4>
+            <div className="flex flex-col ">
+              {menuConfiguration?.map((item) => (
                 <NavLink
                   key={item.title}
                   to={item.path}
