@@ -1,9 +1,7 @@
 import React from "react";
 
-interface Props {}
-
-const Login = (props: Props) => {
-  return <div>Login</div>;
+const Login = () => {
+  return <div></div>;
 };
 
 export default Login;
