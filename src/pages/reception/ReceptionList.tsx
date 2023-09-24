@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "../../components/table";
 import { Layout } from "../../components/layout";
 import Heading from "../../components/common/Heading";
+import { Filter } from "../../components/filters";
 
 const headings = [
   "Tên bệnh nhân",
@@ -16,6 +17,7 @@ const ReceptionList = () => {
   return (
     <Layout>
       <Heading>Danh sách tiếp đón bệnh nhân</Heading>
+      <Filter></Filter>
       <Table headings={headings}>
         <tr>
           <td>Nguyễn Phi Anh</td>

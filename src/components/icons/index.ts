@@ -5,3 +5,6 @@ export { default as IconDocument } from "./IconDocument";
 export { default as IconUser } from "./IconUser";
 export { default as IconProduct } from "./IconProduct";
 export { default as IconFolder } from "./IconFolder";
+export { default as IconSearch } from "./IconSearch";
+export { default as IconSetting } from "./IconSetting";
+export { default as IconPlus } from "./IconPlus";
