@@ -1,9 +1,7 @@
 import React from "react";
 
-interface Props {}
-
-const Register = (props: Props) => {
-  return <div>Register</div>;
+const Register = () => {
+  return <div></div>;
 };
 
 export default Register;
