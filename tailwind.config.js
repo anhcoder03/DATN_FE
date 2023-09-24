@@ -6,6 +6,8 @@ export default {
       colors: {
         primary: "#48a800",
         primary50: "#48a8001a",
+        gray4B: "#4b4b5a",
+        grayF3: "#f3f4f7",
       },
     },
   },

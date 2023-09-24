@@ -1,8 +1,19 @@
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home";
+import ReceptionList from "./pages/reception/ReceptionList";
 function App() {
+  const router = createBrowserRouter([
+    { path: "", element: <Home /> },
+    {
+      path: "reception",
+      element: <ReceptionList />,
+    },
+  ]);
   return (
-    <div className="border-l-8 border-l-primary">
-      <h1 className="px-5 py-3 text-primary bg-primary50 ">Helloo</h1>
-    </div>
+    <React.Fragment>
+      <RouterProvider router={router} />
+    </React.Fragment>
   );
 }
 
