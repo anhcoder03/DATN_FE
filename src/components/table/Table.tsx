@@ -12,10 +12,12 @@ const Table = ({ children, loading, length, headings }: ITableProps) => {
   return (
     <div className="table-wrapper">
       <table>
-        <thead>
-          <tr>
+        <thead className="">
+          <tr className="">
             {headings?.map((heading, index) => (
-              <th key={index}>{heading}</th>
+              <th className="" key={index}>
+                {heading}
+              </th>
             ))}
           </tr>
         </thead>
