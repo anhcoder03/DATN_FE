@@ -3,9 +3,9 @@ import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
 import AppModal from "../modal/Modal";
 import AppSelect from "../select/Select";
-import { optionClinic } from "../../constants/options";
+import { optionDoctor, optionNVCS } from "../../constants/options";
 
-const Filter = () => {
+const FilterReceptionBook = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -27,48 +27,25 @@ const Filter = () => {
     <div className="">
       <div className="flex justify-between bg-white flex-wrap p-5 items-center rounded-tl-lg rounded-tr-lg">
         <div className="filter-wrapper flex items-center gap-2">
-          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[350px]">
             <IconSearch></IconSearch>
             <input
               type="text"
-              className="bg-transparent outline-none border-none"
-              placeholder="Tên bệnh nhân"
+              className="bg-transparent outline-none border-none w-full"
+              placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
             />
           </div>
-          <div className="filter-status">
-            <AppSelect options={optionClinic}></AppSelect>
-          </div>
-          <div className="filter-room">
-            <select
-              name=""
-              id=""
-              className="h-[40px] w-[200px] bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg outline-none"
-            >
-              <option value="">-Phòng khám-</option>
-              <option value="">Phòng 1</option>
-              <option value="">Tầng 1 P203</option>
-              <option value="">Tầng 2 P203</option>
-              <option value="">Tầng 3 P203</option>
-            </select>
-          </div>
-          <div className="filter-doctor">
-            <select
-              name=""
-              id=""
-              className="h-[40px] w-[200px] bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg outline-none"
-            >
-              <option value="">-Bác sĩ-</option>
-              <option value="">Nguyễn Hồng Sơn</option>
-              <option value="">Nguyễn Phi Anh</option>
-              <option value="">Chu Tuấn Phương</option>
-              <option value="">Trần Minh Hiếu</option>
-            </select>
-          </div>
-          <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+          <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] ">
             <input
               type="date"
               className="bg-transparent outline-none border-none"
             />
+          </div>
+          <div className="filter-nvcs">
+            <AppSelect options={optionNVCS} width="300px"></AppSelect>
+          </div>
+          <div className="filter-doctor">
+            <AppSelect options={optionDoctor}></AppSelect>
           </div>
         </div>
         <div className="flex items-end gap-2">
@@ -96,4 +73,4 @@ const Filter = () => {
   );
 };
 
-export default Filter;
+export default FilterReceptionBook;

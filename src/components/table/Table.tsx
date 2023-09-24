@@ -24,14 +24,14 @@ const Table = ({ children, loading, length, headings }: ITableProps) => {
         <tbody className="w-full">
           {loading ? (
             <tr>
-              <td colSpan={headings?.length}>
+              <td colSpan={headings?.length} className="h-full hover:bg-white">
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: 40,
                   }}
+                  className="min-h-[500px]"
                 >
                   <LoadingSpinner />
                 </div>
@@ -40,16 +40,26 @@ const Table = ({ children, loading, length, headings }: ITableProps) => {
           ) : (length && length > 0) || length === undefined ? (
             children
           ) : (
-            <>
-              <tr>
-                <td
-                  colSpan={headings?.length}
-                  style={{ textAlign: "center", height: 40 }}
+            <tr>
+              <td colSpan={headings?.length} className="hover:bg-white">
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: 40,
+                  }}
+                  className="flex-col p-16"
                 >
-                  {"common.No data"}
-                </td>
-              </tr>
-            </>
+                  <img
+                    src="https://nutricms.staging.zsolution.vn/static/media/ic_row-empty.80f5a3dd.svg"
+                    alt=""
+                    className="h-full min-h-[350px] "
+                  />
+                  Không có dữ liệu!
+                </div>
+              </td>
+            </tr>
           )}
         </tbody>
       </table>

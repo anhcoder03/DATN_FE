@@ -8,6 +8,7 @@ export default {
         primary50: "#48a8001a",
         gray4B: "#4b4b5a",
         grayF3: "#f3f4f7",
+        gray16: "#16181b",
       },
     },
   },
