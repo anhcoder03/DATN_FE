@@ -20,7 +20,7 @@ const AppModal = ({
   headings,
 }: IModal) => {
   const [checked, setChecked] = useState<boolean[]>(
-    Array(headings.length).fill(false)
+    Array(headings?.length).fill(false)
   );
   const selectedHeading = useSelector(
     (state: any) => state.headings.selectedHeadings
@@ -32,7 +32,7 @@ const AppModal = ({
       try {
         if (selectedHeading) {
           dispatch(setSelectedHeadings(selectedHeading));
-          const initialChecked = Array(headings.length).fill(false);
+          const initialChecked = Array(headings?.length).fill(false);
           selectedHeading.forEach((column: any) => {
             const columnIndex = headings.findIndex(
               (heading) => heading === column
@@ -124,7 +124,7 @@ const AppModal = ({
           hiển thị
         </h2>
         <div className="max-h-[300px] overflow-y-auto">
-          {headings.map((item: any, index: number) => {
+          {headings?.map((item: any, index: number) => {
             return (
               <div
                 className="flex items-center justify-between px-5 py-2 border-b border-b-grayF3"

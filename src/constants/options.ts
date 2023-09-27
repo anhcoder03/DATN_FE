@@ -2,6 +2,14 @@ export interface IOption {
   value: string;
   label: string;
 }
+export interface IDataAddress {
+  code: number;
+  codename: string;
+  districts: [];
+  division_type: string;
+  name: string;
+  phone_code: number;
+}
 export const optionClinic: IOption[] = [
   { value: "", label: "-Phòng khám-" },
   { value: "phongkham1", label: "Phòng 1" },
