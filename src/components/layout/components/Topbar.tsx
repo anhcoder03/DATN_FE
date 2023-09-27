@@ -33,8 +33,10 @@ const Topbar = () => {
                 className="w-[50px] h-[50px] rounded-full object-cover"
               />
               <div className="flex flex-col">
-                <h4 className="text-gray4B font-bold">BS Nguyễn Phi Anh</h4>
-                <span className="text-sm">anhcoder03@gmail.com</span>
+                <h4 className="text-gray4B font-bold">
+                  BS Nguyễn Phi Anh Con Cặc
+                </h4>
+                <span className="text-sm">sonlabophianh03@gmail.com</span>
               </div>
             </div>
           </div>

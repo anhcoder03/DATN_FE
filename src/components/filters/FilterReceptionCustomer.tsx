@@ -46,9 +46,6 @@ const FilterReceptionCustomer = () => {
               className="bg-transparent outline-none border-none"
             />
           </div>
-          <div className="filter-nvcs">
-            <AppSelect options={optionNVCS} width="300px"></AppSelect>
-          </div>
           <div className="filter-doctor">
             <AppSelect options={optionDoctor}></AppSelect>
           </div>

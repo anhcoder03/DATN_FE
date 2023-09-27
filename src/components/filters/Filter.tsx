@@ -5,7 +5,8 @@ import AppModal from "../modal/Modal";
 import AppSelect from "../select/Select";
 import { optionClinic } from "../../constants/options";
 
-const Filter = () => {
+const Filter = (props: any) => {
+  const { headings } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -87,6 +88,7 @@ const Filter = () => {
         </div>
       </div>
       <AppModal
+        headings={headings}
         open={open}
         loading={loading}
         handleCancel={handleCancel}

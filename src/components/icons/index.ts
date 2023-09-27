@@ -8,3 +8,4 @@ export { default as IconFolder } from "./IconFolder";
 export { default as IconSearch } from "./IconSearch";
 export { default as IconSetting } from "./IconSetting";
 export { default as IconPlus } from "./IconPlus";
+export { default as IconRectangle } from "./IconRectangle";
