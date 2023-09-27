@@ -5,7 +5,10 @@ import { Layout } from "../../components/layout";
 import FilterCustomer from "./components/FilterCustomer";
 import { getAllProduct } from "../../services/customer.service";
 import { ICustomer } from "../../types/customer.types";
-
+import CalcUtils from '../../helpers/CalcULtils';
+import moment from "moment";
+import IconEdit from '../../assets/images/icon-edit.png';
+import { toast } from "react-toastify";
 const CustommerList = () => {
   const [customers, setCustomers] = useState<ICustomer[]>([]);
   const headings = [
@@ -37,14 +40,22 @@ const CustommerList = () => {
           <tr className="text-xs">
             <td>{item._id}</td>
             <td>{item?.name}</td>
-            <td>{item?.dateOfBirth}</td>
+            <td>{CalcUtils.calculateAge(item?.dateOfBirth)}</td>
             <td>{item?.phone}</td>
             <td>{item?.gender}</td>
-            <td>{item?.createdAt}</td>
-            <td></td>
+            <td>{moment(item?.createdAt).format('DD/MM/YYYY')}</td>
+            <td>
+              <div className="table-action">
+                  <div className="button-nutri" onClick={() => {toast.error('Bạn không có quyền thực hiện thao tác này');
+                console.log('22');
+                }}><img width={20} height={20} src={IconEdit} alt="edit" /></div>
+                  <div className="button-nutri"><i className='uil-trash-alt'></i></div>
+              </div>
+            </td>
           </tr>
         ))}
       </Table>
+      
     </Layout>
   );
 };

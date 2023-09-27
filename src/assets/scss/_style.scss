@@ -1,0 +1,48 @@
+.table-action {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.button-nutri {
+  border: 1px solid #ececf2;
+  background: #fff;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+  .Toastify__toast {
+    border-radius: 10px;
+    padding: 20px;
+    /* background: #fff !important; */
+    border: 1px solid transparent;
+  }
+  
+  .Toastify__toast--success {
+    background: #00c292;
+    border-color: #00c292 !important;
+  }
+  
+  .Toastify__toast--error {
+    background: #e46a76;
+    border-color: #e46a76 !important;
+  }
+  
+  .Toastify__toast--info {
+    background: #03a9f3;
+    border-color: #03a9f3 !important;
+  }
+  
+  .Toastify__toast--warning {
+    background: #fec107;
+    border-color: #fec107 !important;
+  }
+  
+  .Toastify__close-button {
+    opacity: 1;
+  }
