@@ -46,7 +46,7 @@ const CustommerList = () => {
             <td>{moment(item?.createdAt).format('DD/MM/YYYY')}</td>
             <td>
               <div className="table-action">
-                  <div className="button-nutri" onClick={() => {toast.error('Bạn không có quyền thực hiện thao tác này');
+                  <div className="button-nutri" onClick={() => {toast.success('Bạn không có quyền thực hiện thao tác này');
                 console.log('22');
                 }}><img width={20} height={20} src={IconEdit} alt="edit" /></div>
                   <div className="button-nutri"><i className='uil-trash-alt'></i></div>
