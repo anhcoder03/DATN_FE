@@ -27,7 +27,7 @@ const CustommerList = () => {
       }
     }
     getAllCustomer();
-  }, [customers]);
+  }, []);
   return (
     <Layout>
       <Heading>Quản lý danh sách khách hàng</Heading>

@@ -10,9 +10,13 @@ const Layout = (props: Props) => {
   return (
     <>
       <Topbar></Topbar>
-      <div className="grid  grid-cols-[250px_minmax(0,1fr)]">
-        <Sidebar></Sidebar>
-        <div className="p-5 bg-grayF3">{props.children}</div>
+      <div className="grid  grid-cols-[250px_minmax(0,1fr)] ">
+        <div>
+          <Sidebar></Sidebar>
+        </div>
+        <div className="w-full min-h-screen overflow-x-hidden overscroll-y-auto mt-[67px] p-5 bg-grayF3">
+          {props.children}
+        </div>
       </div>
     </>
   );
