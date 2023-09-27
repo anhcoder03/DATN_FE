@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('./assets/scss/_style.scss');
+@import url('react-toastify/dist/ReactToastify.css');
+@import url('./assets/scss/_unicons.scss');
 body {
   font-family: "Lato", sans-serif;
   font-size: 14px;
@@ -135,4 +137,126 @@ input {
 }
 .ant-tabs-nav::before {
   border-bottom: none !important;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+// Toast
+.Toastify__toast {
+  border-radius: 10px;
+  // padding: 20px;
+  /* background: #fff !important; */
+  border: 1px solid transparent;
+}
+
+.Toastify__toast--success {
+  background: #00c292 !important;
+  border-color: #00c292 !important;
+}
+
+.Toastify__toast--error {
+  background: #e46a76 !important;
+  border-color: #e46a76 !important;
+}
+
+.Toastify__toast--info {
+  background: #03a9f3 !important;
+  border-color: #03a9f3 !important;
+}
+
+.Toastify__toast--warning {
+  background: #fec107 !important;
+  border-color: #fec107 !important;
+}
+
+.Toastify__close-button {
+  opacity: 1;
+  padding-top: 7px;
+  padding-left: 3px;
+  padding-right: 5px;
+}
+.Toastify__toast-icon {
+  display: none;
+}
+.Toastify__toast-body {
+  margin-left: 2px;
+  margin: auto 0;
+  flex: 1 1 auto;
+}
+.Toastify__toast-body > div:last-child {
+  word-break: break-all;
+  flex: 1;
+}
+// Flatpickr
+.flatpickr-input{
+  color: #000000;
+  font-weight: 500;
+}
+// hover focus
+.form-control ::hover ::active {
+  border-color: #4285f4!important
+}
+
+// react-select
+.react-select__control {
+  min-height: 34px;
+  min-height: unset;
+  border: none;
+  border-bottom: 1px solid #F0F0F3;
+  border-radius: 0;
+  &.dont-line{
+    border-bottom:none;
+  }
+
+  .react-select__value-container {
+    padding: 2px 8px;
+    min-height: 34px;
+    min-width: 170px;
+    .react-select__single-value {
+      // font-weight: 600;;
+      color:#252631;
+    }
+  }
+
+  .react-select__placeholder {
+    font-size: unset !important;
+  }
+
+  .react-select__input {
+    >input {
+      height: unset;
+    }
+  }
+
+  .react-select__indicator-separator {
+    display: none;
+  }
+
+  &.react-select__control--is-focused {
+    outline: none;
+    border: none;
+    box-shadow: none;
+    border: 1px solid #4285f4 !important;
+  }
+
+  &:hover {
+    // border: none;
+    border: 1px solid #4285f4 !important;
+  }
+  &:focus {
+    border: 1px solid #4285f4 !important;
+  } 
+  &:active {
+    border: 1px solid #4285f4 !important;
+  }
 }
