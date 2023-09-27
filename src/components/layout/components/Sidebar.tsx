@@ -1,5 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import {
   IconDate,
   IconDocument,
@@ -74,15 +76,22 @@ const menuConfiguration: TMenu[] = [
     icon: <IconFolder />,
   },
 ];
+const menuStatistical: TMenu[] = [
+  {
+    path: "/statistical/overview",
+    title: "Thống kê tổng quan",
+    icon: <IconProduct />,
+  },
+];
 
 const Sidebar = () => {
   const NavLinkClass = "block font-medium py-3 pl-10  border-l-[5px] text-sm";
   return (
     <React.Fragment>
-      <div className="shadowSidebar h-screen">
-        <div>
+      <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16">
+        <PerfectScrollbar>
           <div>
-            <h4 className="font-medium px-5 py-3 text-xs">KHÁM BỆNH</h4>
+            <h4 className="px-5 py-3 text-xs font-medium">KHÁM BỆNH</h4>
             <div className="flex flex-col ">
               {menuExamination?.map((item) => (
                 <NavLink
@@ -104,7 +113,7 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="font-medium px-5 py-3 text-xs">BÁN HÀNG</h4>
+            <h4 className="px-5 py-3 text-xs font-medium">BÁN HÀNG</h4>
             <div className="flex flex-col ">
               {menuSell?.map((item) => (
                 <NavLink
@@ -126,7 +135,7 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="font-medium px-5 py-3 text-xs">ĐỐI TÁC</h4>
+            <h4 className="px-5 py-3 text-xs font-medium">ĐỐI TÁC</h4>
             <div className="flex flex-col ">
               {menuPartner?.map((item) => (
                 <NavLink
@@ -148,7 +157,7 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="font-medium px-5 py-3 text-xs">SẢN PHẨM</h4>
+            <h4 className="px-5 py-3 text-xs font-medium">SẢN PHẨM</h4>
             <div className="flex flex-col ">
               {menuProduct?.map((item) => (
                 <NavLink
@@ -170,7 +179,7 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="font-medium px-5 py-3 text-xs">CẤU HÌNH</h4>
+            <h4 className="px-5 py-3 text-xs font-medium">CẤU HÌNH</h4>
             <div className="flex flex-col ">
               {menuConfiguration?.map((item) => (
                 <NavLink
@@ -190,7 +199,28 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-        </div>
+          <div>
+            <h4 className="px-5 py-3 text-xs font-medium">THỐNG KÊ</h4>
+            <div className="flex flex-col ">
+              {menuStatistical?.map((item) => (
+                <NavLink
+                  key={item.title}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    isActive
+                      ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
+                      : `hover:text-primary ${NavLinkClass}`
+                  }
+                >
+                  <div className="flex items-center gap-x-3">
+                    <span>{item.icon}</span>
+                    <span>{item.title}</span>
+                  </div>
+                </NavLink>
+              ))}
+            </div>
+          </div>
+        </PerfectScrollbar>
       </div>
     </React.Fragment>
   );
