@@ -6,15 +6,79 @@
 @import url('./assets/scss/_unicons.scss');
 body {
   font-family: "Lato", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   color: #585858;
 }
-
+input {
+  outline: none;
+}
+.input-primary:hover,
+.input-primary:focus {
+  @apply border border-b-primary border-transparent;
+}
+.input-primary {
+  @apply border border-b-transparent border-transparent border-b-[#f0f0f3];
+}
+.star-field {
+  @apply text-red-500 mr-1;
+}
 .shadowCustom {
   box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
 }
 .shadowSidebar {
   box-shadow: rgba(75, 75, 90, 0.075) 1px 0.05rem 0.01rem;
+}
+/* CSS */
+.ant-radio-wrapper.ant-radio-wrapper-checked .ant-radio-inner {
+  background-color: green; /* Thay đổi màu sắc ở đây */
+  border-color: green; /* Thay đổi màu viền ở đây nếu cần */
+}
+.react-select__placeholder {
+  color: #8181a5 !important;
+  font-size: 12px !important;
+}
+.react-select__control .react-select__indicator-separator {
+  display: none !important;
+}
+.css-1wa3eu0-placeholder {
+  color: rgb(128, 128, 128);
+  margin-left: 2px;
+  margin-right: 2px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+}
+/* CSS cho radio button không được chọn (không active) */
+.ant-radio-wrapper .ant-radio-inner {
+  background-color: white; /* Màu mặc định */
+  border-width: 5px;
+  border-color: #d9d9d9; /* Màu viền mặc định */
+}
+.form-group .react-select__control {
+  min-height: 34px;
+  min-height: unset;
+  border: none;
+  border-bottom: 1px solid #f0f0f3;
+  border-radius: 0;
+}
+.form-group .react-select__control:hover {
+  border: none;
+  border-bottom: 1px solid #48a800 !important;
+}
+.form-group .react-select__control .react-select__control--is-focused {
+  border-bottom: 1px solid #48a800 !important;
+  outline: none !important;
+  border: none !important;
+}
+.react-select__control {
+  .react-select__value-container {
+    padding-left: 0;
+  }
+  &:hover {
+    border: none;
+    border-bottom: 1px solid #f0f0f3;
+  }
 }
 //table
 .table-wrapper {

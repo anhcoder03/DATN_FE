@@ -1,13 +1,14 @@
-import React from "react";
 import Select from "react-select";
 import { IOption } from "../../constants/options";
 
 const AppSelect = ({
   options,
   width = "150px",
+  name,
 }: {
-  options: IOption[];
+  options: IOption[] | any;
   width?: string;
+  name?: string;
 }) => {
   return (
     <Select
@@ -18,6 +19,7 @@ const AppSelect = ({
           width: width,
         }),
       }}
+      name={name}
       defaultValue={options[0]}
       className="text-gray16"
       options={options}
