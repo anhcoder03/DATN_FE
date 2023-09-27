@@ -1,0 +1,28 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "benhnhan": "json-server",
+      "bacsi": "typicode",
+      "trieuchung": "typicode",
+      "trangthai": "typicode",
+      "dichvu": "typicode",
+      "phongkham": "typicode",
+      "hoadon": "typicode",
+      "kqbenh": "typicode",
+      "kqbenh2": "typicode"
+    },
+    {
+      "id": 2,
+      "benhnhan": "json-server",
+      "bacsi": "typicode",
+      "trieuchung": "typicode",
+      "trangthai": "typicode",
+      "dichvu": "typicode",
+      "phongkham": "typicode",
+      "hoadon": "typicode",
+      "kqbenh": "typicode",
+      "kqbenh2": "typicode"
+    }
+  ]
+}

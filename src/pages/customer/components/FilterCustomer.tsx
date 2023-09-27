@@ -58,7 +58,6 @@ const FilterCustomer = () => {
               //     handleChange({ target: { name: 'status', value: value.value } })
               // }}
               // value={StatusList?.filter((option: any) => filter?.status === option.value)}
-              styles={{}}
             ></Select>
           </div>
           <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">

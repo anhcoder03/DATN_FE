@@ -3,9 +3,13 @@ import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
 import AppModal from "../modal/Modal";
 import AppSelect from "../select/Select";
-import { optionClinic } from "../../constants/options";
-
-const Filter = () => {
+import { optionClinic, optionDoctor } from "../../constants/options";
+import Flatpickr from "react-flatpickr";
+import { Vietnamese } from "flatpickr/dist/l10n/vn";
+import IconCalendarBlack from '../../assets/images/icon/ic_calendar-black.svg';
+import Select from 'react-select'
+const Filter = (props: any) => {
+  const { headings } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -36,39 +40,47 @@ const Filter = () => {
             />
           </div>
           <div className="filter-status">
-            <AppSelect options={optionClinic}></AppSelect>
-          </div>
-          <div className="filter-room">
-            <select
-              name=""
-              id=""
-              className="h-[40px] w-[200px] bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg outline-none"
-            >
-              <option value="">-Phòng khám-</option>
-              <option value="">Phòng 1</option>
-              <option value="">Tầng 1 P203</option>
-              <option value="">Tầng 2 P203</option>
-              <option value="">Tầng 3 P203</option>
-            </select>
+            <Select
+              className="react-select"
+              classNamePrefix="react-select"
+              placeholder="-Phòng khám-"
+              options={optionClinic}
+              // onChange={(value: any) => {
+              //     handleChange({ target: { name: 'status', value: value.value } })
+              // }}
+              // value={StatusList?.filter((option: any) => filter?.status === option.value)}
+            ></Select>
           </div>
           <div className="filter-doctor">
-            <select
-              name=""
-              id=""
-              className="h-[40px] w-[200px] bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg outline-none"
-            >
-              <option value="">-Bác sĩ-</option>
-              <option value="">Nguyễn Hồng Sơn</option>
-              <option value="">Nguyễn Phi Anh</option>
-              <option value="">Chu Tuấn Phương</option>
-              <option value="">Trần Minh Hiếu</option>
-            </select>
+            <Select
+              className="react-select"
+              classNamePrefix="react-select"
+              placeholder="-Bác sĩ-"
+              options={optionDoctor}
+              // onChange={(value: any) => {
+              //     handleChange({ target: { name: 'status', value: value.value } })
+              // }}
+              // value={StatusList?.filter((option: any) => filter?.status === option.value)}
+            ></Select>
           </div>
           <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
-            <input
-              type="date"
-              className="bg-transparent outline-none border-none"
-            />
+            <Flatpickr
+              options={{
+                locale: Vietnamese,
+                allowInput: true,
+                dateFormat: "d/m/Y",
+                altInputClass: "date-range",
+                maxDate: "today",
+              }}
+              // onChange={([date]) => {
+              //   setValue("dateOfBirth", date);
+              // }}
+              placeholder="dd/mm/yyyy"
+              name="dateOfBirth"
+            ></Flatpickr>
+            <div className='flex items-center'>
+              <img src={IconCalendarBlack} alt="icon" />
+            </div>
           </div>
         </div>
         <div className="flex items-end gap-2">
@@ -87,6 +99,7 @@ const Filter = () => {
         </div>
       </div>
       <AppModal
+        headings={headings}
         open={open}
         loading={loading}
         handleCancel={handleCancel}

@@ -19,7 +19,6 @@ const Topbar = () => {
                 <IconMenu></IconMenu>
               </span>
             </div>
-
             <div className="flex items-center gap-x-10">
               <div className="relative">
                 <IconBell></IconBell>
