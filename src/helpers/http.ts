@@ -86,9 +86,7 @@ class Http {
       const response = await this.api.post(url, data);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
-        return error.response.data;
-      }
+      return error.response.data;
     }
   }
 
@@ -116,10 +114,10 @@ class Http {
 
   async delete(url: any, id: any) {
     try {
-      const response = await this.api.delete(url, id);
+      const response = await this.api.delete(`${url}/${id}`);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+      if (error.response) {
         return error.response.data;
       }
     }
