@@ -1,9 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('./assets/scss/_style.scss');
-@import url('react-toastify/dist/ReactToastify.css');
-@import url('./assets/scss/_unicons.scss');
+@import url("./assets/scss/_style.scss");
+@import url("react-toastify/dist/ReactToastify.css");
+@import url("./assets/scss/_unicons.scss");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 body {
   font-family: "Lato", sans-serif;
   font-size: 14px;
@@ -140,15 +145,15 @@ input {
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 // Toast
@@ -198,13 +203,13 @@ code {
   flex: 1;
 }
 // Flatpickr
-.flatpickr-input{
+.flatpickr-input {
   color: #000000;
   font-weight: 500;
 }
 // hover focus
 .form-control ::hover ::active {
-  border-color: #4285f4!important
+  border-color: #4285f4 !important;
 }
 
 // react-select
@@ -212,10 +217,10 @@ code {
   min-height: 34px;
   min-height: unset;
   border: none;
-  border-bottom: 1px solid #F0F0F3;
+  border-bottom: 1px solid #f0f0f3;
   border-radius: 0;
-  &.dont-line{
-    border-bottom:none;
+  &.dont-line {
+    border-bottom: none;
   }
 
   .react-select__value-container {
@@ -224,7 +229,7 @@ code {
     min-width: 170px;
     .react-select__single-value {
       // font-weight: 600;;
-      color:#252631;
+      color: #252631;
     }
   }
 
@@ -233,7 +238,7 @@ code {
   }
 
   .react-select__input {
-    >input {
+    > input {
       height: unset;
     }
   }
@@ -246,17 +251,53 @@ code {
     outline: none;
     border: none;
     box-shadow: none;
-    border: 1px solid #4285f4 !important;
+    border: 1px solid #48a800 !important;
   }
 
   &:hover {
     // border: none;
-    border: 1px solid #4285f4 !important;
+    border: 1px solid #48a800 !important;
   }
   &:focus {
-    border: 1px solid #4285f4 !important;
-  } 
-  &:active {
-    border: 1px solid #4285f4 !important;
+    border: 1px solid #48a800 !important;
   }
+  &:active {
+    border: 1px solid #48a800 !important;
+  }
+}
+
+//css phianh
+
+// modal delete
+.ant-modal-content {
+  width: 400px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.ant-modal-footer {
+  @apply flex items-center justify-center gap-x-3;
+}
+.ant-btn-default,
+.ant-btn-default:hover {
+  @apply bg-primary50 text-primary px-16 py-5 flex items-center justify-center;
+  border: none;
+}
+
+.ant-btn-primary {
+  @apply text-primary50 bg-primary px-16 py-5 flex items-center justify-center;
+  color: white !important;
+}
+:where(.css-dev-only-do-not-override-1vr7spz).ant-btn-default:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  color: #48a800;
+  border-color: none;
+}
+
+:where(.css-dev-only-do-not-override-1vr7spz).ant-btn-primary:not(
+    :disabled
+  ):not(.ant-btn-disabled):hover {
+  color: #fff;
+  background-color: #48a800;
 }

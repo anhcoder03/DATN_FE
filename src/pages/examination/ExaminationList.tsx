@@ -1,3 +1,4 @@
+import { Table } from "../../components/table";
 import { Layout } from "../../components/layout";
 import Heading from "../../components/common/Heading";
 import { Filter } from "../../components/filters";
