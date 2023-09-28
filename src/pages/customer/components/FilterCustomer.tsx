@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
+import { optionDoctor } from "../../../constants/options";
 import { optionGender } from "../../../constants/options";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../../assets/images/icon/ic_calendar-black.svg";
 import Select from "react-select";
-
 type TFilterCustomer = {
   handleSearch: (e: any) => void;
   handleGenderChange: (selectedOption: any) => void;
@@ -35,7 +35,8 @@ const FilterCustomer = ({
               onKeyDown={handleKeyDown}
             />
           </div>
-          <div className="filter-status">
+          <div className="filter-room"></div>
+          <div className="filter-doctor">
             <Select
               className="react-select"
               classNamePrefix="react-select"
@@ -85,5 +86,4 @@ const FilterCustomer = ({
     </div>
   );
 };
-
 export default FilterCustomer;

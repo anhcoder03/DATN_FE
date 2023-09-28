@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import AppModal from "../modal/Modal";
+import AppModal from "../modal/ModalExamination";
 import AppSelect from "../select/Select";
 import { optionClinic, optionDoctor } from "../../constants/options";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
-import IconCalendarBlack from '../../assets/images/icon/ic_calendar-black.svg';
-import Select from 'react-select'
+import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
+import Select from "react-select";
 const Filter = (props: any) => {
-  const { headings } = props;
+  const { columns } = props;
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -78,7 +78,7 @@ const Filter = (props: any) => {
               placeholder="dd/mm/yyyy"
               name="dateOfBirth"
             ></Flatpickr>
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>
@@ -99,7 +99,7 @@ const Filter = (props: any) => {
         </div>
       </div>
       <AppModal
-        headings={headings}
+        headings={columns}
         open={open}
         loading={loading}
         handleCancel={handleCancel}

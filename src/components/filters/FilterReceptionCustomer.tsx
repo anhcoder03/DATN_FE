@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import AppModal from "../modal/Modal";
+import AppModal from "../modal/ModalExamination";
 import AppSelect from "../select/Select";
 import {
   optionClinic,
