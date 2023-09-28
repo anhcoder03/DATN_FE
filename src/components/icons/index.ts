@@ -11,3 +11,4 @@ export { default as IconPlus } from "./IconPlus";
 export { default as IconRectangle } from "./IconRectangle";
 export { default as IconRadio } from "./IconRadio";
 export { default as IconPhone } from "./IconPhone";
+export { default as IconTrash } from "./IconTrash";

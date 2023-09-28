@@ -22,6 +22,11 @@ export const optionDoctor: IOption[] = [
   { value: "dfđ", label: "Nguyễn Phi Anh" },
   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 ];
+export const optionGender: IOption[] = [
+  { value: "", label: "-Giới tính-" },
+  { value: "Nam", label: "Nam" },
+  { value: "Nữ", label: "Nữ" },
+];
 export const optionNVCS: IOption[] = [
   { value: "", label: "-Nhân viên chăm sóc-" },
   { value: "bac", label: "Nguyễn Hồng Sơn" },

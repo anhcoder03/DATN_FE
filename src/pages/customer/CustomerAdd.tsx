@@ -14,6 +14,11 @@ import axios from "axios";
 import { Button } from "../../components/button";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+import { createCustomer } from "../../services/customer.service";
+import { useNavigate } from "react-router-dom";
 
 type TDataCustomer = {
   _id?: string;
@@ -25,18 +30,49 @@ type TDataCustomer = {
   dateOfBirth: Date;
 };
 
+const schema = yup.object({
+  name: yup.string().trim().required("Tên khách hàng không được để trống!"),
+  dateOfBirth: yup.string().required("Ngày sinh không được để trống!"),
+  phone: yup
+    .string()
+    .required("Số điện thoại không được để trống!")
+    .matches(/^(0[0-9]+)$/, "Số điện thoại không đúng định dạng")
+    .min(10, "Số điện thoại phải có ít nhất 10 chữ số")
+    .max(11, "Số điện thoại không được vượt quá 11 chữ số"),
+  citizenId: yup
+    .string()
+    .required("Số CCCD không được để trống!")
+    .matches(/^(0[0-9]+)$/, "Căn cước công dân không hợp lệ!")
+    .min(9, "Số CCCD phải có ít nhất 9 chữ số")
+    .max(12, "Số CCD không được vượt quá 12 chữ số"),
+});
+
 const CustomerAdd = () => {
   const onChange = (e: RadioChangeEvent) => {
     setGender(e.target.value);
   };
-  const [gender, setGender] = useState("nam");
+  const [gender, setGender] = useState("Nam");
   const [dataProvince, SetDataProvince] = useState([]);
   const [district, setDistrict] = useState([]);
-  // const [date, setDistrict] = useState([]);
+  const navigate = useNavigate();
   const [ward, setWard] = useState([]);
-  const { control, handleSubmit, setValue } = useForm<TDataCustomer>({});
-  const handleCreateCustomer = (values: TDataCustomer) => {
-    console.log({ ...values, gender });
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<TDataCustomer>({
+    resolver: yupResolver<any>(schema),
+  });
+  const handleCreateCustomer = async (values: TDataCustomer) => {
+    const data = { ...values, gender, creator: "650835d91fa3c100012c83d6" };
+    const res = await createCustomer(data);
+    if (res?.customer) {
+      toast.success(res?.message);
+      navigate("/customer");
+    } else {
+      toast.error(res.message);
+    }
   };
   useEffect(() => {
     async function getProvince() {
@@ -95,12 +131,20 @@ const CustomerAdd = () => {
   //     birthday: date[0] ? moment(date[0]) : undefined,
   //   });
   // };
+
+  useEffect(() => {
+    const arrayError = Object.values(errors);
+    if (arrayError.length > 0) {
+      toast.warning(arrayError[0]?.message);
+    }
+  });
+
   return (
     <Layout>
       <div className="relative h-full">
         <Heading>Thêm hồ sơ khách hàng</Heading>
         <form
-          className="max-w-[50%] w-full bg-white p-5"
+          className="w-full p-5 bg-white "
           onSubmit={handleSubmit(handleCreateCustomer)}
         >
           <Heading>Thông tin khách hàng</Heading>
@@ -126,10 +170,7 @@ const CustomerAdd = () => {
               />
             </Field>
             <Field>
-              <Label htmlFor="_id">
-                <span className="star-field">*</span>
-                Ngày sinh
-              </Label>
+              <Label htmlFor="_id">Ngày sinh</Label>
               <Flatpickr
                 options={{
                   locale: Vietnamese,
@@ -148,16 +189,13 @@ const CustomerAdd = () => {
           </Row>
           <Row>
             <Field>
-              <Label htmlFor="gender">
-                <span className="star-field">*</span>
-                Giới tính
-              </Label>
+              <Label htmlFor="gender">Giới tính</Label>
               <Radio.Group onChange={onChange} value={gender}>
                 <div className="flex items-center">
-                  <Radio className="flex items-center h-[34px]" value={"nam"}>
+                  <Radio className="flex items-center h-[34px]" value={"Nam"}>
                     Nam
                   </Radio>
-                  <Radio className="flex items-center h-[34px]" value={"nữ"}>
+                  <Radio className="flex items-center h-[34px]" value={"Nữ"}>
                     Nữ
                   </Radio>
                 </div>
@@ -239,6 +277,17 @@ const CustomerAdd = () => {
             </Field>
           </Row>
           <Row>
+            <Field>
+              <Label htmlFor="citizenId">
+                <span className="star-field">*</span>
+                Căn cước công dân
+              </Label>
+              <Input
+                control={control}
+                name="citizenId"
+                placeholder="Nhập số CCCD"
+              />
+            </Field>
             <Field>
               <Label htmlFor="note">Ghi chú</Label>
               <Input control={control} name="note" placeholder="Nhập ghi chú" />
