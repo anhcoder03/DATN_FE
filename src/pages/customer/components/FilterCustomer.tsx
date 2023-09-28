@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
-import AppModal from "../../../components/modal/Modal";
+import AppModal from "../../../components/modal/ModalExamination";
 import { optionClinic, optionDoctor } from "../../../constants/options";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
-import IconCalendarBlack from '../../../assets/images/icon/ic_calendar-black.svg';
-import Select from 'react-select'
+import IconCalendarBlack from "../../../assets/images/icon/ic_calendar-black.svg";
+import Select from "react-select";
 const FilterCustomer = () => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ const FilterCustomer = () => {
             />
           </div>
           <div className="filter-status">
-          <Select
+            <Select
               className="react-select"
               classNamePrefix="react-select"
               placeholder="-Bác sĩ-"
@@ -75,7 +75,7 @@ const FilterCustomer = () => {
               placeholder="dd/mm/yyyy"
               name="dateOfBirth"
             ></Flatpickr>
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>

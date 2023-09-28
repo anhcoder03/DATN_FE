@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import headingsReducer from "./headingSlice";
+import headingExaminationReducer from "./headingExaminationSlice";
+import headingReceptionReducer from "./headingReceptionSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {
@@ -10,15 +11,20 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["headings"],
+  whitelist: ["headingExamination", "headingReception"],
 };
+
 const reducer = combineReducers({
-  headings: headingsReducer,
+  headingExamination: headingExaminationReducer,
+  headingReception: headingReceptionReducer,
 });
+
 const persistedReducer = persistReducer(persistConfig, reducer);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
@@ -28,7 +34,10 @@ export const store = configureStore({
       },
     }),
 });
+
 const persistor = persistStore(store);
-export default persistor;
+
 export type RootState = ReturnType<typeof reducer>;
 export type AppDispatch = typeof store.dispatch;
+
+export default persistor;
