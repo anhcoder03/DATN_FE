@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
-import { optionDoctor } from "../../../constants/options";
 import { optionGender } from "../../../constants/options";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";

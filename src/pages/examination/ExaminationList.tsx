@@ -1,10 +1,9 @@
-import { Table } from "../../components/table";
 import { Layout } from "../../components/layout";
 import Heading from "../../components/common/Heading";
 import { Filter } from "../../components/filters";
 import CustomTable from "../../components/table/Table2";
 import { useSelector } from "react-redux";
-import { RootState } from "../../components/redux/store";
+import { RootState } from "../../redux/store";
 const ExaminationList = () => {
   const columns = [
     { id: "_id", label: "ID" },

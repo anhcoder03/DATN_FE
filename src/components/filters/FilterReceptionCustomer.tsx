@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import AppModal from "../modal/ModalExamination";
 import AppSelect from "../select/Select";
 import {
   optionClinic,
   optionDoctor,
   optionNVTD,
 } from "../../constants/options";
+import { ModalReception } from "../modal";
 
-const FilterReceptionCustomer = () => {
-  const [loading, setLoading] = useState(false);
+const FilterReceptionCustomer = (props: any) => {
+  const { columns } = props;
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
+    setOpen(false);
   };
 
   const handleCancel = () => {
@@ -70,12 +66,12 @@ const FilterReceptionCustomer = () => {
           </Link>
         </div>
       </div>
-      <AppModal
+      <ModalReception
         open={open}
-        loading={loading}
         handleCancel={handleCancel}
         handleOk={handleOk}
-      ></AppModal>
+        headings={columns}
+      ></ModalReception>
     </div>
   );
 };

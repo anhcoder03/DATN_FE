@@ -5,10 +5,12 @@ const AppSelect = ({
   options,
   width = "150px",
   name,
+  menuPlacement,
 }: {
   options: IOption[] | any;
   width?: string;
   name?: string;
+  menuPlacement?: string;
 }) => {
   return (
     <Select
@@ -23,6 +25,7 @@ const AppSelect = ({
       defaultValue={options[0]}
       className="text-gray16"
       options={options}
+      menuPlacement={menuPlacement}
     />
   );
 };

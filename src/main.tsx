@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import "./index.scss";
 import { PersistGate } from "redux-persist/integration/react";
-import persistor, { store } from "./components/redux/store.tsx";
+import persistor, { store } from "./redux/store.tsx";
 import "flatpickr/dist/themes/material_green.css";
 import { ToastContainer } from "react-toastify";
 
