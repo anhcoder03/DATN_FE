@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import AppSelect from "../select/Select";
-import { optionDoctor, optionNVCS } from "../../constants/options";
+import Select from "react-select";
+import { optionDoctor, optionNVTD } from "../../constants/options";
 import { ModalBooking } from "../modal";
+import Flatpickr from "react-flatpickr";
+import { Vietnamese } from "flatpickr/dist/l10n/vn";
+import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 
 const FilterReceptionBook = (props: any) => {
   const { columns } = props;
@@ -31,18 +34,34 @@ const FilterReceptionBook = (props: any) => {
               placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
             />
           </div>
-          <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] ">
-            <input
-              type="date"
-              className="bg-transparent border-none outline-none"
-            />
+          <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+            <Flatpickr
+              options={{
+                locale: Vietnamese,
+                allowInput: true,
+                dateFormat: "d/m/Y",
+                altInputClass: "date-range",
+                maxDate: "today",
+              }}
+              placeholder="dd/mm/yyyy"
+              name="dateOfBirth"
+            ></Flatpickr>
+            <div className="flex items-center">
+              <img src={IconCalendarBlack} alt="icon" />
+            </div>
           </div>
-          <div className="filter-nvcs">
-            <AppSelect options={optionNVCS} width="300px"></AppSelect>
-          </div>
-          <div className="filter-doctor">
-            <AppSelect options={optionDoctor}></AppSelect>
-          </div>
+          <Select
+            options={optionNVTD}
+            className="react-select"
+            classNamePrefix="react-select"
+            placeholder="-Nhân viên tiếp đón-"
+          ></Select>
+          <Select
+            options={optionDoctor}
+            className="react-select"
+            classNamePrefix="react-select"
+            placeholder="-Bác sĩ-"
+          ></Select>
         </div>
         <div className="flex items-end gap-2">
           <button
