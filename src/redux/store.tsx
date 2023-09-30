@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import headingExaminationReducer from "./headingExaminationSlice";
-import headingReceptionReducer from "./headingReceptionSlice";
+import headingExaminationReducer from "./layout/headingExaminationSlice";
+import headingReceptionReducer from "./layout/headingReceptionSlice";
+import headingBookingReducer from "./layout/headingBookingSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {
@@ -15,12 +16,13 @@ import {
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["headingExamination", "headingReception"],
+  whitelist: ["headingExamination", "headingReception", "headingBooking"],
 };
 
 const reducer = combineReducers({
   headingExamination: headingExaminationReducer,
   headingReception: headingReceptionReducer,
+  headingBooking: headingBookingReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

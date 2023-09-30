@@ -12,27 +12,37 @@ import CalcUtils from "../../helpers/CalcULtils";
 import moment from "moment";
 import IconEdit from "../../assets/images/icon-edit.png";
 import { toast } from "react-toastify";
-import { useDebounce } from "usehooks-ts";
 import { useNavigate } from "react-router-dom";
 import { IconTrash } from "../../components/icons";
 import { Modal } from "antd";
+import { Pagination } from "../../components/pagination";
+
+const optionsPagination = [
+  { value: 25, label: "25 bản ghi" },
+  { value: 50, label: "50 bản ghi" },
+  { value: 100, label: "100 bản ghi" },
+];
+
 const CustommerList = () => {
   const [customers, setCustomers] = useState<ICustomer[]>([]);
   const [customer, setCustomer] = useState<ICustomer>();
   const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
   const [query, setQuery] = useState({
     _page: 1,
-    _limit: 10,
+    _limit: 25,
     _sort: "createdAt",
     _order: "asc",
     _gender: "",
     _createdAt: "",
     search: "",
   });
-  const debouncedValue = useDebounce<object>(query, 500);
+  // nếu muốn cho filter delay 500ms dùng useDebounce rồi bỏ nó vào dependence của useEffect
+  // const debouncedValue = useDebounce<object>(query, 500);
   const headings = [
     "Mã khách hàng",
     "	Tên khách hàng",
@@ -42,20 +52,29 @@ const CustommerList = () => {
     "Ngày tạo",
     "Thao tác",
   ];
-
+  const handlePageClick = (event: any) => {
+    const page = event.selected + 1;
+    setQuery({ ...query, _page: page });
+  };
   const handleGetCustomers = async () => {
     try {
       setLoading(true);
       const data = await getAllCustomer(query);
       setLoading(false);
+      console.log(data);
+      setTotalPages(data.totalPages);
+      setTotalDocs(data.totalDocs);
       setCustomers(data.docs);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
+    urlParams.set("page", query._page as any);
+    urlParams.set("limit", query._limit as any);
+    navigate(`?${urlParams}`);
     handleGetCustomers();
-  }, [debouncedValue]);
+  }, [query]);
 
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
@@ -83,6 +102,10 @@ const CustommerList = () => {
     navigate(`?${urlParams}`);
   };
 
+  const handleLimitChange = (data: any) => {
+    setQuery({ ...query, _limit: data.value });
+  };
+
   const handleShowModel = (data: ICustomer) => {
     setOpenModal(true);
     setCustomer(data);
@@ -107,36 +130,48 @@ const CustommerList = () => {
         handleGenderChange={handleGenderChange}
         handleSearch={handleSearch}
       ></FilterCustomer>
-      <Table headings={headings} loading={loading} length={customers?.length}>
-        {customers?.map((item) => (
-          <tr className="text-xs">
-            <td>{item._id}</td>
-            <td>{item?.name}</td>
-            <td>{CalcUtils.calculateAge(item?.dateOfBirth)}</td>
-            <td>{item?.phone}</td>
-            <td>{item?.gender}</td>
-            <td>{moment(item?.createdAt).format("DD/MM/YYYY")}</td>
-            <td>
-              <div className="table-action">
-                <div
-                  className="button-nutri"
-                  onClick={() => {
-                    toast.warning("Bạn không có quyền thực hiện thao tác này");
-                  }}
-                >
-                  <img width={20} height={20} src={IconEdit} alt="edit" />
+      <div className="bg-white">
+        <Table headings={headings} loading={loading} length={customers?.length}>
+          {customers?.map((item) => (
+            <tr className="text-xs">
+              <td>{item._id}</td>
+              <td>{item?.name}</td>
+              <td>{CalcUtils.calculateAge(item?.dateOfBirth)}</td>
+              <td>{item?.phone}</td>
+              <td>{item?.gender}</td>
+              <td>{moment(item?.createdAt).format("DD/MM/YYYY")}</td>
+              <td>
+                <div className="table-action">
+                  <div
+                    className="button-nutri"
+                    onClick={() => {
+                      toast.warning(
+                        "Bạn không có quyền thực hiện thao tác này"
+                      );
+                    }}
+                  >
+                    <img width={20} height={20} src={IconEdit} alt="edit" />
+                  </div>
+                  <button
+                    className="button-nutri text-[#585858]"
+                    onClick={() => handleShowModel(item)}
+                  >
+                    <IconTrash></IconTrash>
+                  </button>
                 </div>
-                <button
-                  className="button-nutri text-[#585858]"
-                  onClick={() => handleShowModel(item)}
-                >
-                  <IconTrash></IconTrash>
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </Table>
+              </td>
+            </tr>
+          ))}
+        </Table>
+        <Pagination
+          handlePageClick={handlePageClick}
+          pageCount={totalPages}
+          handleLimitChange={handleLimitChange}
+          optionsPagination={optionsPagination}
+          totalDocs={totalDocs}
+          totalPages={totalPages}
+        ></Pagination>
+      </div>
       <Modal
         centered
         open={openModal}
