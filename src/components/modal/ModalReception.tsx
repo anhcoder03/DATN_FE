@@ -98,7 +98,7 @@ const ModalReception = ({ open, handleCancel, handleOk, headings }: IModal) => {
           Tích chọn cột để hiển thị. Kéo thả để thay đổi nhanh vị trí các cột
           hiển thị
         </h2>
-        <div className="max-h-[300px] overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto scrollbar">
           {headings?.map((item: any, index: number) => {
             return (
               <div

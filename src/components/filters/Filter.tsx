@@ -9,18 +9,13 @@ import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 import Select from "react-select";
 const Filter = (props: any) => {
   const { columns } = props;
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
+    setOpen(false);
   };
 
   const handleCancel = () => {
@@ -30,12 +25,12 @@ const Filter = (props: any) => {
     <div className="">
       <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
         <div className="flex items-center gap-2 filter-wrapper">
-          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[250px]">
             <IconSearch></IconSearch>
             <input
               type="text"
               className="bg-transparent border-none outline-none"
-              placeholder="Tên bệnh nhân"
+              placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
             />
           </div>
           <div className="filter-status">
@@ -100,7 +95,6 @@ const Filter = (props: any) => {
       <AppModal
         headings={columns}
         open={open}
-        loading={loading}
         handleCancel={handleCancel}
         handleOk={handleOk}
       ></AppModal>
