@@ -13,7 +13,7 @@ const Layout = (props: Props) => {
         <div>
           <Sidebar></Sidebar>
         </div>
-        <div className="w-full min-h-screen overflow-x-hidden overscroll-y-auto mt-[67px] p-5 bg-grayF3">
+        <div className="w-full min-h-screen overflow-x-hidden  mt-[67px] px-5 pt-5 pb-10 bg-grayF3">
           {props.children}
         </div>
       </div>

@@ -35,7 +35,7 @@ const menuSell: TMenu[] = [
 ];
 const menuPartner: TMenu[] = [
   {
-    path: "/customer",
+    path: "/customer/list",
     title: "Khách hàng",
     icon: <IconUser />,
   },

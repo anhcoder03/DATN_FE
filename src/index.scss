@@ -93,27 +93,43 @@ input {
 .table-wrapper table {
   width: 100%;
 }
-.table-wrapper thead {
-  background-color: #f4f6f8;
-  font-size: 14px;
+.table-wrapper thead,
+.MuiTable-root thead {
+  background-color: #f4f6f8 !important;
+  font-size: 14px !important;
+}
+.css-1ex1afd-MuiTableCell-root {
+  color: #6c757d !important;
+  font-size: 14px !important;
 }
 .table-wrapper th,
-.table-wrapper td {
-  vertical-align: middle;
+.table-wrapper td,
+.MuiTable-root td,
+.MuiTable-root th {
+  vertical-align: middle !important;
 }
-.table-wrapper tbody {
-  background-color: white;
+.table-wrapper tbody,
+.MuiTable-root tbody {
+  background-color: white !important;
 }
-.table-wrapper th {
-  padding: 20px 30px;
-  font-weight: 600;
-  text-align: left;
+.table-wrapper th,
+.MuiTable-root th {
+  padding: 20px 30px !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+  color: #585858 !important  ;
 }
-.table-wrapper td {
-  padding: 15px 30px;
+.table-wrapper td,
+.MuiTable-root td {
+  padding: 15px 30px !important;
 }
-.table-wrapper tbody tr:hover {
-  background-color: #48a8001a;
+.table-wrapper tbody tr:hover,
+.MuiTable-root tbody tr:hover {
+  background-color: #48a8001a !important;
+  cursor: pointer;
+}
+.table-wrapper tbody tr {
+  box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
 }
 .ant-tabs-tab,
 .ant-tabs-tab-active {
@@ -208,12 +224,23 @@ code {
   font-weight: 500;
 }
 // hover focus
-.form-control ::hover ::active {
-  border-color: #4285f4 !important;
+// .form-control ::hover ::active {
+//   border-color: #4285f4 !important;
+// }
+//react-small
+.select-small__control {
+  max-width: 150px;
+  width: 100%;
+  height: 34px;
+  overflow: hidden;
 }
 
+.select-small__indicator-separator {
+  display: none;
+}
 // react-select
-.react-select__control {
+.react-select__control,
+.select-small__control {
   min-height: 34px;
   min-height: unset;
   border: none;
@@ -247,7 +274,8 @@ code {
     display: none;
   }
 
-  &.react-select__control--is-focused {
+  &.react-select__control--is-focused,
+  &.select-small__control--is-focused {
     outline: none;
     border: none;
     box-shadow: none;
@@ -330,4 +358,22 @@ code {
   .react-select__multi-value--is-disabled {
     padding-right: 3px;
   }
+}
+//pagination
+
+.page-active a {
+  @apply text-white bg-primary border-transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 5px;
+  background-color: #48a8001a;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: #bbbbbb;
+  border-radius: 3px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #bbbbbb;
 }

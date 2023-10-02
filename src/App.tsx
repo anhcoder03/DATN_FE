@@ -19,7 +19,7 @@ function App() {
       element: <ExaminationList />,
     },
     {
-      path: "customer",
+      path: "customer/list",
       element: <CustommerList />,
     },
     {

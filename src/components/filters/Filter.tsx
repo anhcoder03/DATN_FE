@@ -1,27 +1,21 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import AppModal from "../modal/Modal";
-import AppSelect from "../select/Select";
+import AppModal from "../modal/ModalExamination";
 import { optionClinic, optionDoctor } from "../../constants/options";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
-import IconCalendarBlack from '../../assets/images/icon/ic_calendar-black.svg';
-import Select from 'react-select'
+import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
+import Select from "react-select";
 const Filter = (props: any) => {
-  const { headings } = props;
-  const [loading, setLoading] = useState(false);
+  const { columns } = props;
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 3000);
+    setOpen(false);
   };
 
   const handleCancel = () => {
@@ -29,14 +23,14 @@ const Filter = (props: any) => {
   };
   return (
     <div className="">
-      <div className="flex justify-between bg-white flex-wrap p-5 items-center rounded-tl-lg rounded-tr-lg">
-        <div className="filter-wrapper flex items-center gap-2">
-          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+      <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
+        <div className="flex items-center gap-2 filter-wrapper">
+          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[250px]">
             <IconSearch></IconSearch>
             <input
               type="text"
-              className="bg-transparent outline-none border-none"
-              placeholder="Tên bệnh nhân"
+              className="bg-transparent border-none outline-none"
+              placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
             />
           </div>
           <div className="filter-status">
@@ -78,30 +72,29 @@ const Filter = (props: any) => {
               placeholder="dd/mm/yyyy"
               name="dateOfBirth"
             ></Flatpickr>
-            <div className='flex items-center'>
+            <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>
         </div>
         <div className="flex items-end gap-2">
           <button
-            className="bg-grayF3 py-2 px-3 rounded-lg"
+            className="px-3 py-2 rounded-lg bg-grayF3"
             onClick={showModal}
           >
             <IconSetting></IconSetting>
           </button>
-          <Link to={"#"} className="flex bg-primary py-2 px-3 rounded-lg gap-2">
-            <div className="bg-white rounded-lg text-primary flex items-center p-1">
+          <Link to={"#"} className="flex gap-2 px-3 py-2 rounded-lg bg-primary">
+            <div className="flex items-center p-1 bg-white rounded-lg text-primary">
               <IconPlus></IconPlus>
             </div>
-            <span className="text-white text-sm flex items-center">Thêm</span>
+            <span className="flex items-center text-sm text-white">Thêm</span>
           </Link>
         </div>
       </div>
       <AppModal
-        headings={headings}
+        headings={columns}
         open={open}
-        loading={loading}
         handleCancel={handleCancel}
         handleOk={handleOk}
       ></AppModal>

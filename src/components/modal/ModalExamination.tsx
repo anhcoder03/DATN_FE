@@ -2,40 +2,44 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal } from "antd";
 import { IconRectangle } from "../icons";
 import { useSelector, useDispatch } from "react-redux";
-import { setSelectedHeadings } from "../redux/headingSlice";
-interface Column {}
+import {
+  resetHeadings,
+  setSelectedHeadings,
+} from "../../redux/layout/headingExaminationSlice";
+import { RootState } from "../../redux/store";
+interface Column {
+  label: any;
+}
 interface IModal {
   open: boolean;
   handleOk: () => void;
   handleCancel: () => void;
-  loading: boolean;
   headings: Column[];
 }
-
-const AppModal = ({
+const ModalExamination = ({
   open,
   handleCancel,
   handleOk,
-  loading,
   headings,
 }: IModal) => {
   const [checked, setChecked] = useState<boolean[]>(
     Array(headings?.length).fill(false)
   );
-  const selectedHeading = useSelector(
-    (state: any) => state.headings.selectedHeadings
-  );
-  console.log("selectedHeading", selectedHeading);
   const dispatch = useDispatch();
+  const selectedHeading = useSelector(
+    (state: RootState) => state.headingExamination.selectedHeadings
+  );
+  console.log("selectHẻading", selectedHeading);
+
   useEffect(() => {
     if (open) {
       try {
         if (selectedHeading) {
           dispatch(setSelectedHeadings(selectedHeading));
           const initialChecked = Array(headings?.length).fill(false);
-          selectedHeading.forEach((column: any) => {
+          selectedHeading.forEach((selectedColumn: { label: any }) => {
             const columnIndex = headings.findIndex(
-              (heading) => heading === column
+              (heading) => heading.label === selectedColumn.label
             );
             if (columnIndex !== -1) {
               initialChecked[columnIndex] = true;
@@ -48,42 +52,29 @@ const AppModal = ({
         console.error(error);
       }
     }
-  }, [open, headings, dispatch]);
+  }, [open, headings, dispatch, selectedHeading]);
 
   const handleCheckboxBodyChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const updatedChecked = [...checked];
-    updatedChecked[index] = !updatedChecked[index];
+    updatedChecked[index] = event.target.checked;
     setChecked(updatedChecked);
+
     const heading = headings[index];
-    if (updatedChecked[index]) {
+    if (event.target.checked) {
       dispatch(setSelectedHeadings([...selectedHeading, heading]));
     } else {
       dispatch(
         setSelectedHeadings(
           selectedHeading.filter(
-            (selectedHeading: any) => selectedHeading !== heading
+            (selectedHeading: any) => selectedHeading.label !== heading.label
           )
         )
       );
     }
   };
-  const toSaveColumns = () => {
-    try {
-      dispatch(setSelectedHeadings(selectedHeading));
-      handleOk();
-    } catch (error) {
-      console.error("Lỗi khi lưu vào Redux store:", error);
-    }
-  };
-  // const resetToDefault = () => {
-  //   const initialCheckedState = selectedHeading.map((column: any) =>
-  //     column.label === "Bệnh nhân" ? true : false
-  //   );
-  //   setChecked(initialCheckedState);
-  // };
   return (
     <>
       <Modal
@@ -92,15 +83,6 @@ const AppModal = ({
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          // <Button
-          //   key="submit"
-          //   type="primary"
-          //   loading={loading}
-          //   onClick={resetToDefault}
-          //   className="bg-primary50 text-primary"
-          // >
-          //   Quay lại mặc định
-          // </Button>,
           <Button
             className="bg-primary50 text-primary"
             key="back"
@@ -111,19 +93,18 @@ const AppModal = ({
           <Button
             key="submit"
             type="primary"
-            loading={loading}
-            onClick={toSaveColumns} // Gọi hàm toSaveColumns khi bấm "Lưu"
+            onClick={() => dispatch(resetHeadings())}
             className="bg-primary50 text-primary"
           >
-            Lưu
+            Hoàn Tác
           </Button>,
         ]}
       >
-        <h2 className="text-center border-b border-b-grayF3 py-3">
+        <h2 className="py-3 text-center border-b border-b-grayF3">
           Tích chọn cột để hiển thị. Kéo thả để thay đổi nhanh vị trí các cột
           hiển thị
         </h2>
-        <div className="max-h-[300px] overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto scrollbar">
           {headings?.map((item: any, index: number) => {
             return (
               <div
@@ -137,7 +118,7 @@ const AppModal = ({
                     onChange={(event) => handleCheckboxBodyChange(event, index)}
                     className="cursor-pointer"
                   />
-                  <span className="pb-1">{item}</span>
+                  <span className="pb-1">{item.label}</span>
                 </div>
                 <div className="">
                   <IconRectangle />
@@ -151,4 +132,4 @@ const AppModal = ({
   );
 };
 
-export default AppModal;
+export default ModalExamination;
