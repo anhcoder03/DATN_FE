@@ -71,7 +71,7 @@ class Http {
     // );
   }
 
-  async get(url: string, params: any) {
+  async get(url: string, params?: any) {
     try {
       const response = await this.api.get(url, { params });
       return response.data;
@@ -95,7 +95,7 @@ class Http {
       const response = await this.api.put(url, data);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+      if (error.response) {
         return error.response.data;
       }
     }
