@@ -330,6 +330,35 @@ code {
   background-color: #48a800;
 }
 
+// view
+
+.only-view {
+  input {
+      border:none;
+      pointer-events:none;
+  }
+  textarea {
+      border:none;
+      pointer-events:none;
+      &.pointer{
+        pointer-events:inherit !important;
+        background: inherit !important;
+      }
+  }
+  .react-select__indicators {
+      display:none!important;
+  }
+  .react-select__control {
+      border:none;
+      background-color: transparent!important;
+  }
+  .react-select__multi-value__remove {
+    display: none;
+  }
+  .react-select__multi-value--is-disabled {
+    padding-right: 3px;
+  }
+}
 //pagination
 
 .page-active a {

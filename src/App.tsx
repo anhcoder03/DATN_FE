@@ -5,6 +5,8 @@ import ReceptionList from "./pages/reception/ReceptionList";
 import ExaminationList from "./pages/examination/ExaminationList";
 import CustommerList from "./pages/customer/CustommerList";
 import CustomerAdd from "./pages/customer/CustomerAdd";
+import CustomerDetail from "./pages/customer/components/CustomerDetail";
+import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -23,6 +25,14 @@ function App() {
     {
       path: "customer/add",
       element: <CustomerAdd />,
+    },
+    {
+      path: "customer/:id",
+      element: <CustomerDetail />,
+    },
+    {
+      path: "customer/update/:id",
+      element: <CustomerUpdate />,
     },
   ]);
   return (

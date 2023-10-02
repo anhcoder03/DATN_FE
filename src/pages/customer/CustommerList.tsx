@@ -121,6 +121,9 @@ const CustommerList = () => {
     }
     setOpenModal(false);
   };
+  const gotoDetail = (item: any) => {
+    navigate(`/customer/${item?._id}`)
+  }
 
   return (
     <Layout>
@@ -131,34 +134,32 @@ const CustommerList = () => {
         handleSearch={handleSearch}
       ></FilterCustomer>
       <div className="bg-white">
-        <Table headings={headings} loading={loading} length={customers?.length}>
-          {customers?.map((item) => (
-            <tr className="text-xs">
-              <td>{item._id}</td>
-              <td>{item?.name}</td>
-              <td>{CalcUtils.calculateAge(item?.dateOfBirth)}</td>
-              <td>{item?.phone}</td>
-              <td>{item?.gender}</td>
-              <td>{moment(item?.createdAt).format("DD/MM/YYYY")}</td>
-              <td>
-                <div className="table-action">
-                  <div
-                    className="button-nutri"
-                    onClick={() => {
-                      toast.warning(
-                        "Bạn không có quyền thực hiện thao tác này"
-                      );
-                    }}
-                  >
-                    <img width={20} height={20} src={IconEdit} alt="edit" />
-                  </div>
-                  <button
+      <Table headings={headings} loading={loading} length={customers?.length}>
+        {customers?.map((item) => (
+          <tr className="text-xs" style={{cursor: 'pointer'}}>
+            <td onClick={() => gotoDetail(item)}>{item._id}</td>
+            <td onClick={() => gotoDetail(item)}>{item?.name}</td>
+            <td onClick={() => gotoDetail(item)}>{CalcUtils.calculateAge(item?.dateOfBirth)}</td>
+            <td onClick={() => gotoDetail(item)}>{item?.phone}</td>
+            <td onClick={() => gotoDetail(item)}>{item?.gender}</td>
+            <td onClick={() => gotoDetail(item)}>{moment(item?.createdAt).format("DD/MM/YYYY")}</td>
+            <td>
+              <div className="table-action">
+                <div
+                  className="button-nutri"
+                  onClick={() => {
+                    navigate(`/customer/update/${item?._id}`)
+                  }}
+                >
+                  <img width={20} height={20} src={IconEdit} alt="edit" />
+                </div>
+                <button
                     className="button-nutri text-[#585858]"
                     onClick={() => handleShowModel(item)}
                   >
                     <IconTrash></IconTrash>
                   </button>
-                </div>
+              </div>
               </td>
             </tr>
           ))}

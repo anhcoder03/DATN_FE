@@ -10,12 +10,31 @@ export const getAllCustomer = async (params: any) => {
     console.error(error);
   }
 };
-
+export const getOneCustomer = async (id: any) => {
+  try {
+    const response = await http.get(`/customers/${id}`);
+    return response.customer;
+  } catch (error) {
+    return error;
+  }
+};
 export const createCustomer = async (data: any) => {
   try {
     const response = await http.post(`/customers`, data);
     return response;
   } catch (error) {
+    return error;
+  }
+};
+export const updateCustomer = async (data: any) => {
+  try {
+    const response = await http.update(`/customers/${data?._id}`, data);
+    console.log('respon', response, data);
+    
+    return response;
+  } catch (error) {
+    console.log("errorr", error);
+    
     return error;
   }
 };
