@@ -336,6 +336,7 @@ code {
   input {
       border:none;
       pointer-events:none;
+      border-bottom: 1px solid #d6d6d6;
   }
   textarea {
       border:none;
@@ -350,6 +351,7 @@ code {
   }
   .react-select__control {
       border:none;
+      border-bottom: 1px solid #d6d6d6;
       background-color: transparent!important;
   }
   .react-select__multi-value__remove {
@@ -357,6 +359,12 @@ code {
   }
   .react-select__multi-value--is-disabled {
     padding-right: 3px;
+  }
+  label {
+    pointer-events:none;
+  }
+  &:hover {
+    border-color: #48a800;
   }
 }
 //pagination
