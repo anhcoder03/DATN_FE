@@ -48,7 +48,7 @@ const menuProduct: TMenu[] = [
     icon: <IconProduct />,
   },
   {
-    path: "/category",
+    path: "/category/list",
     title: "Danh mục",
     icon: <IconFolder />,
   },

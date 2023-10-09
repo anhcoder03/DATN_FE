@@ -7,6 +7,9 @@ import CustommerList from "./pages/customer/CustommerList";
 import CustomerAdd from "./pages/customer/CustomerAdd";
 import CustomerDetail from "./pages/customer/components/CustomerDetail";
 import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
+import CategoryList from "./pages/category/CategoryList";
+import CategoryAdd from "./pages/category/CategoryAdd";
+import CategoryUpdate from "./pages/category/components/CategoryUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -33,6 +36,18 @@ function App() {
     {
       path: "customer/update/:id",
       element: <CustomerUpdate />,
+    },
+    {
+      path: "category/list",
+      element: <CategoryList />,
+    },
+    {
+      path: "category/add",
+      element: <CategoryAdd />,
+    },
+    {
+      path: "category/update/:id",
+      element: <CategoryUpdate />,
     },
   ]);
   return (
