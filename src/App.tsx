@@ -1,3 +1,4 @@
+
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
@@ -10,31 +11,32 @@ import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 import CategoryList from "./pages/category/CategoryList";
 import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
+import PrescriptionListContainer from './pages/prescription/list';
 function App() {
   const router = createBrowserRouter([
-    { path: "", element: <Home /> },
+    { path: '', element: <Home /> },
     {
-      path: "reception",
+      path: 'reception',
       element: <ReceptionList />,
     },
     {
-      path: "examination",
+      path: 'examination',
       element: <ExaminationList />,
     },
     {
-      path: "customer/list",
+      path: 'customer/list',
       element: <CustommerList />,
     },
     {
-      path: "customer/add",
+      path: 'customer/add',
       element: <CustomerAdd />,
     },
     {
-      path: "customer/:id",
+      path: 'customer/:id',
       element: <CustomerDetail />,
     },
     {
-      path: "customer/update/:id",
+      path: 'customer/update/:id',
       element: <CustomerUpdate />,
     },
     {
@@ -49,6 +51,10 @@ function App() {
       path: "category/update/:id",
       element: <CategoryUpdate />,
     },
+    {
+      path: 'prescription',
+      element: <PrescriptionListContainer />,
+    }
   ]);
   return (
     <React.Fragment>
