@@ -1,12 +1,16 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Home from './pages/Home';
-import ReceptionList from './pages/reception/ReceptionList';
-import ExaminationList from './pages/examination/ExaminationList';
-import CustommerList from './pages/customer/CustommerList';
-import CustomerAdd from './pages/customer/CustomerAdd';
-import CustomerDetail from './pages/customer/components/CustomerDetail';
-import CustomerUpdate from './pages/customer/components/CustomerUpdate';
+
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home";
+import ReceptionList from "./pages/reception/ReceptionList";
+import ExaminationList from "./pages/examination/ExaminationList";
+import CustommerList from "./pages/customer/CustommerList";
+import CustomerAdd from "./pages/customer/CustomerAdd";
+import CustomerDetail from "./pages/customer/components/CustomerDetail";
+import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
+import CategoryList from "./pages/category/CategoryList";
+import CategoryAdd from "./pages/category/CategoryAdd";
+import CategoryUpdate from "./pages/category/components/CategoryUpdate";
 import PrescriptionListContainer from './pages/prescription/list';
 function App() {
   const router = createBrowserRouter([
@@ -36,9 +40,21 @@ function App() {
       element: <CustomerUpdate />,
     },
     {
+      path: "category/list",
+      element: <CategoryList />,
+    },
+    {
+      path: "category/add",
+      element: <CategoryAdd />,
+    },
+    {
+      path: "category/update/:id",
+      element: <CategoryUpdate />,
+    },
+    {
       path: 'prescription',
       element: <PrescriptionListContainer />,
-    },
+    }
   ]);
   return (
     <React.Fragment>
