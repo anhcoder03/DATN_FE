@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://book-store-mauve.vercel.app">
-    <img src="/src/assets/logo3.png" alt="Logo" width="80" height="80">
+    <img src="/src/assets/logo-icon.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">Dr Medipro</h3>
   <p align="center">
