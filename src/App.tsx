@@ -12,6 +12,7 @@ import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
 import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
+import ProductList from "./pages/product/ProductList";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -58,6 +59,10 @@ function App() {
     {
       path: "login",
       element: <Login />,
+    },
+    {
+      path: "product/list",
+      element: <ProductList />,
     },
   ]);
   return (
