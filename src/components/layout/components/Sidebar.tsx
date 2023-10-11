@@ -43,7 +43,7 @@ const menuPartner: TMenu[] = [
 
 const menuProduct: TMenu[] = [
   {
-    path: "/product",
+    path: "/product/list",
     title: "Sản phẩm",
     icon: <IconProduct />,
   },

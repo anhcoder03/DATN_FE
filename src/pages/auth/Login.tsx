@@ -117,7 +117,7 @@ const Login = () => {
           </Button>
         </form>
       </div>
-      <div className="flex items-center justify-center w-full md:w-1/2 bg-primary50 min-h-[100vh]">
+      <div className="hidden items-center justify-center w-full md:w-1/2 bg-primary50 min-h-[100vh] md:flex">
         <div className="login-right">
           <img src={bgLogin} alt="login-bg" />
         </div>
