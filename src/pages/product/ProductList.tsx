@@ -120,59 +120,65 @@ const ProductList = () => {
   return (
     <Layout>
       <Heading>Quản lý danh sách sản phẩm</Heading>
-      <FilterProduct
-        handleStatusChange={handleStatusChange}
-        handleSearch={handleSearch}
-      ></FilterProduct>
-      <div className="bg-white">
-        <Table headings={headings} loading={loading} length={products?.length}>
-          {products?.map((item) => (
-            <tr
-              className="text-xs"
-              style={{ cursor: "pointer" }}
-              key={item?._id}
-            >
-              <td onClick={() => gotoDetail(item)}>{item._id}</td>
-              <td onClick={() => gotoDetail(item)}>
-                <img
-                  className="w-10 h-10 object-cover rounded-full"
-                  src={`${item?.image ? item?.image : profilePic} `}
-                  alt=""
-                />
-              </td>
-              <td onClick={() => gotoDetail(item)}>{item?.name}</td>
-              <td onClick={() => gotoDetail(item)}>{item?.dateExpiry}</td>
-              <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
-              <td onClick={() => gotoDetail(item)}>{item?.status}</td>
-              <td>
-                <div className="table-action">
-                  <div
-                    className="button-nutri"
-                    onClick={() => {
-                      navigate(`/customer/update/${item?._id}`);
-                    }}
-                  >
-                    <img width={20} height={20} src={IconEdit} alt="edit" />
+      <div className="rounded-xl bg-white">
+        <FilterProduct
+          handleStatusChange={handleStatusChange}
+          handleSearch={handleSearch}
+        ></FilterProduct>
+        <div className="bg-white">
+          <Table
+            headings={headings}
+            loading={loading}
+            length={products?.length}
+          >
+            {products?.map((item) => (
+              <tr
+                className="text-xs"
+                style={{ cursor: "pointer" }}
+                key={item?._id}
+              >
+                <td onClick={() => gotoDetail(item)}>{item._id}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  <img
+                    className="w-10 h-10 object-cover rounded-full"
+                    src={`${item?.image ? item?.image : profilePic} `}
+                    alt=""
+                  />
+                </td>
+                <td onClick={() => gotoDetail(item)}>{item?.name}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.dateExpiry}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+                <td>
+                  <div className="table-action">
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        navigate(`/customer/update/${item?._id}`);
+                      }}
+                    >
+                      <img width={20} height={20} src={IconEdit} alt="edit" />
+                    </div>
+                    <button
+                      className="button-nutri text-[#585858]"
+                      onClick={() => handleShowModel(item)}
+                    >
+                      <IconTrash></IconTrash>
+                    </button>
                   </div>
-                  <button
-                    className="button-nutri text-[#585858]"
-                    onClick={() => handleShowModel(item)}
-                  >
-                    <IconTrash></IconTrash>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </Table>
-        <Pagination
-          handlePageClick={handlePageClick}
-          pageCount={totalPages}
-          handleLimitChange={handleLimitChange}
-          optionsPagination={optionsPagination}
-          totalDocs={totalDocs}
-          totalPages={totalPages}
-        ></Pagination>
+                </td>
+              </tr>
+            ))}
+          </Table>
+          <Pagination
+            handlePageClick={handlePageClick}
+            pageCount={totalPages}
+            handleLimitChange={handleLimitChange}
+            optionsPagination={optionsPagination}
+            totalDocs={totalDocs}
+            totalPages={totalPages}
+          ></Pagination>
+        </div>
       </div>
       <Modal
         centered
