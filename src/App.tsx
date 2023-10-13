@@ -1,4 +1,3 @@
-
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
@@ -13,32 +12,33 @@ import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
 import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from './pages/prescription/list';
-
+import Login from "./pages/auth/Login";
+import ProductList from "./pages/product/ProductList";
 function App() {
   const router = createBrowserRouter([
-    { path: '', element: <Home /> },
+    { path: "", element: <Home /> },
     {
-      path: 'reception',
+      path: "reception",
       element: <ReceptionList />,
     },
     {
-      path: 'examination',
+      path: "examination",
       element: <ExaminationList />,
     },
     {
-      path: 'customer/list',
+      path: "customer/list",
       element: <CustommerList />,
     },
     {
-      path: 'customer/add',
+      path: "customer/add",
       element: <CustomerAdd />,
     },
     {
-      path: 'customer/:id',
+      path: "customer/:id",
       element: <CustomerDetail />,
     },
     {
-      path: 'customer/update/:id',
+      path: "customer/update/:id",
       element: <CustomerUpdate />,
     },
     {
@@ -60,7 +60,15 @@ function App() {
     {
       path: 'prescription',
       element: <PrescriptionListContainer />,
-    }
+    },
+    {
+      path: "login",
+      element: <Login />,
+    },
+    {
+      path: "product/list",
+      element: <ProductList />,
+    },
   ]);
   return (
     <React.Fragment>

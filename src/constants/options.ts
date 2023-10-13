@@ -26,6 +26,13 @@ export const optionGender: IOption[] = [
   { value: "Nam", label: "Nam" },
   { value: "Nữ", label: "Nữ" },
 ];
+
+export const optionStatus: IOption[] = [
+  { value: "", label: "-Trạng thái-" },
+  { value: "work", label: "Còn hàng" },
+  { value: "empty", label: "Hết hàng" },
+];
+
 export const optionNVCS: IOption[] = [
   { value: "", label: "-Nhân viên chăm sóc-" },
   { value: "bac", label: "Nguyễn Hồng Sơn" },

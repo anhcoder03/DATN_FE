@@ -14,7 +14,7 @@ interface IButtonProps
 }
 
 const Button = (props: IButtonProps) => {
-  const styleButton = ` flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 disabled:opacity-50 disabled:pointer-events-none bg-[#48a7001a] rounded-md text-primary  ${props.className}`;
+  const styleButton = `flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 disabled:opacity-50 disabled:pointer-events-none bg-[#48a7001a] rounded-md text-primary  ${props.className}`;
   const child: string | React.ReactNode = props.isLoading ? (
     <LoadingSpinner></LoadingSpinner>
   ) : (
@@ -28,7 +28,10 @@ const Button = (props: IButtonProps) => {
     );
   }
   return (
-    <button className={styleButton} {...props}>
+    <button
+      className={`flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 disabled:opacity-50 disabled:pointer-events-none bg-[#48a7001a] rounded-md text-primary ${props.className}`}
+      {...props}
+    >
       {props.children}
     </button>
   );

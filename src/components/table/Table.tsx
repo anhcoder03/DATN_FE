@@ -21,7 +21,7 @@ const Table = ({ children, loading, length, headings }: ITableProps) => {
             ))}
           </tr>
         </thead>
-        <tbody className="w-full">
+        <tbody className="w-full ]">
           {loading ? (
             <tr>
               <td colSpan={headings?.length} className="h-full hover:bg-white">

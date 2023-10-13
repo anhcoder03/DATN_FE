@@ -43,7 +43,7 @@ const menuPartner: TMenu[] = [
 
 const menuProduct: TMenu[] = [
   {
-    path: "/product",
+    path: "/product/list",
     title: "Sản phẩm",
     icon: <IconProduct />,
   },
@@ -88,7 +88,7 @@ const Sidebar = () => {
   const NavLinkClass = "block font-medium py-3 pl-10  border-l-[5px] text-sm";
   return (
     <React.Fragment>
-      <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16">
+      <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16 bg-white">
         <PerfectScrollbar>
           <div>
             <h4 className="px-5 py-3 text-xs font-medium">KHÁM BỆNH</h4>
