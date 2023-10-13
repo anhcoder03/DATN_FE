@@ -3,7 +3,7 @@ import React from "react";
 const Label = ({
   htmlFor,
   className = "text-gray81",
-  children,
+  children
 }: {
   htmlFor: string;
   className?: string;

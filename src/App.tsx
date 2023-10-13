@@ -10,7 +10,8 @@ import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 import CategoryList from "./pages/category/CategoryList";
 import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
-import PrescriptionListContainer from "./pages/prescription/list";
+import CategoryDetail from "./pages/category/components/CategoryDetail";
+import PrescriptionListContainer from './pages/prescription/list';
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
 function App() {
@@ -53,7 +54,11 @@ function App() {
       element: <CategoryUpdate />,
     },
     {
-      path: "prescription",
+      path: 'category/:id',
+      element: <CategoryDetail />
+    },
+    {
+      path: 'prescription',
       element: <PrescriptionListContainer />,
     },
     {

@@ -36,9 +36,6 @@ const CategoryList = () => {
   });
   
   const headings = ["Ảnh Danh Mục ", "Tên Danh Mục", "Thao tác"];
-  
-  console.log("Hiep", categorys);
-  
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
@@ -87,6 +84,10 @@ const CategoryList = () => {
     setOpenModal(false);
   };
 
+  const gotoDetail = (item: any) => {
+    navigate(`/category/${item?._id}`)
+  }
+
   return (
     <Layout>
       <Heading>Quản Lý Danh Mục</Heading>
@@ -94,8 +95,8 @@ const CategoryList = () => {
       <div className="bg-white">
         <Table headings={headings} loading={loading}>
           {categorys?.map((item: any) => (
-            <tr className="text-xs" style={{ cursor: "pointer" }}>
-              <td>
+            <tr className="text-xs" style={{ cursor: "pointer" }} >
+              <td onClick={() => gotoDetail(item)}>
                 {" "}
                 <img
                   className="w-[60px] h-[60px] border rounded"
@@ -103,7 +104,7 @@ const CategoryList = () => {
                   alt=""
                 />{" "}
               </td>
-              <td>{item?.name}</td>
+              <td onClick={() => gotoDetail(item)}>{item?.name}</td>
               <td>
                 <div className="table-action">
                   <div

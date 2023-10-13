@@ -1,44 +1,27 @@
-import { Layout } from "../../components/layout";
-import { Input } from "../../components/input";
-import { useForm } from "react-hook-form";
-import { Field } from "../../components/field";
-import { Label } from "../../components/label";
-import { Row } from "../../components/row";
+import React from 'react'
 import { useEffect, useState } from "react";
-import Heading from "../../components/common/Heading";
-import axios from "axios";
-import { Button } from "../../components/button";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { createCategory } from "../../services/category.service";
-import { useNavigate } from "react-router-dom";
-import NotImage from '../../assets/images/users/no-img.jpg';
-const schema = yup.object({
-  name: yup.string().trim().required("Tên danh mục không được để trống!"),
-  image: yup.string().trim().required("Ảnh danh mục không được để trống!"),
-});
-
-const CategoryAdd = () => {
-  const navigate = useNavigate();
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<any>({
-    resolver: yupResolver<any>(schema),
-    mode: "onSubmit",
-  });
-
-
-  // useEffect(() => {
-  //   const arrayError: any = Object.values(errors);
-  //   if (arrayError.length > 0) {
-  //     toast.warning(arrayError[0]?.message);
-  //   }
-  // });
-
+import { createCategory } from "../../../services/category.service";
+import { Button } from "../../../components/button";
+import { Layout } from "../../../components/layout";
+import { Input } from "../../../components/input";
+import { useForm } from "react-hook-form";
+import { Field } from "../../../components/field";
+import { Label } from "../../../components/label";
+import { Row } from "../../../components/row";
+import NotImage from '../../../assets/images/users/no-img.jpg';
+import Heading from "../../../components/common/Heading";
+import { yupResolver } from '@hookform/resolvers/yup';
+const CategoryDetail = () => {
+    const {
+        control,
+        handleSubmit,
+        setValue,
+        formState: { errors },
+      } = useForm<any>({
+        resolver: yupResolver<any>(true),
+        mode: "onSubmit",
+      });
   return (
     <Layout>
       <div className="relative h-full">
@@ -97,7 +80,7 @@ const CategoryAdd = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default CategoryAdd
+export default CategoryDetail
