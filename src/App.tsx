@@ -11,7 +11,9 @@ import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 import CategoryList from "./pages/category/CategoryList";
 import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
+import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from './pages/prescription/list';
+
 function App() {
   const router = createBrowserRouter([
     { path: '', element: <Home /> },
@@ -50,6 +52,10 @@ function App() {
     {
       path: "category/update/:id",
       element: <CategoryUpdate />,
+    },
+    {
+      path: 'category/:id',
+      element: <CategoryDetail />
     },
     {
       path: 'prescription',
