@@ -433,7 +433,7 @@ code {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, .34);
+  background: rgba(0, 0, 0, 0.34);
   width: 100%;
   height: 100%;
   display: flex;
@@ -450,10 +450,53 @@ code {
 .tee-file-preview:hover .tee-file-hover {
   opacity: 1;
 }
-.small, small {
+.small,
+small {
   font-size: 80%;
   font-weight: 400;
 }
 .tee-file-input {
   display: none !important;
+}
+
+.sidebar-menu .sidebar {
+  width: 70px;
+  transition: all 0.2s linear;
+  margin-top: 3px;
+}
+.sidebar-menu .logo-wrapper {
+  max-width: 90px;
+  width: 100%;
+  transition: all 0.2s linear;
+}
+.sidebar-menu .logo-small {
+  display: block;
+  transition: all 0.2s linear;
+}
+.logo-small {
+  display: none;
+  transition: all 0.2s linear;
+}
+.sidebar-menu .logo {
+  display: none;
+  transition: all 0.2s linear;
+}
+.sidebar-menu .custom-layout {
+  grid-template-columns: 70px minmax(0, 1fr);
+  transition: all 0.2s linear;
+}
+
+.sidebar-menu * .heading-menu {
+  display: none;
+}
+.sidebar-menu * .menu-title {
+  display: none;
+}
+.sidebar-menu * .link-menu {
+  padding-left: 20px;
+}
+
+.sidebar-menu .link-menu:hover {
+  display: block;
+  width: 250px;
 }

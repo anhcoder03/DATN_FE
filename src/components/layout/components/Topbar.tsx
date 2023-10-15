@@ -1,21 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo3.png";
+import logoSmall from "../../../assets/logo-icon.png";
 import { IconBell, IconMenu } from "../../icons";
 
 const Topbar = () => {
+  const [show, setShow] = useState(true);
+  const root = document.querySelector("#root");
+  const handleSidebarShow = () => {
+    console.log("ok");
+    if (show == true) {
+      root?.classList.add("sidebar-menu");
+      setShow(!show);
+    } else {
+      root?.classList.remove("sidebar-menu");
+      setShow(!show);
+    }
+  };
   return (
     <React.Fragment>
       <div className="fixed top-0 left-0 right-0 z-10 w-full bg-white">
         <div className="px-5 py-1 shadowCustom">
           <div className="flex items-center justify-between h-[58px]">
-            <div className="flex items-center justify-between max-w-[250px] w-full gap-x-7 ">
+            <div className="flex items-center justify-between logo-wrapper max-w-[250px] w-full gap-x-7 ">
               <Link to="/" className="w-full">
-                <span className="w-full">
+                <span className="w-full logo">
                   <img src={logo} className="w-[250px] h-full" alt="" />
                 </span>
+                <span className="w-full logo-small">
+                  <img src={logoSmall} className="w-[70px] h-full" alt="" />
+                </span>
               </Link>
-              <span>
+              <span className="cursor-pointer" onClick={handleSidebarShow}>
                 <IconMenu></IconMenu>
               </span>
             </div>
