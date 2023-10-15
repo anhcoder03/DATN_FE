@@ -85,13 +85,16 @@ const menuStatistical: TMenu[] = [
 ];
 
 const Sidebar = () => {
-  const NavLinkClass = "block font-medium py-3 pl-10  border-l-[5px] text-sm";
+  const NavLinkClass =
+    "block font-medium py-3 pl-10  border-l-[5px] text-sm link-menu ";
   return (
     <React.Fragment>
-      <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16 bg-white">
+      <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16 bg-white sidebar">
         <PerfectScrollbar>
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">KHÁM BỆNH</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              KHÁM BỆNH
+            </h4>
             <div className="flex flex-col ">
               {menuExamination?.map((item) => (
                 <NavLink
@@ -105,7 +108,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}
@@ -113,7 +116,9 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">BÁN HÀNG</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              BÁN HÀNG
+            </h4>
             <div className="flex flex-col ">
               {menuSell?.map((item) => (
                 <NavLink
@@ -127,7 +132,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}
@@ -135,7 +140,9 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">ĐỐI TÁC</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              ĐỐI TÁC
+            </h4>
             <div className="flex flex-col ">
               {menuPartner?.map((item) => (
                 <NavLink
@@ -149,7 +156,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}
@@ -157,7 +164,9 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">SẢN PHẨM</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              SẢN PHẨM
+            </h4>
             <div className="flex flex-col ">
               {menuProduct?.map((item) => (
                 <NavLink
@@ -171,7 +180,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}
@@ -179,7 +188,9 @@ const Sidebar = () => {
           </div>
 
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">CẤU HÌNH</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              CẤU HÌNH
+            </h4>
             <div className="flex flex-col ">
               {menuConfiguration?.map((item) => (
                 <NavLink
@@ -193,14 +204,16 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}
             </div>
           </div>
           <div>
-            <h4 className="px-5 py-3 text-xs font-medium">THỐNG KÊ</h4>
+            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+              THỐNG KÊ
+            </h4>
             <div className="flex flex-col ">
               {menuStatistical?.map((item) => (
                 <NavLink
@@ -214,7 +227,7 @@ const Sidebar = () => {
                 >
                   <div className="flex items-center gap-x-3">
                     <span>{item.icon}</span>
-                    <span>{item.title}</span>
+                    <span className="menu-title">{item.title}</span>
                   </div>
                 </NavLink>
               ))}

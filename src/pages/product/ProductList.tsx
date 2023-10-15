@@ -86,7 +86,7 @@ const ProductList = () => {
       urlParams.set("status", selectedOpiton.value);
       navigate(`?${urlParams}`);
     } else {
-      urlParams.delete("status", selectedOpiton.value);
+      urlParams.delete("status");
       navigate(`?${urlParams}`);
     }
   };

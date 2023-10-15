@@ -9,7 +9,7 @@ const Layout = (props: Props) => {
   return (
     <>
       <Topbar></Topbar>
-      <div className="grid  grid-cols-[250px_minmax(0,1fr)] ">
+      <div className="grid  grid-cols-[250px_minmax(0,1fr)] custom-layout">
         <div>
           <Sidebar></Sidebar>
         </div>
