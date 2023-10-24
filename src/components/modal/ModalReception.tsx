@@ -8,7 +8,7 @@ import {
 } from "../../redux/layout/headingReceptionSlice";
 import { RootState } from "../../redux/store";
 interface Column {
-  label: any;
+  name: any;
 }
 interface IModal {
   open: boolean;
@@ -31,9 +31,9 @@ const ModalReception = ({ open, handleCancel, handleOk, headings }: IModal) => {
         if (selectedHeading) {
           dispatch(setSelectedHeadings(selectedHeading));
           const initialChecked = Array(headings?.length).fill(false);
-          selectedHeading.forEach((selectedColumn: { label: any }) => {
+          selectedHeading.forEach((selectedColumn: { name: any }) => {
             const columnIndex = headings.findIndex(
-              (heading) => heading.label === selectedColumn.label
+              (heading) => heading.name === selectedColumn.name
             );
             if (columnIndex !== -1) {
               initialChecked[columnIndex] = true;
@@ -41,7 +41,6 @@ const ModalReception = ({ open, handleCancel, handleOk, headings }: IModal) => {
           });
           setChecked(initialChecked);
         }
-        console.log("checkedok", checked);
       } catch (error) {
         console.error(error);
       }
@@ -56,14 +55,19 @@ const ModalReception = ({ open, handleCancel, handleOk, headings }: IModal) => {
     updatedChecked[index] = event.target.checked;
     setChecked(updatedChecked);
 
-    const heading = headings[index];
+    const heading: any = headings[index];
     if (event.target.checked) {
-      dispatch(setSelectedHeadings([...selectedHeading, heading]));
+      dispatch(
+        setSelectedHeadings([
+          ...selectedHeading,
+          { name: heading.name, selector: heading.selector.toString() },
+        ])
+      );
     } else {
       dispatch(
         setSelectedHeadings(
           selectedHeading.filter(
-            (selectedHeading: any) => selectedHeading.label !== heading.label
+            (selectedHeading: any) => selectedHeading.name !== heading.name
           )
         )
       );
@@ -112,7 +116,7 @@ const ModalReception = ({ open, handleCancel, handleOk, headings }: IModal) => {
                     onChange={(event) => handleCheckboxBodyChange(event, index)}
                     className="cursor-pointer"
                   />
-                  <span className="pb-1">{item.label}</span>
+                  <span className="pb-1">{item.name}</span>
                 </div>
                 <div className="">
                   <IconRectangle />

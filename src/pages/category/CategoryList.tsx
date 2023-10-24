@@ -2,14 +2,18 @@ import { Layout } from "../../components/layout";
 import React, { useEffect, useState } from "react";
 import Heading from "../../components/common/Heading";
 import { Table } from "../../components/table";
-import { deleteCategory, getAllCategory } from "../../services/category.service";
+import {
+  deleteCategory,
+  getAllCategory,
+} from "../../services/category.service";
 import { useNavigate } from "react-router-dom";
 import IconEdit from "../../assets/images/icon-edit.png";
 import { IconTrash } from "../../components/icons";
 import { Modal } from "antd";
 import Pagination from "./../../components/pagination/Pagination";
 import { toast } from "react-toastify";
-import FilterCustomer from "./components/FilterCategory";
+import FilterCategory from "./components/FilterCategory";
+import profilePic from "../../assets/images/users/no-img.jpg";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
@@ -28,13 +32,9 @@ const CategoryList = () => {
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
-    _sort: "createdAt",
-    _order: "asc",
-    _gender: "",
-    _createdAt: "",
     search: "",
   });
-  
+
   const headings = ["Ảnh Danh Mục ", "Tên Danh Mục", "Thao tác"];
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
@@ -53,19 +53,28 @@ const CategoryList = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
+    document.title = "Danh sách danh mục";
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
-    navigate(`?${urlParams}`);  
+    navigate(`?${urlParams}`);
     handleGetCategory();
   }, [query]);
 
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
-
-
+  const handleSearch = (e: any) => {
+    setQuery({ ...query, search: e });
+    if (e !== "") {
+      urlParams.set("name", e);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("name");
+      navigate(`?${urlParams}`);
+    }
+  };
   const handleShowModel = (data: any) => {
     setOpenModal(true);
     setCategory(data);
@@ -73,7 +82,7 @@ const CategoryList = () => {
 
   const onOk = async () => {
     const res = await deleteCategory(category?._id);
-    console.log("onOk",res);
+    console.log("onOk", res);
     if (res?.message) {
       toast.success(res?.message);
       setOpenModal(false);
@@ -85,22 +94,22 @@ const CategoryList = () => {
   };
 
   const gotoDetail = (item: any) => {
-    navigate(`/category/${item?._id}`)
-  }
+    navigate(`/category/view/${item?._id}`);
+  };
 
   return (
     <Layout>
       <Heading>Quản Lý Danh Mục</Heading>
-      <FilterCustomer></FilterCustomer>
+      <FilterCategory handleSearch={handleSearch}></FilterCategory>
       <div className="bg-white">
         <Table headings={headings} loading={loading}>
           {categorys?.map((item: any) => (
-            <tr className="text-xs" style={{ cursor: "pointer" }} >
+            <tr className="text-xs" style={{ cursor: "pointer" }}>
               <td onClick={() => gotoDetail(item)}>
                 {" "}
                 <img
-                  className="w-[60px] h-[60px] border rounded"
-                  src={item?.image}
+                  className="w-16 h-16 object-cover rounded"
+                  src={item?.image ? item?.image : profilePic}
                   alt=""
                 />{" "}
               </td>

@@ -62,6 +62,7 @@ const ReceptionList = () => {
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
   useEffect(() => {
+    document.title = "Danh sách tiếp đón bệnh nhân";
     urlParams.set("tab", dataTabs[1].name);
     navigate(`?${urlParams}`);
   }, []);

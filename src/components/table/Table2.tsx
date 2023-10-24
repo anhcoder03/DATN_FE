@@ -19,18 +19,22 @@ const CustomTable: React.FC<CustomTableProps> = ({ rows, columns }) => {
       <Table>
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
+            {columns?.map((column) => (
               <TableCell key={column.id}>{column.label}</TableCell>
             ))}
             <TableCell>Thao tác</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows?.map((row) => (
             <TableRow key={row.id}>
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <>
-                  <TableCell key={column.id}>{row[column.id]}</TableCell>
+                  <TableCell key={column.id}>
+                    {row[column.id]?.name ||
+                      row[column.id]?.phone ||
+                      row[column.id]}
+                  </TableCell>
                 </>
               ))}
               <TableCell>

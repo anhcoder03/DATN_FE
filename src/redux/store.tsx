@@ -1,9 +1,9 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import headingExaminationReducer from './layout/headingExaminationSlice';
-import headingReceptionReducer from './layout/headingReceptionSlice';
-import headingBookingReducer from './layout/headingBookingSlice';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import headingExaminationReducer from "./layout/headingExaminationSlice";
+import headingReceptionReducer from "./layout/headingReceptionSlice";
+import headingBookingReducer from "./layout/headingBookingSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import {
   FLUSH,
   REHYDRATE,
@@ -11,13 +11,13 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
-} from 'redux-persist';
-import headingPrescriptionSlice from './layout/headingPrescriptionSlice';
+} from "redux-persist";
+import headingPrescriptionSlice from "./layout/headingPrescriptionSlice";
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-  whitelist: ['headingExamination', 'headingReception', 'headingBooking'],
+  whitelist: ["headingExamination", "headingReception", "headingBooking"],
 };
 
 const reducer = combineReducers({
