@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
+type TFilterCategory = {
+  handleSearch: (e: any) => void;
+};
 
-const FilterCategory = () => {
+const FilterCategory = ({ handleSearch }: TFilterCategory) => {
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      handleSearch(e.target.value);
+    }
+  };
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -12,7 +20,7 @@ const FilterCategory = () => {
               type="text"
               className="w-full bg-transparent border-none outline-none"
               placeholder="Tìm kiếm theo tên"
-              // onKeyDown={handleKeyDown}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </div>
@@ -28,12 +36,6 @@ const FilterCategory = () => {
           </Link>
         </div>
       </div>
-      {/* <AppModal
-        open={open}
-        loading={loading}
-        handleCancel={handleCancel}
-        handleOk={handleOk}
-      ></AppModal> */}
     </div>
   );
 };

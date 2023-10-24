@@ -6,17 +6,17 @@ import { Label } from "../../components/label";
 import { Row } from "../../components/row";
 import { useEffect, useState } from "react";
 import Heading from "../../components/common/Heading";
-import axios from "axios";
 import { Button } from "../../components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createCategory } from "../../services/category.service";
 import { useNavigate } from "react-router-dom";
-import NotImage from '../../assets/images/users/no-img.jpg';
+import NotImage from "../../assets/images/users/no-img.jpg";
+import useUploadImage from "../../hooks/useUploadImage";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
 const schema = yup.object({
   name: yup.string().trim().required("Tên danh mục không được để trống!"),
-  image: yup.string().trim().required("Ảnh danh mục không được để trống!"),
 });
 
 const CategoryAdd = () => {
@@ -24,29 +24,35 @@ const CategoryAdd = () => {
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<any>({
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+  const { image, handleDeleteImage, handleSelectImage, loading } =
+    useUploadImage();
+  const handleCreateCategory = async (values: any) => {
+    const res = await createCategory({ ...values, image });
+    if (res?.category) {
+      toast.success(res?.message);
+      navigate("/category/list");
+    } else {
+      toast.error(res.message);
+    }
+  };
 
-
-  // useEffect(() => {
-  //   const arrayError: any = Object.values(errors);
-  //   if (arrayError.length > 0) {
-  //     toast.warning(arrayError[0]?.message);
-  //   }
-  // });
+  useEffect(() => {
+    const arrayError: any = Object.values(errors);
+    if (arrayError.length > 0) {
+      toast.warning(arrayError[0]?.message);
+    }
+  });
 
   return (
     <Layout>
       <div className="relative h-full">
         <Heading>Thêm danh mục </Heading>
-        <form
-          className="w-full p-5 bg-white "
-          // onSubmit={handleSubmit(handleCreateCustomer)}
-        >
+        <form className="w-full p-5 bg-white ">
           <Heading>Thông tin danh mục </Heading>
           <Row>
             <Field>
@@ -61,24 +67,44 @@ const CategoryAdd = () => {
               />
             </Field>
             <Field>
-            <Label className="tee-file-preview" htmlFor="image">
-              <img 
-                src={NotImage}
-              />
-              <div className="tee-file-hover">
-                  <span><i className="ti-reload" /> Thay đổi</span> 
-              </div> 
-              <input 
-              // onChange={_onChangeImage}
-               accept="image/png, image/gif, image/jpeg" className="tee-file-input" name="image" type="file" id="image" /> 
-              <small className="form-control-feedback" />
-            </Label>
-            {/* <Input
+              <Label className="tee-file-preview relative" htmlFor="image">
+                {!image && <img src={NotImage} />}
+                {image && <img src={image} />}
+
+                {image && (
+                  <div
+                    className="tee-file-hover absolute z-10"
+                    onClick={() => handleDeleteImage()}
+                  >
+                    <span>
+                      <i className="ti-reload" /> Xóa
+                    </span>
+                  </div>
+                )}
+                {!image && (
+                  <input
+                    onChange={handleSelectImage}
+                    // accept="image/png, image/gif, image/jpeg"
+                    className="tee-file-input"
+                    name="image"
+                    type="file"
+                    id="image"
+                    multiple
+                  />
+                )}
+                {loading && (
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 ">
+                    <LoadingSpinner />
+                  </div>
+                )}
+                <small className="form-control-feedback" />
+              </Label>
+              {/* <Input
                 control={control}
                 name="image"
                 placeholder="Giúp mình nhé hehe "
               /> */}
-          </Field>
+            </Field>
           </Row>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
@@ -88,7 +114,7 @@ const CategoryAdd = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                // onClick={handleSubmit(handleCreateCustomer)}
+                onClick={handleSubmit(handleCreateCategory)}
               >
                 Lưu
               </Button>
@@ -100,4 +126,4 @@ const CategoryAdd = () => {
   );
 };
 
-export default CategoryAdd
+export default CategoryAdd;

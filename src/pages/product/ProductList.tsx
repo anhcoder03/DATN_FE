@@ -64,6 +64,7 @@ const ProductList = () => {
     }
   };
   useEffect(() => {
+    document.title = "Danh sách sản phẩm";
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
     navigate(`?${urlParams}`);
@@ -140,7 +141,7 @@ const ProductList = () => {
                 <td onClick={() => gotoDetail(item)}>{item._id}</td>
                 <td onClick={() => gotoDetail(item)}>
                   <img
-                    className="w-10 h-10 object-cover rounded-full"
+                    className="w-10 h-10 object-cover rounded"
                     src={`${item?.image ? item?.image : profilePic} `}
                     alt=""
                   />

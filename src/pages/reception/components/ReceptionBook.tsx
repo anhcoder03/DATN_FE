@@ -1,55 +1,175 @@
+import { useEffect, useState } from "react";
 import { FilterReceptionBook } from "../../../components/filters";
-import CustomTable from "../../../components/table/Table2";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
+import { getAllExamination } from "../../../services/examination.service";
+import { Table3 } from "../../../components/table";
+import moment from "moment";
+import { IconTrash } from "../../../components/icons";
+import IconEdit from "../../../assets/images/icon-edit.png";
+import CalcUtils from "../../../helpers/CalcULtils";
+import { Pagination } from "../../../components/pagination";
+import { Modal } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const ReceptionBook = () => {
+  const optionsPagination = [
+    { value: 25, label: "25 bản ghi" },
+    { value: 50, label: "50 bản ghi" },
+    { value: 100, label: "100 bản ghi" },
+  ];
+  const [bookings, setBookings] = useState<any[]>();
+  const [booking, setBooking] = useState<any>();
+  const [loading, setLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalDocs, setTotalDocs] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
+  const urlParams = new URLSearchParams(location.search);
+  const navigate = useNavigate();
+  const [query, setQuery] = useState({
+    _page: 1,
+    _limit: 25,
+    _sort: "createdAt",
+    _order: "asc",
+    status: "booking",
+  });
   const columns = [
-    { id: "_id", label: "Mã bệnh nhân" },
-    { id: "name", label: "Tên bệnh nhân" },
-    { id: "dateOfBirth", label: "Tuổi" },
-    { id: "gender", label: "Giới tính" },
-    { id: "phone", label: "Số điện thoại" },
-    { id: "day_booking", label: "Ngày đặt lịch" },
-    { id: "service_id", label: "Dịch vụ khám" },
-    { id: "doctor_id", label: "Bác sĩ" },
-    { id: "creator_id", label: "Người tạo" },
-    { id: "createdAt", label: "Ngày tạo" },
-  ];
-  const rows = [
     {
-      _id: "KH00002",
-      name: "Nguyễn Phi Anh",
-      dateOfBirth: "10 tuổi, 2 tháng, 12 ngày",
-      gender: "Nam",
-      phone: "0357984421",
-      day_booking: "12:00 01/10/2023",
-      service_id: "Khám chim",
-      doctor_id: "Ngọc Trinh",
-      creator_id: "Trần Minh Hiếu",
-      createdAt: "30/09/2023",
+      name: "Tên bệnh nhân",
+      selector: function (row: any) {
+        return row.customerId._id;
+      },
     },
     {
-      _id: "KH00003",
-      name: "Nguyễn Phi Anh",
-      dateOfBirth: "10 tuổi, 2 tháng, 12 ngày",
-      gender: "Nam",
-      phone: "0357984421",
-      day_booking: "12:00 01/10/2023",
-      service_id: "Khám chim",
-      doctor_id: "Trần Hà Linh",
-      creator_id: "Trần Minh Hiếu",
-      createdAt: "30/09/2023",
+      name: "Tuổi",
+      selector: (row: { customerId: { dateOfBirth: any } }) =>
+        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
+    },
+    {
+      name: "Giới tính",
+      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+    },
+    {
+      name: "Số điện thoại",
+      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+    },
+    {
+      name: "Ngày đặt lịch",
+      selector: (row: { day_booking: moment.MomentInput }) =>
+        moment(row?.day_booking).format("DD/MM/YYYY"),
+    },
+    {
+      name: "Nhân viên tiếp đón",
+      selector: (row: { staffId: { name: any } }) => row.staffId.name,
+    },
+    {
+      name: "Bác sĩ",
+      selector: (row: { doctorId: { name: any } }) => row.doctorId.name,
+    },
+    {
+      name: "Ngày tạo",
+      selector: (row: { createdAt: moment.MomentInput }) =>
+        moment(row?.createdAt).format("DD/MM/YYYY"),
     },
   ];
+  const handleUpdate = (data: any) => {
+    setOpenModal(true);
+    setBooking(data);
+  };
+
+  const handleGetExamination = async () => {
+    try {
+      setLoading(true);
+      const data = await getAllExamination(query);
+      setLoading(false);
+      setTotalPages(data.totalPages);
+      setTotalDocs(data.totalDocs);
+      setBookings(data.docs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    urlParams.set("page", query._page as any);
+    urlParams.set("limit", query._limit as any);
+    navigate(`?${urlParams}`);
+    handleGetExamination();
+  }, [query]);
+  const handleLimitChange = (data: any) => {
+    setQuery({ ...query, _limit: data.value });
+  };
   const selectedHeading = useSelector(
     (state: RootState) => state.headingBooking.selectedHeadings
   );
-  console.log(selectedHeading);
+  const deserializedHeadings = selectedHeading.map((heading) => {
+    return {
+      name: heading.name,
+      selector: eval(heading.selector),
+    };
+  });
+
+  const action = {
+    name: "Thao tác",
+    cell: (row: { _id: any }) => (
+      <div className="flex items-center gap-x-3">
+        <button
+          onClick={() => handleUpdate(row)}
+          className="button-nutri text-[#585858]"
+        >
+          <IconTrash />
+        </button>
+        <button
+          onClick={() => console.log(row._id)}
+          className="button-nutri text-[#585858]"
+        >
+          <img
+            style={{ border: "none" }}
+            src={IconEdit}
+            width={20}
+            height={20}
+            alt=""
+          />
+        </button>
+      </div>
+    ),
+  };
+  const newHeading = [...deserializedHeadings, action];
+  const handlePageClick = (event: any) => {
+    const page = event.selected + 1;
+    setQuery({ ...query, _page: page });
+  };
+  const onOk = async () => {
+    setOpenModal(false);
+  };
+
   return (
     <>
       <FilterReceptionBook columns={columns}></FilterReceptionBook>
-      <CustomTable columns={selectedHeading} rows={rows} />
+      <Table3 isLoading={loading} columns={newHeading} data={bookings}></Table3>
+      <Pagination
+        handlePageClick={handlePageClick}
+        pageCount={totalPages}
+        handleLimitChange={handleLimitChange}
+        optionsPagination={optionsPagination}
+        totalDocs={totalDocs}
+        totalPages={totalPages}
+      ></Pagination>
+      <Modal
+        centered
+        open={openModal}
+        onOk={onOk}
+        onCancel={() => setOpenModal(false)}
+      >
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+          Thông Báo
+        </h1>
+        <div className="flex flex-col items-center justify-center py-4 text-sm">
+          <p>Bạn có chắc muốn xoá phiếu đặt lịch</p>
+          <span className="text-center text-[#ff5c75] font-bold">
+            {booking?._id}
+          </span>
+        </div>
+      </Modal>
     </>
   );
 };
