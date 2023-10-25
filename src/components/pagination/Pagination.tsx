@@ -22,7 +22,7 @@ const Pagination = ({
 }: TPagination) => {
   return (
     <React.Fragment>
-      <div className="flex items-center justify-between p-5 rounded-xl bg-white">
+      <div className="flex items-center justify-between p-5 rounded-bl-xl rounded-br-xl bg-white">
         <Select
           menuPlacement="top"
           options={optionsPagination}

@@ -14,12 +14,22 @@ import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
+import AddBooking from "./pages/reception/components/AddBooking";
+import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
     {
       path: "reception",
       element: <ReceptionList />,
+    },
+    {
+      path: "reception/add",
+      element: <ReceptionAdd />,
+    },
+    {
+      path: "reception/addBooking",
+      element: <AddBooking />,
     },
     {
       path: "examination",

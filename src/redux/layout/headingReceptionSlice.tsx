@@ -3,7 +3,7 @@ import moment from "moment";
 const headings = [
   {
     name: "Mã bệnh nhân",
-    selector: (row: any) => row?._id,
+    selector: (row: any) => row?.customerId?._id,
   },
   {
     name: "Tên bệnh nhân",

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   resetHeadings,
   setSelectedHeadings,
-} from "../../redux/layout/headingExaminationSlice";
+} from "../../redux/layout/HeadingWaiting";
 import { RootState } from "../../redux/store";
 interface Column {
   name: any;
@@ -16,18 +16,13 @@ interface IModal {
   handleCancel: () => void;
   headings: Column[];
 }
-const ModalExamination = ({
-  open,
-  handleCancel,
-  handleOk,
-  headings,
-}: IModal) => {
+const ModalWaiting = ({ open, handleCancel, handleOk, headings }: IModal) => {
   const [checked, setChecked] = useState<boolean[]>(
     Array(headings?.length).fill(false)
   );
   const dispatch = useDispatch();
   const selectedHeading = useSelector(
-    (state: RootState) => state.headingExamination.selectedHeadings
+    (state: RootState) => state.headingWaiting.selectedHeadings
   );
 
   useEffect(() => {
@@ -135,4 +130,4 @@ const ModalExamination = ({
   );
 };
 
-export default ModalExamination;
+export default ModalWaiting;

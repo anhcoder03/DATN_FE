@@ -101,7 +101,7 @@ const ReceptionBook = () => {
   const selectedHeading = useSelector(
     (state: RootState) => state.headingBooking.selectedHeadings
   );
-  const deserializedHeadings = selectedHeading.map((heading) => {
+  const deserializedHeadings = selectedHeading.map((heading: any) => {
     return {
       name: heading.name,
       selector: eval(heading.selector),

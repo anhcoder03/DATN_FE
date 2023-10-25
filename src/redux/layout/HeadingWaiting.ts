@@ -30,8 +30,8 @@ const serializedHeadings = headings.map((heading) => {
     selector: heading.selector.toString(), // Chuyển đổi hàm thành chuỗi JSON
   };
 });
-export const headingExamination = createSlice({
-  name: "headingExamination",
+export const headingWaiting = createSlice({
+  name: "headingWaiting",
   initialState: {
     selectedHeadings: serializedHeadings,
   },
@@ -44,6 +44,5 @@ export const headingExamination = createSlice({
     },
   },
 });
-export const { setSelectedHeadings, resetHeadings } =
-  headingExamination.actions;
-export default headingExamination.reducer;
+export const { setSelectedHeadings, resetHeadings } = headingWaiting.actions;
+export default headingWaiting.reducer;

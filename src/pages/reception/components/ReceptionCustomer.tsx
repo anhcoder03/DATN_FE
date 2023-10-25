@@ -45,7 +45,7 @@ const ReceptionCustomer = () => {
   const columns = [
     {
       name: "Mã bệnh nhân",
-      selector: (row: any) => row?._id,
+      selector: (row: any) => row?.customerId?._id,
     },
     {
       name: "Tên bệnh nhân",
@@ -178,9 +178,6 @@ const ReceptionCustomer = () => {
     setTimeout(() => {
       handlePrint();
     }, 500);
-  };
-  const onOk = async () => {
-    setOpenModal(false);
   };
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;

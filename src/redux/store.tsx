@@ -13,11 +13,19 @@ import {
   REGISTER,
 } from "redux-persist";
 import headingPrescriptionSlice from "./layout/headingPrescriptionSlice";
+import { headingWaiting } from "./layout/HeadingWaiting";
+import authSlice from "./auth/authSlice";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["headingExamination", "headingReception", "headingBooking"],
+  whitelist: [
+    "headingExamination",
+    "headingReception",
+    "headingBooking",
+    "headingWaiting",
+    "auth",
+  ],
 };
 
 const reducer = combineReducers({
@@ -25,6 +33,8 @@ const reducer = combineReducers({
   headingReception: headingReceptionReducer,
   headingBooking: headingBookingReducer,
   headingPrescription: headingPrescriptionSlice.reducer,
+  headingWaiting: headingWaiting.reducer,
+  auth: authSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);

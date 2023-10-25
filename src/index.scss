@@ -131,6 +131,8 @@ input {
   color: #6c757d !important;
   font-size: 14px !important;
 }
+.custom-table th,
+.custom-table td,
 .table-wrapper th,
 .table-wrapper td,
 .MuiTable-root td,
@@ -144,7 +146,7 @@ input {
   overflow-y: scroll !important;
 }
 .sc-feUZmu {
-  max-height: calc(100vh - 415px) !important;
+  max-height: calc(100vh - 350px) !important;
   height: 100% !important;
   overflow-y: scroll !important;
 }
@@ -152,6 +154,7 @@ input {
 .MuiTable-root tbody {
   background-color: white !important;
 }
+.custom-table th,
 .table-wrapper th,
 .MuiTable-root th {
   font-weight: 700 !important;
@@ -160,6 +163,7 @@ input {
   padding: 14px;
   font-size: 15px !important;
 }
+.custom-table td,
 .table-wrapper td,
 .MuiTable-root td {
   padding: 15px 20px !important;
@@ -168,10 +172,11 @@ input {
 
 .table-wrapper tbody tr:hover,
 .MuiTable-root tbody tr:hover,
-.jTxdyS:hover {
+.sc-dhKdcB:hover {
   background-color: #48a8001a !important;
   cursor: pointer;
 }
+.custom-table tbody tr,
 .table-wrapper tbody tr {
   box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
 }
