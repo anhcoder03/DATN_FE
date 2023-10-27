@@ -13,7 +13,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createCategory } from "../../services/category.service";
 import { useNavigate } from "react-router-dom";
-import NotImage from '../../assets/images/users/no-img.jpg';
+import NotImage from "../../assets/images/users/no-img.jpg";
 const schema = yup.object({
   name: yup.string().trim().required("Tên danh mục không được để trống!"),
   image: yup.string().trim().required("Ảnh danh mục không được để trống!"),
@@ -30,7 +30,6 @@ const CategoryAdd = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
-
 
   // useEffect(() => {
   //   const arrayError: any = Object.values(errors);
@@ -61,24 +60,29 @@ const CategoryAdd = () => {
               />
             </Field>
             <Field>
-            <Label className="tee-file-preview" htmlFor="image">
-              <img 
-                src={NotImage}
-              />
-              <div className="tee-file-hover">
-                  <span><i className="ti-reload" /> Thay đổi</span> 
-              </div> 
-              <input 
-              // onChange={_onChangeImage}
-               accept="image/png, image/gif, image/jpeg" className="tee-file-input" name="image" type="file" id="image" /> 
-              <small className="form-control-feedback" />
-            </Label>
-            {/* <Input
+              <Label className="tee-file-preview" htmlFor="image">
+                <img src={NotImage} />
+                <div className="tee-file-hover">
+                  <span>
+                    <i className="ti-reload" /> Thay đổi
+                  </span>
+                </div>
+                <input
+                  // onChange={_onChangeImage}
+                  accept="image/png, image/gif, image/jpeg"
+                  className="tee-file-input"
+                  name="image"
+                  type="file"
+                  id="image"
+                />
+                <small className="form-control-feedback" />
+              </Label>
+              {/* <Input
                 control={control}
                 name="image"
                 placeholder="Giúp mình nhé hehe "
               /> */}
-          </Field>
+            </Field>
           </Row>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
@@ -100,4 +104,4 @@ const CategoryAdd = () => {
   );
 };
 
-export default CategoryAdd
+export default CategoryAdd;

@@ -11,9 +11,9 @@ export interface IDataAddress {
   phone_code: number;
 }
 export const optionClinic: IOption[] = [
-  { value: "phongkham1", label: "Phòng 1" },
-  { value: "phongkham2", label: "Phòng 2" },
-  { value: "phongkham3", label: "Phòng 3" },
+  { value: "", label: "-Trạng thái-" },
+  { value: "active", label: "Đang hoạt động" },
+  { value: "stop", label: "Ngừng hoạt động" },
 ];
 
 export const optionDoctor: IOption[] = [

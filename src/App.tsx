@@ -11,9 +11,12 @@ import CategoryList from "./pages/category/CategoryList";
 import CategoryAdd from "./pages/category/CategoryAdd";
 import CategoryUpdate from "./pages/category/components/CategoryUpdate";
 import CategoryDetail from "./pages/category/components/CategoryDetail";
-import PrescriptionListContainer from './pages/prescription/list';
+import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
+import ClinicList from "./pages/clinic/ClinicList";
+import ClinicAdd from "./pages/clinic/ClinicAdd";
+import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -54,11 +57,23 @@ function App() {
       element: <CategoryUpdate />,
     },
     {
-      path: 'category/:id',
-      element: <CategoryDetail />
+      path: "category/:id",
+      element: <CategoryDetail />,
     },
     {
-      path: 'prescription',
+      path: "configuration/clinic",
+      element: <ClinicList />,
+    },
+    {
+      path: "configuration/clinic/add",
+      element: <ClinicAdd />,
+    },
+    {
+      path: "configuration/clinic/update/:id",
+      element: <ClinicUpdate />,
+    },
+    {
+      path: "prescription",
       element: <PrescriptionListContainer />,
     },
     {
