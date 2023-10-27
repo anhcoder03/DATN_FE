@@ -14,6 +14,8 @@ import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
+import ServiceList from "./pages/service/ServiceList";
+import ServiceAdd from "./pages/service/ServiceAdd";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -69,6 +71,14 @@ function App() {
       path: "product/list",
       element: <ProductList />,
     },
+    {
+      path: 'service/list',
+      element: <ServiceList />
+    },
+    {
+      path: 'service/add',
+      element: <ServiceAdd />
+    }
   ]);
   return (
     <React.Fragment>
