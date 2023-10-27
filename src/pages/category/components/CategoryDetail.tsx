@@ -32,7 +32,7 @@ const CategoryDetail = () => {
   };
   return (
     <Layout>
-      <div className="relative h-full">
+      <div className="relative h-full only-view">
         <Heading>Thêm danh mục </Heading>
         <form className="w-full p-5 bg-white ">
           <Heading>Thông tin danh mục </Heading>

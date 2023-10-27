@@ -50,3 +50,9 @@ export const optionNVTD: IOption[] = [
 //   { value: "dfđ", label: "Nguyễn Phi Anh" },
 //   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 // ];
+
+export const optionService: IOption[] = [
+  {value: '', label: '-Trạng thái-'},
+  {value: '1', label: 'Đang hoạt động'},
+  {value: '0', label: 'Không hoạt động'}
+]

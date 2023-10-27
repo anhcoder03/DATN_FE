@@ -1,41 +1,43 @@
-import { Layout } from "../../components/layout";
-import { Input } from "../../components/input";
+import { Layout } from "../../../components/layout";
+import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
-import { Field } from "../../components/field";
-import { Label } from "../../components/label";
-import { Row } from "../../components/row";
+import { Field } from "../../../components/field";
+import { Label } from "../../../components/label";
+import { Row } from "../../../components/row";
 import { useEffect, useState } from "react";
-import Heading from "../../components/common/Heading";
-import { Button } from "../../components/button";
+import Heading from "../../../components/common/Heading";
+import { Button } from "../../../components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { createService } from "../../services/service.service";
+import { useNavigate, useParams } from "react-router-dom";
+import { getOneService } from "../../../services/service.service";
 const schema = yup.object({
   name: yup.string().trim().required("Tên danh mục không được để trống!"),
   price: yup.number().required('Giá dịch vụ không được để trống')
 });
 
-const ServiceAdd = () => {
+const ServiceDetail = () => {
+    const { id } = useParams();
   const navigate = useNavigate();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm<any>({
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
-  const handleCreateService = async (values: any) => {
-    const res = await createService({ ...values });
-    if (res?.services) {
-      toast.success(res?.message);
-      navigate("/service/list");
-    } else {
-      toast.error(res.message);
+  useEffect(() => {
+    async function handleGetService() {
+      const res = await getOneService(id);
+      if (res) {
+        reset(res);
+      }
     }
-  };
+    handleGetService();
+  }, [id]);
 
   useEffect(() => {
     const arrayError: any = Object.values(errors);
@@ -43,12 +45,14 @@ const ServiceAdd = () => {
       toast.warning(arrayError[0]?.message);
     }
   });
-  
+  const handleGotoUpdate = () => {
+    navigate(`/service/update/${id}`);
+  };
 
   return (
     <Layout>
-      <div className="relative h-full">
-        <Heading>Thêm dịch vụ </Heading>
+      <div className="relative h-full only-view">
+        <Heading>Chi tiết dịch vụ </Heading>
         <form className="w-full p-5 bg-white ">
           <Heading>Thông tin dịch vụ </Heading>
           <Row>
@@ -94,9 +98,9 @@ const ServiceAdd = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleCreateService)}
+                onClick={() => handleGotoUpdate()}
               >
-                Lưu
+                Chỉnh sửa
               </Button>
             </div>
           </div>
@@ -106,4 +110,4 @@ const ServiceAdd = () => {
   );
 };
 
-export default ServiceAdd;
+export default ServiceDetail;

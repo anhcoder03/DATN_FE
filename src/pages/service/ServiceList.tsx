@@ -11,6 +11,8 @@ import { Pagination } from "../../components/pagination";
 import { getAllService, deleteService } from "../../services/service.service";
 import PriceUtils from "../../helpers/PriceUtils";
 import ServiceFillter from "./components/ServiceFillter";
+import IconLock from '../../assets/images/icon-lock.png';
+import IconUnLock from '../../assets/images/icon-unlock.png';
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
@@ -111,9 +113,16 @@ const ServiceList = () => {
   };
   const gotoDetail = (item: any) => {
     console.log(item?._id);
-    // navigate(`/service/${item?._id}`);
-    toast.warning("Tính năng đang phát triển");
+    navigate(`/service/${item?._id}`);
   };
+  const StatusServicePack = (status: any) => {
+    if(status == 1) {
+      return <span className="text-success">Đang hoạt động</span>
+    }
+    if(status == 0) {
+      return <span className="text-danger">Không hoạt động</span>
+    }
+  }
   console.log('servies',services);
   
   return (
@@ -139,13 +148,16 @@ const ServiceList = () => {
                 <td onClick={() => gotoDetail(item)}>{item._id}</td>
                 <td onClick={() => gotoDetail(item)}>{item?.name}</td>
                 <td onClick={() => gotoDetail(item)}>{PriceUtils.format(item?.price || 0, 'đ')}</td>
-                <td onClick={() => gotoDetail(item)}>chưa có trạng thái</td>
+                <td onClick={() => gotoDetail(item)}>{StatusServicePack(item?.status)}</td>
                 <td>
                   <div className="table-action">
+                    <div className="button-nutri" onClick={() => handleShowModel({type: item?.status == 1 ? 'stop' : 'active', data: item})}>
+                      <img style={{border: 'none'}} src={ item?.status == 1 ? IconLock : IconUnLock} width={20} height={20} alt=""/>
+                    </div>
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        navigate(`/customer/update/${item?._id}`);
+                        navigate(`/service/update/${item?._id}`);
                       }}
                     >
                       <img width={20} height={20} src={IconEdit} alt="edit" />
@@ -177,6 +189,8 @@ const ServiceList = () => {
         onOk={onOk}
         onCancel={() => setOpenModal(false)}
       >
+        {/* {service?.type == 'stop'}
+        {service?.type == 'active'}
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
@@ -185,10 +199,60 @@ const ServiceList = () => {
           <span className="text-center text-[#ff5c75] font-bold">
             {service?.name}
           </span>
-        </div>
+        </div> */}
+        <HandleRenderPopup
+          service = {service}
+        />
       </Modal>
     </Layout>
   );
 };
+const HandleRenderPopup = (props: any) => {
+  const {service} = props;
+  if(service?.type == 'active') {
+    return (
+      <>
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+        Kích hoạt dịch vụ
+      </h1>
+      <div className="flex flex-col items-center justify-center py-4 text-sm">
+        <p>Bạn có chắc muốn kích hoạt dịch vụ không?</p>
+        <span className="text-center text-[#ff5c75] font-bold">
+          {service?.name}
+        </span>
+      </div>
+      </>
+    )
+  }
+  if(service?.type == 'stop') {
+    return (
+      <>
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+        Vô hiệu hoá dịch vụ
+      </h1>
+      <div className="flex flex-col items-center justify-center py-4 text-sm">
+        <p>Bạn có chắc muốn vô hiệu hoá dịch vụ này không</p>
+        <span className="text-center text-[#ff5c75] font-bold">
+          {service?.name}
+        </span>
+      </div>
+      </>
+    )
+  }
+  return (
+    <>
+      <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+      Thông Báo
+    </h1>
+    <div className="flex flex-col items-center justify-center py-4 text-sm">
+      <p>Bạn có chắc muốn xoá dịch vụ</p>
+      <span className="text-center text-[#ff5c75] font-bold">
+        {service?.name}
+      </span>
+    </div>
+    </>
+    
+  )
+}
 
 export default ServiceList;

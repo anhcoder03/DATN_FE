@@ -16,6 +16,8 @@ import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
 import ServiceList from "./pages/service/ServiceList";
 import ServiceAdd from "./pages/service/ServiceAdd";
+import ServiceDetail from './pages/service/components/ServiceDetail';
+import ServiceUpdate from "./pages/service/components/ServiceUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -78,6 +80,14 @@ function App() {
     {
       path: 'service/add',
       element: <ServiceAdd />
+    },
+    {
+      path: 'service/:id',
+      element: <ServiceDetail />
+    },
+    {
+      path: 'service/update/:id',
+      element: <ServiceUpdate />
     }
   ]);
   return (

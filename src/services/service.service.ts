@@ -14,7 +14,7 @@ export const getAllService = async (params?: any) => {
 export const getOneService = async (id: any) => {
   try {
     const response = await http.get(`/services/${id}`);
-    return response.category;
+    return response.services;
   } catch (error) {
     return error;
   }

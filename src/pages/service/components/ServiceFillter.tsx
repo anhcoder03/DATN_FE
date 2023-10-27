@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
-import { optionStatus } from "../../../constants/options";
+import { optionService } from "../../../constants/options";
 import Select from "react-select";
 type TFilterService = {
   handleSearch: (e: any) => void;
@@ -34,7 +34,7 @@ const ServiceFillter = ({
             className="react-select"
             classNamePrefix="react-select"
             placeholder="-Trạng thái-"
-            options={optionStatus}
+            options={optionService}
             onChange={handleStatusChange}
           ></Select>
         </div>
