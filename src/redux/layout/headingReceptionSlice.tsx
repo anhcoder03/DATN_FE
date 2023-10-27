@@ -1,28 +1,46 @@
 import { createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
 const headings = [
-  { id: "id", label: "ID" },
-  { id: "name", label: "Tên bệnh nhân" },
-  { id: "age", label: "Tuổi" },
-  { id: "address", label: "Cơ sở khám" },
-  { id: "status", label: "Trạng thái" },
+  {
+    name: "Mã bệnh nhân",
+    selector: (row: any) => row?._id,
+  },
+  {
+    name: "Tên bệnh nhân",
+    selector: (row: any) => row?.customerId.name,
+  },
+
+  {
+    name: "Ngày tiếp đón",
+    selector: (row: { day_welcome: moment.MomentInput }) =>
+      moment(row?.day_welcome).format("DD/MM/YYYY"),
+  },
+  {
+    name: "Phòng khám",
+    selector: (row: { clinicId: { name: any } }) => row.clinicId?.name,
+  },
+  {
+    name: "Bác sĩ",
+    selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+  },
 ];
+const serializedHeadings = headings.map((heading) => {
+  return {
+    name: heading.name,
+    selector: heading.selector.toString(), // Chuyển đổi hàm thành chuỗi JSON
+  };
+});
 export const headingReception = createSlice({
   name: "headingReception",
   initialState: {
-    selectedHeadings: [
-      { id: "id", label: "ID" },
-      { id: "name", label: "Tên bệnh nhân" },
-      { id: "age", label: "Tuổi" },
-      { id: "address", label: "Cơ sở khám" },
-      { id: "status", label: "Trạng thái" },
-    ],
+    selectedHeadings: serializedHeadings,
   },
   reducers: {
     setSelectedHeadings: (state, action) => {
       state.selectedHeadings = action.payload;
     },
     resetHeadings: (state) => {
-      state.selectedHeadings = headings;
+      state.selectedHeadings = serializedHeadings;
     },
   },
 });

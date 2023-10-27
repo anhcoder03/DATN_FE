@@ -5,7 +5,7 @@ const http = new Http();
 export const getAllCategory = async (params?: any) => {
   try {
     const response = await http.get(`/categories`, params);
-    console.log("Cate",response);
+    console.log("Cate", response);
     return response.categories;
   } catch (error) {
     console.error(error);
@@ -14,7 +14,7 @@ export const getAllCategory = async (params?: any) => {
 export const getOneCategory = async (id: any) => {
   try {
     const response = await http.get(`/categories/${id}`);
-    return response.customer;
+    return response.category;
   } catch (error) {
     return error;
   }
@@ -30,12 +30,10 @@ export const createCategory = async (data: any) => {
 export const updateCategory = async (data: any) => {
   try {
     const response = await http.update(`/categories/${data?._id}`, data);
-    console.log('respon', response, data);
-    
     return response;
   } catch (error) {
     console.log("errorr", error);
-    
+
     return error;
   }
 };

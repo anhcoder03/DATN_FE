@@ -100,18 +100,21 @@ input {
 }
 
 .MuiTableContainer-root::-webkit-scrollbar,
-.table-wrapper::-webkit-scrollbar {
+.table-wrapper::-webkit-scrollbar,
+.sc-feUZmu::-webkit-scrollbar {
   width: 8px;
   background-color: #7878781a;
 }
 .MuiTableContainer-root::-webkit-scrollbar-thumb,
-.table-wrapper::-webkit-scrollbar-thumb {
+.table-wrapper::-webkit-scrollbar-thumb,
+.sc-feUZmu::-webkit-scrollbar-thumb {
   background-color: #bbbbbbb8;
   border-radius: 5px;
 }
 
 .MuiTableContainer-root::-webkit-scrollbar-thumb:hover,
-.table-wrapper::-webkit-scrollbar-thumb:hover {
+.table-wrapper::-webkit-scrollbar-thumb:hover,
+.sc-feUZmu::-webkit-scrollbar-thumb:hover {
   background-color: #bbbbbb;
 }
 
@@ -123,18 +126,25 @@ input {
   background-color: #f4f6f8 !important;
   font-size: 14px !important;
 }
-.css-1ex1afd-MuiTableCell-root {
+.css-1ex1afd-MuiTableCell-root,
+.rdt_TableCell {
   color: #6c757d !important;
   font-size: 14px !important;
 }
 .table-wrapper th,
 .table-wrapper td,
 .MuiTable-root td,
-.MuiTable-root th {
+.MuiTable-root th,
+.rdt_TableRow {
   vertical-align: middle !important;
 }
 .MuiTableContainer-root {
   max-height: calc(100vh - 350px) !important;
+  height: 100% !important;
+  overflow-y: scroll !important;
+}
+.sc-feUZmu {
+  max-height: calc(100vh - 415px) !important;
   height: 100% !important;
   overflow-y: scroll !important;
 }
@@ -144,17 +154,21 @@ input {
 }
 .table-wrapper th,
 .MuiTable-root th {
-  padding: 20px 30px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   text-align: left !important;
   color: #585858 !important  ;
+  padding: 14px;
+  font-size: 15px !important;
 }
 .table-wrapper td,
 .MuiTable-root td {
-  padding: 15px 30px !important;
+  padding: 15px 20px !important;
+  font-size: 13px !important;
 }
+
 .table-wrapper tbody tr:hover,
-.MuiTable-root tbody tr:hover {
+.MuiTable-root tbody tr:hover,
+.jTxdyS:hover {
   background-color: #48a8001a !important;
   cursor: pointer;
 }
@@ -499,4 +513,25 @@ small {
 .sidebar-menu .link-menu:hover {
   display: block;
   width: 250px;
+}
+.lnndaO {
+  font-weight: 600 !important;
+  text-align: left !important;
+  color: #585858 !important;
+  font-size: 15px !important;
+  overflow: unset !important;
+  font-weight: bold !important;
+}
+.rdt_TableHeadRow {
+  background-color: #f4f6f8 !important;
+  font-size: 16px !important;
+  padding: 10px 0 !important;
+}
+
+// css text
+.text-success {
+  color: #48a81d!important;
+}
+.text-danger {
+  color: #ff5c75!important;
 }

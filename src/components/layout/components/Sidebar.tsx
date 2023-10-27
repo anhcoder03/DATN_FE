@@ -71,7 +71,7 @@ const menuConfiguration: TMenu[] = [
     icon: <IconFolder />,
   },
   {
-    path: "/configuration/service",
+    path: "/service/list",
     title: "Dịch vụ",
     icon: <IconFolder />,
   },

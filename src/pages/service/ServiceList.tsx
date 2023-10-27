@@ -8,20 +8,20 @@ import { useNavigate } from "react-router-dom";
 import { IconTrash } from "../../components/icons";
 import { Modal } from "antd";
 import { Pagination } from "../../components/pagination";
-import { IMedicine } from "../../types/menicine.type";
-import { deleteProduct, getAllProduct } from "../../services/medicine.service";
-import profilePic from "../../assets/images/users/no-img.jpg";
-import FilterProduct from "./components/FilterProduct";
-
+import { getAllService, deleteService } from "../../services/service.service";
+import PriceUtils from "../../helpers/PriceUtils";
+import ServiceFillter from "./components/ServiceFillter";
+import IconLock from '../../assets/images/icon-lock.png';
+import IconUnLock from '../../assets/images/icon-unlock.png';
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
   { value: 100, label: "100 bản ghi" },
 ];
 
-const ProductList = () => {
-  const [products, setProducts] = useState<IMedicine[]>([]);
-  const [product, setProduct] = useState<IMedicine>();
+const ServiceList = () => {
+  const [services, setServices] = useState<any[]>([]);
+  const [service, setservice] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -39,11 +39,9 @@ const ProductList = () => {
   // nếu muốn cho filter delay 500ms dùng useDebounce rồi bỏ nó vào dependence của useEffect
   // const debouncedValue = useDebounce<object>(query, 500);
   const headings = [
-    "Mã sản phẩm",
-    "Ảnh",
-    "Tên sản phẩm",
-    "Hết hạn",
-    "Có thể bán",
+    "Mã dịch vụ",
+    "Tên dịch vụ",
+    "Giá bán",
     "Trạng thái",
     "Thao tác",
   ];
@@ -51,26 +49,27 @@ const ProductList = () => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
-  const handleGetProducts = async () => {
+  const handleGetservices = async () => {
     try {
       setLoading(true);
-      const data = await getAllProduct(query);
+      const data = await getAllService(query);
+      console.log('siuĐatâ', data);
+      
       setLoading(false);
       setTotalPages(data.totalPages);
       setTotalDocs(data.totalDocs);
-      setProducts(data.docs);
+      setServices(data.docs);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    document.title = "Danh sách sản phẩm";
+    document.title = "Danh sách dịch vụ";
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
     navigate(`?${urlParams}`);
-    handleGetProducts();
+    handleGetservices();
   }, [query]);
-
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -96,17 +95,17 @@ const ProductList = () => {
     setQuery({ ...query, _limit: data.value });
   };
 
-  const handleShowModel = (data: IMedicine) => {
+  const handleShowModel = (data: any) => {
     setOpenModal(true);
-    setProduct(data);
+    setservice(data);
   };
   const onOk = async () => {
-    const res = await deleteProduct(product?._id);
+    const res = await deleteService(service?._id);
     console.log(res);
-    if (res?.medicine) {
+    if (res?.services) {
       toast.success(res?.message);
       setOpenModal(false);
-      handleGetProducts();
+      handleGetservices();
     } else {
       toast.error(res?.message);
     }
@@ -114,48 +113,51 @@ const ProductList = () => {
   };
   const gotoDetail = (item: any) => {
     console.log(item?._id);
-    // navigate(`/product/${item?._id}`);
-    toast.warning("Tính năng đang phát triển");
+    navigate(`/service/${item?._id}`);
   };
-
+  const StatusServicePack = (status: any) => {
+    if(status == 1) {
+      return <span className="text-success">Đang hoạt động</span>
+    }
+    if(status == 0) {
+      return <span className="text-danger">Không hoạt động</span>
+    }
+  }
+  console.log('servies',services);
+  
   return (
     <Layout>
-      <Heading>Quản lý danh sách sản phẩm</Heading>
+      <Heading>Quản lý danh sách dịch vụ</Heading>
       <div className="rounded-xl bg-white">
-        <FilterProduct
+      <ServiceFillter
           handleStatusChange={handleStatusChange}
           handleSearch={handleSearch}
-        ></FilterProduct>
+      ></ServiceFillter>
         <div className="bg-white">
           <Table
             headings={headings}
             loading={loading}
-            length={products?.length}
+            length={services?.length}
           >
-            {products?.map((item) => (
+            {services?.map((item) => (
               <tr
                 className="text-xs"
                 style={{ cursor: "pointer" }}
                 key={item?._id}
               >
                 <td onClick={() => gotoDetail(item)}>{item._id}</td>
-                <td onClick={() => gotoDetail(item)}>
-                  <img
-                    className="w-10 h-10 object-cover rounded"
-                    src={`${item?.image ? item?.image : profilePic} `}
-                    alt=""
-                  />
-                </td>
                 <td onClick={() => gotoDetail(item)}>{item?.name}</td>
-                <td onClick={() => gotoDetail(item)}>{item?.dateExpiry}</td>
-                <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
-                <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+                <td onClick={() => gotoDetail(item)}>{PriceUtils.format(item?.price || 0, 'đ')}</td>
+                <td onClick={() => gotoDetail(item)}>{StatusServicePack(item?.status)}</td>
                 <td>
                   <div className="table-action">
+                    <div className="button-nutri" onClick={() => handleShowModel({type: item?.status == 1 ? 'stop' : 'active', data: item})}>
+                      <img style={{border: 'none'}} src={ item?.status == 1 ? IconLock : IconUnLock} width={20} height={20} alt=""/>
+                    </div>
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        navigate(`/customer/update/${item?._id}`);
+                        navigate(`/service/update/${item?._id}`);
                       }}
                     >
                       <img width={20} height={20} src={IconEdit} alt="edit" />
@@ -187,18 +189,70 @@ const ProductList = () => {
         onOk={onOk}
         onCancel={() => setOpenModal(false)}
       >
+        {/* {service?.type == 'stop'}
+        {service?.type == 'active'}
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
         <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá sản phẩm</p>
+          <p>Bạn có chắc muốn xoá dịch vụ</p>
           <span className="text-center text-[#ff5c75] font-bold">
-            {product?.name}
+            {service?.name}
           </span>
-        </div>
+        </div> */}
+        <HandleRenderPopup
+          service = {service}
+        />
       </Modal>
     </Layout>
   );
 };
+const HandleRenderPopup = (props: any) => {
+  const {service} = props;
+  if(service?.type == 'active') {
+    return (
+      <>
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+        Kích hoạt dịch vụ
+      </h1>
+      <div className="flex flex-col items-center justify-center py-4 text-sm">
+        <p>Bạn có chắc muốn kích hoạt dịch vụ không?</p>
+        <span className="text-center text-[#ff5c75] font-bold">
+          {service?.name}
+        </span>
+      </div>
+      </>
+    )
+  }
+  if(service?.type == 'stop') {
+    return (
+      <>
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+        Vô hiệu hoá dịch vụ
+      </h1>
+      <div className="flex flex-col items-center justify-center py-4 text-sm">
+        <p>Bạn có chắc muốn vô hiệu hoá dịch vụ này không</p>
+        <span className="text-center text-[#ff5c75] font-bold">
+          {service?.name}
+        </span>
+      </div>
+      </>
+    )
+  }
+  return (
+    <>
+      <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+      Thông Báo
+    </h1>
+    <div className="flex flex-col items-center justify-center py-4 text-sm">
+      <p>Bạn có chắc muốn xoá dịch vụ</p>
+      <span className="text-center text-[#ff5c75] font-bold">
+        {service?.name}
+      </span>
+    </div>
+    </>
+    
+  )
+}
 
-export default ProductList;
+export default ServiceList;

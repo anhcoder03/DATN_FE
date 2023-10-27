@@ -70,6 +70,7 @@ const CustommerList = () => {
     }
   };
   useEffect(() => {
+    document.title = "Quản lý danh sách khách hàng";
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
     navigate(`?${urlParams}`);

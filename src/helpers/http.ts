@@ -9,9 +9,9 @@ class Http {
     this.api = axios.create({
       baseURL: `http://localhost:8000`,
       timeout: 10000,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
     });
 
     // this.api.interceptors.request.use((config: { headers: { [x: string]: string; }; }) => {
