@@ -40,14 +40,12 @@ const CategoryAdd = () => {
       toast.error(res.message);
     }
   };
-
   useEffect(() => {
     const arrayError: any = Object.values(errors);
     if (arrayError.length > 0) {
       toast.warning(arrayError[0]?.message);
     }
   });
-
   return (
     <Layout>
       <div className="relative h-full">

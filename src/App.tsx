@@ -14,6 +14,9 @@ import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
+import ClinicList from "./pages/clinic/ClinicList";
+import ClinicAdd from "./pages/clinic/ClinicAdd";
+import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
 import ServiceList from "./pages/service/ServiceList";
 import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceDetail from './pages/service/components/ServiceDetail';
@@ -56,6 +59,18 @@ function App() {
     {
       path: "category/update/:id",
       element: <CategoryUpdate />,
+    },
+    {
+      path: "configuration/clinic",
+      element: <ClinicList />,
+    },
+    {
+      path: "configuration/clinic/add",
+      element: <ClinicAdd />,
+    },
+    {
+      path: "configuration/clinic/update/:id",
+      element: <ClinicUpdate />,
     },
     {
       path: "category/view/:id",
