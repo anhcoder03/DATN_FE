@@ -25,7 +25,7 @@ import ClinicAdd from "./pages/clinic/ClinicAdd";
 import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
 import ServiceList from "./pages/service/ServiceList";
 import ServiceAdd from "./pages/service/ServiceAdd";
-import ServiceDetail from './pages/service/components/ServiceDetail';
+import ServiceDetail from "./pages/service/components/ServiceDetail";
 import ServiceUpdate from "./pages/service/components/ServiceUpdate";
 function App() {
   const router = createBrowserRouter([
@@ -114,22 +114,22 @@ function App() {
       path: "product/update/:id",
       element: <ProductUpdate />,
     },
-=======
-      path: 'service/list',
-      element: <ServiceList />
+    {
+      path: "service/list",
+      element: <ServiceList />,
     },
     {
-      path: 'service/add',
-      element: <ServiceAdd />
+      path: "service/add",
+      element: <ServiceAdd />,
     },
     {
-      path: 'service/:id',
-      element: <ServiceDetail />
+      path: "service/:id",
+      element: <ServiceDetail />,
     },
     {
-      path: 'service/update/:id',
-      element: <ServiceUpdate />
-    }
+      path: "service/update/:id",
+      element: <ServiceUpdate />,
+    },
   ]);
   return (
     <React.Fragment>
