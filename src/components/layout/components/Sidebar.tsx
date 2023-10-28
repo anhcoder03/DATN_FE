@@ -66,12 +66,12 @@ const menuConfiguration: TMenu[] = [
     icon: <IconFolder />,
   },
   {
-    path: "/configuration/department",
+    path: "/configuration/clinic",
     title: "Phòng khám",
     icon: <IconFolder />,
   },
   {
-    path: "/configuration/service",
+    path: "/service/list",
     title: "Dịch vụ",
     icon: <IconFolder />,
   },
