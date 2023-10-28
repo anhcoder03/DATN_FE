@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import ReceptionList from "./pages/reception/ReceptionList";
@@ -14,6 +14,12 @@ import CategoryDetail from "./pages/category/components/CategoryDetail";
 import PrescriptionListContainer from "./pages/prescription/list";
 import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
+import AddBooking from "./pages/reception/components/AddBooking";
+import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
+import ProductAdd from "./pages/product/components/ProductAdd";
+import LoadingPage from "./components/common/LoadingPage";
+import ProductDetail from "./pages/product/components/ProductDetail";
+import ProductUpdate from "./pages/product/components/ProductUpdate";
 import ClinicList from "./pages/clinic/ClinicList";
 import ClinicAdd from "./pages/clinic/ClinicAdd";
 import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
@@ -27,6 +33,14 @@ function App() {
     {
       path: "reception",
       element: <ReceptionList />,
+    },
+    {
+      path: "reception/add",
+      element: <ReceptionAdd />,
+    },
+    {
+      path: "reception/addBooking",
+      element: <AddBooking />,
     },
     {
       path: "examination",
@@ -89,6 +103,18 @@ function App() {
       element: <ProductList />,
     },
     {
+      path: "product/add",
+      element: <ProductAdd />,
+    },
+    {
+      path: "product/view/:id",
+      element: <ProductDetail />,
+    },
+    {
+      path: "product/update/:id",
+      element: <ProductUpdate />,
+    },
+=======
       path: 'service/list',
       element: <ServiceList />
     },
@@ -107,7 +133,9 @@ function App() {
   ]);
   return (
     <React.Fragment>
-      <RouterProvider router={router} />
+      <Suspense fallback={<LoadingPage />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </React.Fragment>
   );
 }

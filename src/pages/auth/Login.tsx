@@ -4,24 +4,29 @@ import { Field } from "../../components/field";
 import { Input } from "../../components/input";
 import { Label } from "../../components/label";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo3.png";
 import { Button } from "../../components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { TDataResponse, handleLogin } from "../../redux/auth/handler";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 type TLogin = {
-  phone: number;
+  email: string;
   password: string;
 };
 const schema = yup.object({
-  phone: yup
+  email: yup
     .string()
-    .required("* Số điện thoại không được để trống!")
-    .matches(/^(0[0-9]+)$/, "* Số điện thoại không đúng định dạng")
-    .min(10, "* Số điện thoại phải có ít nhất 10 chữ số")
-    .max(11, "* Số điện thoại không được vượt quá 11 chữ số"),
-  password: yup.string().required("* Mật khẩu không được để trống!"),
+    .required("* Email không được để trống!")
+    .email("Email không đúng định dạng"),
+
+  password: yup
+    .string()
+    .required("* Mật khẩu không được để trống!")
+    .min(6, "Mật khẩu ít nhất 6 ký tự"),
 });
 const Login = () => {
   const {
@@ -32,10 +37,22 @@ const Login = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
-  const handleLogin = (values: TLogin) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleSignin = async (values: TLogin) => {
     if (!isValid) return;
-    console.log(values);
-    // xử lý login ở đây || handle login here
+    try {
+      const response: TDataResponse = await dispatch(
+        handleLogin(values) as any
+      ).unwrap();
+      console.log(response);
+      toast.success(response?.message);
+      if (response?.user) {
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -55,13 +72,13 @@ const Login = () => {
         <form className="w-full flex flex-col gap-y-5">
           <Field>
             <Label htmlFor="phone" className="text-base font-medium">
-              Số điện thoại
+              Email
             </Label>
             <Input
               control={control}
-              name="phone"
-              type="number"
-              placeholder="Nhập số điện thoại"
+              name="email"
+              type="text"
+              placeholder="Nhập địa chỉ email"
               className="h-[42px] px-2 border-b border-b-[#f0f0f3]"
             >
               <span className="input-group-text ">
@@ -69,7 +86,7 @@ const Login = () => {
               </span>
             </Input>
             <div className="text-red-500 text-sm h-5">
-              {errors.phone && errors.phone.message}
+              {errors.email && errors.email.message}
             </div>
           </Field>
           <Field>
@@ -101,7 +118,7 @@ const Login = () => {
           <Button
             type="button"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
-            onClick={handleSubmit(handleLogin)}
+            onClick={handleSubmit(handleSignin)}
           >
             Đăng nhập
           </Button>

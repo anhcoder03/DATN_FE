@@ -5,7 +5,6 @@ const http = new Http();
 export const getAllCategory = async (params?: any) => {
   try {
     const response = await http.get(`/categories`, params);
-    console.log("Cate", response);
     return response.categories;
   } catch (error) {
     console.error(error);
@@ -32,8 +31,6 @@ export const updateCategory = async (data: any) => {
     const response = await http.update(`/categories/${data?._id}`, data);
     return response;
   } catch (error) {
-    console.log("errorr", error);
-
     return error;
   }
 };

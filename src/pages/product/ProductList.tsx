@@ -12,6 +12,7 @@ import { IMedicine } from "../../types/menicine.type";
 import { deleteProduct, getAllProduct } from "../../services/medicine.service";
 import profilePic from "../../assets/images/users/no-img.jpg";
 import FilterProduct from "./components/FilterProduct";
+import moment from "moment";
 
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
@@ -113,9 +114,7 @@ const ProductList = () => {
     setOpenModal(false);
   };
   const gotoDetail = (item: any) => {
-    console.log(item?._id);
-    // navigate(`/product/${item?._id}`);
-    toast.warning("Tính năng đang phát triển");
+    navigate(`/product/view/${item?._id}`);
   };
 
   return (
@@ -147,7 +146,9 @@ const ProductList = () => {
                   />
                 </td>
                 <td onClick={() => gotoDetail(item)}>{item?.name}</td>
-                <td onClick={() => gotoDetail(item)}>{item?.dateExpiry}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  {moment(item?.dateExpiry).format("DD/MM/YYYY")}
+                </td>
                 <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
                 <td onClick={() => gotoDetail(item)}>{item?.status}</td>
                 <td>
@@ -155,7 +156,7 @@ const ProductList = () => {
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        navigate(`/customer/update/${item?._id}`);
+                        navigate(`/product/update/${item?._id}`);
                       }}
                     >
                       <img width={20} height={20} src={IconEdit} alt="edit" />

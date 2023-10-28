@@ -104,7 +104,11 @@ const CategoryList = () => {
       <div className="bg-white">
         <Table headings={headings} loading={loading}>
           {categorys?.map((item: any) => (
-            <tr className="text-xs" style={{ cursor: "pointer" }}>
+            <tr
+              className="text-xs"
+              key={item?._id}
+              style={{ cursor: "pointer" }}
+            >
               <td onClick={() => gotoDetail(item)}>
                 {" "}
                 <img
