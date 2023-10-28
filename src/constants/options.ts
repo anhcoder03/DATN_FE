@@ -44,6 +44,16 @@ export const optionNVTD: IOption[] = [
   { value: "dfđ", label: "Nguyễn Phi Anh" },
   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 ];
+
+export const dataTypeImportProduct: IOption[] = [
+  { value: "Miếng", label: "Miếng" },
+  { value: "Gói", label: "Gói" },
+  { value: "Bịch", label: "Bịch" },
+  { value: "Cái", label: "Cái" },
+  { value: "Hộp", label: "Hộp" },
+  { value: "Vỉ", label: "Vỉ" },
+  { value: "Viên", label: "Viên" },
+];
 // export const optionDoctor: IOption[] = [
 //   { value: "", label: "-Bác sĩ-" },
 //   { value: "bac", label: "Nguyễn Hồng Sơn" },

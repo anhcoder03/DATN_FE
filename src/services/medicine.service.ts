@@ -18,14 +18,14 @@ export const getAllProduct = async (params: any) => {
 //     return error;
 //   }
 // };
-// export const createCustomer = async (data: any) => {
-//   try {
-//     const response = await http.post(`/customers`, data);
-//     return response;
-//   } catch (error) {
-//     return error;
-//   }
-// };
+export const createMedicine = async (data: any) => {
+  try {
+    const response = await http.post(`/medicines`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
 // export const updateCustomer = async (data: any) => {
 //   try {
 //     const response = await http.update(`/customers/${data?._id}`, data);

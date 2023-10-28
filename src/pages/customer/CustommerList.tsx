@@ -61,7 +61,6 @@ const CustommerList = () => {
       setLoading(true);
       const data = await getAllCustomer(query);
       setLoading(false);
-      console.log(data);
       setTotalPages(data.totalPages);
       setTotalDocs(data.totalDocs);
       setCustomers(data.docs);
@@ -137,7 +136,11 @@ const CustommerList = () => {
       <div className="bg-white">
         <Table headings={headings} loading={loading} length={customers?.length}>
           {customers?.map((item) => (
-            <tr className="text-xs" style={{ cursor: "pointer" }}>
+            <tr
+              className="text-xs"
+              key={item?._id}
+              style={{ cursor: "pointer" }}
+            >
               <td onClick={() => gotoDetail(item)}>{item._id}</td>
               <td onClick={() => gotoDetail(item)}>{item?.name}</td>
               <td onClick={() => gotoDetail(item)}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import ReceptionList from "./pages/reception/ReceptionList";
@@ -16,6 +16,10 @@ import Login from "./pages/auth/Login";
 import ProductList from "./pages/product/ProductList";
 import AddBooking from "./pages/reception/components/AddBooking";
 import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
+import ProductAdd from "./pages/product/components/ProductAdd";
+import LoadingPage from "./components/common/LoadingPage";
+import ProductDetail from "./pages/product/components/ProductDetail";
+import ProductUpdate from "./pages/product/components/ProductUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -79,10 +83,24 @@ function App() {
       path: "product/list",
       element: <ProductList />,
     },
+    {
+      path: "product/add",
+      element: <ProductAdd />,
+    },
+    {
+      path: "product/view/:id",
+      element: <ProductDetail />,
+    },
+    {
+      path: "product/update/:id",
+      element: <ProductUpdate />,
+    },
   ]);
   return (
     <React.Fragment>
-      <RouterProvider router={router} />
+      <Suspense fallback={<LoadingPage />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </React.Fragment>
   );
 }
