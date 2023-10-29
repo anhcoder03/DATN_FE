@@ -5,7 +5,6 @@ const http = new Http();
 export const getAllService = async (params?: any) => {
   try {
     const response = await http.get(`/services`, params);
-    console.log("Cate", response);
     return response.services;
   } catch (error) {
     console.error(error);

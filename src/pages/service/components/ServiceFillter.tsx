@@ -24,7 +24,7 @@ const ServiceFillter = ({
           <input
             type="text"
             className="w-full bg-transparent border-none outline-none"
-            placeholder="Tên dịch vụ"
+            placeholder="Tên hoặc mã dịch vụ"
             onKeyDown={handleKeyDown}
           />
         </div>

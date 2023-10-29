@@ -8,11 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { IconTrash } from "../../components/icons";
 import { Modal } from "antd";
 import { Pagination } from "../../components/pagination";
-import { getAllService, deleteService } from "../../services/service.service";
+import {
+  getAllService,
+  deleteService,
+  updateService,
+} from "../../services/service.service";
 import PriceUtils from "../../helpers/PriceUtils";
 import ServiceFillter from "./components/ServiceFillter";
-import IconLock from '../../assets/images/icon-lock.png';
-import IconUnLock from '../../assets/images/icon-unlock.png';
+import IconLock from "../../assets/images/icon-lock.png";
+import IconUnLock from "../../assets/images/icon-unlock.png";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
@@ -53,8 +57,6 @@ const ServiceList = () => {
     try {
       setLoading(true);
       const data = await getAllService(query);
-      console.log('siuĐatâ', data);
-      
       setLoading(false);
       setTotalPages(data.totalPages);
       setTotalDocs(data.totalDocs);
@@ -76,7 +78,7 @@ const ServiceList = () => {
       urlParams.set("name", e);
       navigate(`?${urlParams}`);
     } else {
-      urlParams.delete("name", e);
+      urlParams.delete("name");
       navigate(`?${urlParams}`);
     }
   };
@@ -100,14 +102,27 @@ const ServiceList = () => {
     setservice(data);
   };
   const onOk = async () => {
-    const res = await deleteService(service?._id);
-    console.log(res);
-    if (res?.services) {
-      toast.success(res?.message);
-      setOpenModal(false);
-      handleGetservices();
+    if (service?.type === "stop" || service?.type === "active") {
+      const res = await updateService({
+        ...service?.data,
+        status: service?.data?.status == 1 ? 0 : 1,
+      });
+      if (res?.services) {
+        toast.success(res?.message);
+        setOpenModal(false);
+        await handleGetservices();
+      } else {
+        toast.error(res?.message);
+      }
     } else {
-      toast.error(res?.message);
+      const res = await deleteService(service?._id);
+      if (res?.services) {
+        toast.success(res?.message);
+        setOpenModal(false);
+        await handleGetservices();
+      } else {
+        toast.error(res?.message);
+      }
     }
     setOpenModal(false);
   };
@@ -116,23 +131,22 @@ const ServiceList = () => {
     navigate(`/service/${item?._id}`);
   };
   const StatusServicePack = (status: any) => {
-    if(status == 1) {
-      return <span className="text-success">Đang hoạt động</span>
+    if (status == 1) {
+      return <span className="text-success">Đang hoạt động</span>;
     }
-    if(status == 0) {
-      return <span className="text-danger">Không hoạt động</span>
+    if (status == 0) {
+      return <span className="text-danger">Không hoạt động</span>;
     }
-  }
-  console.log('servies',services);
-  
+  };
+
   return (
     <Layout>
       <Heading>Quản lý danh sách dịch vụ</Heading>
       <div className="rounded-xl bg-white">
-      <ServiceFillter
+        <ServiceFillter
           handleStatusChange={handleStatusChange}
           handleSearch={handleSearch}
-      ></ServiceFillter>
+        ></ServiceFillter>
         <div className="bg-white">
           <Table
             headings={headings}
@@ -145,14 +159,32 @@ const ServiceList = () => {
                 style={{ cursor: "pointer" }}
                 key={item?._id}
               >
-                <td onClick={() => gotoDetail(item)}>{item._id}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.serviceId}</td>
                 <td onClick={() => gotoDetail(item)}>{item?.name}</td>
-                <td onClick={() => gotoDetail(item)}>{PriceUtils.format(item?.price || 0, 'đ')}</td>
-                <td onClick={() => gotoDetail(item)}>{StatusServicePack(item?.status)}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  {PriceUtils.format(item?.price || 0, "đ")}
+                </td>
+                <td onClick={() => gotoDetail(item)}>
+                  {StatusServicePack(item?.status)}
+                </td>
                 <td>
                   <div className="table-action">
-                    <div className="button-nutri" onClick={() => handleShowModel({type: item?.status == 1 ? 'stop' : 'active', data: item})}>
-                      <img style={{border: 'none'}} src={ item?.status == 1 ? IconLock : IconUnLock} width={20} height={20} alt=""/>
+                    <div
+                      className="button-nutri"
+                      onClick={() =>
+                        handleShowModel({
+                          type: item?.status == 1 ? "stop" : "active",
+                          data: item,
+                        })
+                      }
+                    >
+                      <img
+                        style={{ border: "none" }}
+                        src={item?.status == 1 ? IconLock : IconUnLock}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
                     </div>
                     <div
                       className="button-nutri"
@@ -189,70 +221,56 @@ const ServiceList = () => {
         onOk={onOk}
         onCancel={() => setOpenModal(false)}
       >
-        {/* {service?.type == 'stop'}
-        {service?.type == 'active'}
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá dịch vụ</p>
-          <span className="text-center text-[#ff5c75] font-bold">
-            {service?.name}
-          </span>
-        </div> */}
-        <HandleRenderPopup
-          service = {service}
-        />
+        <HandleRenderPopup service={service} />
       </Modal>
     </Layout>
   );
 };
 const HandleRenderPopup = (props: any) => {
-  const {service} = props;
-  if(service?.type == 'active') {
+  const { service } = props;
+  if (service?.type == "active") {
     return (
       <>
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-        Kích hoạt dịch vụ
-      </h1>
-      <div className="flex flex-col items-center justify-center py-4 text-sm">
-        <p>Bạn có chắc muốn kích hoạt dịch vụ không?</p>
-        <span className="text-center text-[#ff5c75] font-bold">
-          {service?.name}
-        </span>
-      </div>
+          Kích hoạt dịch vụ
+        </h1>
+        <div className="flex flex-col items-center justify-center py-4 text-sm">
+          <p>Bạn có chắc muốn kích hoạt dịch vụ không?</p>
+          <span className="text-center text-[#ff5c75] font-bold">
+            {service?.data?.name}
+          </span>
+        </div>
       </>
-    )
+    );
   }
-  if(service?.type == 'stop') {
+  if (service?.type == "stop") {
     return (
       <>
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-        Vô hiệu hoá dịch vụ
-      </h1>
-      <div className="flex flex-col items-center justify-center py-4 text-sm">
-        <p>Bạn có chắc muốn vô hiệu hoá dịch vụ này không</p>
-        <span className="text-center text-[#ff5c75] font-bold">
-          {service?.name}
-        </span>
-      </div>
+          Vô hiệu hoá dịch vụ
+        </h1>
+        <div className="flex flex-col items-center justify-center py-4 text-sm">
+          <p>Bạn có chắc muốn vô hiệu hoá dịch vụ này không</p>
+          <span className="text-center text-[#ff5c75] font-bold">
+            {service?.data?.name}
+          </span>
+        </div>
       </>
-    )
+    );
   }
   return (
     <>
       <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-      Thông Báo
-    </h1>
-    <div className="flex flex-col items-center justify-center py-4 text-sm">
-      <p>Bạn có chắc muốn xoá dịch vụ</p>
-      <span className="text-center text-[#ff5c75] font-bold">
-        {service?.name}
-      </span>
-    </div>
+        Thông Báo
+      </h1>
+      <div className="flex flex-col items-center justify-center py-4 text-sm">
+        <p>Bạn có chắc muốn xoá dịch vụ</p>
+        <span className="text-center text-[#ff5c75] font-bold">
+          {service?.name}
+        </span>
+      </div>
     </>
-    
-  )
-}
+  );
+};
 
 export default ServiceList;

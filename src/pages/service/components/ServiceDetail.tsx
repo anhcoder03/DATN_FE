@@ -14,17 +14,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getOneService } from "../../../services/service.service";
 const schema = yup.object({
   name: yup.string().trim().required("Tên danh mục không được để trống!"),
-  price: yup.number().required('Giá dịch vụ không được để trống')
+  price: yup.number().required("Giá dịch vụ không được để trống"),
 });
 
 const ServiceDetail = () => {
-    const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const {
     control,
-    handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<any>({
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
