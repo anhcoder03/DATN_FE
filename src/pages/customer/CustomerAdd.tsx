@@ -63,7 +63,7 @@ const CustomerAdd = () => {
     formState: { errors },
   } = useForm<TDataCustomer>({
     resolver: yupResolver<any>(schema),
-    mode: "onSubmit",
+    mode: "onChange",
   });
   const handleCreateCustomer = async (values: TDataCustomer) => {
     const data = { ...values, gender, creator: "650835d91fa3c100012c83d6" };
@@ -138,7 +138,7 @@ const CustomerAdd = () => {
     if (arrayError.length > 0) {
       toast.warning(arrayError[0]?.message);
     }
-  });
+  }, [errors]);
 
   return (
     <Layout>

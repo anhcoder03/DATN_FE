@@ -10,3 +10,11 @@ export const getAllExamination = async (params: any) => {
     console.error(error);
   }
 };
+export const createExamination = async (data: any) => {
+  try {
+    const response = await http.post(`/medicalExaminationSlip`, data);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
