@@ -46,6 +46,9 @@ input {
 .react-select__control .react-select__indicator-separator {
   display: none !important;
 }
+.react-select__single-value {
+  font-weight: 600;
+}
 .css-1wa3eu0-placeholder {
   color: rgb(128, 128, 128);
   margin-left: 2px;
@@ -507,6 +510,9 @@ small {
   grid-template-columns: 70px minmax(0, 1fr);
   transition: all 0.2s linear;
 }
+.sidebar-menu * .action-bottom {
+  left: 71px;
+}
 
 .sidebar-menu * .heading-menu {
   display: none;
@@ -538,8 +544,8 @@ small {
 
 // css text
 .text-success {
-  color: #48a81d!important;
+  color: #48a81d !important;
 }
 .text-danger {
-  color: #ff5c75!important;
+  color: #ff5c75 !important;
 }

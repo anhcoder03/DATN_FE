@@ -116,7 +116,7 @@ const Login = () => {
           </Field>
 
           <Button
-            type="button"
+            type="submit"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
             onClick={handleSubmit(handleSignin)}
           >
