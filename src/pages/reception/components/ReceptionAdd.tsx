@@ -18,7 +18,6 @@ import Select from "react-select";
 import { optionDoctor, optionNVTD } from "../../../constants/options";
 import { useForm } from "react-hook-form";
 import { IconTrash } from "../../../components/icons";
-import { Table } from "../../../components/table";
 import { cloneDeep } from "lodash";
 
 type Props = {};
@@ -91,7 +90,6 @@ const ReceptionAdd = (props: Props) => {
                     classNamePrefix="react-select"
                     options={optionNVTD}
                     onChange={(val: any) => {
-                      // fetchDistrict(val?.code);
                       setValue("staffId", val);
                     }}
                   ></Select>

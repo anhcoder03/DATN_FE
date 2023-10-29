@@ -102,7 +102,7 @@ const CategoryList = () => {
       <Heading>Quản Lý Danh Mục</Heading>
       <FilterCategory handleSearch={handleSearch}></FilterCategory>
       <div className="bg-white">
-        <Table headings={headings} loading={loading}>
+        <Table headings={headings} loading={loading} length={categorys?.length}>
           {categorys?.map((item: any) => (
             <tr
               className="text-xs"

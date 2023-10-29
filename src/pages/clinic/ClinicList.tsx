@@ -104,7 +104,7 @@ const ClinicList = () => {
           handleSearch={handleSearch}
         ></FilterClinic>
         <div className="bg-white">
-          <Table headings={headings} loading={loading}>
+          <Table headings={headings} loading={loading} length={clinics?.length}>
             {clinics?.map((item: IClinic) => (
               <tr
                 className="text-xs"
