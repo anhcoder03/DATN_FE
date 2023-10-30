@@ -1,149 +1,154 @@
-import React, { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LoadingPage from './components/common/LoadingPage';
-import Login from './pages/auth/Login';
-import CategoryAdd from './pages/category/CategoryAdd';
-import CategoryList from './pages/category/CategoryList';
-import CategoryDetail from './pages/category/components/CategoryDetail';
-import CategoryUpdate from './pages/category/components/CategoryUpdate';
-import ClinicAdd from './pages/clinic/ClinicAdd';
-import ClinicList from './pages/clinic/ClinicList';
-import ClinicUpdate from './pages/clinic/components/ClinicUpdate';
-import ConfigUserUpdateContainer from './pages/configuration/user/edit';
-import ConfigUserListContainer from './pages/configuration/user/list';
-import ConfigUserAddContainer from './pages/configuration/user/new';
-import CustomerDetail from './pages/customer/components/CustomerDetail';
-import CustomerUpdate from './pages/customer/components/CustomerUpdate';
-import CustomerAdd from './pages/customer/CustomerAdd';
-import CustommerList from './pages/customer/CustommerList';
-import ExaminationList from './pages/examination/ExaminationList';
-import Home from './pages/Home';
-import PrescriptionListContainer from './pages/prescription/list';
-import ProductAdd from './pages/product/components/ProductAdd';
-import ProductDetail from './pages/product/components/ProductDetail';
-import ProductUpdate from './pages/product/components/ProductUpdate';
-import ProductList from './pages/product/ProductList';
-import AddBooking from './pages/reception/components/AddBooking';
-import ReceptionAdd from './pages/reception/components/ReceptionAdd';
-import ReceptionList from './pages/reception/ReceptionList';
-import ServiceDetail from './pages/service/components/ServiceDetail';
-import ServiceUpdate from './pages/service/components/ServiceUpdate';
-import ServiceAdd from './pages/service/ServiceAdd';
-import ServiceList from './pages/service/ServiceList';
+import React, { Suspense } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import LoadingPage from "./components/common/LoadingPage";
+import Login from "./pages/auth/Login";
+import CategoryAdd from "./pages/category/CategoryAdd";
+import CategoryList from "./pages/category/CategoryList";
+import CategoryDetail from "./pages/category/components/CategoryDetail";
+import CategoryUpdate from "./pages/category/components/CategoryUpdate";
+import ClinicAdd from "./pages/clinic/ClinicAdd";
+import ClinicList from "./pages/clinic/ClinicList";
+import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
+import ConfigUserUpdateContainer from "./pages/configuration/user/edit";
+import ConfigUserListContainer from "./pages/configuration/user/list";
+import ConfigUserAddContainer from "./pages/configuration/user/new";
+import CustomerDetail from "./pages/customer/components/CustomerDetail";
+import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
+import CustomerAdd from "./pages/customer/CustomerAdd";
+import CustommerList from "./pages/customer/CustommerList";
+import ExaminationList from "./pages/examination/ExaminationList";
+import Home from "./pages/Home";
+import PrescriptionListContainer from "./pages/prescription/list";
+import ProductAdd from "./pages/product/components/ProductAdd";
+import ProductDetail from "./pages/product/components/ProductDetail";
+import ProductUpdate from "./pages/product/components/ProductUpdate";
+import ProductList from "./pages/product/ProductList";
+import AddBooking from "./pages/reception/components/AddBooking";
+import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
+import ReceptionList from "./pages/reception/ReceptionList";
+import ServiceDetail from "./pages/service/components/ServiceDetail";
+import ServiceUpdate from "./pages/service/components/ServiceUpdate";
+import ServiceAdd from "./pages/service/ServiceAdd";
+import ServiceList from "./pages/service/ServiceList";
+import DesignationList from "./pages/designation/DesignationList";
 function App() {
   const router = createBrowserRouter([
-    { path: '', element: <Home /> },
+    { path: "", element: <Home /> },
     {
-      path: 'reception',
+      path: "reception",
       element: <ReceptionList />,
     },
     {
-      path: 'reception/add',
+      path: "reception/add",
       element: <ReceptionAdd />,
     },
     {
-      path: 'reception/addBooking',
+      path: "reception/addBooking",
       element: <AddBooking />,
     },
     {
-      path: 'examination',
+      path: "examination",
       element: <ExaminationList />,
     },
     {
-      path: 'customer/list',
+      path: "customer/list",
       element: <CustommerList />,
     },
     {
-      path: 'customer/add',
+      path: "customer/add",
       element: <CustomerAdd />,
     },
     {
-      path: 'customer/:id',
+      path: "customer/:id",
       element: <CustomerDetail />,
     },
     {
-      path: 'customer/update/:id',
+      path: "customer/update/:id",
       element: <CustomerUpdate />,
     },
     {
-      path: 'category/list',
+      path: "category/list",
       element: <CategoryList />,
     },
     {
-      path: 'category/add',
+      path: "category/add",
       element: <CategoryAdd />,
     },
     {
-      path: 'category/update/:id',
+      path: "category/update/:id",
       element: <CategoryUpdate />,
     },
     {
-      path: 'configuration/clinic',
+      path: "configuration/clinic",
       element: <ClinicList />,
     },
     {
-      path: 'configuration/clinic/add',
+      path: "configuration/clinic/add",
       element: <ClinicAdd />,
     },
     {
-      path: 'configuration/clinic/update/:id',
+      path: "configuration/clinic/update/:id",
       element: <ClinicUpdate />,
     },
     {
-      path: 'category/view/:id',
+      path: "category/view/:id",
       element: <CategoryDetail />,
     },
     {
-      path: 'prescription',
+      path: "prescription",
       element: <PrescriptionListContainer />,
     },
     {
-      path: 'login',
+      path: "login",
       element: <Login />,
     },
     {
-      path: 'product/list',
+      path: "product/list",
       element: <ProductList />,
     },
     {
-      path: 'product/add',
+      path: "product/add",
       element: <ProductAdd />,
     },
     {
-      path: 'product/view/:id',
+      path: "product/view/:id",
       element: <ProductDetail />,
     },
     {
-      path: 'product/update/:id',
+      path: "product/update/:id",
       element: <ProductUpdate />,
     },
     {
-      path: 'service/list',
+      path: "service/list",
       element: <ServiceList />,
     },
     {
-      path: 'service/add',
+      path: "service/add",
       element: <ServiceAdd />,
     },
     {
-      path: 'service/:id',
+      path: "service/:id",
       element: <ServiceDetail />,
     },
     {
-      path: 'service/update/:id',
+      path: "service/update/:id",
       element: <ServiceUpdate />,
     },
     {
-      path: 'configuration/user',
+      path: "configuration/user",
       element: <ConfigUserListContainer />,
     },
     {
-      path: 'configuration/user/add',
+      path: "configuration/user/add",
       element: <ConfigUserAddContainer />,
     },
     {
-      path: 'configuration/user/:id/edit',
+      path: "configuration/user/:id/edit",
       element: <ConfigUserUpdateContainer />,
+    },
+    {
+      path: "designation/list",
+      element: <DesignationList />,
     },
   ]);
   return (
