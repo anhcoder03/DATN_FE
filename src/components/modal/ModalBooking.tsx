@@ -82,7 +82,7 @@ const ModalBooking = ({ open, handleCancel, handleOk, headings }: IModal) => {
   return (
     <>
       <Modal
-        visible={open}
+        open={open}
         title="Điều chỉnh cột hiển thị danh sách"
         onOk={handleOk}
         onCancel={handleCancel}

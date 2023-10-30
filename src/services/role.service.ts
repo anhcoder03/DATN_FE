@@ -1,4 +1,4 @@
-import Http from '../helpers/http';
+import Http from "../helpers/http";
 
 const http = new Http();
 
@@ -31,7 +31,7 @@ export const updateRole = async (data: any) => {
     const response = await http.update(`/role/${data?._id}`, data);
     return response;
   } catch (error) {
-    console.log('errorr', error);
+    console.log("errorr", error);
 
     return error;
   }
@@ -42,5 +42,14 @@ export const deleteRole = async (id: any) => {
     return response;
   } catch (error) {
     return error;
+  }
+};
+
+export const getAllByName = async (params?: any) => {
+  try {
+    const response = await http.get(`/rol`, params);
+    return response.users;
+  } catch (error) {
+    console.error(error);
   }
 };
