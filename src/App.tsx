@@ -28,6 +28,8 @@ import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
 import ReceptionList from "./pages/reception/ReceptionList";
 import ServiceDetail from "./pages/service/components/ServiceDetail";
 import ServiceUpdate from "./pages/service/components/ServiceUpdate";
+import DetailBooking from './pages/reception/components/DetailBooking';
+import UpdateBooking from "./pages/reception/components/UpdateBooking";
 import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceList from "./pages/service/ServiceList";
 import DesignationList from "./pages/designation/DesignationList";
@@ -133,6 +135,15 @@ function App() {
     {
       path: "service/update/:id",
       element: <ServiceUpdate />,
+    },
+    // booking
+    {
+      path: "reception/booking/:id",
+      element: <DetailBooking />,
+    },
+    {
+      path: "reception/booking/update/:id",
+      element: <UpdateBooking />,
     },
     {
       path: "configuration/user",

@@ -19,10 +19,6 @@ const headings = [
     selector: (row: { staffId: { name: any } }) => row.staffId.name,
   },
   {
-    name: "Bác sĩ",
-    selector: (row: { doctorId: { name: any } }) => row.doctorId.name,
-  },
-  {
     name: "Ngày tạo",
     selector: (row: { createdAt: MomentInput }) =>
       moment(row?.createdAt).format("DD/MM/YYYY"),

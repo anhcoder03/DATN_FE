@@ -2,7 +2,7 @@ import React from "react";
 import DataTable from "react-data-table-component";
 import LoadingSpinner from "../common/LoadingSpinner";
 
-const Table3 = ({ data, columns, isLoading }: any) => {
+const Table3 = ({ data, columns, isLoading, gotoDetail }: any) => {
   return (
     <DataTable
       progressPending={isLoading}
@@ -12,7 +12,7 @@ const Table3 = ({ data, columns, isLoading }: any) => {
       fixedHeader
       highlightOnHover
       pointerOnHover
-      onRowClicked={(row: any) => console.log(row?._id)}
+      onRowClicked={(item: any) => gotoDetail(item?._id)}
       noDataComponent={
         <div
           style={{

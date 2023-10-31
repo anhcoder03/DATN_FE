@@ -18,13 +18,13 @@ import Select from "react-select";
 import { getAllCustomer } from "../../../services/customer.service";
 import { getAllStaff } from "../../../services/staff.service";
 import { Textarea } from "../../../components/textarea";
-import { createExamination } from "../../../services/examination.service";
+import { createExamination, getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-const AddBooking = () => {
+const UpdateBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [staffs, setStaffs] = useState<any[]>([]);
   const [data, setData] = useState<any>(
@@ -46,11 +46,38 @@ const AddBooking = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+  const {id} = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     getCustomers();
     getStaffs();
   }, [])
+
+  useEffect(() => {
+    if(id !== undefined) {
+        loadData();
+    }
+  }, [id])
+
+  async function loadData() {
+    try {
+      const response = await getOneExamination(id);
+      const resData = response.medicine;
+      setData({
+        customer: resData?.customer?._id,
+        dateOfBirth: moment(resData?.customerId?.dateOfBirth).unix(),
+        gender: resData?.customerId?.gender,
+        phone: resData?.customerId?.phone,
+        note: resData?.note,
+        staffId: resData?.staffId?._id,
+        day_booking: resData?.day_booking
+      });
+    } catch (error) {
+      toast.error('Đã có lỗi sảy ra!!!')
+    }
+  }
+
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -63,6 +90,7 @@ const AddBooking = () => {
     });
     setDataCustomers(ListArr);
   }
+
   async function getStaffs() {
     const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
     const ListArr: any = [];
@@ -75,8 +103,8 @@ const AddBooking = () => {
     });
     setStaffs(ListArr);
   }
-  const handleCreateBooking = async () => {
 
+  const handleUpdateBooking = async () => {
     const params = {
       customerId: data?.customer,
       staffId: data?.staffId,
@@ -84,7 +112,6 @@ const AddBooking = () => {
       day_booking: data?.day_booking,
       status: 'booking'
     }
-    
     const res = await createExamination(params);
     if (res?.examination) {
       toast.success('Tạo đặt lịch thành công!');
@@ -99,21 +126,11 @@ const AddBooking = () => {
       toast.warning(arrayError[0]?.message);
     }
   }, [errors]);
-  console.log("siuData", data);
-
-  const handleChangeInput = (event?: any) => {
-    let { value, name } = event.target
-    if (value === " ") return;
-    setData({
-        ...data,
-        [name]: value
-    })
-}
   
   return (
     <Layout>
       <div className="relative h-full">
-        <Heading>Đặt lịch khám, Tư vấn</Heading>
+        <Heading>Chỉnh sửa lịch khám, Tư vấn</Heading>
         <form className="w-[70%] p-5 bg-white ">
           <Heading>Thông tin bệnh nhân</Heading>
           <Row className="grid-cols-2 ">
@@ -245,8 +262,8 @@ const AddBooking = () => {
               <Label htmlFor="staffId">Nhân viên tiếp đón</Label>
               <Select
                 placeholder="Chọn nhân viên tiếp đón"
-                className="mb-2 !text-xs hover:!border-transparent react-select"
-                classNamePrefix=" hover:!border-transparent react-select"
+                className="mb-2 react-select"
+                classNamePrefix="react-select"
                 options={staffs}
                 onChange={(val: any) => {
                   setValue("staffId", val?._id);
@@ -266,7 +283,10 @@ const AddBooking = () => {
                 name="note"
                 placeholder="Nhập ghi chú"
                 onChange={(val: any) => {
-                  handleChangeInput(val)
+                  setData({
+                    ...data,
+                    note: val
+                  })
                 }}
                 value={data?.note}
               />
@@ -276,11 +296,11 @@ const AddBooking = () => {
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
-              <Button to="/reception">Đóng</Button>
+              <Button to={`/reception/booking/${id}`}>Đóng</Button>
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleCreateBooking)}
+                onClick={handleSubmit(handleUpdateBooking)}
               >
                 Lưu
               </Button>
@@ -292,4 +312,4 @@ const AddBooking = () => {
   );
 };
 
-export default AddBooking;
+export default UpdateBooking;

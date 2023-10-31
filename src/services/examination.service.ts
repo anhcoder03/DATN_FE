@@ -1,3 +1,4 @@
+
 import Http from "../helpers/http";
 
 const http = new Http();
@@ -10,6 +11,14 @@ export const getAllExamination = async (params: any) => {
     console.error(error);
   }
 };
+export const getOneExamination = async (id: any) => {
+  try {
+    const response = await http.get(`/medicalExaminationSlip/${id}`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
 export const createExamination = async (data: any) => {
   try {
     const response = await http.post(`/medicalExaminationSlip`, data);
@@ -18,3 +27,12 @@ export const createExamination = async (data: any) => {
     console.error(error);
   }
 };
+
+// export const UpdateExamination = async (data: any) => {
+//   try {
+//     const response = await http.post(`/medicalExaminationSlip/${data?.id}`, data);
+//     return response;
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };

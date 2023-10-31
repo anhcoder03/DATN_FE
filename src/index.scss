@@ -396,6 +396,7 @@ code {
   textarea {
     border: none;
     pointer-events: none;
+    border-bottom: 1px solid #d6d6d6;
     &.pointer {
       pointer-events: inherit !important;
       background: inherit !important;
@@ -548,4 +549,11 @@ small {
 }
 .text-danger {
   color: #ff5c75 !important;
+}
+
+// css button
+.btn-info {
+  color: #fff;
+  background-color: #25c2e3;
+  border-color: #25c2e3;
 }

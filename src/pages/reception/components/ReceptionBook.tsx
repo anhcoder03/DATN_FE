@@ -63,10 +63,6 @@ const ReceptionBook = () => {
       selector: (row: { staffId: { name: any } }) => row.staffId.name,
     },
     {
-      name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row.doctorId.name,
-    },
-    {
       name: "Ngày tạo",
       selector: (row: { createdAt: moment.MomentInput }) =>
         moment(row?.createdAt).format("DD/MM/YYYY"),
@@ -141,11 +137,14 @@ const ReceptionBook = () => {
   const onOk = async () => {
     setOpenModal(false);
   };
+  const gotoDetail = (id: any) => {
+    navigate(`/reception/booking/${id}`);
+  }
 
   return (
     <>
       <FilterReceptionBook columns={columns}></FilterReceptionBook>
-      <Table3 isLoading={loading} columns={newHeading} data={bookings}></Table3>
+      <Table3 isLoading={loading} columns={newHeading} data={bookings} gotoDetail = {gotoDetail}></Table3>
       <Pagination
         handlePageClick={handlePageClick}
         pageCount={totalPages}
