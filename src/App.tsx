@@ -27,6 +27,8 @@ import ServiceList from "./pages/service/ServiceList";
 import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceDetail from "./pages/service/components/ServiceDetail";
 import ServiceUpdate from "./pages/service/components/ServiceUpdate";
+import DetailBooking from './pages/reception/components/DetailBooking';
+import UpdateBooking from "./pages/reception/components/UpdateBooking";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -129,6 +131,15 @@ function App() {
     {
       path: "service/update/:id",
       element: <ServiceUpdate />,
+    },
+    // booking
+    {
+      path: "reception/booking/:id",
+      element: <DetailBooking />,
+    },
+    {
+      path: "reception/booking/update/:id",
+      element: <UpdateBooking />,
     },
   ]);
   return (

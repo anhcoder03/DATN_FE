@@ -7,50 +7,35 @@ import { Field } from "../../../components/field";
 import { Label } from "../../../components/label";
 import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
-import { Radio } from "antd";
 import { IconPhone } from "../../../components/icons";
-import Flatpickr from "react-flatpickr";
-import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import moment from "moment";
 import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import CalcUtils from "../../../helpers/CalcULtils";
-import Select from "react-select";
 import { getAllCustomer } from "../../../services/customer.service";
 import { getAllStaff } from "../../../services/staff.service";
 import { Textarea } from "../../../components/textarea";
-import { createExamination } from "../../../services/examination.service";
+import { getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useParams } from "react-router-dom";
 
-const AddBooking = () => {
+const DetailBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [staffs, setStaffs] = useState<any[]>([]);
-  const [data, setData] = useState<any>(
-    {
-      day_booking: new Date(),
-      gender: ''
-    }
-  );
-  const schema = yup.object({
-    customerId: yup.string().required("Bệnh nhân không được để trống!"),
-    staffId: yup.string().required("Nhân viên tiếp đón không được để trống!"),
-  })
+  const [data, setData] = useState<any>();
   const {
     control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver<any>(schema),
-    mode: "onSubmit",
-  });
-  const navigate = useNavigate();
+    handleSubmit
+  } = useForm({});
+  const {id} = useParams();
   useEffect(() => {
     getCustomers();
     getStaffs();
   }, [])
+  useEffect(() => {
+    if(id !== undefined) {
+      loadData()
+    }
+  },[id])
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -75,35 +60,33 @@ const AddBooking = () => {
     });
     setStaffs(ListArr);
   }
-  const handleCreateBooking = async () => {
-
-    const params = {
-      customerId: data?.customer,
-      staffId: data?.staffId,
-      note: data?.note,
-      day_booking: data?.day_booking,
-      status: 'booking'
-    }
-    
-    const res = await createExamination(params);
-    if (res?.examination) {
-      toast.success('Tạo đặt lịch thành công!');
-      navigate("/reception");
-    } else {
-      toast.error('Có lỗi sảy ra!!!');
+  async function loadData() {
+    try {
+      const response = await getOneExamination(id);
+      const resData = response.medicine;
+      setData({
+        customer: resData?.customer,
+        dateOfBirth: resData?.customerId?.dateOfBirth,
+        gender: resData?.customerId?.gender,
+        phone: resData?.customerId?.phone,
+        note: resData?.note,
+        staffId: resData?.staffId,
+        day_booking: resData?.day_booking
+      });
+    } catch (error) {
+      toast.error('Đã có lỗi sảy ra!!!')
     }
   }
-  useEffect(() => {
-    const arrayError: any = Object.values(errors);
-    if (arrayError.length > 0) {
-      toast.warning(arrayError[0]?.message);
+  const handleChangeStatus = async () => {
+    const params = {
+      status : 'reception'
     }
-  }, [errors]);
-  
+
+  }
   return (
     <Layout>
-      <div className="relative h-full">
-        <Heading>Đặt lịch khám, Tư vấn</Heading>
+      <div className="relative h-full only-view">
+        <Heading>Đặt trước lịch khám, Tư vấn</Heading>
         <form className="w-[70%] p-5 bg-white ">
           <Heading>Thông tin bệnh nhân</Heading>
           <Row className="grid-cols-2 ">
@@ -112,36 +95,19 @@ const AddBooking = () => {
                 <span className="star-field">*</span>
                 Họ và tên khách hàng/bệnh nhân
               </Label>
-              <Select
-                placeholder=""
-                className="mb-2 !text-xs hover:!border-transparent react-select"
-                classNamePrefix="hover:!border-transparent  react-select"
-                name="customerId"
-                options={dataCustomers}
-                onChange={(val: any) => {
-                  setValue("customerId", val?._id);
-                  setData({
-                    ...data,
-                    customer: val?._id,
-                    dateOfBirth: moment(val?.dateOfBirth).unix(),
-                    gender: val?.gender,
-                    phone: val?.phone
-                  });
-                }}
-              ></Select>
+              <Input
+                control={control}
+                placeholder="Nhập mã khách hàng"
+                value={data?.customer?.name}
+              />
             </Field>
             <Field>
               <Label htmlFor="gender">Giới tính</Label>
-              <Radio.Group value={data?.gender}>
-                <div className="flex items-center gap-x-10">
-                  <Radio className="flex items-center h-[34px]" value={"Nam"}>
-                    Nam
-                  </Radio>
-                  <Radio className="flex items-center h-[34px]" value={"Nữ"}>
-                    Nữ
-                  </Radio>
-                </div>
-              </Radio.Group>
+              <Input
+                control={control}
+                placeholder="Nhập giới tính"
+                value={data?.gender}
+              />
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
@@ -163,23 +129,13 @@ const AddBooking = () => {
             </Field>
             <Field>
               <Label htmlFor="_id">Ngày đặt lịch</Label>
-              <div className="relative border-b border-b-gray-200 pb-3">
-                <Flatpickr
-                  value={data?.day_booking}
-                  options={{
-                    locale: Vietnamese,
-                    allowInput: true,
-                    enableTime: true,
-                    dateFormat: "d/m/Y H:i",
-                    altInputClass: "date-range",
-                    time_24hr: true,
-                  }}
-                  onChange={([date]) => {
-                    setValue("day_booking", date);
-                  }}
-                  placeholder="dd/mm/yyyy"
-                  name="day_booking"
-                ></Flatpickr>
+              <div className="relative pb-3">
+                <Input
+                  control={control}
+                  name="phone"
+                  value={moment(data?.dateOfBirth).format('DD/MM/YYYY')}
+                  placeholder="Nhập ngày đặt lịch"
+                />
                 <div className="absolute top-0 right-0">
                   <img src={IconCalendar} alt="icon" />
                 </div>
@@ -189,28 +145,13 @@ const AddBooking = () => {
           <Row className="grid-cols-2 ">
             <Field>
               <Label htmlFor="_id">Năm sinh</Label>
-              <div className="relative border-b border-b-gray-200 pb-3">
-                <Flatpickr
-                  options={{
-                    locale: Vietnamese,
-                    allowInput: true,
-                    dateFormat: "d/m/Y",
-                    altInputClass: "date-range",
-                    maxDate: "today",
-                  }}
-                  onChange={([date]) => {
-                    setValue("dateOfBirth", date);
-                    console.log('datên', date, data);
-                    
-                    setData({
-                      ...data,
-                      dateOfBirth: date
-                    })
-                  }}
-                  value={data?.dateOfBirth}
-                  placeholder="dd/mm/yyyy"
-                  name="dateOfBirth"
-                ></Flatpickr>
+              <div className="relative pb-3">
+                <Input
+                  control={control}
+                  name="phone"
+                  value={moment(data?.day_booking).format('DD/MM/YYYY')}
+                  placeholder="Nhập năm sinh"
+                />
                 <div className="absolute top-0 right-0">
                   <img src={IconCalendar} alt="icon" />
                 </div>
@@ -233,20 +174,12 @@ const AddBooking = () => {
           <Row className="grid-cols-2 ">
             <Field>
               <Label htmlFor="staffId">Nhân viên tiếp đón</Label>
-              <Select
-                placeholder="Chọn nhân viên tiếp đón"
-                className="mb-2 !text-xs hover:!border-transparent react-select"
-                classNamePrefix=" hover:!border-transparent react-select"
-                options={staffs}
-                onChange={(val: any) => {
-                  setValue("staffId", val?._id);
-                  setData({
-                    ...data,
-                    staffId: val?._id
-                  })
-                }}
-                value = {data?.staffId?.id}
-              ></Select>
+              <Input
+                control={control}
+                name="phone"
+                value={data?.staffId?.name}
+                placeholder="Chọn nhân viên"
+              />
             </Field>
             <Field>
               <Label htmlFor="note">Ghi chú</Label>
@@ -273,9 +206,18 @@ const AddBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleCreateBooking)}
+                // to={`/reception/booking/update/${id}`}
+                onClick={() => toast.warning('BE chưa có làm:">>>')}
               >
-                Lưu
+                Chỉnh sửa
+              </Button>
+              <Button
+                type="submit"
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                // onClick={handleSubmit(handleChangeStatus)}
+                onClick={() => toast.info('chờ leader')}
+              >
+                Tiếp đón
               </Button>
             </div>
           </div>
@@ -285,4 +227,4 @@ const AddBooking = () => {
   );
 };
 
-export default AddBooking;
+export default DetailBooking;
