@@ -99,6 +99,16 @@ const AddBooking = () => {
       toast.warning(arrayError[0]?.message);
     }
   }, [errors]);
+  console.log("siuData", data);
+
+  const handleChangeInput = (event?: any) => {
+    let { value, name } = event.target
+    if (value === " ") return;
+    setData({
+        ...data,
+        [name]: value
+    })
+}
   
   return (
     <Layout>
@@ -256,10 +266,7 @@ const AddBooking = () => {
                 name="note"
                 placeholder="Nhập ghi chú"
                 onChange={(val: any) => {
-                  setData({
-                    ...data,
-                    note: val
-                  })
+                  handleChangeInput(val)
                 }}
                 value={data?.note}
               />

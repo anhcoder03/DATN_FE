@@ -191,11 +191,17 @@ const ReceptionAdd = () => {
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
     }
+    let checkService = false;
     dataServices.forEach((item) => {
       if (item.price === "" || item.service_id === "") {
-        return toast.warning("Dịch vụ không được được để trống");
+        return (checkService = true);
       }
     });
+
+    if (checkService) {
+      return toast.warning("Dịch vụ không được được để trống");
+    }
+
     const examinationServiceId = dataServices.map(
       (service) => service.service_id
     );

@@ -1,34 +1,38 @@
 import React, { Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./pages/Home";
-import ReceptionList from "./pages/reception/ReceptionList";
-import ExaminationList from "./pages/examination/ExaminationList";
-import CustommerList from "./pages/customer/CustommerList";
-import CustomerAdd from "./pages/customer/CustomerAdd";
+import LoadingPage from "./components/common/LoadingPage";
+import Login from "./pages/auth/Login";
+import CategoryAdd from "./pages/category/CategoryAdd";
+import CategoryList from "./pages/category/CategoryList";
+import CategoryDetail from "./pages/category/components/CategoryDetail";
+import CategoryUpdate from "./pages/category/components/CategoryUpdate";
+import ClinicAdd from "./pages/clinic/ClinicAdd";
+import ClinicList from "./pages/clinic/ClinicList";
+import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
+import ConfigUserUpdateContainer from "./pages/configuration/user/edit";
+import ConfigUserListContainer from "./pages/configuration/user/list";
+import ConfigUserAddContainer from "./pages/configuration/user/new";
 import CustomerDetail from "./pages/customer/components/CustomerDetail";
 import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
-import CategoryList from "./pages/category/CategoryList";
-import CategoryAdd from "./pages/category/CategoryAdd";
-import CategoryUpdate from "./pages/category/components/CategoryUpdate";
-import CategoryDetail from "./pages/category/components/CategoryDetail";
+import CustomerAdd from "./pages/customer/CustomerAdd";
+import CustommerList from "./pages/customer/CustommerList";
+import ExaminationList from "./pages/examination/ExaminationList";
+import Home from "./pages/Home";
 import PrescriptionListContainer from "./pages/prescription/list";
-import Login from "./pages/auth/Login";
+import ProductAdd from "./pages/product/components/ProductAdd";
+import ProductDetail from "./pages/product/components/ProductDetail";
+import ProductUpdate from "./pages/product/components/ProductUpdate";
 import ProductList from "./pages/product/ProductList";
 import AddBooking from "./pages/reception/components/AddBooking";
 import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
-import ProductAdd from "./pages/product/components/ProductAdd";
-import LoadingPage from "./components/common/LoadingPage";
-import ProductDetail from "./pages/product/components/ProductDetail";
-import ProductUpdate from "./pages/product/components/ProductUpdate";
-import ClinicList from "./pages/clinic/ClinicList";
-import ClinicAdd from "./pages/clinic/ClinicAdd";
-import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
-import ServiceList from "./pages/service/ServiceList";
-import ServiceAdd from "./pages/service/ServiceAdd";
+import ReceptionList from "./pages/reception/ReceptionList";
 import ServiceDetail from "./pages/service/components/ServiceDetail";
 import ServiceUpdate from "./pages/service/components/ServiceUpdate";
 import DetailBooking from './pages/reception/components/DetailBooking';
 import UpdateBooking from "./pages/reception/components/UpdateBooking";
+import ServiceAdd from "./pages/service/ServiceAdd";
+import ServiceList from "./pages/service/ServiceList";
+import DesignationList from "./pages/designation/DesignationList";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -140,6 +144,22 @@ function App() {
     {
       path: "reception/booking/update/:id",
       element: <UpdateBooking />,
+    },
+    {
+      path: "configuration/user",
+      element: <ConfigUserListContainer />,
+    },
+    {
+      path: "configuration/user/add",
+      element: <ConfigUserAddContainer />,
+    },
+    {
+      path: "configuration/user/:id/edit",
+      element: <ConfigUserUpdateContainer />,
+    },
+    {
+      path: "designation/list",
+      element: <DesignationList />,
     },
   ]);
   return (

@@ -27,6 +27,11 @@ const menuExamination: TMenu[] = [
     title: "Phiếu khám",
     icon: <IconDocument />,
   },
+  {
+    path: "/designation/list",
+    title: "Dịch vụ chỉ định",
+    icon: <IconDocument />,
+  },
 ];
 const menuSell: TMenu[] = [
   { path: "/order", title: "Đơn hàng", icon: <IconDocument /> },
