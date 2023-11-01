@@ -14,6 +14,7 @@ import {
 } from "redux-persist";
 import headingPrescriptionSlice from "./layout/headingPrescriptionSlice";
 import { headingWaiting } from "./layout/HeadingWaiting";
+import { headingDone } from "./layout/HeadingDone";
 import authSlice from "./auth/authSlice";
 
 const persistConfig = {
@@ -24,6 +25,7 @@ const persistConfig = {
     "headingReception",
     "headingBooking",
     "headingWaiting",
+    "headingDone",
     "auth",
   ],
 };
@@ -34,6 +36,7 @@ const reducer = combineReducers({
   headingBooking: headingBookingReducer,
   headingPrescription: headingPrescriptionSlice.reducer,
   headingWaiting: headingWaiting.reducer,
+  headingDone: headingDone.reducer,
   auth: authSlice,
 });
 

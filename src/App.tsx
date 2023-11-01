@@ -34,6 +34,7 @@ import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceList from "./pages/service/ServiceList";
 import DesignationList from "./pages/designation/DesignationList";
 import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
+import ReceptionView from "./pages/reception/components/ReceptionView";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -52,6 +53,10 @@ function App() {
     {
       path: "reception/addBooking",
       element: <AddBooking />,
+    },
+    {
+      path: "reception/:id/view",
+      element: <ReceptionView />,
     },
     {
       path: "examination",
