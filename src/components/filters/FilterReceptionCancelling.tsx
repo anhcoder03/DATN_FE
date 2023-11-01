@@ -1,30 +1,37 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import { Link } from "react-router-dom";
-import Select from "react-select";
-import { optionDoctor, optionNVTD } from "../../constants/options";
-import { ModalBooking } from "../modal";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
+import Select from "react-select";
+import {
+  optionClinic,
+  optionDoctor,
+  optionNVTD,
+} from "../../constants/options";
+import ModalCancelling from "../modal/ModalCancelling";
+// import { ModalWaiting } from "../modal";
 
-const FilterReceptionBook = (props: any) => {
+const FilterReceptionCancelling = (props: any) => {
   const { columns } = props;
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
+
   const handleOk = () => {
     setOpen(false);
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
   return (
     <div className="">
-      <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
+      <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
         <div className="flex items-center gap-2 filter-wrapper">
-          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[350px]">
+          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[300px]">
             <IconSearch></IconSearch>
             <input
               type="text"
@@ -49,16 +56,22 @@ const FilterReceptionBook = (props: any) => {
             </div>
           </div>
           <Select
-            options={optionNVTD}
-            className="react-select"
-            classNamePrefix="react-select"
-            placeholder="-Nhân viên tiếp đón-"
-          ></Select>
-          <Select
             options={optionDoctor}
             className="react-select"
-            classNamePrefix="react-select"
+            classNamePrefix="react-select select-small"
             placeholder="-Bác sĩ-"
+          ></Select>
+          <Select
+            options={optionClinic}
+            className="react-select"
+            classNamePrefix="react-select select-small"
+            placeholder="-Phòng khám-"
+          ></Select>
+          <Select
+            options={optionNVTD}
+            className="react-select"
+            classNamePrefix="react-select select-small"
+            placeholder="-Nhân viên tiếp đón-"
           ></Select>
         </div>
         <div className="flex items-end gap-2">
@@ -68,10 +81,7 @@ const FilterReceptionBook = (props: any) => {
           >
             <IconSetting></IconSetting>
           </button>
-          <Link
-            to={"/reception/addBooking"}
-            className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
-          >
+          <Link to={"#"} className="flex gap-2 px-3 py-2 rounded-lg bg-primary">
             <div className="flex items-center p-1 bg-white rounded-lg text-primary">
               <IconPlus></IconPlus>
             </div>
@@ -79,14 +89,14 @@ const FilterReceptionBook = (props: any) => {
           </Link>
         </div>
       </div>
-      <ModalBooking
+      <ModalCancelling
         open={open}
         handleCancel={handleCancel}
         handleOk={handleOk}
         headings={columns}
-      ></ModalBooking>
+      ></ModalCancelling>
     </div>
   );
 };
 
-export default FilterReceptionBook;
+export default FilterReceptionCancelling;

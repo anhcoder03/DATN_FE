@@ -6,6 +6,8 @@ import ReceptionBook from "./components/ReceptionBook";
 import ReceptionCustomer from "./components/ReceptionCustomer";
 import ReceptionWaiting from "./components/ReceptionWaiting";
 import { useNavigate } from "react-router-dom";
+import ReceptionDone from "./components/ReceptionDone";
+import ReceptionCancelling from "./components/ReceptionCancelling";
 
 export interface IDataTabs {
   title: string;
@@ -42,13 +44,13 @@ const ReceptionList = () => {
     },
     {
       title: "ĐÃ KHÁM (3)",
-      children: <ReceptionWaiting />,
+      children: <ReceptionDone />,
       id: "5",
       name: "done",
     },
     {
       title: "CHỜ HUỶ (0)",
-      children: <ReceptionWaiting />,
+      children: <ReceptionCancelling />,
       id: "6",
       name: "cancelling",
     },
