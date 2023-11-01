@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Pagination } from "../../../components/pagination";
+import { Table3 } from "../../../components/table";
+import { useNavigate } from "react-router-dom";
 import CalcUtils from "../../../helpers/CalcULtils";
 import moment from "moment";
-import { Table3 } from "../../../components/table";
-import { Pagination } from "../../../components/pagination";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
-import IconTrash2 from "../../../assets/images/icon-trash2.png";
-import { useNavigate } from "react-router-dom";
 import { getAllExamination } from "../../../services/examination.service";
-import FilterReceptionDone from "../../../components/filters/FilterReceptionDone";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
+import IconTrash2 from "../../../assets/images/icon-trash2.png";
+import FilterReceptionCancelling from "../../../components/filters/FilterReceptionCancelling";
 
-const ReceptionDone = () => {
+const ReceptionCancelling = () => {
   const [receptions, setReceptions] = useState<any[]>();
   const [reception, setReception] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ const ReceptionDone = () => {
     _limit: 25,
     _sort: "createdAt",
     _order: "desc",
-    status: "done",
+    status: "cancelling",
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -101,7 +101,7 @@ const ReceptionDone = () => {
   }, [query]);
 
   const selectedHeading = useSelector(
-    (state: RootState) => state.headingDone.selectedHeadings
+    (state: RootState) => state.headingCancelling.selectedHeadings
   );
   const deserializedHeadings = selectedHeading.map((heading) => {
     return {
@@ -109,14 +109,33 @@ const ReceptionDone = () => {
       selector: eval(heading.selector),
     };
   });
+  const gotoDetail = (id: any) => {
+    navigate(`/reception/${id}/view`);
+  };
   const handleUpdate = (data: any) => {
     setOpenModal(true);
     setReception(data);
   };
-  const gotoDetail = (id: any) => {
-    navigate(`/reception/${id}/view`);
+  const action = {
+    name: "Thao tác",
+    cell: (row: { _id: any }) => (
+      <div className="flex items-center gap-x-[2px]">
+        <button
+          onClick={() => console.log(row._id)}
+          className="button-nutri text-[#585858]"
+        >
+          <img
+            style={{ border: "none" }}
+            src={IconTrash2}
+            width={20}
+            height={20}
+            alt=""
+          />
+        </button>
+      </div>
+    ),
   };
-  const newHeading = [...deserializedHeadings];
+  const newHeading = [...deserializedHeadings, action];
   const onOk = async () => {
     setOpenModal(false);
   };
@@ -129,7 +148,7 @@ const ReceptionDone = () => {
   };
   return (
     <>
-      <FilterReceptionDone columns={columns}></FilterReceptionDone>
+      <FilterReceptionCancelling columns={columns}></FilterReceptionCancelling>
       <Table3
         gotoDetail={gotoDetail}
         isLoading={loading}
@@ -148,4 +167,4 @@ const ReceptionDone = () => {
   );
 };
 
-export default ReceptionDone;
+export default ReceptionCancelling;
