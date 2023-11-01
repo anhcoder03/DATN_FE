@@ -3,7 +3,7 @@ import { Layout } from "../../../components/layout";
 import Heading from "../../../components/common/Heading";
 import { Row } from "../../../components/row";
 import { Field } from "../../../components/field";
-import { Label } from "../../../components/label";
+import { Label, LabelStatus } from "../../../components/label";
 import { Radio, Select } from "antd";
 import { Input } from "../../../components/input";
 import { IconPhone, IconPlus, IconTrash } from "../../../components/icons";
@@ -71,9 +71,10 @@ const ReceptionView = () => {
             <div className="p-5 bg-white w-1/2 rounded-xl">
               <Heading>
                 Thông tin khách hàng{" "}
-                <span className="px-3 text-sm py-1 bg-primary text-white rounded-lg">
+                <LabelStatus type={data?.status}></LabelStatus>
+                {/* <span className="px-3 text-sm py-1 bg-primary text-white rounded-lg">
                   Đã Khám
-                </span>
+                </span> */}
               </Heading>
               <Row className="grid-cols-2 mb-10">
                 <Field>

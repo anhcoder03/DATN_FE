@@ -15,6 +15,7 @@ import {
 import headingPrescriptionSlice from "./layout/headingPrescriptionSlice";
 import { headingWaiting } from "./layout/HeadingWaiting";
 import { headingDone } from "./layout/HeadingDone";
+import { headingCancelling } from "./layout/HeadingCancelling";
 import authSlice from "./auth/authSlice";
 
 const persistConfig = {
@@ -25,7 +26,7 @@ const persistConfig = {
     "headingReception",
     "headingBooking",
     "headingWaiting",
-    "headingDone",
+    "headingCancelling",
     "auth",
   ],
 };
@@ -37,6 +38,7 @@ const reducer = combineReducers({
   headingPrescription: headingPrescriptionSlice.reducer,
   headingWaiting: headingWaiting.reducer,
   headingDone: headingDone.reducer,
+  headingCancelling: headingCancelling.reducer,
   auth: authSlice,
 });
 
