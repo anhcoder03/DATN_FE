@@ -22,20 +22,17 @@ const DetailBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [staffs, setStaffs] = useState<any[]>([]);
   const [data, setData] = useState<any>();
-  const {
-    control,
-    handleSubmit
-  } = useForm({});
-  const {id} = useParams();
+  const { control, handleSubmit } = useForm({});
+  const { id } = useParams();
   useEffect(() => {
     getCustomers();
     getStaffs();
-  }, [])
+  }, []);
   useEffect(() => {
-    if(id !== undefined) {
-      loadData()
+    if (id !== undefined) {
+      loadData();
     }
-  },[id])
+  }, [id]);
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -63,7 +60,7 @@ const DetailBooking = () => {
   async function loadData() {
     try {
       const response = await getOneExamination(id);
-      const resData = response.medicine;
+      const resData = response.examination;
       setData({
         customer: resData?.customer,
         dateOfBirth: resData?.customerId?.dateOfBirth,
@@ -71,18 +68,17 @@ const DetailBooking = () => {
         phone: resData?.customerId?.phone,
         note: resData?.note,
         staffId: resData?.staffId,
-        day_booking: resData?.day_booking
+        day_booking: resData?.day_booking,
       });
     } catch (error) {
-      toast.error('Đã có lỗi sảy ra!!!')
+      toast.error("Đã có lỗi sảy ra!!!");
     }
   }
   const handleChangeStatus = async () => {
     const params = {
-      status : 'reception'
-    }
-
-  }
+      status: "reception",
+    };
+  };
   return (
     <Layout>
       <div className="relative h-full only-view">
@@ -133,7 +129,7 @@ const DetailBooking = () => {
                 <Input
                   control={control}
                   name="phone"
-                  value={moment(data?.dateOfBirth).format('DD/MM/YYYY')}
+                  value={moment(data?.dateOfBirth).format("DD/MM/YYYY")}
                   placeholder="Nhập ngày đặt lịch"
                 />
                 <div className="absolute top-0 right-0">
@@ -149,7 +145,7 @@ const DetailBooking = () => {
                 <Input
                   control={control}
                   name="phone"
-                  value={moment(data?.day_booking).format('DD/MM/YYYY')}
+                  value={moment(data?.day_booking).format("DD/MM/YYYY")}
                   placeholder="Nhập năm sinh"
                 />
                 <div className="absolute top-0 right-0">
@@ -191,8 +187,8 @@ const DetailBooking = () => {
                 onChange={(val: any) => {
                   setData({
                     ...data,
-                    note: val
-                  })
+                    note: val,
+                  });
                 }}
                 value={data?.note}
               />
@@ -215,7 +211,7 @@ const DetailBooking = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
                 // onClick={handleSubmit(handleChangeStatus)}
-                onClick={() => toast.info('chờ leader')}
+                onClick={() => toast.info("chờ leader")}
               >
                 Tiếp đón
               </Button>

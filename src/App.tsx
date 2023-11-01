@@ -28,17 +28,22 @@ import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
 import ReceptionList from "./pages/reception/ReceptionList";
 import ServiceDetail from "./pages/service/components/ServiceDetail";
 import ServiceUpdate from "./pages/service/components/ServiceUpdate";
-import DetailBooking from './pages/reception/components/DetailBooking';
+import DetailBooking from "./pages/reception/components/DetailBooking";
 import UpdateBooking from "./pages/reception/components/UpdateBooking";
 import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceList from "./pages/service/ServiceList";
 import DesignationList from "./pages/designation/DesignationList";
+import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
     {
       path: "reception",
       element: <ReceptionList />,
+    },
+    {
+      path: "reception/:id",
+      element: <WelcomeUpdate />,
     },
     {
       path: "reception/add",

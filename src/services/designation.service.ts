@@ -10,6 +10,14 @@ export const getAllServiceByExamination = async (params: any) => {
     console.error(error);
   }
 };
+export const getServiceByIdExam = async (id: any) => {
+  try {
+    const response = await http.get(`/serviceByExamination/${id}`);
+    return response.serviceByExaminations;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const deleteServiceByExamination = async (id: any) => {
   try {
