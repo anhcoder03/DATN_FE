@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
-import Select, { Props } from 'react-select';
-import { IRole } from '../../../types/role.type';
-import { getAllRole } from '../../../services/role.service';
+import React, { useCallback, useState } from "react";
+import Select, { Props } from "react-select";
+import { IRole } from "../../../types/role.type";
+import { getAllRole } from "../../../services/role.service";
 
 type RoleSelectProps = {} & Props;
 
@@ -12,8 +12,8 @@ const RoleSelect: React.FC<RoleSelectProps> = ({ ...p }) => {
     getAllRole({
       _page: 1,
       _limit: 500,
-      _sort: 'createdAt',
-      _order: 'asc',
+      _sort: "createdAt",
+      _order: "asc",
       search,
     }).then((r) => {
       setData(r ?? []);
@@ -28,12 +28,13 @@ const RoleSelect: React.FC<RoleSelectProps> = ({ ...p }) => {
       }))}
       onFocus={() => {
         if (!data.length) {
-          fetch('');
+          fetch("");
         }
       }}
-      className='react-select'
-      classNamePrefix='react-select'
-      placeholder='-Chức danh-'></Select>
+      className="p-2 h-full react-select"
+      classNamePrefix="react-select"
+      placeholder="-Chức danh-"
+    ></Select>
   );
 };
 

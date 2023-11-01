@@ -186,6 +186,9 @@ const ReceptionCustomer = () => {
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+  const gotoDetail = (id: any) => {
+    navigate(`/reception/${id}`);
+  };
   return (
     <>
       <FilterReceptionCustomer columns={columns}></FilterReceptionCustomer>
@@ -193,6 +196,7 @@ const ReceptionCustomer = () => {
         isLoading={loading}
         columns={newHeading}
         data={receptions}
+        gotoDetail={gotoDetail}
       ></Table3>
       <Pagination
         handlePageClick={handlePageClick}
