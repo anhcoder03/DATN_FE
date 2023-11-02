@@ -150,6 +150,7 @@ function App() {
       path: "reception/booking/update/:id",
       element: <UpdateBooking />,
     },
+    
     {
       path: "configuration/user",
       element: <ConfigUserListContainer />,

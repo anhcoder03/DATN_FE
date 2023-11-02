@@ -10,6 +10,7 @@ export const getAllExamination = async (params: any) => {
     console.error(error);
   }
 };
+
 export const getOneExamination = async (id: any) => {
   try {
     const response = await http.get(`/medicalExaminationSlip/${id}`);
@@ -18,6 +19,7 @@ export const getOneExamination = async (id: any) => {
     console.error(error);
   }
 };
+
 export const createExamination = async (data: any) => {
   try {
     const response = await http.post(`/medicalExaminationSlip`, data);
@@ -33,6 +35,15 @@ export const UpdateExamination = async (data: any) => {
       `/medicalExaminationSlip/${data?._id}`,
       data
     );
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteExamination = async (id: any) => {
+  try {
+    const response = await http.delete(`/medicalExaminationSlip`, id);
     return response;
   } catch (error) {
     console.error(error);

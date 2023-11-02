@@ -18,11 +18,12 @@ import Select from "react-select";
 import { getAllCustomer } from "../../../services/customer.service";
 import { getAllStaff } from "../../../services/staff.service";
 import { Textarea } from "../../../components/textarea";
-import { createExamination, getOneExamination } from "../../../services/examination.service";
+import { UpdateExamination, createExamination, getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { isEmpty } from "lodash";
 
 const UpdateBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
@@ -33,17 +34,23 @@ const UpdateBooking = () => {
       gender: ''
     }
   );
-  const schema = yup.object({
-    customerId: yup.string().required("Bệnh nhân không được để trống!"),
-    staffId: yup.string().required("Nhân viên tiếp đón không được để trống!"),
-  })
+  const validate = () => {
+    if(isEmpty(data?.customer)) {
+      toast.warning('Bệnh nhân không được để trống!')
+      return false
+    }
+    if(isEmpty(data?.staffId)) {
+      toast.warning('Nhân viên tiếp đón không được để trống!')
+      return false
+    }
+    return true
+  }
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
   const {id} = useParams();
@@ -63,9 +70,9 @@ const UpdateBooking = () => {
   async function loadData() {
     try {
       const response = await getOneExamination(id);
-      const resData = response.medicine;
+      const resData = response.examination;
       setData({
-        customer: resData?.customer?._id,
+        customer: resData?.customerId?._id,
         dateOfBirth: moment(resData?.customerId?.dateOfBirth).unix(),
         gender: resData?.customerId?.gender,
         phone: resData?.customerId?.phone,
@@ -77,7 +84,7 @@ const UpdateBooking = () => {
       toast.error('Đã có lỗi sảy ra!!!')
     }
   }
-
+  console.log('siuData', data)
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -105,16 +112,18 @@ const UpdateBooking = () => {
   }
 
   const handleUpdateBooking = async () => {
+    if(!validate()) return;
     const params = {
       customerId: data?.customer,
       staffId: data?.staffId,
       note: data?.note,
       day_booking: data?.day_booking,
-      status: 'booking'
+      status: 'booking',
+      _id: id
     }
-    const res = await createExamination(params);
+    const res = await UpdateExamination(params);
     if (res?.examination) {
-      toast.success('Tạo đặt lịch thành công!');
+      toast.success('Cập nhật đặt lịch thành công!');
       navigate("/reception");
     } else {
       toast.error('Có lỗi sảy ra!!!');
@@ -155,6 +164,7 @@ const UpdateBooking = () => {
                     phone: val?.phone
                   });
                 }}
+                value = {dataCustomers?.find((item: any) => item?._id == data?.customer)}
               ></Select>
             </Field>
             <Field>
@@ -272,7 +282,7 @@ const UpdateBooking = () => {
                     staffId: val?._id
                   })
                 }}
-                value = {data?.staffId?.id}
+                value = {staffs?.find((item: any) => item?._id == data?.staffId)}
               ></Select>
             </Field>
             <Field>
