@@ -239,7 +239,7 @@ const ExaminationList = () => {
     setQuery({ ...query, _limit: data.value });
   };
   const gotoDetail = (id: any) => {
-    navigate(`/examination/${id}`)
+    navigate(`/examination/${id}`, { state: { action: 'examination' } });
   }
   return (
     <Layout>
