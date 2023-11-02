@@ -1,4 +1,4 @@
-import { Lock, Phone } from "react-feather";
+import { Mail, Eye } from "react-feather";
 import bgLogin from "../../assets/images/bg-login.svg";
 import { Field } from "../../components/field";
 import { Input } from "../../components/input";
@@ -12,6 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TDataResponse, handleLogin } from "../../redux/auth/handler";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 type TLogin = {
   email: string;
@@ -37,6 +38,7 @@ const Login = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+  const [typePassWord, setTypePassWord] = useState("password");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleSignin = async (values: TLogin) => {
@@ -53,6 +55,12 @@ const Login = () => {
     } catch (error: any) {
       toast.error(error);
     }
+  };
+
+  const handleChangeType = () => {
+    typePassWord === "password"
+      ? setTypePassWord("text")
+      : setTypePassWord("password");
   };
 
   return (
@@ -82,7 +90,7 @@ const Login = () => {
               className="h-[42px] px-2 border-b border-b-[#f0f0f3]"
             >
               <span className="input-group-text ">
-                <Phone />
+                <Mail />
               </span>
             </Input>
             <div className="text-red-500 text-sm h-5">
@@ -94,13 +102,14 @@ const Login = () => {
               Mật khẩu
             </Label>
             <Input
+              type={typePassWord}
               control={control}
               name="password"
               placeholder="Nhập mật khẩu"
               className="h-[42px] px-2 border-b border-b-[#f0f0f3]"
             >
               <span className="input-group-text">
-                <Lock />
+                <Eye onClick={handleChangeType} />
               </span>
             </Input>
             <div className="text-red-500 text-sm h-5">

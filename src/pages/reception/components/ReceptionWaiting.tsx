@@ -12,7 +12,7 @@ import IconTrash2 from "../../../assets/images/icon-trash2.png";
 
 const ReceptionWaiting = () => {
   const [receptions, setReceptions] = useState<any[]>();
-  const [reception, setReception] = useState<any>();
+  // const [reception, setReception] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     _page: 1,
@@ -23,7 +23,7 @@ const ReceptionWaiting = () => {
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
@@ -75,11 +75,13 @@ const ReceptionWaiting = () => {
       selector: (row: any) => row?.note,
     },
   ];
+
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
     { value: 100, label: "100 bản ghi" },
   ];
+
   const handleGetExaminaton = async () => {
     try {
       setLoading(true);
@@ -92,7 +94,7 @@ const ReceptionWaiting = () => {
       console.log(error);
     }
   };
-  console.log(receptions);
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
@@ -109,10 +111,12 @@ const ReceptionWaiting = () => {
       selector: eval(heading.selector),
     };
   });
-  const handleUpdate = (data: any) => {
-    setOpenModal(true);
-    setReception(data);
-  };
+
+  // const handleUpdate = (data: any) => {
+  //   setOpenModal(true);
+  //   setReception(data);
+  // };
+
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
@@ -133,15 +137,21 @@ const ReceptionWaiting = () => {
     ),
   };
   const newHeading = [...deserializedHeadings, action];
-  const onOk = async () => {
-    setOpenModal(false);
-  };
+
+  // const onOk = async () => {
+  //   setOpenModal(false);
+  // };
+
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
+  };
+
+  const gotoDetail = (id: string) => {
+    navigate(`/reception/${id}/view`);
   };
   return (
     <>
@@ -150,6 +160,7 @@ const ReceptionWaiting = () => {
         isLoading={loading}
         columns={newHeading}
         data={receptions}
+        gotoDetail={gotoDetail}
       ></Table3>
       <Pagination
         handlePageClick={handlePageClick}

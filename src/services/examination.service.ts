@@ -5,6 +5,7 @@ const http = new Http();
 export const getAllExamination = async (params: any) => {
   try {
     const response = await http.get(`/medicalExaminationSlip`, params);
+
     return response.medicalExaminationSlips;
   } catch (error) {
     console.error(error);
@@ -14,7 +15,7 @@ export const getAllExamination = async (params: any) => {
 export const getOneExamination = async (id: any) => {
   try {
     const response = await http.get(`/medicalExaminationSlip/${id}`);
-    return response;
+    return response.medicalExaminationSlip;
   } catch (error) {
     console.error(error);
   }
