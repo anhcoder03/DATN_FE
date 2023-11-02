@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FilterReceptionBook } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
-import { getAllExamination } from "../../../services/examination.service";
+import { UpdateExamination, deleteExamination, getAllExamination } from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
 import moment from "moment";
 import { IconTrash } from "../../../components/icons";
@@ -11,6 +11,8 @@ import CalcUtils from "../../../helpers/CalcULtils";
 import { Pagination } from "../../../components/pagination";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
+import IconHand from '../../../assets/images/icon-hand.png';
+import { toast } from "react-toastify";
 
 const ReceptionBook = () => {
   const optionsPagination = [
@@ -104,10 +106,30 @@ const ReceptionBook = () => {
     };
   });
 
+  const handleChangeStatus = async (id: any) => {
+    const params = {
+      status: "recetion",
+      _id: id
+    };
+    const response: any = await UpdateExamination(params);
+    if(response?.examination) {
+      toast.success('chuyển trạng thái thành công!');
+      navigate(`/reception/${id}`);
+    }else {
+      toast.error('Đã có lỗi sảy ra!!!')
+    }
+  };
+
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-3">
+        <button
+          onClick={() => handleChangeStatus(row?._id)}
+          className="button-nutri text-[#585858]"
+        >
+          <img width={20} height={20} src={IconHand} alt="tiếp đón" />
+        </button>
         <button
           onClick={() => handleUpdate(row)}
           className="button-nutri text-[#585858]"
@@ -115,7 +137,7 @@ const ReceptionBook = () => {
           <IconTrash />
         </button>
         <button
-          onClick={() => console.log(row._id)}
+          onClick={() => navigate(`/reception/booking/update/${row?._id}`)}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -135,7 +157,14 @@ const ReceptionBook = () => {
     setQuery({ ...query, _page: page });
   };
   const onOk = async () => {
-    setOpenModal(false);
+    const res = await deleteExamination(booking?._id);
+    if(res?.examination) {
+      toast.success(res?.message);
+      setOpenModal(false);
+      handleGetExamination();
+    } else {
+      setOpenModal(false);
+    }
   };
   const gotoDetail = (id: any) => {
     navigate(`/reception/booking/${id}`);

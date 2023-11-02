@@ -11,58 +11,27 @@ import { IconPhone } from "../../../components/icons";
 import moment from "moment";
 import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import CalcUtils from "../../../helpers/CalcULtils";
-import { getAllCustomer } from "../../../services/customer.service";
-import { getAllStaff } from "../../../services/staff.service";
 import { Textarea } from "../../../components/textarea";
-import { getOneExamination } from "../../../services/examination.service";
+import { UpdateExamination, getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const DetailBooking = () => {
-  const [dataCustomers, setDataCustomers] = useState<any[]>([]);
-  const [staffs, setStaffs] = useState<any[]>([]);
   const [data, setData] = useState<any>();
   const { control, handleSubmit } = useForm({});
   const { id } = useParams();
-  useEffect(() => {
-    getCustomers();
-    getStaffs();
-  }, []);
+  const navigate = useNavigate();
   useEffect(() => {
     if (id !== undefined) {
       loadData();
     }
   }, [id]);
-  async function getCustomers() {
-    const response = await getAllCustomer({ _limit: 3000 });
-    const ListArr: any = [];
-    response?.docs?.map((e: any) => {
-      ListArr?.push({
-        ...e,
-        value: e?._id,
-        label: `${e?.name} - ${e?.phone}`,
-      });
-    });
-    setDataCustomers(ListArr);
-  }
-  async function getStaffs() {
-    const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
-    const ListArr: any = [];
-    response?.map((e: any) => {
-      ListArr?.push({
-        ...e,
-        value: e?._id,
-        label: e?.name,
-      });
-    });
-    setStaffs(ListArr);
-  }
   async function loadData() {
     try {
       const response = await getOneExamination(id);
       const resData = response.examination;
       setData({
-        customer: resData?.customer,
+        customer: resData?.customerId,
         dateOfBirth: resData?.customerId?.dateOfBirth,
         gender: resData?.customerId?.gender,
         phone: resData?.customerId?.phone,
@@ -76,9 +45,18 @@ const DetailBooking = () => {
   }
   const handleChangeStatus = async () => {
     const params = {
-      status: "reception",
+      status: "recetion",
+      _id: id
     };
+    const response: any = await UpdateExamination(params);
+    if(response?.examination) {
+      toast.success('chuyển trạng thái thành công!');
+      navigate(`/reception/${id}`);
+    }else {
+      toast.error('Đã có lỗi sảy ra!!!')
+    }
   };
+  
   return (
     <Layout>
       <div className="relative h-full only-view">
@@ -202,16 +180,14 @@ const DetailBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                // to={`/reception/booking/update/${id}`}
-                onClick={() => toast.warning('BE chưa có làm:">>>')}
+                to={`/reception/booking/update/${id}`}
               >
                 Chỉnh sửa
               </Button>
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                // onClick={handleSubmit(handleChangeStatus)}
-                onClick={() => toast.info("chờ leader")}
+                onClick={handleSubmit(handleChangeStatus)}
               >
                 Tiếp đón
               </Button>

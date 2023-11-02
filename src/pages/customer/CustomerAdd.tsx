@@ -70,7 +70,7 @@ const CustomerAdd = () => {
     const res = await createCustomer(data);
     if (res?.customer) {
       toast.success(res?.message);
-      navigate("/customer");
+      navigate("/customer/list");
     } else {
       toast.error(res.message);
     }
