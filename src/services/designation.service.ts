@@ -27,3 +27,12 @@ export const deleteServiceByExamination = async (id: any) => {
     return error;
   }
 };
+
+export const getOneServiceByExam = async (id: any) => {
+  try {
+    const response = await http.get(`/serviceExaminationById/${id}`);
+    return response?.designation;
+  } catch (error) {
+    console.error(error);
+  }
+};

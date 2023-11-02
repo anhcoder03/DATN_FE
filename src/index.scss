@@ -289,6 +289,9 @@ code {
   height: 34px;
   overflow: hidden;
 }
+.select-small__menu {
+  z-index: 9999 !important;
+}
 
 .select-small__indicator-separator {
   display: none;
