@@ -23,89 +23,62 @@ export interface IDataTabs {
 }
 const ExaminationAdd = (props: any) => {
   const navigate = useNavigate();
-  const id = useParams()
-  console.log(id?.id , "idNE");
-  
-    const dataTabs: IDataTabs[] = [
-      {
-        title: "THÔNG TIN BỆNH NHÂN",
-        children: <ExaminationInfo id={id?.id} />,
-        id: "1",
-        name: "booking",
-      },
-      {
-        title: "CHỈ ĐỊNH DỊCH VỤ",
-        children: <ExaminationSevicer/>,
-        id: "2",
-        name: "recetion",
-      },
-      // {
-      //   title: "CHỜ KHÁM (0)",
-      //   children: <ReceptionWaiting />,
-      //   id: "3",
-      //   name: "waiting",
-      // },
-      // {
-      //   title: "ĐANG KHÁM (3)",
-      //   children: <ReceptionWaiting />,
-      //   id: "4",
-      //   name: "running",
-      // },
-      // {
-      //   title: "ĐÃ KHÁM (3)",
-      //   children: <ReceptionDone />,
-      //   id: "5",
-      //   name: "done",
-      // },
-      // {
-      //   title: "CHỜ HUỶ (0)",
-      //   children: <ReceptionCancelling />,
-      //   id: "6",
-      //   name: "cancelling",
-      // },
-      // {
-      //   title: "HUỶ (0)",
-      //   children: <ReceptionWaiting />,
-      //   id: "7",
-      //   name: "cancel",
-      // },
-    ];
-    const urlParams = new URLSearchParams(location.search);
-    useEffect(() => {
-      document.title = "Danh sách tiếp đón bệnh nhân";
-      urlParams.set("tab", dataTabs[1].name);
-      navigate(`?${urlParams}`);
-    }, []);
-    const handleSelectTab = (key: string) => {
-      if (key === "1") {
-        urlParams.set("tab", dataTabs[0].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "2") {
-        urlParams.set("tab", dataTabs[1].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "3") {
-        urlParams.set("tab", dataTabs[2].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "4") {
-        urlParams.set("tab", dataTabs[3].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "5") {
-        urlParams.set("tab", dataTabs[4].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "6") {
-        urlParams.set("tab", dataTabs[5].name);
-        navigate(`?${urlParams}`);
-      }
-      if (key === "7") {
-        urlParams.set("tab", dataTabs[6].name);
-        navigate(`?${urlParams}`);
-      }
-    };
+  const id = useParams();
+  console.log(id?.id, "idNE");
+
+  const dataTabs: IDataTabs[] = [
+    {
+      title: "THÔNG TIN BỆNH NHÂN",
+      children: <ExaminationInfo id={id?.id} />,
+      id: "1",
+      name: "booking",
+    },
+    {
+      title: "CHỈ ĐỊNH DỊCH VỤ",
+      children: <ExaminationSevicer />,
+      id: "2",
+      name: "recetion",
+    },
+    // {
+    //   title: "CHỜ KHÁM (0)",
+    //   children: <ReceptionWaiting />,
+    //   id: "3",
+    //   name: "waiting",
+    // },
+    // {
+    //   title: "ĐANG KHÁM (3)",
+    //   children: <ReceptionWaiting />,
+    //   id: "4",
+    //   name: "running",
+    // },
+    // {
+    //   title: "ĐÃ KHÁM (3)",
+    //   children: <ReceptionDone />,
+    //   id: "5",
+    //   name: "done",
+    // },
+    // {
+    //   title: "CHỜ HUỶ (0)",
+    //   children: <ReceptionCancelling />,
+    //   id: "6",
+    //   name: "cancelling",
+    // },
+    // {
+    //   title: "HUỶ (0)",
+    //   children: <ReceptionWaiting />,
+    //   id: "7",
+    //   name: "cancel",
+    // },
+  ];
+  useEffect(() => {
+    document.title = "Chi tiết phiếu khám";
+  }, []);
+  const handleSelectTab = (key: string) => {
+    if (key === "1") {
+    }
+    if (key === "2") {
+    }
+  };
   return (
     <Layout>
       <div>
@@ -113,7 +86,7 @@ const ExaminationAdd = (props: any) => {
           <Heading>Chi tiết phiếu khám</Heading>
         </div>
         <AppTaps
-          keyActive="2"
+          keyActive="1"
           data={dataTabs}
           selectTab={handleSelectTab}
         ></AppTaps>

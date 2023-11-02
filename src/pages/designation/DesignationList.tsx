@@ -174,7 +174,7 @@ const DesignationList = () => {
   }, [query]);
 
   const gotoDetail = (item: any) => {
-    navigate(`/designation/${item?._id}`);
+    navigate(`/designation/${item?._id}/view`);
   };
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
