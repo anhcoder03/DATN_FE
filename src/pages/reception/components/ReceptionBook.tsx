@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { FilterReceptionBook } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
-import { UpdateExamination, deleteExamination, getAllExamination } from "../../../services/examination.service";
+import {
+  UpdateExamination,
+  deleteExamination,
+  getAllExamination,
+} from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
 import moment from "moment";
 import { IconTrash } from "../../../components/icons";
@@ -11,7 +15,7 @@ import CalcUtils from "../../../helpers/CalcULtils";
 import { Pagination } from "../../../components/pagination";
 import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
-import IconHand from '../../../assets/images/icon-hand.png';
+import IconHand from "../../../assets/images/icon-hand.png";
 import { toast } from "react-toastify";
 
 const ReceptionBook = () => {
@@ -32,7 +36,7 @@ const ReceptionBook = () => {
     _page: 1,
     _limit: 25,
     _sort: "createdAt",
-    _order: "asc",
+    _order: "desc",
     status: "booking",
   });
   const columns = [
@@ -109,14 +113,14 @@ const ReceptionBook = () => {
   const handleChangeStatus = async (id: any) => {
     const params = {
       status: "recetion",
-      _id: id
+      _id: id,
     };
     const response: any = await UpdateExamination(params);
-    if(response?.examination) {
-      toast.success('chuyển trạng thái thành công!');
+    if (response?.examination) {
+      toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
-    }else {
-      toast.error('Đã có lỗi sảy ra!!!')
+    } else {
+      toast.error("Đã có lỗi sảy ra!!!");
     }
   };
 
@@ -158,7 +162,7 @@ const ReceptionBook = () => {
   };
   const onOk = async () => {
     const res = await deleteExamination(booking?._id);
-    if(res?.examination) {
+    if (res?.examination) {
       toast.success(res?.message);
       setOpenModal(false);
       handleGetExamination();
@@ -168,12 +172,17 @@ const ReceptionBook = () => {
   };
   const gotoDetail = (id: any) => {
     navigate(`/reception/booking/${id}`);
-  }
+  };
 
   return (
     <>
       <FilterReceptionBook columns={columns}></FilterReceptionBook>
-      <Table3 isLoading={loading} columns={newHeading} data={bookings} gotoDetail = {gotoDetail}></Table3>
+      <Table3
+        isLoading={loading}
+        columns={newHeading}
+        data={bookings}
+        gotoDetail={gotoDetail}
+      ></Table3>
       <Pagination
         handlePageClick={handlePageClick}
         pageCount={totalPages}

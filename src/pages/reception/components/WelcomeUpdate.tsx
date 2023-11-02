@@ -53,7 +53,7 @@ const WelcomeUpdate = () => {
       price: "",
     },
   ]);
-  console.log(dataServices);
+  console.log("dataServices", dataServices);
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
   console.log(data);
@@ -76,7 +76,7 @@ const WelcomeUpdate = () => {
       setValue("clinicId", resData?.clinicId?._id);
       setDoctorId(resData?.doctorId?._id);
       setClinicId(resData?.clinicId?._id);
-      setDayWelcome(resData?.day_welcome);
+      setDayWelcome(resData?.day_welcome || new Date());
       setData(resData);
       reset(resData);
     }
@@ -84,7 +84,7 @@ const WelcomeUpdate = () => {
   }, []);
   const handleGetServiceByExam = async () => {
     const response = await getServiceByIdExam(id);
-    if (response?.docs) {
+    if (response?.docs?.length > 0) {
       const ListArr: any = [];
       response?.docs?.map((e: any) => {
         ListArr?.push({
@@ -95,6 +95,26 @@ const WelcomeUpdate = () => {
       setDataServices([...ListArr]);
       setServiceByExam(response?.docs);
       setLengthService(response?.docs?.length);
+    } else {
+      if (response?.docs?.length == 0) {
+        if (dataServices.length > 1) {
+          const newData = dataServices.splice(0);
+          setServiceByExam(response?.docs);
+          setLengthService(response?.docs?.length);
+          setDataServices([...newData]);
+          setServiceByExam(response?.docs);
+          setLengthService(response?.docs?.length);
+        } else {
+          setDataServices([
+            {
+              service_id: "",
+              price: "",
+            },
+          ]);
+          setServiceByExam(response?.docs);
+          setLengthService(response?.docs?.length);
+        }
+      }
     }
   };
   useEffect(() => {
@@ -253,11 +273,49 @@ const WelcomeUpdate = () => {
       customerId: data?.customerId?._id || data?.customerId,
       staffId: data?.staffId?._id || data?.staffId,
     };
-    console.log("cloneData", cloneData);
     const res = await UpdateExamination(cloneData);
     if (res?.examination) {
       toast.success(res?.message);
-      navigate("/reception");
+      navigate(`/reception/${id}/view`);
+    } else {
+      toast.error(res?.message);
+    }
+  };
+  const handleCreateWaiting = async (values: any) => {
+    if (!doctorId) {
+      return toast.warning("Vui lòng chọn bác sĩ phòng khám");
+    }
+    let checkService = false;
+    dataServices.forEach((item) => {
+      if (item.price === "" || item.service_id === "") {
+        return (checkService = true);
+      }
+    });
+
+    if (checkService) {
+      return toast.warning("Dịch vụ không được được để trống");
+    }
+    const newService = dataServices.slice(lengthService);
+    const examinationServiceId = newService.map(
+      (service) => service?.service_id
+    );
+    const cloneData = {
+      symptom: values.symptom,
+      note: values.note,
+      medicalHistory: values.medicalHistory,
+      status: "waiting",
+      clinicId,
+      doctorId,
+      examinationServiceId,
+      day_welcome,
+      _id: data?._id,
+      customerId: data?.customerId?._id || data?.customerId,
+      staffId: data?.staffId?._id || data?.staffId,
+    };
+    const res = await UpdateExamination(cloneData);
+    if (res?.examination) {
+      toast.success("Tạo phiếu khám thành công!");
+      navigate(`/examination/${id}`);
     } else {
       toast.error(res?.message);
     }
@@ -277,7 +335,7 @@ const WelcomeUpdate = () => {
       const res = await deleteServiceByExamination(service?._id);
       if (res?.designation) {
         toast.success("Xóa dịch vụ khám thành công");
-        handleGetServiceByExam();
+        await handleGetServiceByExam();
       } else {
         toast.error("Đã có lỗi xảy ra!");
       }
@@ -596,16 +654,18 @@ const WelcomeUpdate = () => {
                 Lưu
               </Button>
               <Button
-                type="submit"
+                type="button"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                // onClick={handleSubmit(handleCreateReception)}
+                onClick={handleSubmit(handleCreateWaiting)}
               >
                 Tạo phiếu khám
               </Button>
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                // onClick={handleSubmit(handleCreateReception)}
+                onClick={() => {
+                  handleSubmit(handleUpdate);
+                }}
               >
                 Hủy
               </Button>
