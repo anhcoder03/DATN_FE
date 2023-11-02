@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout } from "../../../components/layout";
 import Heading from "../../../components/common/Heading";
 import { Row } from "../../../components/row";
 import { Field } from "../../../components/field";
 import { Label, LabelStatus } from "../../../components/label";
-import { Radio, Select } from "antd";
+import { Radio } from "antd";
 import { Input } from "../../../components/input";
-import { IconPhone, IconPlus, IconTrash } from "../../../components/icons";
+import { IconPhone } from "../../../components/icons";
 import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import { Textarea } from "../../../components/textarea";
 import Flatpickr from "react-flatpickr";
@@ -23,28 +23,18 @@ const ReceptionView = () => {
   const [dataServices, setDataServices] = useState<any[]>([]);
   const [data, setData] = useState<any>({});
   const { id } = useParams();
-  const {
-    control,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm({
+
+  const { control, reset } = useForm({
     mode: "onChange",
   });
+
+  console.log(">>>control:", control);
 
   useEffect(() => {
     async function getExamination() {
       const response = await getOneExamination(id);
-      const resData = response.examination;
-      //   setValue("customerId", resData?.customerId?._id);
-      //   setValue("staffId", resData?.staffId?._id);
-      //   setValue("clinicId", resData?.clinicId?._id);
-      //   setDoctorId(resData?.doctorId?._id);
-      //   setClinicId(resData?.clinicId?._id);
-      //   setDayWelcome(resData?.day_welcome);
-      setData(resData);
-      reset(resData);
+      setData(response);
+      reset(response);
     }
     getExamination();
   }, []);
@@ -53,14 +43,11 @@ const ReceptionView = () => {
     const response = await getServiceByIdExam(id);
     if (response?.docs) {
       setDataServices(response?.docs);
-      //   setServiceByExam(response?.docs);
-      //   setLengthService(response?.docs?.length);
     }
   };
   useEffect(() => {
     handleGetServiceByExam();
   }, []);
-  console.log("data", data);
 
   return (
     <Layout>
@@ -199,7 +186,7 @@ const ReceptionView = () => {
                     control={control}
                     className="outline-none input-primary pointer-events-none hover-border-none"
                     name="symptom"
-                    placeholder="Triệu chứng (nếu có)"
+                    placeholder="Không có triệu trứng"
                   />
                 </Field>
                 <Field>
@@ -210,7 +197,7 @@ const ReceptionView = () => {
                     control={control}
                     className="outline-none input-primary pointer-events-none hover-border-none"
                     name="medicalHistory"
-                    placeholder="Nhập bệnh sử (nếu có)"
+                    placeholder="Chưa có bệnh sử"
                   />
                 </Field>
               </Row>
@@ -223,7 +210,7 @@ const ReceptionView = () => {
                     control={control}
                     className="outline-none input-primary pointer-events-none hover-border-none"
                     name="note"
-                    placeholder="Nhập ghi chú"
+                    placeholder="Không có ghi chú"
                   />
                 </Field>
               </Row>
@@ -231,84 +218,71 @@ const ReceptionView = () => {
             <div className="flex flex-col gap-y-10 w-1/2">
               <div className="p-5 bg-white rounded-xl">
                 <div className="flex flex-col">
-                  <Heading>Chọn bác sĩ(Phòng khám)</Heading>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={`${data?.clinicId?.name} - ${data?.doctorId?.name}`}
-                  >
-                    <div className="p-2 bg-white">
-                      <IconPhone></IconPhone>
-                    </div>
-                  </Input>
-                  {/* <Radio.Group value={clinicId}>
+                  <Heading>Phòng khám - Bác sĩ</Heading>
+
+                  <Radio.Group>
                     <div className="flex flex-col">
-                      {clinics?.map((item) => (
-                        <Radio
-                          key={item?._id}
-                          className="flex items-center h-[40px]"
-                          value={item?._id}
-                          onChange={(e) => {
-                            setDoctorId(item?.doctorInClinic?._id);
-                            setClinicId(e.target.value);
-                          }}
-                        >
-                          <span className="font-semibold pr-2">
-                            {item?.name}
-                          </span>
-                          -
-                          <span className="text-[#6f42c1] pl-2 font-semibold">
-                            {item?.doctorInClinic?.name}
-                          </span>
-                        </Radio>
-                      ))}
+                      <Radio className="flex items-center h-[40px]">
+                        <span className="font-semibold pr-2">
+                          {data?.clinicId?.name || "Phòng không xác định"}
+                        </span>
+                        -
+                        <span className="text-[#6f42c1] pl-2 font-semibold">
+                          {data?.doctorId?.name}
+                        </span>
+                      </Radio>
                     </div>
-                  </Radio.Group> */}
+                  </Radio.Group>
                 </div>
               </div>
               <div className="p-5 bg-white rounded-xl">
                 <Heading>Chỉ định dịch vụ</Heading>
-                <table className="w-full custom-table">
-                  <thead className="bg-[#f4f6f8] text-sm">
-                    <th>Tên dịch vụ</th>
-                    <th>Đơn giá</th>
-                    <th>Trạng thái thanh toán</th>
-                  </thead>
-                  <tbody>
-                    {dataServices?.map((item: any, index: any) => (
-                      <tr
-                        className="hover:bg-transparent"
-                        key={`active-${index}`}
-                      >
-                        <td>{item?.service_examination?.name}</td>
-                        <td>
-                          {PriceUtils.format(
-                            item?.service_examination?.price || 0,
-                            "đ"
-                          )}
-                        </td>
-                        <td>
-                          <span
-                            style={{
-                              cursor: "pointer",
-                              color:
-                                item?.paymentStatus === "paid"
-                                  ? "green"
-                                  : item?.paymentStatus === "unpaid"
-                                  ? "red"
-                                  : "white",
-                            }}
-                          >
-                            {item?.paymentStatus === "paid"
-                              ? "Đã thanh toán"
-                              : "Chưa thanh toán"}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {dataServices.length ? (
+                  <table className="w-full custom-table">
+                    <thead className="bg-[#f4f6f8] text-sm">
+                      <th>Tên dịch vụ</th>
+                      <th>Đơn giá</th>
+                      <th>Trạng thái thanh toán</th>
+                    </thead>
+                    <tbody>
+                      {dataServices?.map((item: any, index: any) => (
+                        <tr
+                          className="hover:bg-transparent"
+                          key={`active-${index}`}
+                        >
+                          <td>{item?.service_examination?.name}</td>
+                          <td>
+                            {PriceUtils.format(
+                              item?.service_examination?.price || 0,
+                              "đ"
+                            )}
+                          </td>
+                          <td>
+                            <span
+                              style={{
+                                cursor: "pointer",
+                                color:
+                                  item?.paymentStatus === "paid"
+                                    ? "green"
+                                    : item?.paymentStatus === "unpaid"
+                                    ? "red"
+                                    : "white",
+                              }}
+                            >
+                              {item?.paymentStatus === "paid"
+                                ? "Đã thanh toán"
+                                : "Chưa thanh toán"}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p style={{ color: "#EDA119", fontSize: 15 }}>
+                    Không tìm thấy dữ liệu dịch vụ
+                  </p>
+                )}
               </div>
             </div>
           </form>
@@ -316,45 +290,11 @@ const ReceptionView = () => {
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
-              <Button to="/reception">Đóng</Button>
-              {/* <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleUpdate)}
-              >
-                Lưu
-              </Button> */}
-              {/* <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                // onClick={handleSubmit(handleCreateReception)}
-              >
-                Tạo phiếu khám
-              </Button> */}
-              {/* <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                // onClick={handleSubmit(handleCreateReception)}
-              >
-                Hủy
-              </Button> */}
+              <Button to="/reception?tab=waiting">Đóng</Button>
             </div>
           </div>
         </div>
       </div>
-      {/* <Modal
-        centered
-        open={openModal}
-        onOk={handleDeleteService}
-        onCancel={() => setOpenModal(false)}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá dịch vụ này</p>
-        </div>
-      </Modal> */}
     </Layout>
   );
 };
