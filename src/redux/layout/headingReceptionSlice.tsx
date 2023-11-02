@@ -22,7 +22,8 @@ const headings = [
   },
   {
     name: "Bác sĩ",
-    selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+    selector: (row: { doctorId: { name: any } }) =>
+      row?.doctorId?.name || "---",
   },
 ];
 const serializedHeadings = headings.map((heading) => {

@@ -74,13 +74,14 @@ const ReceptionCustomer = () => {
       selector: (row: { staffId: { name: any } }) => row?.staffId.name,
     },
     {
-      name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
-    },
-    {
       name: "Phòng khám",
       selector: (row: { clinicId: { name: any } }) =>
         row?.clinicId?.name || "---",
+    },
+    {
+      name: "Bác sĩ",
+      selector: (row: { doctorId: { name: any } }) =>
+        row?.doctorId?.name || "---",
     },
   ];
   const optionsPagination = [
