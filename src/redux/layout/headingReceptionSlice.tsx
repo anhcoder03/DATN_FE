@@ -17,7 +17,8 @@ const headings = [
   },
   {
     name: "Phòng khám",
-    selector: (row: { clinicId: { name: any } }) => row.clinicId?.name,
+    selector: (row: { clinicId: { name: any } }) =>
+      row?.clinicId?.name || "---",
   },
   {
     name: "Bác sĩ",

@@ -28,13 +28,11 @@ const ReceptionView = () => {
     mode: "onChange",
   });
 
-  console.log(">>>control:", control);
-
   useEffect(() => {
     async function getExamination() {
       const response = await getOneExamination(id);
-      setData(response);
-      reset(response);
+      setData(response?.examination);
+      reset(response?.examination);
     }
     getExamination();
   }, []);

@@ -15,7 +15,7 @@ export const getAllExamination = async (params: any) => {
 export const getOneExamination = async (id: any) => {
   try {
     const response = await http.get(`/medicalExaminationSlip/${id}`);
-    return response.medicalExaminationSlip;
+    return response;
   } catch (error) {
     console.error(error);
   }
