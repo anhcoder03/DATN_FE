@@ -239,13 +239,18 @@ const ExaminationList = () => {
     setQuery({ ...query, _limit: data.value });
   };
   const gotoDetail = (id: any) => {
-    navigate(`/examination/${id}`, { state: { action: 'examination' } });
-  }
+    navigate(`/examination/${id}/view`, { state: { action: "examination" } });
+  };
   return (
     <Layout>
       <Heading>Danh sách phiếu khám</Heading>
       <FilterExamination columns={columns}></FilterExamination>
-      <Table3 columns={newHeading} gotoDetail = {gotoDetail} data={examinations} isLoading={loading} />
+      <Table3
+        columns={newHeading}
+        gotoDetail={gotoDetail}
+        data={examinations}
+        isLoading={loading}
+      />
       <Pagination
         handlePageClick={handlePageClick}
         pageCount={totalPages}

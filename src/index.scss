@@ -176,15 +176,22 @@ input {
   font-size: 13px !important;
 }
 
-.table-wrapper tbody tr:hover,
 .MuiTable-root tbody tr:hover,
 .rdt_TableRow:hover {
   background-color: #48a8001a !important;
   cursor: pointer;
 }
+.table-wrapper tbody tr:hover {
+  background-color: #48a8001a;
+  cursor: pointer;
+}
 .custom-table tbody tr,
 .table-wrapper tbody tr {
   box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
+}
+.ant-tabs-tab {
+  padding: 0 !important;
+  background: none;
 }
 .ant-tabs-tab,
 .ant-tabs-tab-active {
@@ -196,6 +203,10 @@ input {
   font-size: 16px !important;
   padding: 15px 20px !important;
 }
+.custom-tab * .ant-tabs-tab {
+  background: none !important ;
+  padding: 8px 15px !important;
+}
 .ant-tabs-tab {
   background: white !important;
   color: #8181a5 !important;
@@ -203,14 +214,18 @@ input {
 .ant-tabs-tab-active {
   background: #48a8001a !important;
 }
+.custom-tab * .ant-tabs-tab-active {
+  background: #48a8001a !important;
+}
+
 .ant-tabs-tab-active .ant-tabs-tab-btn,
 .ant-tabs-tab:hover .ant-tabs-tab-btn {
   color: #48a800 !important;
 }
-.ant-tabs-nav {
-  padding: 20px 20px 0 20px;
-  margin: 0 !important;
-}
+// .ant-tabs-nav-list {
+//   padding: 20px 20px;
+//   margin: 0 !important;
+// }
 .ant-tabs-nav::before {
   border-bottom: none !important;
 }

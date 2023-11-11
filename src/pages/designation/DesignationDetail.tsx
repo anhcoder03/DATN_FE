@@ -155,9 +155,9 @@ const DesignationDetail = (props: Props) => {
               <Heading>Thông tin dịch vụ</Heading>
               <table className="w-full custom-table">
                 <thead className="bg-[#f4f6f8] text-sm">
+                  <th>Mã dịch vụ</th>
                   <th>Tên dịch vụ</th>
-                  <th>Đơn giá</th>
-                  <th>Thao tác</th>
+                  <th>Thành tiền</th>
                 </thead>
                 <tbody>
                   <tr>

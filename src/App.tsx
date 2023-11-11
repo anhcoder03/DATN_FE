@@ -34,9 +34,10 @@ import ServiceAdd from "./pages/service/ServiceAdd";
 import ServiceList from "./pages/service/ServiceList";
 import DesignationList from "./pages/designation/DesignationList";
 import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
-import ExaminationAdd from "./pages/examination/ExaminationAdd";
 import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
+import ExaminationDetail from "./pages/examination/ExaminationDetail";
+import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -65,8 +66,12 @@ function App() {
       element: <ExaminationList />,
     },
     {
+      path: "examination/:id/view",
+      element: <ExaminationDetail />,
+    },
+    {
       path: "examination/:id",
-      element: <ExaminationAdd />,
+      element: <ExaminationUpdate />,
     },
     {
       path: "customer/list",

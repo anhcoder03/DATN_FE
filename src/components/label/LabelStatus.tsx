@@ -3,18 +3,22 @@ import styled from "styled-components";
 
 const LabelStatusStyles = styled.span`
   display: inline-block;
-  padding: 6px 10px;
+  padding: 4px 12px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 400;
 `;
 type LabelStatusType = {
-  type: "waiting" | "running" | "done" | "cancelling" | "cancel";
+  type: "recetion" | "waiting" | "running" | "done" | "cancelling" | "cancel";
 };
 const LabelStatus = ({ type }: LabelStatusType) => {
   let children = "";
   let styleClassName = "text-gray-500 bg-gray-100";
   switch (type) {
+    case "recetion":
+      styleClassName = "text-[#fff] bg-[#25c2e3]";
+      children = "Tiếp đón";
+      break;
     case "waiting":
       styleClassName = "text-[#fff] bg-[#eda119]";
       children = "Chờ khám";
