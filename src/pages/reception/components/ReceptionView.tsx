@@ -51,7 +51,7 @@ const ReceptionView = () => {
     <Layout>
       <div>
         <div className="relative-h-full">
-          <Heading>Chỉnh sửa tiếp đón</Heading>
+          <Heading>Xem chi tiết tiếp đón</Heading>
           <form className="flex  justify-between gap-x-10 w-full pb-16">
             <div className="p-5 bg-white w-1/2 rounded-xl">
               <Heading>

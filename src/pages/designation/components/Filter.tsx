@@ -48,7 +48,7 @@ const Filter = ({
           </div>
           <div className="filter-doctor">
             <Select
-              className="react-select !z-[9999]"
+              className="react-select"
               classNamePrefix="react-select"
               placeholder="-Bác sĩ-"
               options={dataDoctor}
