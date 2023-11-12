@@ -1,37 +1,131 @@
 import React, { useEffect, useState } from "react";
-import { Layout } from "../../components/layout";
+import { Layout } from "../../../components/layout";
 import { useParams, useNavigate } from "react-router-dom";
-import { getOneServiceByExam } from "../../services/designation.service";
-import Heading from "../../components/common/Heading";
-import { Label, LabelStatusDesignationDetail } from "../../components/label";
-import { Row } from "../../components/row";
-import { Field } from "../../components/field";
-import { Input } from "../../components/input";
+import { getOneServiceByExam, updateServiceByExam } from "../../../services/designation.service";
+import Heading from "../../../components/common/Heading";
+import { Label, LabelStatusDesignationDetail } from "../../../components/label";
+import { Row } from "../../../components/row";
+import { Field } from "../../../components/field";
+import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
 import moment from "moment";
-import PriceUtils from "../../helpers/PriceUtils";
-import { Textarea } from "../../components/textarea";
-import { Button } from "../../components/button";
-
+import PriceUtils from "../../../helpers/PriceUtils";
+import { Textarea } from "../../../components/textarea";
+import { Button } from "../../../components/button";
+import Select from "react-select";
+import { getAllService } from "../../../services/service.service";
+import { cloneDeep } from "lodash";
+import { toast } from "react-toastify";
+import { IconTrash } from "../../../components/icons";
+import { IconPlus } from "../../../components/icons";
+import { Modal } from "antd";
 
 const DesignationDetail = () => {
   const { control } = useForm();
   const [designation, setDesignation] = useState<any>({});
   const { id } = useParams();
-  const navigate = useNavigate();
-  useEffect(() => {
-    async function getOneService() {
-      const response = await getOneServiceByExam(id);
-      setDesignation(response);
+  const [services, setServices] = useState<any>();
+  const [openModal, setOpenModal] = useState(false);
+  const [url, setUrl] = useState<any>([
+    {
+      url: ''
     }
+  ]);
+  useEffect(() => {
     getOneService();
   }, [id]);
-  console.log(id);
+  useEffect(() => {
+    getServices();
+  }, []);
+
+  const navigate = useNavigate();
+
+  async function getServices() {
+    const response = await getAllService({ _limit: 3000, _status: 1 });
+    const ListArr: any = [];
+    response?.docs?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setServices(ListArr);
+  }
+
+  async function getOneService() {
+    const response = await getOneServiceByExam(id);
+    setDesignation(response);
+    setUrl(response?.fileResult)
+  }
+
+  const handleChangeInput = (event?: any) => {
+    let { value, name } = event.target
+    if (value === " ") return;
+    setDesignation({
+        ...designation,
+        [name]: value
+    })
+  }
+  // thêm url
+  const handleAddUrl = () => {
+    const newUrl = {
+      url: "",
+    };
+    setUrl([...url, newUrl]);
+  };
+  // xoá url
+  const handleRemoveUrl = (index: number) => {
+    let newUrl = cloneDeep(url);
+    newUrl.splice(index, 1);
+    if (newUrl?.length === 0) {
+      newUrl.push({
+        url: "",
+      });
+    }
+    setUrl(newUrl);
+  };
+  // Chỉnh sửa url
+  const handleUpdateUrl = (dataRela: any, index: number) => {
+    let newUrl = cloneDeep(url);
+    newUrl[index] = dataRela;
+    setUrl(newUrl);
+  };
+
+  const udpateDesignation = async () => {
+    const params = {
+      service_examination: designation?.service_examination?._id,
+      _id: id,
+      mainResults: designation?.mainResults,
+      fileResult: url
+    }
+    const response: any = await updateServiceByExam(params);
+    if(response?.designation) {
+      toast.success('Cập nhât dịch vụ chỉ định thành công');
+      navigate(`/designation/list`);
+    }else {
+      toast.error('Đã có lỗi sảy ra')
+    }
+  }
+
+  // const handleDeleteService = async () => {
+  //     const res = await deleteServiceByExamination(service?._id);
+  //     if (res?.designation) {
+  //       toast.success("Xóa dịch vụ khám thành công");
+  //       await handleGetServiceByExam();
+  //     } else {
+  //       toast.error("Đã có lỗi xảy ra!");
+  //     }
+  //   setOpenModal(false);
+  // };
+
+  
+
   return (
     <Layout>
       <div className="relative-h-full">
-        <Heading>Xem chi tiết đơn dịch vụ</Heading>
-        <form className="flex  justify-between gap-x-10 w-full pb-16">
+        <Heading>Chỉnh sửa đơn dịch vụ</Heading>
+        <form className="flex justify-between gap-x-10 w-full pb-16">
           <div className="flex flex-col gap-y-5 w-[60%]">
             <div className="p-5 bg-white w-full rounded-xl">
               <Heading>
@@ -152,12 +246,33 @@ const DesignationDetail = () => {
               <Heading>Thông tin dịch vụ</Heading>
               <table className="w-full custom-table">
                 <thead className="bg-[#f4f6f8] text-sm">
-                  <th>Tên dịch vụ</th>
-                  <th>Đơn giá</th>
+                  <th style={{width: '60%'}}>Tên dịch vụ</th>
+                  <th style={{width: '40%'}}>Đơn giá</th>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{designation?.service_examination?.name}</td>
+                    <td>
+                    <Select
+                      placeholder="Chọn dich vụ"
+                      className="mb-2 react-select"
+                      classNamePrefix="react-select"
+                      options={services}
+                      onChange={(val: any) => {
+                        setDesignation({
+                          ...designation,
+                          service_examination: val
+                        })
+                      }}
+                      value={services?.find((item: any) => item?.value == designation?.service_examination?._id)}
+                      formatOptionLabel={(service: any) => {
+                        return (
+                          <div>
+                            {`${service?.name}_${service?.serviceId}`}
+                          </div>
+                        )
+                      }}
+                    ></Select>
+                    </td>
                     <td>
                       {PriceUtils.format(
                         designation?.service_examination?.price
@@ -173,27 +288,65 @@ const DesignationDetail = () => {
                 <Label htmlFor="mainResults">Nội dung kết quả</Label>
                 <Textarea
                   control={control}
-                  placeholder="----"
-                  className="!border-transparent font-semibold text-black"
-                  value={
-                    designation?.mainResults ? designation?.mainResults : "---"
-                  }
+                  placeholder="Nhập kết quả và kết luận"
+                  className="outline-none input-primary"
+                  name="mainResults"
+                  value = {designation?.mainResults}
+                  onChange={(val: any) => handleChangeInput(val)}
                 ></Textarea>
               </Field>
             </div>
             <div className="p-5 bg-white w-full rounded-xl">
-              <Heading>Hình ảnh và tệp kết quả</Heading>
+              <Heading>Tệp kết quả</Heading>
               <Label htmlFor="mainResults">Chèn link</Label>
-              <tbody style={{lineHeight: 2}}>
-                  {designation?.fileResult && designation?.fileResult?.map((item: any) => {
-                    return (
-                      <tr>
-                        <a style={{color: "#3183FF", marginLeft: 20, marginTop: 15}} href={item?.url} target="_blank">{item?.url}</a>
-                      </tr>
-                      
-                    )
-                  })}
-              </tbody>
+              <table className="w-full custom-table">
+                <tbody>
+                    {url && url?.map((item: any, index: number) => {
+                      return (
+                        <tr>
+                          <td>
+                            <Input
+                              control={control}
+                              placeholder="Nhập link"
+                              className="!border-transparent font-semibold text-black"
+                              name="url"
+                              value={item?.url}
+                              onChange={(e: any) => handleUpdateUrl({[e?.target?.name] : e?.target?.value},index)}
+                            ></Input>
+                          </td>
+                          <td style={{ borderBottom: "none" }}>
+                            <div className="flex items-center gap-x-2">
+                              {
+                                <div
+                                  className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
+                                  onClick={() => {
+                                    // if (item?.id) {
+                                    //   // props?.handleActionModal({ data: item, index: index });
+                                    // } else {
+                                      handleRemoveUrl(index);
+                                    // }
+                                  }}
+                                  style={{cursor: 'pointer'}}
+                                >
+                                  <IconTrash />
+                                </div>
+                              }
+                              {url?.length == index + 1 && (
+                                <div
+                                  className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
+                                  onClick={() => handleAddUrl()}
+                                  style={{cursor: 'pointer'}}
+                                >
+                                  <IconPlus></IconPlus>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                </tbody>
+              </table>
             </div>
           </div>
           <div className="flex flex-col gap-y-5 w-[40%]">
@@ -285,53 +438,37 @@ const DesignationDetail = () => {
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
           <div className="flex justify-end w-full gap-x-2">
             <div className="flex items-center gap-x-2">
-              <Button to="/designation/list">Đóng</Button>
-              {designation?.paymentStatus == "paid" && (
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                >
-                  In
-                </Button>
-              )}
-              {designation?.paymentStatus === "unpaid" && (
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                >
-                  Thu tiền
-                </Button>
-              )}
+              <Button to={`/designation/${id}/view`}>Đóng</Button>
               <Button
                 type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                // onClick={handleSubmit(handleChangeStatus)}
-              >
-                Đang thực hiện
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                className="flex items-center justify-center px-8 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
               >
                 Hủy
               </Button>
               <Button
                 type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                className="flex items-center justify-center px-8 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                onClick={() => udpateDesignation()}
               >
-                Hoàn thành
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick = {() => navigate(`/designation/update/${id}`)}
-              >
-                Chỉnh sửa
+                Lưu
               </Button>
             </div>
           </div>
         </div>
       </div>
+      {/* <Modal
+        centered
+        open={openModal}
+        onOk={handleDeleteService}
+        onCancel={() => setOpenModal(false)}
+      >
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+          Thông Báo
+        </h1>
+        <div className="flex flex-col items-center justify-center py-4 text-sm">
+          <p>Bạn có chắc muốn xoá dịch vụ này</p>
+        </div>
+      </Modal> */}
     </Layout>
   );
 };

@@ -37,6 +37,8 @@ import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
 import ExaminationAdd from "./pages/examination/ExaminationAdd";
 import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
+import DesigantionUpdate from './pages/designation/components/DesignationUpdate';
+
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -181,6 +183,10 @@ function App() {
     {
       path: "designation/:id/view",
       element: <DesignationDetail />,
+    },
+    {
+      path: "designation/update/:id",
+      element: <DesigantionUpdate />,
     },
   ]);
   return (

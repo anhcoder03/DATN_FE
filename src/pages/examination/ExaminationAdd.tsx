@@ -24,7 +24,6 @@ export interface IDataTabs {
 const ExaminationAdd = (props: any) => {
   const navigate = useNavigate();
   const id = useParams();
-  console.log(id?.id, "idNE");
 
   const dataTabs: IDataTabs[] = [
     {

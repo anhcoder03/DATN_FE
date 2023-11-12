@@ -42,7 +42,6 @@ const DesignationList = () => {
   const [clinics, setClinics] = useState<any[]>([]);
   const [data, setData] = useState<any[]>([]);
   const [designation, setDesignation] = useState<any>(null);
-  console.log("data", data);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     _page: 1,
@@ -117,6 +116,7 @@ const DesignationList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handlePaymentStatusChange = (selectedOpiton: any) => {
     setQuery({ ...query, paymentStatus: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
@@ -149,6 +149,7 @@ const DesignationList = () => {
     }
     handleGetDoctors();
   }, []);
+
   useEffect(() => {
     async function handleGetClinic() {
       const response = await getAllClinic({ _status: "active", _limit: 100 });
@@ -176,14 +177,17 @@ const DesignationList = () => {
   const gotoDetail = (item: any) => {
     navigate(`/designation/${item?._id}/view`);
   };
+  
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleShowModel = (data: any) => {
     setOpenModal(true);
     setDesignation(data);
   };
+  
   const onOk = async () => {
     const res = await deleteServiceByExamination(designation?._id);
     if (res?.designation) {

@@ -34,7 +34,6 @@ const ExaminationSevicer = (props: Props) => {
         }
     }
 
-    console.log(data, "dataMMM");
     const checkpayment = (status : any) => {
         switch (status) {
             case "unpaid" : 
