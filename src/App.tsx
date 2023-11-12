@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 import Login from "./pages/auth/Login";
@@ -39,8 +39,16 @@ import DesignationDetail from "./pages/designation/DesignationDetail";
 import DesigantionUpdate from './pages/designation/components/DesignationUpdate';
 import ExaminationDetail from "./pages/examination/ExaminationDetail";
 import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
+import { getMessagingToken, onMessageListener } from "./firebase";
 
 function App() {
+  useEffect(() => {
+    getMessagingToken();
+  }, []);
+  useEffect(() => {
+    onMessageListener();
+  });
+
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
     {
