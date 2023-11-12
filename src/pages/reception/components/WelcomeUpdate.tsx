@@ -53,7 +53,6 @@ const WelcomeUpdate = () => {
       price: "",
     },
   ]);
-  console.log("dataServices", dataServices);
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
   console.log(data);

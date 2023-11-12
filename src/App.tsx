@@ -36,6 +36,7 @@ import DesignationList from "./pages/designation/DesignationList";
 import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
 import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
+import DesigantionUpdate from './pages/designation/components/DesignationUpdate';
 import ExaminationDetail from "./pages/examination/ExaminationDetail";
 import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
 import { getMessagingToken, onMessageListener } from "./firebase";
@@ -195,6 +196,10 @@ function App() {
     {
       path: "designation/:id/view",
       element: <DesignationDetail />,
+    },
+    {
+      path: "designation/update/:id",
+      element: <DesigantionUpdate />,
     },
   ]);
   return (
