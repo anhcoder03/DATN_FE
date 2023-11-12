@@ -1,13 +1,11 @@
 import React, { useCallback, useState } from "react";
 import Select, { Props } from "react-select";
-import { IRole } from "../../../types/role.type";
 import { getAllRole } from "../../../services/role.service";
 
 type RoleSelectProps = {} & Props;
 
 const RoleSelect: React.FC<RoleSelectProps> = ({ ...p }) => {
-  const [data, setData] = useState<IRole[]>([]);
-
+  const [data, setData] = useState<any[]>([]);
   const fetch = useCallback((search: string) => {
     getAllRole({
       _page: 1,
@@ -16,7 +14,7 @@ const RoleSelect: React.FC<RoleSelectProps> = ({ ...p }) => {
       _order: "asc",
       search,
     }).then((r) => {
-      setData(r ?? []);
+      setData(r?.docs ?? []);
     });
   }, []);
   return (
