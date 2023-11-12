@@ -36,3 +36,12 @@ export const getOneServiceByExam = async (id: any) => {
     console.error(error);
   }
 };
+
+export const updateServiceByExam = async (data: any) => {
+  try {
+    const response = await http.update(`/serviceExaminationById/${data?._id}`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

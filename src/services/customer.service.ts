@@ -29,12 +29,8 @@ export const createCustomer = async (data: any) => {
 export const updateCustomer = async (data: any) => {
   try {
     const response = await http.update(`/customers/${data?._id}`, data);
-    console.log('respon', response, data);
-    
     return response;
   } catch (error) {
-    console.log("errorr", error);
-    
     return error;
   }
 };
