@@ -7,6 +7,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import persistor, { store } from "./redux/store.tsx";
 import "flatpickr/dist/themes/material_green.css";
 import { ToastContainer } from "react-toastify";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PersistGate persistor={persistor}>
