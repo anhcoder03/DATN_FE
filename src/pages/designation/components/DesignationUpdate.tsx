@@ -56,7 +56,9 @@ const DesignationDetail = () => {
   async function getOneService() {
     const response = await getOneServiceByExam(id);
     setDesignation(response);
-    setUrl(response?.fileResult)
+    if(response?.fileResult?.length > 0) {
+      setUrl(response?.fileResult)
+    }
   }
 
   const handleChangeInput = (event?: any) => {

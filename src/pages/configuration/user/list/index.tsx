@@ -1,25 +1,25 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import IconEdit from '../../../../assets/images/icon-edit.png';
-import Heading from '../../../../components/common/Heading';
-import { IconTrash } from '../../../../components/icons';
-import { Layout } from '../../../../components/layout';
-import { Pagination } from '../../../../components/pagination';
-import { Table } from '../../../../components/table';
-import { getAllUser } from '../../../../services/user.service';
-import { IUser } from '../../../../types/user.type';
-import ConfigUserModal, { ConfigUserModalMethod } from '../components/modal';
-import FilterConfigUser from '../components/filter';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import IconEdit from "../../../../assets/images/icon-edit.png";
+import Heading from "../../../../components/common/Heading";
+import { IconTrash } from "../../../../components/icons";
+import { Layout } from "../../../../components/layout";
+import { Pagination } from "../../../../components/pagination";
+import { Table } from "../../../../components/table";
+import { getAllUser } from "../../../../services/user.service";
+import { IUser } from "../../../../types/user.type";
+import ConfigUserModal, { ConfigUserModalMethod } from "../components/modal";
+import FilterConfigUser from "../components/filter";
 
 type ConfigUserListContainerProps = {};
 
 const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
   const optionsPagination = [
-    { value: 25, label: '25 bản ghi' },
-    { value: 50, label: '50 bản ghi' },
-    { value: 100, label: '100 bản ghi' },
+    { value: 25, label: "25 bản ghi" },
+    { value: 50, label: "50 bản ghi" },
+    { value: 100, label: "100 bản ghi" },
   ];
-  const [users, setUsers] = useState<IUser[]>();
+  const [users, setUsers] = useState<any[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -35,18 +35,18 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
-    _sort: 'createdAt',
-    _order: 'asc',
-    search: '',
-    _role: '',
+    _sort: "createdAt",
+    _order: "asc",
+    search: "",
+    _role: "",
   });
   const headings = [
-    'Mã người dùng',
-    'Tên người dùng',
-    'Số điện thoại',
-    'Email',
-    'Chức danh',
-    'Thao tác',
+    "Mã người dùng",
+    "Tên người dùng",
+    "Số điện thoại",
+    "Email",
+    "Chức danh",
+    "Thao tác",
   ];
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
@@ -66,28 +66,28 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
   }, [query]);
 
   useEffect(() => {
-    urlParams.set('page', query._page as any);
-    urlParams.set('limit', query._limit as any);
+    urlParams.set("page", query._page as any);
+    urlParams.set("limit", query._limit as any);
     fetch();
   }, [query, fetch]);
 
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
-    if (e !== '') {
-      urlParams.set('name', e);
+    if (e !== "") {
+      urlParams.set("name", e);
       navigate(`?${urlParams}`);
     } else {
-      urlParams.delete('name', e);
+      urlParams.delete("name", e);
       navigate(`?${urlParams}`);
     }
   };
   const handleRoleChange = (selectedOpiton: any) => {
     setQuery({ ...query, _role: selectedOpiton.value });
-    if (selectedOpiton.value !== '') {
-      urlParams.set('role', selectedOpiton.value);
+    if (selectedOpiton.value !== "") {
+      urlParams.set("role", selectedOpiton.value);
       navigate(`?${urlParams}`);
     } else {
-      urlParams.delete('role');
+      urlParams.delete("role");
       navigate(`?${urlParams}`);
     }
   };
@@ -103,30 +103,33 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
         handleSearch={handleSearch}
         handleRoleChange={handleRoleChange}
       />
-      <div className='bg-white'>
+      <div className="bg-white">
         <Table headings={headings} loading={loading} length={users?.length}>
           {users?.map((item) => (
             <tr
-              className='text-xs'
+              className="text-xs"
               key={item?._id}
-              style={{ cursor: 'pointer' }}>
-              <td onClick={() => gotoDetail(item)}>{item._id}</td>
+              style={{ cursor: "pointer" }}
+            >
+              <td onClick={() => gotoDetail(item)}>{item?._id}</td>
               <td onClick={() => gotoDetail(item)}>{item?.name}</td>
               <td onClick={() => gotoDetail(item)}>{item?.phone}</td>
               <td onClick={() => gotoDetail(item)}>{item?.email}</td>
-              <td onClick={() => gotoDetail(item)}>{item?.role}</td>
+              <td onClick={() => gotoDetail(item)}>{item?.role?.name}</td>
               <td>
-                <div className='table-action'>
+                <div className="table-action">
                   <div
-                    className='button-nutri'
+                    className="button-nutri"
                     onClick={() => {
                       navigate(`/configuration/user/${item?._id}/edit`);
-                    }}>
-                    <img width={20} height={20} src={IconEdit} alt='edit' />
+                    }}
+                  >
+                    <img width={20} height={20} src={IconEdit} alt="edit" />
                   </div>
                   <button
-                    className='button-nutri text-[#585858]'
-                    onClick={() => deleteRef.current?.open(item?._id ?? '')}>
+                    className="button-nutri text-[#585858]"
+                    onClick={() => deleteRef.current?.open(item?._id ?? "")}
+                  >
                     <IconTrash></IconTrash>
                   </button>
                 </div>
@@ -141,7 +144,8 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
         handleLimitChange={handleLimitChange}
         optionsPagination={optionsPagination}
         totalDocs={totalDocs}
-        totalPages={totalPages}></Pagination>
+        totalPages={totalPages}
+      ></Pagination>
       <ConfigUserModal onSuccess={fetch} ref={deleteRef} />
     </Layout>
   );
