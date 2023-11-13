@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout } from "../../components/layout";
 import { useParams, useNavigate } from "react-router-dom";
-import { getOneServiceByExam } from "../../services/designation.service";
+import { deleteServiceByExamination, getOneServiceByExam, updateServiceByExam } from "../../services/designation.service";
 import Heading from "../../components/common/Heading";
 import { Label, LabelStatusDesignationDetail } from "../../components/label";
 import { Row } from "../../components/row";
@@ -12,21 +12,77 @@ import moment from "moment";
 import PriceUtils from "../../helpers/PriceUtils";
 import { Textarea } from "../../components/textarea";
 import { Button } from "../../components/button";
+import { Modal } from "antd";
+import { toast } from 'react-toastify';
 
 
 const DesignationDetail = () => {
-  const { control } = useForm();
+  const { control, handleSubmit } = useForm();
   const [designation, setDesignation] = useState<any>({});
+  const [oneDesignation, setOneDesignation] = useState<any>();
+  const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
-    async function getOneService() {
-      const response = await getOneServiceByExam(id);
-      setDesignation(response);
-    }
     getOneService();
   }, [id]);
-  console.log(id);
+
+  async function getOneService() {
+    const response = await getOneServiceByExam(id);
+    setDesignation(response);
+  }
+
+  const handleShowModel = (data: any) => {
+    setOpenModal(true);
+    setOneDesignation(data);
+  };
+
+  const onOk = async () => {
+    if(oneDesignation?.type == 'cancel') {
+      const response = await deleteServiceByExamination(oneDesignation?.data?._id);
+      if (response?.message) {
+        toast.success(response?.message);
+        setOpenModal(false);
+        getOneService();
+      } else {
+        toast.error(response?.message);
+      }
+    }
+
+    if(oneDesignation?.type == 'running') {
+      const params = {
+        _id: id,
+        status: 'running'
+      }
+      const response: any = await updateServiceByExam(params);
+      if (response?.message) {
+        toast.success(response?.message);
+        setOpenModal(false);
+        getOneService();
+      } else {
+        toast.error(response?.message);
+      }
+    }
+
+    if(oneDesignation?.type == 'done') {
+      const params = {
+        _id: id,
+        status: 'done'
+      }
+      const response: any = await updateServiceByExam(params);
+      if (response?.message) {
+        toast.success(response?.message);
+        setOpenModal(false);
+        getOneService();
+      } else {
+        toast.error(response?.message);
+      }
+    }
+    
+    setOpenModal(false);
+  };
+
   return (
     <Layout>
       <div className="relative-h-full">
@@ -152,7 +208,6 @@ const DesignationDetail = () => {
               <Heading>Thông tin dịch vụ</Heading>
               <table className="w-full custom-table">
                 <thead className="bg-[#f4f6f8] text-sm">
-                  <th>Mã dịch vụ</th>
                   <th>Tên dịch vụ</th>
                   <th>Đơn giá</th>
                 </thead>
@@ -295,44 +350,84 @@ const DesignationDetail = () => {
                   In
                 </Button>
               )}
-              {designation?.paymentStatus === "unpaid" && (
+              {designation?.status == 'waiting' && (
+                <>
                 <Button
                   type="submit"
                   className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                  onClick={() => handleShowModel({type: 'running', data: designation})}
                 >
-                  Thu tiền
+                  Đang thực hiện
+                </Button>
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                  onClick={() => handleShowModel({type: 'cancel', data: designation})}
+                >
+                  Hủy
+                </Button>
+                </>
+              )}
+              {
+                designation?.status == 'running' && (
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                    onClick={() => handleShowModel({type: 'done', data: designation})}
+                  >
+                    Hoàn thành
+                  </Button>
+                )
+              }
+              {designation?.status !== 'done' && (
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  onClick = {() => navigate(`/designation/update/${id}`)}
+                >
+                  Chỉnh sửa
                 </Button>
               )}
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                // onClick={handleSubmit(handleChangeStatus)}
-              >
-                Đang thực hiện
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-              >
-                Hủy
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-              >
-                Hoàn thành
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick = {() => navigate(`/designation/update/${id}`)}
-              >
-                Chỉnh sửa
-              </Button>
+              
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        centered
+        open={openModal}
+        onOk={onOk}
+        onCancel={() => setOpenModal(false)}
+      >
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+          Thông Báo
+        </h1>
+        {oneDesignation?.type == 'cancel' && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ đơn dịch vụ này không?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {oneDesignation?.name}
+            </span>
+          </div>
+        )}
+        {oneDesignation?.type == 'running' && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
+            <p>Bạn có chắc chắn muốn thực hiện đơn dịch vụ này không?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {oneDesignation?.name}
+            </span>
+          </div>
+        )}
+        {oneDesignation?.type == 'done' && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
+            <p>Bạn có chắc chắn muốn hoàn thành đơn dịch vụ này không?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {oneDesignation?.name}
+            </span>
+          </div>
+        )}
+        
+      </Modal>
     </Layout>
   );
 };
