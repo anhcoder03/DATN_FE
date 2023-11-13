@@ -9,7 +9,7 @@ const LabelStatusStyles = styled.span`
   font-weight: 500;
 `;
 type LabelStatusType = {
-  type: "waiting" | "done" | "canceled";
+  type: "waiting" | "done" | "canceled" | "running";
 };
 const LabelStatusDesignationDetail = ({ type }: LabelStatusType) => {
   let children = "";
@@ -28,6 +28,10 @@ const LabelStatusDesignationDetail = ({ type }: LabelStatusType) => {
       children = "Đã hủy";
       styleClassName = "bg-[#fd4858] text-white";
       break;
+
+    case 'running': 
+      children = 'Đang thực hiện';
+      styleClassName = "text-[#fff] btn-info"
 
     default:
       break;

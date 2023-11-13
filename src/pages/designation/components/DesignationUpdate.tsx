@@ -320,7 +320,7 @@ const DesignationDetail = () => {
                             <div className="flex items-center gap-x-2">
                               {
                                 <div
-                                  className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
+                                  className="w-[30px] h-[30px] border border-gray-200 rounded-lg flex justify-center items-center"
                                   onClick={() => {
                                     // if (item?.id) {
                                     //   // props?.handleActionModal({ data: item, index: index });
@@ -335,7 +335,7 @@ const DesignationDetail = () => {
                               }
                               {url?.length == index + 1 && (
                                 <div
-                                  className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
+                                  className="flex items-center w-[30px] h-[30px] bg-primary rounded-lg text-white justify-center"
                                   onClick={() => handleAddUrl()}
                                   style={{cursor: 'pointer'}}
                                 >
@@ -443,13 +443,7 @@ const DesignationDetail = () => {
               <Button to={`/designation/${id}/view`}>Đóng</Button>
               <Button
                 type="submit"
-                className="flex items-center justify-center px-8 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-              >
-                Hủy
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-8 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={() => udpateDesignation()}
               >
                 Lưu
