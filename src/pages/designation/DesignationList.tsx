@@ -17,6 +17,7 @@ import { getAllByName } from "../../services/role.service";
 import { getAllClinic } from "../../services/clinic.service";
 import { LabelStatusDesignation } from "../../components/label";
 import { toast } from "react-toastify";
+import IconPrint from "../../assets/images/ic-print.svg";
 
 const headings = [
   "Mã Phiếu",
@@ -242,23 +243,36 @@ const DesignationList = () => {
               <td onClick={() => gotoDetail(item)}>
                 <LabelStatusDesignation type={item?.status} />
               </td>
-
               <td>
                 <div className="table-action">
-                  <div
-                    className="button-nutri"
-                    onClick={() => {
-                      navigate(`/designation/update/${item?._id}`);
-                    }}
-                  >
-                    <img width={20} height={20} src={IconEdit} alt="edit" />
-                  </div>
-                  <button
-                    className="button-nutri text-[#585858]"
-                    onClick={() => handleShowModel(item)}
-                  >
-                    <IconTrash></IconTrash>
-                  </button>
+                  {item?.status == 'done' && (
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        toast.info('đang làm nha!!')
+                      }}
+                    >
+                      <img width={20} height={20} src={IconPrint} alt="print" />
+                    </div>
+                  )}
+                  {item?.status !== 'done' && (
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        navigate(`/designation/update/${item?._id}`);
+                      }}
+                    >
+                      <img width={20} height={20} src={IconEdit} alt="edit" />
+                    </div>
+                  )}
+                  {item?.status == 'waiting' && (
+                    <button
+                      className="button-nutri text-[#585858]"
+                      onClick={() => handleShowModel(item)}
+                    >
+                      <IconTrash></IconTrash>
+                    </button>
+                  )}
                 </div>
               </td>
             </tr>
