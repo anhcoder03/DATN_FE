@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 import Login from "./pages/auth/Login";
@@ -36,11 +36,20 @@ import DesignationList from "./pages/designation/DesignationList";
 import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
 import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
+import DesigantionUpdate from './pages/designation/components/DesignationUpdate';
 import ExaminationDetail from "./pages/examination/ExaminationDetail";
 import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
 import PrescriptionDetail from "./pages/prescription/components/PrescriptionDetail";
 import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
+import { getMessagingToken, onMessageListener } from "./firebase";
 function App() {
+  useEffect(() => {
+    getMessagingToken();
+  }, []);
+  useEffect(() => {
+    onMessageListener();
+  });
+
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
     {
@@ -196,6 +205,10 @@ function App() {
     {
       path: "designation/:id/view",
       element: <DesignationDetail />,
+    },
+    {
+      path: "designation/update/:id",
+      element: <DesigantionUpdate />,
     },
   ]);
   return (
