@@ -18,7 +18,7 @@ import CustomerAdd from "./pages/customer/CustomerAdd";
 import CustommerList from "./pages/customer/CustommerList";
 import ExaminationList from "./pages/examination/ExaminationList";
 import Home from "./pages/Home";
-import PrescriptionListContainer from "./pages/prescription/list";
+import PrescriptionListContainer from "./pages/prescription/list/PrescriptionList";
 import ProductAdd from "./pages/product/components/ProductAdd";
 import ProductDetail from "./pages/product/components/ProductDetail";
 import ProductUpdate from "./pages/product/components/ProductUpdate";
@@ -38,6 +38,8 @@ import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
 import ExaminationDetail from "./pages/examination/ExaminationDetail";
 import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
+import PrescriptionDetail from "./pages/prescription/components/PrescriptionDetail";
+import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 function App() {
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
@@ -120,6 +122,14 @@ function App() {
     {
       path: "prescription",
       element: <PrescriptionListContainer />,
+    },
+    {
+      path: "prescription/view/:id",
+      element: <PrescriptionDetail />,
+    },
+    {
+      path: "prescription/add/:id",
+      element: <PrescriptionAdd />,
     },
     {
       path: "login",
