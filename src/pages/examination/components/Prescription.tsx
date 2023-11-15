@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
 import { Table } from "../../../components/table";
 import { BsPrinter } from "react-icons/bs";
@@ -9,6 +9,7 @@ type Props = {
 };
 
 const Prescription = (props: Props) => {
+  const { id } = useParams();
   const [data, setData] = useState<any[]>([]);
   const headings = ["STT", "Mã đơn", "Khách hàng", "Bác sĩ", "Hành động"];
   return (
@@ -23,7 +24,7 @@ const Prescription = (props: Props) => {
           />
         </div>
         <Link
-          to={"/prescription/add"}
+          to={`/prescription/add/${id}`}
           className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
         >
           <div className="flex items-center p-1 bg-white rounded-lg text-primary">
