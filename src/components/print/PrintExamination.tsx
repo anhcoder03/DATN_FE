@@ -89,7 +89,29 @@ const ReceptionPrint = styled.div`
 `;
 
 const PrintExamination = ({ componentRef, dataPrint }: any) => {
-  console.log(dataPrint);
+  console.log('dataPrint', dataPrint);
+
+  const getFullAddress = () => {
+    const address: any[] = [
+      `${dataPrint?.customerId?.detailedAddress ? `${dataPrint?.customerId?.detailedAddress},` : ""}${dataPrint?.customerId?.commune
+        ? `${dataPrint?.customerId?.commune?.name}, `
+        : ""
+      }${dataPrint?.customerId?.district
+        ? `${dataPrint?.customerId?.district?.name}, `
+        : ""
+      }${dataPrint?.customerId?.province
+        ? `${dataPrint?.customerId?.province?.name}`
+        : ""
+      }`,
+    ];
+
+    if (address.length > 0) {
+      return address?.filter((e: any) => e != null)?.join(", ");
+    } else {
+      return "---";
+    }
+  };
+
   return (
     <div style={{ position: "relative" }} className="hidden">
       <div className="print-content reception-print" ref={componentRef}>
@@ -170,7 +192,8 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
             <div>
               <span>Địa chỉ: </span>
               <span className="font-semibold">
-                {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune.name} - ${dataPrint?.customerId?.district.name} - ${dataPrint?.customerId?.province.name}`}
+                {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
+                {getFullAddress()}
               </span>
             </div>
           </div>
