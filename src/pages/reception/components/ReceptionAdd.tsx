@@ -484,7 +484,7 @@ const ReceptionAdd = () => {
           </div>
         </form>
       </div>
-      <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
+      <div className="fixed bottom-0 py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
         <div className="flex justify-end w-full px-5">
           <div className="flex items-center gap-x-5">
             <Button to="/reception">Đóng</Button>
