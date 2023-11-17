@@ -3,4 +3,5 @@ export interface IClinic {
     _id?: string;
     name: string;
     description: string;
+    doctorInClinic: string;
 }

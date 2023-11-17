@@ -21,7 +21,14 @@ const ClinicList = () => {
   const urlParams = new URLSearchParams(location.search);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const headings = ["Mã Phòng", "Tên Phòng", "Mô tả", "Trạng thái", "Thao Tác"];
+  const headings = [
+    "Mã Phòng",
+    "Tên Phòng",
+    "Mô tả",
+    "Bác sỹ",
+    "Trạng thái",
+    "Thao Tác",
+  ];
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
@@ -51,6 +58,8 @@ const ClinicList = () => {
       console.log(error);
     }
   };
+  console.log("clinics", clinics);
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
@@ -114,6 +123,7 @@ const ClinicList = () => {
                 <td>{item?._id}</td>
                 <td>{item?.name}</td>
                 <td>{item?.description}</td>
+                <td>{item?.doctorInClinic?.name}</td>
                 <td
                   style={{
                     cursor: "pointer",
