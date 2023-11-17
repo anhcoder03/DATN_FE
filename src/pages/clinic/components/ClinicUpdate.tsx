@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Radio, RadioChangeEvent } from "antd";
+import { Radio, Select } from "antd";
 import { Layout } from "../../../components/layout";
 import Heading from "../../../components/common/Heading";
 import { Row } from "../../../components/row";
@@ -12,6 +12,7 @@ import { Input } from "../../../components/input";
 import { Button } from "../../../components/button";
 import { toast } from "react-toastify";
 import { getOneClinic, updateClinic } from "../../../services/clinic.service";
+import { getAllUser } from "../../../services/user.service";
 import { useNavigate, useParams } from "react-router-dom";
 
 const schema = yup.object({
@@ -21,50 +22,85 @@ const schema = yup.object({
 const ClinicUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [user, setUser] = useState<any>([]);
+  const [doctor, setDoctor] = useState<any>();
+  const [tempStatus, setTempStatus] = useState("active");
   const {
     control,
     formState: { errors },
     handleSubmit,
+    setValue,
     reset,
   } = useForm<any>({
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
 
-  const [tempStatus, setTempStatus] = useState("active"); // Biến tạm thời
-
-  const onChange = (e: RadioChangeEvent) => {
-    setTempStatus(e.target.value); // Cập nhật giá trị tạm thời
-  };
-
   useEffect(() => {
     async function handleGetClinic() {
-      const res = await getOneClinic(id);
-      reset(res);
-      setTempStatus(res.status); // Cập nhật giá trị tạm thời từ dữ liệu đã có
+      try {
+        const res = await getOneClinic(id);
+        console.log("res", res);
+        reset(res);
+        setTempStatus(res.status);
+        setDoctor(res?.doctorInClinic?._id);
+      } catch (error) {
+        console.error(error);
+      }
     }
     handleGetClinic();
   }, [id, reset]);
 
-  const handleUpdateClinic = async (values: any) => {
-    const res = await updateClinic({ ...values, status: tempStatus }); // Sử dụng giá trị tạm thời
+  const handleGetUsers = async () => {
+    try {
+      const data = await getAllUser();
+      const roleDoctor = data?.docs;
 
-    if (res?.clinic) {
-      toast.success(res?.message);
-      navigate("/configuration/clinic");
-    } else {
-      toast.error(res?.message);
+      const filteredUsers = roleDoctor.filter(
+        (user: any) => user.role === "VT-00000002"
+      );
+
+      if (filteredUsers.length > 0) {
+        const array: any = [];
+        filteredUsers.forEach((item: any) => {
+          array.push({ ...item, label: item?.name, value: item?._id });
+        });
+        setUser(array);
+      } else {
+        console.log("Không có người dùng có quyền truy cập");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
+  console.log("ushfsdshgvds", user);
 
   useEffect(() => {
-    const arrayError = Object.values(errors);
+    handleGetUsers();
+  }, []);
 
-    if (arrayError.length > 0) {
-      toast.warning(arrayError[0]?.message as any);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTempStatus(e.target.value);
+  };
+
+  const onChangeDoctor = (value: string) => {
+    setDoctor(value);
+    setValue("doctorInClinic", value);
+  };
+
+  const handleUpdateClinic = async (values: any) => {
+    try {
+      const res = await updateClinic({ ...values, status: tempStatus });
+      if (res?.clinic) {
+        toast.success(res?.message);
+        navigate("/configuration/clinic");
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  });
+  };
 
   return (
     <Layout>
@@ -79,6 +115,7 @@ const ClinicUpdate = () => {
                 control={control}
                 name="_id"
                 placeholder="PK + Mã phòng khám"
+                readOnly
               />
             </Field>
             <Field>
@@ -91,6 +128,19 @@ const ClinicUpdate = () => {
                 name="name"
                 placeholder="Nhập tên phòng khám"
               />
+            </Field>
+            <Field>
+              <Label htmlFor="categoryId">
+                <span className="star-field">*</span>
+                Chọn bác sỹ
+              </Label>
+              <Select
+                placeholder="Chọn bác sỹ"
+                className="mb-2 react-select"
+                options={user}
+                value={user.find((option: any) => option.value === doctor)}
+                onChange={onChangeDoctor}
+              ></Select>
             </Field>
           </Row>
           <Row>
