@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/messaging";
+import {
+  createNotifyToken,
+  getAllNotifyToken,
+} from "../services/notifyToken.service";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCN7dlY5xzFuetxlyfbgHMDbFf2xeZ_UNg",
@@ -32,6 +36,12 @@ export const getMessagingToken = async () => {
       vapidKey:
         "BF5Qqv-QKdiuy5XOEWeKnlZflIRMyihZiBBXE-aSlJiOecUegO-9zAOK6HCmmZEDB4dQrNbJpZfFblTywPknyps",
     });
+    const registrationTokens = await getAllNotifyToken();
+
+    if (!registrationTokens.includes(currentToken)) {
+      await createNotifyToken({ notifyToken: currentToken });
+    }
+
     console.log("FCM registration token", currentToken);
   } catch (error) {
     console.error("An error occurred while retrieving token. ", error);
