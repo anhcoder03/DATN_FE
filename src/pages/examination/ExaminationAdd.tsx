@@ -4,9 +4,6 @@ import Heading from "../../components/common/Heading";
 import { Button } from "../../components/button";
 import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
-import ReceptionWaiting from "../reception/components/ReceptionWaiting";
-import ReceptionDone from "../reception/components/ReceptionDone";
-import ReceptionCancelling from "../reception/components/ReceptionCancelling";
 import AppTaps from "../../components/tabs/Tabs";
 import ExaminationInfo from "./components/ExaminationInfo";
 import ExaminationSevicer from "./components/ExaminationSevicer";
@@ -57,15 +54,9 @@ const ExaminationAdd = (props: any) => {
     //   name: "done",
     // },
     // {
-    //   title: "CHỜ HUỶ (0)",
-    //   children: <ReceptionCancelling />,
-    //   id: "6",
-    //   name: "cancelling",
-    // },
-    // {
-    //   title: "HUỶ (0)",
+    //   title: "HUỶ KHÁM (0)",
     //   children: <ReceptionWaiting />,
-    //   id: "7",
+    //   id: "6",
     //   name: "cancel",
     // },
   ];
