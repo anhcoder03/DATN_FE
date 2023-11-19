@@ -7,8 +7,6 @@ import ReceptionCustomer from "./components/ReceptionCustomer";
 import ReceptionWaiting from "./components/ReceptionWaiting";
 import { useNavigate } from "react-router-dom";
 import ReceptionDone from "./components/ReceptionDone";
-import ReceptionCancelling from "./components/ReceptionCancelling";
-
 export interface IDataTabs {
   title: string;
   children: React.ReactNode;
@@ -49,15 +47,9 @@ const ReceptionList = () => {
       name: "done",
     },
     {
-      title: "CHỜ HUỶ (0)",
-      children: <ReceptionCancelling />,
-      id: "6",
-      name: "cancelling",
-    },
-    {
-      title: "HUỶ (0)",
+      title: "HUỶ KHÁM (0)",
       children: <ReceptionWaiting />,
-      id: "7",
+      id: "6",
       name: "cancel",
     },
   ];
@@ -90,10 +82,6 @@ const ReceptionList = () => {
       navigate(`?${urlParams}`);
     }
     if (key === "6") {
-      urlParams.set("tab", dataTabs[5].name);
-      navigate(`?${urlParams}`);
-    }
-    if (key === "7") {
       urlParams.set("tab", dataTabs[6].name);
       navigate(`?${urlParams}`);
     }
