@@ -14,18 +14,28 @@ import IconTrash2 from "../../../assets/images/icon-trash2.png";
 import IconPhieuKham from "../../../assets/images/icon-phieukham.png";
 import { useReactToPrint } from "react-to-print";
 import { PrintCompoent } from "../../../components/print";
+import { getAllByName } from "../../../services/role.service";
+import { getAllClinic } from "../../../services/clinic.service";
 
 const ReceptionCustomer = () => {
   const [receptions, setReceptions] = useState<any[]>();
   const [reception, setReception] = useState<any>();
   const [dataPrint, setDataPrint] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const [dataStaffs, setDataStaffs] = useState<any[]>([]);
+  const [dataDoctors, setDataDoctors] = useState<any[]>([]);
+  const [clinics, setClinics] = useState<any[]>([]);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     _sort: "createdAt",
     _order: "desc",
     status: "recetion",
+    search: null,
+    staffId: null,
+    clinicId: null,
+    day_welcome: null,
+    doctorId: null,
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -108,6 +118,52 @@ const ReceptionCustomer = () => {
     navigate(`?${urlParams}`);
     handleGetExaminaton();
   }, [query]);
+  useEffect(() => {
+    async function handleGetStaffs() {
+      const response = await getAllByName({ name: "Nhân viên tiếp đón" });
+      const ListArr: any = [];
+      response?.map((e: any) => {
+        ListArr?.push({
+          ...e,
+          value: e?._id,
+          label: e?.name,
+        });
+      });
+      setDataStaffs([{ value: "", label: "-Nhân viên tiếp đón-" }, ...ListArr]);
+    }
+    handleGetStaffs();
+  }, []);
+  useEffect(() => {
+    async function handleGetDoctors() {
+      const response = await getAllByName({ name: "Bác sĩ" });
+      const ListArr: any = [];
+      response?.map((e: any) => {
+        ListArr?.push({
+          ...e,
+          value: e?._id,
+          label: e?.name,
+        });
+      });
+      setDataDoctors([{ value: "", label: "-Bác sĩ-" }, ...ListArr]);
+    }
+    handleGetDoctors();
+  }, []);
+
+  useEffect(() => {
+    async function handleGetClinic() {
+      const response = await getAllClinic({ _status: "active", _limit: 100 });
+      const ListArr: any = [];
+      response?.docs?.map((e: any) => {
+        ListArr?.push({
+          ...e,
+          value: e?._id,
+          label: e?.name,
+        });
+      });
+      setClinics([{ value: "", label: "-Phòng-" }, ...ListArr]);
+    }
+    handleGetClinic();
+  }, []);
 
   const selectedHeading = useSelector(
     (state: RootState) => state.headingReception.selectedHeadings
@@ -191,9 +247,65 @@ const ReceptionCustomer = () => {
   const gotoDetail = (id: any) => {
     navigate(`/reception/${id}`);
   };
+
+  const handleSearch = (e: any) => {
+    setQuery({ ...query, search: e });
+    if (e !== "") {
+      urlParams.set("s", e);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("s");
+      navigate(`?${urlParams}`);
+    }
+  };
+  const handleDayChange = (date: any) => {
+    setQuery({ ...query, day_welcome: date });
+    urlParams.set("day_welcome", date);
+    navigate(`?${urlParams}`);
+  };
+  const handleSearchByStaffId = (selectedOpiton: any) => {
+    setQuery({ ...query, staffId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("staff", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("staff");
+      navigate(`?${urlParams}`);
+    }
+  };
+  const handleSearchByDoctorId = (selectedOpiton: any) => {
+    setQuery({ ...query, doctorId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("doctor", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("doctor");
+      navigate(`?${urlParams}`);
+    }
+  };
+  const handleSearchByClinic = (selectedOpiton: any) => {
+    setQuery({ ...query, clinicId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("clinic", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("clinic");
+      navigate(`?${urlParams}`);
+    }
+  };
   return (
     <>
-      <FilterReceptionCustomer columns={columns}></FilterReceptionCustomer>
+      <FilterReceptionCustomer
+        dataStaffs={dataStaffs}
+        dataDoctors={dataDoctors}
+        clinics={clinics}
+        handleSearchByStaffId={handleSearchByStaffId}
+        handleSearchByDoctorId={handleSearchByDoctorId}
+        handleSearch={handleSearch}
+        columns={columns}
+        handleDayChange={handleDayChange}
+        handleClinicChange={handleSearchByClinic}
+      ></FilterReceptionCustomer>
       <Table3
         isLoading={loading}
         columns={newHeading}

@@ -12,8 +12,29 @@ import {
 } from "../../constants/options";
 import { ModalReception } from "../modal";
 
-const FilterReceptionCustomer = (props: any) => {
-  const { columns } = props;
+type TFilterReceptionCustomer = {
+  handleSearch: (e: any) => void;
+  handleDayChange: (day: any) => void;
+  handleSearchByStaffId: (id: any) => void;
+  handleSearchByDoctorId: (id: any) => void;
+  handleClinicChange: (id: any) => void;
+  columns: any;
+  dataStaffs: any[];
+  dataDoctors: any[];
+  clinics: any[];
+};
+
+const FilterReceptionCustomer = ({
+  columns,
+  handleSearch,
+  handleDayChange,
+  handleSearchByStaffId,
+  handleSearchByDoctorId,
+  handleClinicChange,
+  dataStaffs,
+  dataDoctors,
+  clinics,
+}: TFilterReceptionCustomer) => {
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -26,6 +47,11 @@ const FilterReceptionCustomer = (props: any) => {
   const handleCancel = () => {
     setOpen(false);
   };
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      handleSearch(e.target.value);
+    }
+  };
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -36,6 +62,7 @@ const FilterReceptionCustomer = (props: any) => {
               type="text"
               className="w-full bg-transparent border-none outline-none"
               placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
@@ -47,30 +74,35 @@ const FilterReceptionCustomer = (props: any) => {
                 altInputClass: "date-range",
                 maxDate: "today",
               }}
-              placeholder="dd/mm/yyyy"
-              name="dateOfBirth"
+              onChange={([date]) => {
+                handleDayChange(date);
+              }}
+              placeholder="Ngày tiếp đón"
             ></Flatpickr>
             <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>
           <Select
-            options={optionDoctor}
+            options={dataDoctors}
             className="react-select"
             classNamePrefix="react-select select-small"
             placeholder="-Bác sĩ-"
+            onChange={handleSearchByDoctorId}
           ></Select>
           <Select
-            options={optionClinic}
+            options={clinics}
             className="react-select"
             classNamePrefix="react-select select-small"
             placeholder="-Phòng khám-"
+            onChange={handleClinicChange}
           ></Select>
           <Select
-            options={optionNVTD}
+            options={dataStaffs}
             className="react-select"
             classNamePrefix="react-select select-small"
             placeholder="-Nhân viên tiếp đón-"
+            onChange={handleSearchByStaffId}
           ></Select>
         </div>
         <div className="flex items-end gap-2">

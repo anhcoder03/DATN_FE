@@ -38,7 +38,10 @@ export const getMessagingToken = async () => {
     });
     const registrationTokens = await getAllNotifyToken();
 
-    if (!registrationTokens.includes(currentToken)) {
+    if (
+      !registrationTokens ||
+      (registrationTokens && !registrationTokens.includes(currentToken))
+    ) {
       await createNotifyToken({ notifyToken: currentToken });
     }
 

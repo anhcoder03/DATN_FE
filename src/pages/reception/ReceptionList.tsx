@@ -17,37 +17,37 @@ export interface IDataTabs {
 const ReceptionList = () => {
   const dataTabs: IDataTabs[] = [
     {
-      title: "ĐẶT LICH (19)",
+      title: "ĐẶT LỊCH",
       children: <ReceptionBook />,
       id: "1",
       name: "booking",
     },
     {
-      title: "TIẾP ĐÓN (2)",
+      title: "TIẾP ĐÓN",
       children: <ReceptionCustomer />,
       id: "2",
       name: "recetion",
     },
     {
-      title: "CHỜ KHÁM (0)",
+      title: "CHỜ KHÁM",
       children: <ReceptionWaiting />,
       id: "3",
       name: "waiting",
     },
     {
-      title: "ĐANG KHÁM (3)",
+      title: "ĐANG KHÁM",
       children: <ReceptionWaiting />,
       id: "4",
       name: "running",
     },
     {
-      title: "ĐÃ KHÁM (3)",
+      title: "ĐÃ KHÁM",
       children: <ReceptionDone />,
       id: "5",
       name: "done",
     },
     {
-      title: "HUỶ KHÁM (0)",
+      title: "ĐÃ HỦY",
       children: <ReceptionWaiting />,
       id: "6",
       name: "cancel",

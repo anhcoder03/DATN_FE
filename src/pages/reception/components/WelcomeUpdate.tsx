@@ -275,7 +275,7 @@ const WelcomeUpdate = () => {
     const res = await UpdateExamination(cloneData);
     if (res?.examination) {
       toast.success(res?.message);
-      navigate(`/reception/${id}/view`);
+      navigate(`/reception/${id}`);
     } else {
       toast.error(res?.message);
     }
@@ -314,7 +314,7 @@ const WelcomeUpdate = () => {
     const res = await UpdateExamination(cloneData);
     if (res?.examination) {
       toast.success("Tạo phiếu khám thành công!");
-      navigate(`/examination/${id}`);
+      navigate(`/examination/${id}/view`);
     } else {
       toast.error(res?.message);
     }

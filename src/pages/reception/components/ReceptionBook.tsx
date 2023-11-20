@@ -17,6 +17,7 @@ import { Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import IconHand from "../../../assets/images/icon-hand.png";
 import { toast } from "react-toastify";
+import { getAllByName } from "../../../services/role.service";
 
 const ReceptionBook = () => {
   const optionsPagination = [
@@ -30,6 +31,7 @@ const ReceptionBook = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
   const [openModal, setOpenModal] = useState(false);
+  const [dataStaffs, setDataStaffs] = useState<any[]>([]);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
   const [query, setQuery] = useState({
@@ -38,6 +40,9 @@ const ReceptionBook = () => {
     _sort: "createdAt",
     _order: "desc",
     status: "booking",
+    search: "",
+    day_booking: null,
+    staffId: null,
   });
   const columns = [
     {
@@ -91,6 +96,7 @@ const ReceptionBook = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
@@ -100,6 +106,21 @@ const ReceptionBook = () => {
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+  useEffect(() => {
+    async function handleGetStaffs() {
+      const response = await getAllByName({ name: "Nhân viên tiếp đón" });
+      const ListArr: any = [];
+      response?.map((e: any) => {
+        ListArr?.push({
+          ...e,
+          value: e?._id,
+          label: e?.name,
+        });
+      });
+      setDataStaffs([{ value: "", label: "-Nhân viên tiếp đón-" }, ...ListArr]);
+    }
+    handleGetStaffs();
+  }, []);
   const selectedHeading = useSelector(
     (state: RootState) => state.headingBooking.selectedHeadings
   );
@@ -173,10 +194,41 @@ const ReceptionBook = () => {
   const gotoDetail = (id: any) => {
     navigate(`/reception/booking/${id}`);
   };
+  const handleSearch = (e: any) => {
+    setQuery({ ...query, search: e });
+    if (e !== "") {
+      urlParams.set("s", e);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("s");
+      navigate(`?${urlParams}`);
+    }
+  };
+  const handleDayChange = (date: any) => {
+    setQuery({ ...query, day_booking: date });
+    urlParams.set("day_booking", date);
+    navigate(`?${urlParams}`);
+  };
+  const handleSearchByStaffId = (selectedOpiton: any) => {
+    setQuery({ ...query, staffId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("staff", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("staff");
+      navigate(`?${urlParams}`);
+    }
+  };
 
   return (
     <>
-      <FilterReceptionBook columns={columns}></FilterReceptionBook>
+      <FilterReceptionBook
+        handleSearch={handleSearch}
+        columns={columns}
+        handleDayChange={handleDayChange}
+        dataStaffs={dataStaffs}
+        handleSearchByStaffId={handleSearchByStaffId}
+      ></FilterReceptionBook>
       <Table3
         isLoading={loading}
         columns={newHeading}
