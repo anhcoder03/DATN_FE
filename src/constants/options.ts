@@ -16,6 +16,14 @@ export const optionClinic: IOption[] = [
   { value: "stop", label: "Ngừng hoạt động" },
 ];
 
+export const examinationStatus: IOption[] = [
+  { value: "", label: "-Trạng thái-" },
+  { value: "waiting", label: "Chờ khám" },
+  { value: "running", label: "Đang khám" },
+  { value: "done", label: "Đã khám" },
+  { value: "cancel", label: "Đã hủy" },
+];
+
 export const optionDoctor: IOption[] = [
   { value: "bac", label: "Nguyễn Hồng Sơn" },
   { value: "dfđ", label: "Nguyễn Phi Anh" },

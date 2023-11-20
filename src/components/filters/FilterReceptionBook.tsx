@@ -8,8 +8,21 @@ import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 
-const FilterReceptionBook = (props: any) => {
-  const { columns } = props;
+type TFilterCustomer = {
+  handleSearch: (e: any) => void;
+  handleDayChange: (day: any) => void;
+  handleSearchByStaffId: (id: any) => void;
+  columns: any;
+  dataStaffs: any[];
+};
+
+const FilterReceptionBook = ({
+  columns,
+  handleDayChange,
+  handleSearch,
+  dataStaffs,
+  handleSearchByStaffId,
+}: TFilterCustomer) => {
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -19,6 +32,11 @@ const FilterReceptionBook = (props: any) => {
   };
   const handleCancel = () => {
     setOpen(false);
+  };
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      handleSearch(e.target.value);
+    }
   };
   return (
     <div className="">
@@ -30,6 +48,7 @@ const FilterReceptionBook = (props: any) => {
               type="text"
               className="w-full bg-transparent border-none outline-none"
               placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
+              onKeyDown={handleKeyDown}
             />
           </div>
           <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
@@ -41,24 +60,21 @@ const FilterReceptionBook = (props: any) => {
                 altInputClass: "date-range",
                 maxDate: "today",
               }}
-              placeholder="dd/mm/yyyy"
-              name="dateOfBirth"
+              onChange={([date]) => {
+                handleDayChange(date);
+              }}
+              placeholder="Ngày đặt lịch"
             ></Flatpickr>
             <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>
           <Select
-            options={optionNVTD}
-            className="react-select"
-            classNamePrefix="react-select"
+            options={dataStaffs}
+            className="react-select w-full"
+            classNamePrefix="react-select select-small"
             placeholder="-Nhân viên tiếp đón-"
-          ></Select>
-          <Select
-            options={optionDoctor}
-            className="react-select"
-            classNamePrefix="react-select"
-            placeholder="-Bác sĩ-"
+            onChange={handleSearchByStaffId}
           ></Select>
         </div>
         <div className="flex items-end gap-2">

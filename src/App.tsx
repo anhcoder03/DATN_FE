@@ -36,12 +36,13 @@ import DesignationList from "./pages/designation/DesignationList";
 import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
 import ReceptionView from "./pages/reception/components/ReceptionView";
 import DesignationDetail from "./pages/designation/DesignationDetail";
-import DesigantionUpdate from './pages/designation/components/DesignationUpdate';
+import DesigantionUpdate from "./pages/designation/components/DesignationUpdate";
 import ExaminationDetail from "./pages/examination/ExaminationDetail";
 import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
 import PrescriptionDetail from "./pages/prescription/components/PrescriptionDetail";
 import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 import { getMessagingToken, onMessageListener } from "./firebase";
+import StatitisPage from "./pages/statitis";
 function App() {
   useEffect(() => {
     getMessagingToken();
@@ -209,6 +210,10 @@ function App() {
     {
       path: "designation/update/:id",
       element: <DesigantionUpdate />,
+    },
+    {
+      path: "statistical/overview",
+      element: <StatitisPage />,
     },
   ]);
   return (

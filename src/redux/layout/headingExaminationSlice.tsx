@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
 const headings = [
   {
-    name: "Mã bệnh nhân",
-    selector: (row: any) => row?.customerId?._id,
+    name: "Mã phiếu khám",
+    selector: (row: any) => row?._id,
   },
   {
     name: "Tên bệnh nhân",
