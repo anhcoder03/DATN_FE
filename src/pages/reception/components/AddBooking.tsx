@@ -33,10 +33,12 @@ const AddBooking = () => {
       gender: ''
     }
   );
+
   const schema = yup.object({
     customerId: yup.string().required("Bệnh nhân không được để trống!"),
     staffId: yup.string().required("Nhân viên tiếp đón không được để trống!"),
   })
+
   const {
     control,
     handleSubmit,
@@ -46,11 +48,13 @@ const AddBooking = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+
   const navigate = useNavigate();
   useEffect(() => {
     getCustomers();
     getStaffs();
   }, [])
+
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -63,6 +67,7 @@ const AddBooking = () => {
     });
     setDataCustomers(ListArr);
   }
+
   async function getStaffs() {
     const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
     const ListArr: any = [];
@@ -75,8 +80,8 @@ const AddBooking = () => {
     });
     setStaffs(ListArr);
   }
-  const handleCreateBooking = async () => {
 
+  const handleCreateBooking = async () => {
     const params = {
       customerId: data?.customer,
       staffId: data?.staffId,
@@ -93,13 +98,13 @@ const AddBooking = () => {
       toast.error('Có lỗi sảy ra!!!');
     }
   }
+
   useEffect(() => {
     const arrayError: any = Object.values(errors);
     if (arrayError.length > 0) {
       toast.warning(arrayError[0]?.message);
     }
   }, [errors]);
-  console.log("siuData", data);
 
   const handleChangeInput = (event?: any) => {
     let { value, name } = event.target
@@ -108,7 +113,7 @@ const AddBooking = () => {
         ...data,
         [name]: value
     })
-}
+  }
   
   return (
     <Layout>

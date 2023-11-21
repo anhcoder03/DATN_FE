@@ -2,27 +2,24 @@ import { useSelector } from "react-redux";
 import { FilterReceptionWaiting } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
-import { UpdateExamination, getAllExamination } from "../../../services/examination.service";
+import { getAllExamination } from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
 import moment from "moment";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination";
 import IconTrash2 from "../../../assets/images/icon-trash2.png";
-import { Button, Modal } from "antd";
-import { toast } from 'react-toastify';
 
-const ReceptionWaiting = () => {
+const ReceptionRunning = () => {
   const [receptions, setReceptions] = useState<any[]>();
-  const [reception, setReception] = useState<any>();
-  const [openModal, setOpenModal] = useState(false);
+  // const [reception, setReception] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     _sort: "createdAt",
     _order: "desc",
-    status: "waiting",
+    status: "running",
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -116,30 +113,17 @@ const ReceptionWaiting = () => {
     };
   });
 
-  const handleModal = (data: any) => {
-    setOpenModal(true);
-    setReception(data);
-  };
-
-  const handleStatus = async () => {
-    const params = {
-      _id: reception?.data?._id,
-      status: 'cancel'
-    }
-    const res: any = await UpdateExamination(params);
-    if(res?.examination) {
-      location.reload();
-      toast.success(res?.message)
-      return
-    }
-  }
+  // const handleUpdate = (data: any) => {
+  //   setOpenModal(true);
+  //   setReception(data);
+  // };
 
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-[2px]">
         <button
-          onClick={() => handleModal({type: 'cancel', data: row})}
+          onClick={() => console.log(row._id)}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -155,19 +139,14 @@ const ReceptionWaiting = () => {
   };
   const newHeading = [...deserializedHeadings, action];
 
-  const onOk = async () => {
-    if(reception?.type == 'cancel') {
-      handleStatus();
-      setOpenModal(false);
-      return
-    }
-  };
+  // const onOk = async () => {
+  //   setOpenModal(false);
+  // };
 
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
-
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
@@ -175,7 +154,6 @@ const ReceptionWaiting = () => {
   const gotoDetail = (id: string) => {
     navigate(`/reception/${id}/view`);
   };
-
   return (
     <>
       <FilterReceptionWaiting columns={columns}></FilterReceptionWaiting>
@@ -193,44 +171,8 @@ const ReceptionWaiting = () => {
         totalDocs={totalDocs}
         totalPages={totalPages}
       ></Pagination>
-      <Modal
-          centered
-          open={openModal}
-          footer={[
-            <Button
-              className="bg-primary50 text-primary"
-              key="back"
-              onClick={() => setOpenModal(false)}
-            >
-              Hủy
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              onClick={onOk}
-              className="bg-primary50 text-primary"
-            >
-              Xác nhận
-            </Button>
-          ]}
-          onCancel={() => setOpenModal(false)}
-        >
-          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-            Thông Báo
-          </h1>
-          {
-            reception?.type == 'cancel' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc hủy phiếu khám này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {reception?.data?._id}
-                </span>
-              </div>
-            )
-          }
-        </Modal>
     </>
   );
 };
 
-export default ReceptionWaiting;
+export default ReceptionRunning;

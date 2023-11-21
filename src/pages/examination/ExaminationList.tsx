@@ -398,6 +398,7 @@ const ExaminationList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleSearchByDoctorId = (selectedOpiton: any) => {
     setQuery({ ...query, doctorId: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
@@ -408,6 +409,7 @@ const ExaminationList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleSearchByClinic = (selectedOpiton: any) => {
     setQuery({ ...query, clinicId: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
@@ -418,6 +420,7 @@ const ExaminationList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -428,6 +431,7 @@ const ExaminationList = () => {
       navigate(`?${urlParams}`);
     }
   };
+  
   const handleDayChange = (date: any) => {
     setQuery({ ...query, day_welcome: date });
     urlParams.set("day", date);
