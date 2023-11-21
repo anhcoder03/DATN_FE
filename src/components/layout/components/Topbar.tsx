@@ -14,12 +14,14 @@ const Topbar = ({ user }: { user: any }) => {
   const [show, setShow] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const {
     show: showModal,
     setShow: setShowModal,
     nodeRef,
   } = useClickOutSide(".action-wrapper");
   const root = document.querySelector("#root");
+
   const handleSidebarShow = () => {
     if (show == true) {
       root?.classList.add("sidebar-menu");
@@ -29,11 +31,19 @@ const Topbar = ({ user }: { user: any }) => {
       setShow(!show);
     }
   };
+
   const handleLogout = () => {
     dispatch(authLogout());
     toast.success("Đăng xuất thành công!");
     navigate("/login");
   };
+
+  // const notification = () => {
+  //   return (
+
+  //   )
+  // }
+
   return (
     <React.Fragment>
       <div className="fixed top-0 left-0 right-0 z-10 w-full bg-white">

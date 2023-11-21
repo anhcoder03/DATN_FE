@@ -17,7 +17,7 @@ import Select from "react-select";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { IconTrash } from "../../../components/icons";
-import { cloneDeep, set } from "lodash";
+import { cloneDeep } from "lodash";
 import { getAllCustomer } from "../../../services/customer.service";
 import { getAllService } from "../../../services/service.service";
 import { toast } from "react-toastify";
@@ -38,7 +38,6 @@ const schema = yup.object({
 
 const ReceptionAdd = () => {
   const auth = useSelector((state: RootState) => state.auth.auth);
-  console.log(auth);
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
   const [clinics, setClinics] = useState<any[]>([]);
@@ -58,7 +57,6 @@ const ReceptionAdd = () => {
     control,
     handleSubmit,
     setValue,
-    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver<any>(schema),
@@ -66,69 +64,63 @@ const ReceptionAdd = () => {
   });
 
   useEffect(() => {
-    async function getCustomers() {
-      const response = await getAllCustomer({ _limit: 3000 });
-      const ListArr: any = [];
-      response?.docs?.map((e: any) => {
-        ListArr?.push({
-          ...e,
-          value: e?._id,
-          label: `${e?.name} - ${e?.phone}`,
-        });
-      });
-      setDataCustomers(ListArr);
-    }
-
+    getClinics();
+    getStaffs();
+    getServices();
     getCustomers();
   }, []);
-  useEffect(() => {
-    async function getClinics() {
-      const response = await getAllClinic({ _limit: 3000 });
-      const ListArr: any = [];
-      response?.docs?.map((e: any) => {
-        ListArr?.push({
-          ...e,
-          value: e?._id,
-          label: e?.name,
-        });
-      });
-      setClinics(ListArr);
-    }
 
-    getClinics();
-  }, []);
-  useEffect(() => {
-    async function getStaffs() {
-      const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
-      const ListArr: any = [];
-      response?.map((e: any) => {
-        ListArr?.push({
-          ...e,
-          value: e?._id,
-          label: e?.name,
-        });
+  async function getCustomers() {
+    const response = await getAllCustomer({ _limit: 3000 });
+    const ListArr: any = [];
+    response?.docs?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: `${e?.name} - ${e?.phone}`,
       });
-      setStaffs(ListArr);
-    }
-    getStaffs();
-  }, []);
+    });
+    setDataCustomers(ListArr);
+  }
 
-  useEffect(() => {
-    async function getServices() {
-      const response = await getAllService({ _limit: 3000, _status: 1 });
-      const ListArr: any = [];
-      response?.docs?.map((e: any) => {
-        ListArr?.push({
-          ...e,
-          value: e?._id,
-          label: e?.name,
-        });
+  async function getStaffs() {
+    const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
+    const ListArr: any = [];
+    response?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
       });
-      setServices(ListArr);
-    }
+    });
+    setStaffs(ListArr);
+  }
 
-    getServices();
-  }, []);
+  async function getClinics() {
+    const response = await getAllClinic({ _limit: 3000 });
+    const ListArr: any = [];
+    response?.docs?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setClinics(ListArr);
+  }
+
+  async function getServices() {
+    const response = await getAllService({ _limit: 3000, _status: 1 });
+    const ListArr: any = [];
+    response?.docs?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setServices(ListArr);
+  }
 
   const handleAddService = () => {
     const newData = {
@@ -137,6 +129,7 @@ const ReceptionAdd = () => {
     };
     setDataServices([...dataServices, newData]);
   };
+
   const handleRemoveService = (index: number) => {
     let newServiceExam = cloneDeep(dataServices);
     newServiceExam.splice(index, 1);
@@ -150,6 +143,7 @@ const ReceptionAdd = () => {
     }
     setDataServices(newServiceExam);
   };
+
   const handleUpdateService = (dataRela: any, index: number) => {
     console.log(dataRela);
     let newServiceExam = cloneDeep(dataServices);
@@ -251,7 +245,6 @@ const ReceptionAdd = () => {
                   options={dataCustomers}
                   onChange={(val: any) => {
                     setValue("customerId", val?._id);
-                    // reset(val);
                     setData(val);
                   }}
                 ></Select>

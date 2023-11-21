@@ -15,17 +15,22 @@ import { Textarea } from "../../../components/textarea";
 import { UpdateExamination, getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
+import { Modal } from "antd";
 
 const DetailBooking = () => {
   const [data, setData] = useState<any>();
+  const [deltail, setDeltail] = useState<any>();
   const { control, handleSubmit } = useForm({});
+  const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (id !== undefined) {
       loadData();
     }
   }, [id]);
+
   async function loadData() {
     try {
       const response = await getOneExamination(id);
@@ -43,6 +48,7 @@ const DetailBooking = () => {
       toast.error("Đã có lỗi sảy ra!!!");
     }
   }
+
   const handleChangeStatus = async () => {
     const params = {
       status: "recetion",
@@ -55,6 +61,16 @@ const DetailBooking = () => {
     }else {
       toast.error('Đã có lỗi sảy ra!!!')
     }
+  };
+
+  const onOk = () => {
+    handleChangeStatus();
+    setOpenModal(false);
+  }
+
+  const handleModal = (data: any) => {
+    setOpenModal(true);
+    setDeltail(data);
   };
   
   return (
@@ -187,7 +203,7 @@ const DetailBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                onClick={handleSubmit(handleChangeStatus)}
+                onClick={() => handleModal(data)}
               >
                 Tiếp đón
               </Button>
@@ -195,6 +211,22 @@ const DetailBooking = () => {
           </div>
         </div>
       </div>
+      <Modal
+        centered
+        open={openModal}
+        onOk={onOk}
+        onCancel={() => setOpenModal(false)}
+      >
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+          Thông Báo
+        </h1>
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {deltail?._id}
+              </span>
+            </div>
+      </Modal>
     </Layout>
   );
 };

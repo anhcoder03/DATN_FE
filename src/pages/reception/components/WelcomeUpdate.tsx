@@ -55,7 +55,6 @@ const WelcomeUpdate = () => {
   ]);
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
-  console.log(data);
   const {
     control,
     handleSubmit,
@@ -81,6 +80,7 @@ const WelcomeUpdate = () => {
     }
     getExamination();
   }, []);
+
   const handleGetServiceByExam = async () => {
     const response = await getServiceByIdExam(id);
     if (response?.docs?.length > 0) {
@@ -116,6 +116,7 @@ const WelcomeUpdate = () => {
       }
     }
   };
+
   useEffect(() => {
     handleGetServiceByExam();
   }, []);
@@ -136,6 +137,7 @@ const WelcomeUpdate = () => {
 
     getCustomers();
   }, []);
+
   useEffect(() => {
     async function getClinics() {
       const response = await getAllClinic({ _limit: 3000 });
@@ -152,6 +154,7 @@ const WelcomeUpdate = () => {
 
     getClinics();
   }, []);
+
   useEffect(() => {
     async function getStaffs() {
       const response = await getAllStaff({ name: "Nhân viên tiếp đón" });
@@ -192,6 +195,7 @@ const WelcomeUpdate = () => {
     };
     setDataServices([...dataServices, newData]);
   };
+
   const handleRemoveService = (index: number) => {
     let newServiceExam = cloneDeep(dataServices);
     newServiceExam.splice(index, 1);
@@ -205,6 +209,7 @@ const WelcomeUpdate = () => {
     }
     setDataServices(newServiceExam);
   };
+
   const handleUpdateService = (dataRela: any, index: number) => {
     let newServiceExam = cloneDeep(dataServices);
     newServiceExam[index] = dataRela;
@@ -242,6 +247,7 @@ const WelcomeUpdate = () => {
   };
 
   const handleUpdate = async (values: any) => {
+    console.log('1111');
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
     }
@@ -275,11 +281,12 @@ const WelcomeUpdate = () => {
     const res = await UpdateExamination(cloneData);
     if (res?.examination) {
       toast.success(res?.message);
-      navigate(`/reception/${id}`);
+      navigate(`/reception`);
     } else {
       toast.error(res?.message);
     }
   };
+  
   const handleCreateWaiting = async (values: any) => {
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
@@ -682,7 +689,7 @@ const WelcomeUpdate = () => {
           Thông Báo
         </h1>
         <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá dịch vụ này</p>
+          <p>Bạn có chắc muốn huỷ dịch vụ này</p>
         </div>
       </Modal>
     </Layout>
