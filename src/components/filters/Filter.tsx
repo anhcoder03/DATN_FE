@@ -80,7 +80,7 @@ const FilterExamination = ({
           ></Select>
           <Select
             options={clinics}
-            className="react-select"
+            className="react-select" 
             classNamePrefix="react-select select-small"
             placeholder="-Phòng khám-"
             onChange={handleClinicChange}

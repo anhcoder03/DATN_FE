@@ -1,4 +1,4 @@
-export interface IClinic {
+export interface c {
     status: string;
     _id?: string;
     name: string;
