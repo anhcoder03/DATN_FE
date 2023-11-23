@@ -134,50 +134,54 @@ const ExaminationList = () => {
   const columns = [
     {
       name: "Mã phiếu khám",
-      selector: (row: any) => row?._id,
+      selector: (row: any) => row?._id ?? "---",
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId.name ?? "---",
     },
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row.customerId?.dateOfBirth) ?? "---",
     },
     {
       name: "Giới tính",
       selector: (row: { customerId: { gender: any } }) =>
-        row?.customerId?.gender || "---",
+        row?.customerId?.gender ?? "---",
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) =>
+        row.customerId.phone ?? "---",
     },
     {
       name: "Ngày tiếp đón",
       selector: (row: { day_welcome: moment.MomentInput }) =>
-        moment(row?.day_welcome).format("DD/MM/YYYY"),
+        moment(row?.day_welcome).format("DD/MM/YYYY") ?? "---",
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row?.staffId.name,
+      selector: (row: { staffId: { name: any } }) =>
+        row?.staffId?.name ?? "---",
     },
     {
       name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+      selector: (row: { doctorId: { name: any } }) =>
+        row?.doctorId?.name ?? "---",
     },
     {
       name: "Phòng khám",
-      selector: (row: { clinicId: { name: any } }) => row?.clinicId?.name,
+      selector: (row: { clinicId: { name: any } }) =>
+        row?.clinicId?.name ?? "---",
     },
     {
       name: "Triệu chứng",
-      selector: (row: any) => row?.symptom,
+      selector: (row: any) => row?.symptom ?? "---",
     },
     {
       name: "Ghi chú",
-      selector: (row: any) => row?.note,
+      selector: (row: any) => row?.note ?? "---",
     },
   ];
 
@@ -431,7 +435,7 @@ const ExaminationList = () => {
       navigate(`?${urlParams}`);
     }
   };
-  
+
   const handleDayChange = (date: any) => {
     setQuery({ ...query, day_welcome: date });
     urlParams.set("day", date);

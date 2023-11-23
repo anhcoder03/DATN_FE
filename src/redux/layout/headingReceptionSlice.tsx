@@ -3,27 +3,27 @@ import moment from "moment";
 const headings = [
   {
     name: "Mã bệnh nhân",
-    selector: (row: any) => row?.customerId?._id,
+    selector: (row: any) => row?.customerId?._id ?? "---",
   },
   {
     name: "Tên bệnh nhân",
-    selector: (row: any) => row?.customerId.name,
+    selector: (row: any) => row?.customerId?.name ?? "---",
   },
 
   {
     name: "Ngày tiếp đón",
     selector: (row: { day_welcome: moment.MomentInput }) =>
-      moment(row?.day_welcome).format("DD/MM/YYYY"),
+      moment(row?.day_welcome).format("DD/MM/YYYY") ?? "---",
   },
   {
     name: "Phòng khám",
     selector: (row: { clinicId: { name: any } }) =>
-      row?.clinicId?.name || "---",
+      row?.clinicId?.name ?? "---",
   },
   {
     name: "Bác sĩ",
     selector: (row: { doctorId: { name: any } }) =>
-      row?.doctorId?.name || "---",
+      row?.doctorId?.name ?? "---",
   },
 ];
 const serializedHeadings = headings.map((heading) => {
