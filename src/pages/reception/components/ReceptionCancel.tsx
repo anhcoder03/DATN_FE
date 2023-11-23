@@ -9,46 +9,48 @@ import IconTrash2 from "../../../assets/images/icon-trash2.png";
 import { useNavigate } from "react-router-dom";
 import { getAllExamination } from "../../../services/examination.service";
 import FilterReceptionDone from "../../../components/filters/FilterReceptionDone";
+import FilterReceptionCancel from "../../../components/filters/FilterReceptionCancel";
 
-const ReceptionDone = () => {
+const ReceptionCancel = () => {
   const [receptions, setReceptions] = useState<any[]>();
-  const [reception, setReception] = useState<any>();
+  //   const [reception, setReception] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     _sort: "createdAt",
     _order: "desc",
-    status: "done",
+    status: "cancel",
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
+  //   const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
   const columns = [
     {
       name: "Mã bệnh nhân",
-      selector: (row: any) => row?.customerId?._id,
+      selector: (row: any) => row?.customerId?._id ?? "---",
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId?.name ?? "---",
     },
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row?.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row?.customerId?.dateOfBirth) ?? "---",
     },
     {
       name: "Giới tính",
       selector: (row: { customerId: { gender: any } }) =>
-        row?.customerId?.gender,
+        row?.customerId?.gender ?? "---",
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
+      selector: (row: { customerId: { phone: any } }) =>
+        row?.customerId?.phone ?? "---",
     },
     {
       name: "Ngày tiếp đón",
@@ -57,23 +59,26 @@ const ReceptionDone = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
+      selector: (row: { staffId: { name: any } }) =>
+        row?.staffId?.name ?? "---",
     },
     {
       name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row?.doctorId?.name,
+      selector: (row: { doctorId: { name: any } }) =>
+        row?.doctorId?.name ?? "---",
     },
     {
       name: "Phòng khám",
-      selector: (row: { clinicId: { name: any } }) => row?.clinicId?.name,
+      selector: (row: { clinicId: { name: any } }) =>
+        row?.clinicId?.name ?? "---",
     },
     {
       name: "Triệu chứng",
-      selector: (row: any) => row?.symptom,
+      selector: (row: any) => row?.symptom || "---",
     },
     {
       name: "Ghi chú",
-      selector: (row: any) => row?.note,
+      selector: (row: any) => row?.note || "---",
     },
   ];
   const optionsPagination = [
@@ -102,7 +107,7 @@ const ReceptionDone = () => {
   }, [query]);
 
   const selectedHeading = useSelector(
-    (state: RootState) => state.headingDone.selectedHeadings
+    (state: RootState) => state.headingCancelling.selectedHeadings
   );
   const deserializedHeadings = selectedHeading.map((heading) => {
     return {
@@ -110,17 +115,17 @@ const ReceptionDone = () => {
       selector: eval(heading.selector),
     };
   });
-  const handleUpdate = (data: any) => {
-    setOpenModal(true);
-    setReception(data);
-  };
+  // const handleUpdate = (data: any) => {
+  //   setOpenModal(true);
+  //   setReception(data);
+  // };
   const gotoDetail = (id: any) => {
     navigate(`/reception/${id}/view`);
   };
   const newHeading = [...deserializedHeadings];
-  const onOk = async () => {
-    setOpenModal(false);
-  };
+  // const onOk = async () => {
+  //   setOpenModal(false);
+  // };
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
@@ -130,7 +135,7 @@ const ReceptionDone = () => {
   };
   return (
     <>
-      <FilterReceptionDone columns={columns}></FilterReceptionDone>
+      <FilterReceptionCancel columns={columns}></FilterReceptionCancel>
       <Table3
         gotoDetail={gotoDetail}
         isLoading={loading}
@@ -149,4 +154,4 @@ const ReceptionDone = () => {
   );
 };
 
-export default ReceptionDone;
+export default ReceptionCancel;

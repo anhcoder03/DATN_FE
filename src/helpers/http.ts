@@ -14,14 +14,16 @@ class Http {
         "Content-Type": "application/json",
       },
     });
-
-    this.api.interceptors.request.use((config: { headers: { [x: string]: string; }; }) => {
-      const accessToken = store.getState().auth.auth?.accessToken;
-      if (accessToken) {
-        config.headers["Authorization"] = `Bearer ${accessToken}`;
+    
+    this.api.interceptors.request.use(
+      (config: { headers: { [x: string]: string } }) => {
+        const accessToken = store.getState().auth.auth?.accessToken;
+        if (accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+        return config;
       }
-      return config;
-    });
+    );
 
     // this.api.interceptors.response.use(
     //   (res) => res,

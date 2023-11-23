@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from "react";
-import CalcUtils from "../../../helpers/CalcULtils";
-import moment from "moment";
-import { Table3 } from "../../../components/table";
-import { Pagination } from "../../../components/pagination";
 import { useSelector } from "react-redux";
+import { FilterReceptionWaiting } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
-import IconTrash2 from "../../../assets/images/icon-trash2.png";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { getAllExamination } from "../../../services/examination.service";
-import FilterReceptionDone from "../../../components/filters/FilterReceptionDone";
+import { Table3 } from "../../../components/table";
+import moment from "moment";
+import CalcUtils from "../../../helpers/CalcULtils";
+import { useNavigate } from "react-router-dom";
+import { Pagination } from "../../../components/pagination";
+import IconTrash2 from "../../../assets/images/icon-trash2.png";
 
-const ReceptionDone = () => {
+const ReceptionRunning = () => {
   const [receptions, setReceptions] = useState<any[]>();
-  const [reception, setReception] = useState<any>();
+  // const [reception, setReception] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     _sort: "createdAt",
     _order: "desc",
-    status: "done",
+    status: "running",
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
-  const [openModal, setOpenModal] = useState(false);
+  // const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
@@ -34,17 +34,17 @@ const ReceptionDone = () => {
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId?.name,
     },
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row?.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
     },
     {
       name: "Giới tính",
       selector: (row: { customerId: { gender: any } }) =>
-        row?.customerId?.gender,
+        row?.customerId.gender,
     },
     {
       name: "Số điện thoại",
@@ -76,11 +76,13 @@ const ReceptionDone = () => {
       selector: (row: any) => row?.note,
     },
   ];
+
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
     { value: 100, label: "100 bản ghi" },
   ];
+
   const handleGetExaminaton = async () => {
     try {
       setLoading(true);
@@ -93,7 +95,7 @@ const ReceptionDone = () => {
       console.log(error);
     }
   };
-  console.log(receptions);
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
@@ -102,25 +104,46 @@ const ReceptionDone = () => {
   }, [query]);
 
   const selectedHeading = useSelector(
-    (state: RootState) => state.headingDone.selectedHeadings
+    (state: RootState) => state.headingWaiting.selectedHeadings
   );
+
   const deserializedHeadings = selectedHeading.map((heading) => {
     return {
       name: heading.name,
       selector: eval(heading.selector),
     };
   });
-  const handleUpdate = (data: any) => {
-    setOpenModal(true);
-    setReception(data);
+
+  // const handleUpdate = (data: any) => {
+  //   setOpenModal(true);
+  //   setReception(data);
+  // };
+
+  const action = {
+    name: "Thao tác",
+    cell: (row: { _id: any }) => (
+      <div className="flex items-center gap-x-[2px]">
+        <button
+          onClick={() => console.log(row._id)}
+          className="button-nutri text-[#585858]"
+        >
+          <img
+            style={{ border: "none" }}
+            src={IconTrash2}
+            width={20}
+            height={20}
+            alt=""
+          />
+        </button>
+      </div>
+    ),
   };
-  const gotoDetail = (id: any) => {
-    navigate(`/reception/${id}/view`);
-  };
-  const newHeading = [...deserializedHeadings];
-  const onOk = async () => {
-    setOpenModal(false);
-  };
+  const newHeading = [...deserializedHeadings, action];
+
+  // const onOk = async () => {
+  //   setOpenModal(false);
+  // };
+
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
@@ -128,14 +151,18 @@ const ReceptionDone = () => {
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
+  const gotoDetail = (id: string) => {
+    navigate(`/reception/${id}/view`);
+  };
   return (
     <>
-      <FilterReceptionDone columns={columns}></FilterReceptionDone>
+      <FilterReceptionWaiting columns={columns}></FilterReceptionWaiting>
       <Table3
-        gotoDetail={gotoDetail}
         isLoading={loading}
         columns={newHeading}
         data={receptions}
+        gotoDetail={gotoDetail}
       ></Table3>
       <Pagination
         handlePageClick={handlePageClick}
@@ -149,4 +176,4 @@ const ReceptionDone = () => {
   );
 };
 
-export default ReceptionDone;
+export default ReceptionRunning;

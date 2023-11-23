@@ -6,34 +6,14 @@ import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 import Select from "react-select";
 import {
-  examinationStatus,
   optionClinic,
   optionDoctor,
   optionNVTD,
 } from "../../constants/options";
-import ModalExamination from "../modal/ModalExamination";
+import { ModalCancel } from "../modal";
 
-type TFilterExamination = {
-  handleSearch: (e: any) => void;
-  handleDayChange: (day: any) => void;
-  handleClinicChange: (id: any) => void;
-  handleSearchByDoctorId: (id: any) => void;
-  handleChangeStatus: (id: any) => void;
-  columns: any;
-  // dataStaffs: any[];
-  dataDoctors: any[];
-  clinics: any[];
-};
-const FilterExamination = ({
-  columns,
-  handleChangeStatus,
-  handleSearchByDoctorId,
-  handleClinicChange,
-  handleDayChange,
-  handleSearch,
-  dataDoctors,
-  clinics,
-}: TFilterExamination) => {
+const FilterReceptionCancel = (props: any) => {
+  const { columns } = props;
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -46,11 +26,6 @@ const FilterExamination = ({
   const handleCancel = () => {
     setOpen(false);
   };
-  const handleKeyDown = (e: any) => {
-    if (e.key === "Enter") {
-      handleSearch(e.target.value);
-    }
-  };
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -60,31 +35,9 @@ const FilterExamination = ({
             <input
               type="text"
               className="w-full bg-transparent border-none outline-none"
-              placeholder="Tên bệnh nhân hoặc mã phiếu khám"
-              onKeyDown={handleKeyDown}
+              placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
             />
           </div>
-          <Select
-            options={examinationStatus}
-            className="react-select"
-            classNamePrefix="react-select select-small"
-            placeholder="-Trạng thái-"
-            onChange={handleChangeStatus}
-          ></Select>
-          <Select
-            options={dataDoctors}
-            className="react-select"
-            classNamePrefix="react-select select-small"
-            placeholder="-Bác sĩ-"
-            onChange={handleSearchByDoctorId}
-          ></Select>
-          <Select
-            options={clinics}
-            className="react-select" 
-            classNamePrefix="react-select select-small"
-            placeholder="-Phòng khám-"
-            onChange={handleClinicChange}
-          ></Select>
           <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
             <Flatpickr
               options={{
@@ -94,15 +47,31 @@ const FilterExamination = ({
                 altInputClass: "date-range",
                 maxDate: "today",
               }}
-              onChange={([date]) => {
-                handleDayChange(date);
-              }}
-              placeholder="Ngày khám"
+              placeholder="dd/mm/yyyy"
+              name="dateOfBirth"
             ></Flatpickr>
             <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
           </div>
+          <Select
+            options={optionDoctor}
+            className="react-select"
+            classNamePrefix="react-select select-small"
+            placeholder="-Bác sĩ-"
+          ></Select>
+          <Select
+            options={optionClinic}
+            className="react-select"
+            classNamePrefix="react-select select-small"
+            placeholder="-Phòng khám-"
+          ></Select>
+          <Select
+            options={optionNVTD}
+            className="react-select"
+            classNamePrefix="react-select select-small"
+            placeholder="-Nhân viên tiếp đón-"
+          ></Select>
         </div>
         <div className="flex items-end gap-2">
           <button
@@ -111,16 +80,22 @@ const FilterExamination = ({
           >
             <IconSetting></IconSetting>
           </button>
+          <Link to={"#"} className="flex gap-2 px-3 py-2 rounded-lg bg-primary">
+            <div className="flex items-center p-1 bg-white rounded-lg text-primary">
+              <IconPlus></IconPlus>
+            </div>
+            <span className="flex items-center text-sm text-white">Thêm</span>
+          </Link>
         </div>
       </div>
-      <ModalExamination
+      <ModalCancel
         open={open}
         handleCancel={handleCancel}
         handleOk={handleOk}
         headings={columns}
-      ></ModalExamination>
+      ></ModalCancel>
     </div>
   );
 };
 
-export default FilterExamination;
+export default FilterReceptionCancel;
