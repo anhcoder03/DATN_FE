@@ -18,7 +18,7 @@ import CustomerDetail from "./pages/customer/components/CustomerDetail";
 import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 import CustomerAdd from "./pages/customer/CustomerAdd";
 import CustommerList from "./pages/customer/CustommerList";
-import TitleUpdate from "./pages/title/components/UpdateTitle"
+import TitleUpdate from "./pages/title/components/UpdateTitle";
 import ExaminationList from "./pages/examination/ExaminationList";
 import Home from "./pages/Home";
 import PrescriptionListContainer from "./pages/prescription/list/PrescriptionList";

@@ -74,14 +74,15 @@ const Information = () => {
   const handleChangePassword = async () => {
     try {
       const response: any = await changePassword(
-        auth.user._id,
+        auth?.user?._id,
         currentPassword,
-        newPassword
+        newPassword,
+        auth?.accessToken
       );
-      if (response?.user) {
-        return toast.success(response?.message);
+      if (response?.data?.message) {
+        return toast.success(response?.data?.message);
       }
-      return toast.error(response?.message);
+      return toast.error(response?.response?.data?.message);
     } catch (error) {
       console.log(error);
     }
