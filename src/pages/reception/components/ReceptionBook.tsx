@@ -58,11 +58,12 @@ const ReceptionBook = () => {
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId.gender,
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
     },
     {
       name: "Ngày đặt lịch",
@@ -71,7 +72,7 @@ const ReceptionBook = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row.staffId.name,
+      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
     },
     {
       name: "Ngày tạo",
@@ -155,13 +156,13 @@ const ReceptionBook = () => {
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-3">
         <button
-          onClick={() => handleUpdate({type: 'statusReception', data: row})}
+          onClick={() => handleUpdate({ type: "statusReception", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img width={20} height={20} src={IconHand} alt="tiếp đón" />
         </button>
         <button
-          onClick={() => handleUpdate({type: 'remove', data: row})}
+          onClick={() => handleUpdate({ type: "remove", data: row })}
           className="button-nutri text-[#585858]"
         >
           <IconTrash />
@@ -188,24 +189,24 @@ const ReceptionBook = () => {
   };
 
   const onOk = async () => {
-    if(booking?.type == 'remove') {
+    if (booking?.type == "remove") {
       const res = await UpdateExamination({
         _id: booking?.data?._id,
-        status: 'cancel'
+        status: "cancel",
       });
       if (res?.examination) {
-        toast.success('Huỷ đặt lịch thành công!');
+        toast.success("Huỷ đặt lịch thành công!");
         setOpenModal(false);
         handleGetExamination();
       } else {
         setOpenModal(false);
       }
-      return
+      return;
     }
-    if(booking?.type == 'statusReception') {
+    if (booking?.type == "statusReception") {
       handleChangeStatus(booking?.data?._id);
       setOpenModal(false);
-      return
+      return;
     }
   };
 
@@ -273,27 +274,22 @@ const ReceptionBook = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-        {
-          booking?.type == 'remove' && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
+        {booking?.type == "remove" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
               {booking?.data?._id}
-              </span>
-            </div>
-          )
-        }
-        {
-          booking?.type == 'statusReception' && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {booking?.data?._id}
-              </span>
-            </div>
-          )
-        }
-        
+            </span>
+          </div>
+        )}
+        {booking?.type == "statusReception" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {booking?.data?._id}
+            </span>
+          </div>
+        )}
       </Modal>
     </>
   );

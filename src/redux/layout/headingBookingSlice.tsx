@@ -3,11 +3,11 @@ import moment, { MomentInput } from "moment";
 const headings = [
   {
     name: "Mã bệnh nhân",
-    selector: (row: { customerId: { _id: any } }) => row.customerId._id,
+    selector: (row: { customerId: { _id: any } }) => row?.customerId?._id,
   },
   {
     name: "Tên bệnh nhân",
-    selector: (row: { customerId: { name: any } }) => row.customerId.name,
+    selector: (row: { customerId: { name: any } }) => row?.customerId?.name,
   },
   {
     name: "Ngày đặt lịch",
@@ -16,7 +16,7 @@ const headings = [
   },
   {
     name: "Nhân viên tiếp đón",
-    selector: (row: { staffId: { name: any } }) => row.staffId.name,
+    selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
   },
   {
     name: "Ngày tạo",

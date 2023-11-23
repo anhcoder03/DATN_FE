@@ -2,7 +2,10 @@ import { useSelector } from "react-redux";
 import { FilterReceptionCustomer } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useEffect, useRef, useState } from "react";
-import { UpdateExamination, getAllExamination } from "../../../services/examination.service";
+import {
+  UpdateExamination,
+  getAllExamination,
+} from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
 import moment from "moment";
 import CalcUtils from "../../../helpers/CalcULtils";
@@ -56,24 +59,26 @@ const ReceptionCustomer = () => {
   const columns = [
     {
       name: "Mã bệnh nhân",
-      selector: (row: any) => row?.customerId?._id,
+      selector: (row: any) => row?.customerId?._id ?? "---",
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId?.name ?? "---",
     },
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row?.customerId?.dateOfBirth) ?? "---",
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId?.gender ?? "---",
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) =>
+        row?.customerId?.phone ?? "---",
     },
     {
       name: "Ngày tiếp đón",
@@ -82,17 +87,18 @@ const ReceptionCustomer = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row?.staffId.name,
+      selector: (row: { staffId: { name: any } }) =>
+        row?.staffId?.name ?? "---",
     },
     {
       name: "Phòng khám",
       selector: (row: { clinicId: { name: any } }) =>
-        row?.clinicId?.name || "---",
+        row?.clinicId?.name ?? "---",
     },
     {
       name: "Bác sĩ",
       selector: (row: { doctorId: { name: any } }) =>
-        row?.doctorId?.name || "---",
+        row?.doctorId?.name ?? "---",
     },
   ];
 
@@ -189,15 +195,15 @@ const ReceptionCustomer = () => {
   const handleChangeStatus = async () => {
     const params = {
       _id: reception?.data?._id,
-      status: 'cancel'
-    }
+      status: "cancel",
+    };
     const res: any = await UpdateExamination(params);
-    if(res?.examination) {
+    if (res?.examination) {
       location.reload();
-      toast.success(res?.message)
-      return
+      toast.success(res?.message);
+      return;
     }
-  }
+  };
 
   const action = {
     name: "Thao tác",
@@ -210,7 +216,7 @@ const ReceptionCustomer = () => {
           <img width={20} height={20} src={IconPrint} alt="print" />
         </button>
         <button
-          onClick={() => handleUpdate({type: 'waiting', data: row})}
+          onClick={() => handleUpdate({ type: "waiting", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -234,7 +240,7 @@ const ReceptionCustomer = () => {
           />
         </button>
         <button
-          onClick={() => handleUpdate({type: 'cancel', data: row})}
+          onClick={() => handleUpdate({ type: "cancel", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -254,7 +260,7 @@ const ReceptionCustomer = () => {
   const handleClickPrint = (item: any) => {
     setOpenModal(true);
     setDataPrint(item);
-    setReception({type : 'print'})
+    setReception({ type: "print" });
     setTimeout(() => {
       handlePrint();
     }, 500);
@@ -324,17 +330,16 @@ const ReceptionCustomer = () => {
   };
 
   const onOk = () => {
-    if(reception?.type == 'cancel') {
+    if (reception?.type == "cancel") {
       handleChangeStatus();
       setOpenModal(false);
-      return
+      return;
     }
-    if(reception?.type == 'waiting') {
-      return toast.warning('Tính năng đang phát triển');
+    if (reception?.type == "waiting") {
+      return toast.warning("Tính năng đang phát triển");
     }
-  }
+  };
   console.log("reception", reception);
-  
 
   return (
     <>
@@ -363,7 +368,7 @@ const ReceptionCustomer = () => {
         totalDocs={totalDocs}
         totalPages={totalPages}
       ></Pagination>
-      {(openModal && reception?.type == 'print') ? (
+      {openModal && reception?.type == "print" ? (
         <PrintCompoent
           componentRef={componentRef}
           dataPrint={dataPrint}
@@ -394,30 +399,24 @@ const ReceptionCustomer = () => {
           <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
             Thông Báo
           </h1>
-          {
-            reception?.type == 'cancel' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc hủy tiếp đón này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {reception?.data?._id}
-                </span>
-              </div>
-            )
-          }
-          {
-            reception?.type == 'waiting' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc chuyển trạng thái của tiếp đón này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {reception?.data?._id}
-                </span>
-              </div>
-            )
-          }
-          
+          {reception?.type == "cancel" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc hủy tiếp đón này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {reception?.data?._id}
+              </span>
+            </div>
+          )}
+          {reception?.type == "waiting" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc chuyển trạng thái của tiếp đón này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {reception?.data?._id}
+              </span>
+            </div>
+          )}
         </Modal>
-      )
-    }
+      )}
     </>
   );
 };
