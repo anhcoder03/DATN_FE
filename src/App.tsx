@@ -43,6 +43,8 @@ import PrescriptionDetail from "./pages/prescription/components/PrescriptionDeta
 import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 import { getMessagingToken, onMessageListener } from "./firebase";
 import StatitisPage from "./pages/statitis";
+import Information from "./pages/auth/Information";
+import Examination_view from "./pages/examination_view/examination_view";
 function App() {
   useEffect(() => {
     getMessagingToken();
@@ -146,6 +148,10 @@ function App() {
       element: <Login />,
     },
     {
+      path: "account",
+      element: <Information />,
+    },
+    {
       path: "product/list",
       element: <ProductList />,
     },
@@ -214,6 +220,11 @@ function App() {
     {
       path: "statistical/overview",
       element: <StatitisPage />,
+    },
+    // examination
+    {
+      path: "examination_view",
+      element: <Examination_view />,
     },
   ]);
   return (
