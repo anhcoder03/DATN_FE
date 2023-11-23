@@ -14,7 +14,7 @@ class Http {
         "Content-Type": "application/json",
       },
     });
-
+    
     this.api.interceptors.request.use(
       (config: { headers: { [x: string]: string } }) => {
         const accessToken = store.getState().auth.auth?.accessToken;
