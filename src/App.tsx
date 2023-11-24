@@ -10,7 +10,6 @@ import ClinicAdd from "./pages/clinic/ClinicAdd";
 import ClinicList from "./pages/clinic/ClinicList";
 import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
 import TitleList from "./pages/title/TitleList";
-import TitlecAdd from "./pages/title/TitleAdd";
 import ConfigUserUpdateContainer from "./pages/configuration/user/edit";
 import ConfigUserListContainer from "./pages/configuration/user/list";
 import ConfigUserAddContainer from "./pages/configuration/user/new";
@@ -18,7 +17,6 @@ import CustomerDetail from "./pages/customer/components/CustomerDetail";
 import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
 import CustomerAdd from "./pages/customer/CustomerAdd";
 import CustommerList from "./pages/customer/CustommerList";
-import TitleUpdate from "./pages/title/components/UpdateTitle";
 import ExaminationList from "./pages/examination/ExaminationList";
 import Home from "./pages/Home";
 import PrescriptionListContainer from "./pages/prescription/list/PrescriptionList";
@@ -47,7 +45,7 @@ import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 import { getMessagingToken, onMessageListener } from "./firebase";
 import StatitisPage from "./pages/statitis";
 import Information from "./pages/auth/Information";
-import Examination_view from "./pages/examination_view/examination_view";
+import Examination_view from "./pages/examination_view/Examination_view";
 function App() {
   useEffect(() => {
     getMessagingToken();
@@ -136,11 +134,9 @@ function App() {
     },
     {
       path: "configuration/title/add",
-      element: <TitlecAdd />,
     },
     {
       path: "configuration/title/update/:id",
-      element: <TitleUpdate />,
     },
     {
       path: "category/view/:id",
