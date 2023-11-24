@@ -7,7 +7,7 @@ type IFilterTitle = {
   handleStatusChange: (status: any) => void;
 };
 
-const FilterTitle = ({ handleSearch, handleStatusChange }: IFilterTitle) => {
+const FilterTitle = ( { check ,handleSearch, handleStatusChange }: any) => {
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSearch(e.target.value);
@@ -35,17 +35,6 @@ const FilterTitle = ({ handleSearch, handleStatusChange }: IFilterTitle) => {
             onChange={handleStatusChange}
           ></Select>
         </div>
-      </div>
-      <div className="flex items-end gap-2">
-        <Link
-          to={"/configuration/title/add"}
-          className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
-        >
-          <div className="flex items-center p-1 bg-white rounded-lg text-primary">
-            <IconPlus></IconPlus>
-          </div>
-          <span className="flex items-center text-sm text-white">Thêm</span>
-        </Link>
       </div>
     </div>
   );
