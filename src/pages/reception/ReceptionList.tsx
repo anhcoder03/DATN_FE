@@ -7,6 +7,8 @@ import ReceptionCustomer from "./components/ReceptionCustomer";
 import ReceptionWaiting from "./components/ReceptionWaiting";
 import { useNavigate } from "react-router-dom";
 import ReceptionDone from "./components/ReceptionDone";
+import ReceptionRunning from "./components/ReceptionRunning";
+import ReceptionCancel from "./components/ReceptionCancel";
 export interface IDataTabs {
   title: string;
   children: React.ReactNode;
@@ -36,7 +38,7 @@ const ReceptionList = () => {
     },
     {
       title: "ĐANG KHÁM",
-      children: <ReceptionWaiting />,
+      children: <ReceptionRunning />,
       id: "4",
       name: "running",
     },
@@ -48,18 +50,21 @@ const ReceptionList = () => {
     },
     {
       title: "ĐÃ HỦY",
-      children: <ReceptionWaiting />,
+      children: <ReceptionCancel />,
       id: "6",
       name: "cancel",
     },
   ];
+
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "Danh sách tiếp đón bệnh nhân";
     urlParams.set("tab", dataTabs[1].name);
     navigate(`?${urlParams}`);
   }, []);
+
   const handleSelectTab = (key: string) => {
     if (key === "1") {
       urlParams.set("tab", dataTabs[0].name);
@@ -82,10 +87,12 @@ const ReceptionList = () => {
       navigate(`?${urlParams}`);
     }
     if (key === "6") {
-      urlParams.set("tab", dataTabs[6].name);
+      console.log('tabsíuiu', dataTabs[5])
+      urlParams.set("tab", dataTabs[5].name);
       navigate(`?${urlParams}`);
     }
   };
+
   return (
     <Layout>
       <Heading>Danh sách tiếp đón bệnh nhân</Heading>

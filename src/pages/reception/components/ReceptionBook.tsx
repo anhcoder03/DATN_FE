@@ -4,7 +4,6 @@ import { RootState } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import {
   UpdateExamination,
-  deleteExamination,
   getAllExamination,
 } from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
@@ -44,6 +43,7 @@ const ReceptionBook = () => {
     day_booking: null,
     staffId: null,
   });
+
   const columns = [
     {
       name: "Tên bệnh nhân",
@@ -58,11 +58,12 @@ const ReceptionBook = () => {
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId.gender,
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
     },
     {
       name: "Ngày đặt lịch",
@@ -71,7 +72,7 @@ const ReceptionBook = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row.staffId.name,
+      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
     },
     {
       name: "Ngày tạo",
@@ -79,6 +80,7 @@ const ReceptionBook = () => {
         moment(row?.createdAt).format("DD/MM/YYYY"),
     },
   ];
+
   const handleUpdate = (data: any) => {
     setOpenModal(true);
     setBooking(data);
@@ -103,9 +105,11 @@ const ReceptionBook = () => {
     navigate(`?${urlParams}`);
     handleGetExamination();
   }, [query]);
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
   useEffect(() => {
     async function handleGetStaffs() {
       const response = await getAllByName({ name: "Nhân viên tiếp đón" });
@@ -121,9 +125,11 @@ const ReceptionBook = () => {
     }
     handleGetStaffs();
   }, []);
+
   const selectedHeading = useSelector(
     (state: RootState) => state.headingBooking.selectedHeadings
   );
+
   const deserializedHeadings = selectedHeading.map((heading: any) => {
     return {
       name: heading.name,
@@ -150,13 +156,13 @@ const ReceptionBook = () => {
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-3">
         <button
-          onClick={() => handleChangeStatus(row?._id)}
+          onClick={() => handleUpdate({ type: "statusReception", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img width={20} height={20} src={IconHand} alt="tiếp đón" />
         </button>
         <button
-          onClick={() => handleUpdate(row)}
+          onClick={() => handleUpdate({ type: "remove", data: row })}
           className="button-nutri text-[#585858]"
         >
           <IconTrash />
@@ -181,19 +187,33 @@ const ReceptionBook = () => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const onOk = async () => {
-    const res = await deleteExamination(booking?._id);
-    if (res?.examination) {
-      toast.success(res?.message);
+    if (booking?.type == "remove") {
+      const res = await UpdateExamination({
+        _id: booking?.data?._id,
+        status: "cancel",
+      });
+      if (res?.examination) {
+        toast.success("Huỷ đặt lịch thành công!");
+        setOpenModal(false);
+        handleGetExamination();
+      } else {
+        setOpenModal(false);
+      }
+      return;
+    }
+    if (booking?.type == "statusReception") {
+      handleChangeStatus(booking?.data?._id);
       setOpenModal(false);
-      handleGetExamination();
-    } else {
-      setOpenModal(false);
+      return;
     }
   };
+
   const gotoDetail = (id: any) => {
     navigate(`/reception/booking/${id}`);
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -204,11 +224,13 @@ const ReceptionBook = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleDayChange = (date: any) => {
     setQuery({ ...query, day_booking: date });
     urlParams.set("day_booking", date);
     navigate(`?${urlParams}`);
   };
+
   const handleSearchByStaffId = (selectedOpiton: any) => {
     setQuery({ ...query, staffId: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
@@ -252,12 +274,22 @@ const ReceptionBook = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá phiếu đặt lịch</p>
-          <span className="text-center text-[#ff5c75] font-bold">
-            {booking?._id}
-          </span>
-        </div>
+        {booking?.type == "remove" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {booking?.data?._id}
+            </span>
+          </div>
+        )}
+        {booking?.type == "statusReception" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {booking?.data?._id}
+            </span>
+          </div>
+        )}
       </Modal>
     </>
   );
