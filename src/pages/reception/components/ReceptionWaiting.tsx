@@ -2,7 +2,10 @@ import { useSelector } from "react-redux";
 import { FilterReceptionWaiting } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
-import { UpdateExamination, getAllExamination } from "../../../services/examination.service";
+import {
+  UpdateExamination,
+  getAllExamination,
+} from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
 import moment from "moment";
 import CalcUtils from "../../../helpers/CalcULtils";
@@ -10,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination";
 import IconTrash2 from "../../../assets/images/icon-trash2.png";
 import { Button, Modal } from "antd";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const ReceptionWaiting = () => {
   const [receptions, setReceptions] = useState<any[]>();
@@ -37,20 +40,21 @@ const ReceptionWaiting = () => {
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId?.name,
     },
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row?.customerId?.dateOfBirth),
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId?.gender,
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
     },
     {
       name: "Ngày tiếp đón",
@@ -59,11 +63,11 @@ const ReceptionWaiting = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row?.staffId.name,
+      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
     },
     {
       name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+      selector: (row: { doctorId: { name: any } }) => row?.doctorId?.name,
     },
     {
       name: "Phòng khám",
@@ -124,22 +128,22 @@ const ReceptionWaiting = () => {
   const handleStatus = async () => {
     const params = {
       _id: reception?.data?._id,
-      status: 'cancel'
-    }
+      status: "cancel",
+    };
     const res: any = await UpdateExamination(params);
-    if(res?.examination) {
+    if (res?.examination) {
       location.reload();
-      toast.success(res?.message)
-      return
+      toast.success(res?.message);
+      return;
     }
-  }
+  };
 
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-[2px]">
         <button
-          onClick={() => handleModal({type: 'cancel', data: row})}
+          onClick={() => handleModal({ type: "cancel", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -156,10 +160,10 @@ const ReceptionWaiting = () => {
   const newHeading = [...deserializedHeadings, action];
 
   const onOk = async () => {
-    if(reception?.type == 'cancel') {
+    if (reception?.type == "cancel") {
       handleStatus();
       setOpenModal(false);
-      return
+      return;
     }
   };
 
@@ -194,41 +198,39 @@ const ReceptionWaiting = () => {
         totalPages={totalPages}
       ></Pagination>
       <Modal
-          centered
-          open={openModal}
-          footer={[
-            <Button
-              className="bg-primary50 text-primary"
-              key="back"
-              onClick={() => setOpenModal(false)}
-            >
-              Hủy
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              onClick={onOk}
-              className="bg-primary50 text-primary"
-            >
-              Xác nhận
-            </Button>
-          ]}
-          onCancel={() => setOpenModal(false)}
-        >
-          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-            Thông Báo
-          </h1>
-          {
-            reception?.type == 'cancel' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc hủy phiếu khám này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {reception?.data?._id}
-                </span>
-              </div>
-            )
-          }
-        </Modal>
+        centered
+        open={openModal}
+        footer={[
+          <Button
+            className="bg-primary50 text-primary"
+            key="back"
+            onClick={() => setOpenModal(false)}
+          >
+            Hủy
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={onOk}
+            className="bg-primary50 text-primary"
+          >
+            Xác nhận
+          </Button>,
+        ]}
+        onCancel={() => setOpenModal(false)}
+      >
+        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+          Thông Báo
+        </h1>
+        {reception?.type == "cancel" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc hủy phiếu khám này không?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {reception?.data?._id}
+            </span>
+          </div>
+        )}
+      </Modal>
     </>
   );
 };

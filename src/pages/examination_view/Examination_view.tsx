@@ -1,6 +1,6 @@
-import moment from "moment";
-import styled from "styled-components";
+import React from "react";
 import Logo from "../../assets/logo-icon.png";
+import styled from "styled-components";
 const ReceptionPrint = styled.div`
   /* padding: 50px 100px; */
   background: #fff;
@@ -87,43 +87,19 @@ const ReceptionPrint = styled.div`
     border: 1px solid black;
   }
 `;
-
-const PrintExamination = ({ componentRef, dataPrint }: any) => {
-  console.log("dataPrint", dataPrint);
-
-  const getFullAddress = () => {
-    const address: any[] = [
-      `${
-        dataPrint?.customerId?.detailedAddress
-          ? `${dataPrint?.customerId?.detailedAddress},`
-          : ""
-      }${
-        dataPrint?.customerId?.commune
-          ? `${dataPrint?.customerId?.commune?.name}, `
-          : ""
-      }${
-        dataPrint?.customerId?.district
-          ? `${dataPrint?.customerId?.district?.name}, `
-          : ""
-      }${
-        dataPrint?.customerId?.province
-          ? `${dataPrint?.customerId?.province?.name}`
-          : ""
-      }`,
-    ];
-
-    if (address.length > 0) {
-      return address?.filter((e: any) => e != null)?.join(", ");
-    } else {
-      return "---";
-    }
-  };
-
+const Examination_view = () => {
   return (
-    <div style={{ position: "relative" }} className="hidden">
-      <div className="print-content reception-print" ref={componentRef}>
-        <ReceptionPrint style={{ paddingLeft: 50, paddingRight: 50 }}>
-          <div className="flex items-start justify-between my-4">
+    <div style={{ position: "relative" }}>
+      <div className="print-content reception-print">
+        <ReceptionPrint
+          style={{
+            paddingLeft: 50,
+            paddingRight: 50,
+            maxWidth: "900px",
+            margin: "0 auto",
+          }}
+        >
+          <div className="flex items-start justify-between my-4 pt-10">
             <div className="w-[70%] flex items-start gap-x-2 text-xs">
               <div>
                 <img src={Logo} alt="" height="50" width={50} />
@@ -154,53 +130,52 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
             </div>
             <div>
               <p className="text-sm">
-                <span>MÃ SỐ PK: {dataPrint?._id}</span>
+                <span>MÃ SỐ PK: PK_200122313</span>
               </p>
             </div>
           </div>
           <div className="title-print">
-            <h1 className="mb-3">PHIẾU KẾT QUẢ KHÁM BỆNH</h1>
+            <h1 className="mb-3">PHIẾU KẾT QUẢ KHÁM BỆNH ONLINE</h1>
           </div>
 
           <div className="text-sm mb-3">
             <div>
               <span>Họ và tên: </span>
               <span className="uppercase font-semibold pl-3">
-                {dataPrint?.customerId?.name}
+                Nguyễn Hồng Sơn
               </span>
             </div>
             <div>
               <span>Mã bệnh nhân: </span>
-              <span className="uppercase font-semibold pl-3">
-                {dataPrint?.customerId?._id}
-              </span>
+              <span className="uppercase font-semibold pl-3">PH20433</span>
             </div>
             <div>
               <span>Số điện thoại: </span>
-              <span className="uppercase font-semibold pl-3">
-                {dataPrint?.customerId?.phone}
-              </span>
+              <span className="uppercase font-semibold pl-3">0384707136</span>
             </div>
             <div>
               <span>Ngày sinh: </span>
               <span className="uppercase font-semibold pl-3">
-                {dataPrint?.customerId?.dateOfBirth &&
+                {/* {dataPrint?.customerId?.dateOfBirth &&
                   moment(dataPrint?.customerId?.dateOfBirth).format(
                     "DD/MM/YYYY"
-                  )}
+                  )} */}
+                04/06/2003
               </span>
             </div>
             <div>
               <span>Giới tính: </span>
               <span className="uppercase font-semibold pl-3">
-                {dataPrint?.customerId?.gender}
+                {/* {dataPrint?.customerId?.gender} */}
+                Nam
               </span>
             </div>
             <div>
               <span>Địa chỉ: </span>
               <span className="font-semibold">
                 {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                {getFullAddress()}
+                {/* {getFullAddress()} */}
+                Hưng Đạo, Đông Lỗ, Hiệp Hòa, Bắc Giang
               </span>
             </div>
           </div>
@@ -211,13 +186,14 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
             </h1>
             <div>
               <span>Triệu chứng: </span>
-              <span className="font-medium">{dataPrint?.symptom || "---"}</span>
+              <span className="font-medium">Cảm cúm</span>
             </div>
 
             <div>
               <span>Bệnh sử: </span>
               <span className="font-medium">
-                {dataPrint?.medicalHistory || "---"}
+                {/* {dataPrint?.medicalHistory || "---"} */}
+                Đau ốm suốt ngày
               </span>
             </div>
           </div>
@@ -234,13 +210,14 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
                 </tr>
               </thead>
               <tbody>
-                {dataPrint?.services?.length > 0 &&
-                  dataPrint?.services?.map((item: any) => (
-                    <tr className="border border-black">
-                      <td>{item?.service_examination?.name}</td>
-                      <td>{item?.mainResults || "---"}</td>
-                    </tr>
-                  ))}
+                <tr className="border border-black">
+                  <td>Khám cổ</td>
+                  <td>Khám tym</td>
+                </tr>
+                <tr className="border border-black">
+                  <td>Khám cổ</td>
+                  <td>Khám tym</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -250,10 +227,11 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
               <span>
                 Ngày giờ khám:{" "}
                 <span className="font-semibold">
-                  {moment(dataPrint?.day_running)
+                  {/* {moment(dataPrint?.day_running)
                     .subtract(24, "hours")
                     .add(7, "hours")
-                    .format("hh:mm DD/MM/yyyy")}
+                    .format("hh:mm DD/MM/yyyy")} */}
+                  04/06/2003
                 </span>
               </span>
             </div>
@@ -261,38 +239,46 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
               <span>
                 Ngày giờ kết thúc:{" "}
                 <span className="font-semibold">
-                  {moment(dataPrint?.day_done)
+                  {/* {moment(dataPrint?.day_done)
                     .add(7, "hours")
-                    .format("hh:mm DD/MM/yyyy")}
+                    .format("hh:mm DD/MM/yyyy")} */}
+                  04/06/2003
                 </span>
               </span>
             </div>
             <div>
               <span>
                 Chuẩn đoán:{" "}
-                <span className="font-semibold">{dataPrint?.diagnostic}</span>
+                <span className="font-semibold">Ung thu giai đoạn cuối</span>
               </span>
             </div>
             <div>
               <span>
                 Kết quả:{" "}
-                <span className="font-semibold">{dataPrint?.conclude}</span>
+                <span className="font-semibold">
+                  {/* {dataPrint?.conclude} */}
+                  Ung thu thật
+                </span>
               </span>
             </div>
             <div>
               <span>
                 Dặn dò:{" "}
                 <span className="font-semibold">
-                  {dataPrint?.advice || "---"}
+                  {/* {dataPrint?.advice || "---"} */}
+                  Uống nhiều bia rượu lên
                 </span>
               </span>
             </div>
           </div>
 
-          <div className="flex mt-10 my-3 justify-center">
+          <div className="flex mt-10 my-3 justify-center pb-10">
             <div>
               <h3 className="text-sm font-semibold">Ký xác nhận bác sĩ</h3>
-              <p className="text-sm text-center">{dataPrint?.doctorId?.name}</p>
+              <p className="text-sm text-center">
+                {/* {dataPrint?.doctorId?.name} */}
+                Nguyễn Hồng Sơn
+              </p>
             </div>
           </div>
         </ReceptionPrint>
@@ -301,4 +287,4 @@ const PrintExamination = ({ componentRef, dataPrint }: any) => {
   );
 };
 
-export default PrintExamination;
+export default Examination_view;

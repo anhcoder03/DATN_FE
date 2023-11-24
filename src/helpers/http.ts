@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { store } from "../redux/store";
-
 // import { history } from "./history";
 
 class Http {

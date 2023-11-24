@@ -10,3 +10,12 @@ export const getAllNotifications = async () => {
       console.error(error);
     }
 };
+
+export const updateNotifications = async (data: any) => {
+  try {
+    const response = await http.update(`/notifications/${data?._id}`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

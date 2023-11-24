@@ -7,7 +7,7 @@ import { Field } from "../../../components/field";
 import { Label } from "../../../components/label";
 import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
-import { Radio } from "antd";
+import { Radio, message } from "antd";
 import { IconPhone } from "../../../components/icons";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
@@ -95,7 +95,7 @@ const AddBooking = () => {
       toast.success('Tạo đặt lịch thành công!');
       navigate("/reception");
     } else {
-      toast.error('Có lỗi sảy ra!!!');
+      toast.error(res?.message);
     }
   }
 

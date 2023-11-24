@@ -39,15 +39,16 @@ const ReceptionDone = () => {
     {
       name: "Tuổi",
       selector: (row: { customerId: { dateOfBirth: any } }) =>
-        CalcUtils.calculateAge(row.customerId?.dateOfBirth),
+        CalcUtils.calculateAge(row?.customerId?.dateOfBirth),
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId?.gender,
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
     },
     {
       name: "Ngày tiếp đón",
@@ -56,11 +57,11 @@ const ReceptionDone = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row?.staffId.name,
+      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
     },
     {
       name: "Bác sĩ",
-      selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+      selector: (row: { doctorId: { name: any } }) => row?.doctorId?.name,
     },
     {
       name: "Phòng khám",

@@ -24,6 +24,7 @@ const ReceptionBook = () => {
     { value: 50, label: "50 bản ghi" },
     { value: 100, label: "100 bản ghi" },
   ];
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [bookings, setBookings] = useState<any[]>();
   const [booking, setBooking] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -58,11 +59,12 @@ const ReceptionBook = () => {
     },
     {
       name: "Giới tính",
-      selector: (row: { customerId: { gender: any } }) => row.customerId.gender,
+      selector: (row: { customerId: { gender: any } }) =>
+        row?.customerId.gender,
     },
     {
       name: "Số điện thoại",
-      selector: (row: { customerId: { phone: any } }) => row.customerId.phone,
+      selector: (row: { customerId: { phone: any } }) => row?.customerId?.phone,
     },
     {
       name: "Ngày đặt lịch",
@@ -71,7 +73,7 @@ const ReceptionBook = () => {
     },
     {
       name: "Nhân viên tiếp đón",
-      selector: (row: { staffId: { name: any } }) => row.staffId.name,
+      selector: (row: { staffId: { name: any } }) => row?.staffId?.name,
     },
     {
       name: "Ngày tạo",
@@ -142,11 +144,12 @@ const ReceptionBook = () => {
       _id: id,
     };
     const response: any = await UpdateExamination(params);
+    console.log('response', response)
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
     } else {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error(response?.message);
     }
   };
 
@@ -155,19 +158,25 @@ const ReceptionBook = () => {
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-3">
         <button
-          onClick={() => handleUpdate({type: 'statusReception', data: row})}
+          onClick={() => handleUpdate({ type: "statusReception", data: row })}
           className="button-nutri text-[#585858]"
         >
           <img width={20} height={20} src={IconHand} alt="tiếp đón" />
         </button>
         <button
-          onClick={() => handleUpdate({type: 'remove', data: row})}
+          onClick={() => handleUpdate({ type: "remove", data: row })}
           className="button-nutri text-[#585858]"
         >
           <IconTrash />
         </button>
         <button
-          onClick={() => navigate(`/reception/booking/update/${row?._id}`)}
+          onClick={() => {
+            if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+              toast.warning('Bạn không có quyền thực hiện hành động này!')
+              return
+            }
+            navigate(`/reception/booking/update/${row?._id}`) 
+          }}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -188,24 +197,24 @@ const ReceptionBook = () => {
   };
 
   const onOk = async () => {
-    if(booking?.type == 'remove') {
+    if (booking?.type == "remove") {
       const res = await UpdateExamination({
         _id: booking?.data?._id,
-        status: 'cancel'
+        status: "cancel_schedule",
       });
       if (res?.examination) {
-        toast.success('Huỷ đặt lịch thành công!');
+        toast.success("Huỷ đặt lịch thành công!");
         setOpenModal(false);
         handleGetExamination();
       } else {
         setOpenModal(false);
       }
-      return
+      return;
     }
-    if(booking?.type == 'statusReception') {
+    if (booking?.type == "statusReception") {
       handleChangeStatus(booking?.data?._id);
       setOpenModal(false);
-      return
+      return;
     }
   };
 
@@ -273,27 +282,22 @@ const ReceptionBook = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-        {
-          booking?.type == 'remove' && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
+        {booking?.type == "remove" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
               {booking?.data?._id}
-              </span>
-            </div>
-          )
-        }
-        {
-          booking?.type == 'statusReception' && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {booking?.data?._id}
-              </span>
-            </div>
-          )
-        }
-        
+            </span>
+          </div>
+        )}
+        {booking?.type == "statusReception" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {booking?.data?._id}
+            </span>
+          </div>
+        )}
       </Modal>
     </>
   );

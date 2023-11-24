@@ -16,12 +16,7 @@ interface IModal {
   handleCancel: () => void;
   headings: Column[];
 }
-const ModalCancelling = ({
-  open,
-  handleCancel,
-  handleOk,
-  headings,
-}: IModal) => {
+const ModalCancel = ({ open, handleCancel, handleOk, headings }: IModal) => {
   const [checked, setChecked] = useState<boolean[]>(
     Array(headings?.length).fill(false)
   );
@@ -135,4 +130,4 @@ const ModalCancelling = ({
   );
 };
 
-export default ModalCancelling;
+export default ModalCancel;
