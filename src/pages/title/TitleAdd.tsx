@@ -14,6 +14,7 @@ import { createClinic } from "../../services/clinic.service";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { getAllUser } from "../../services/user.service";
+import { createRole } from "../../services/role.service";
 
 type TDataClinic = {
   _id: string;
@@ -51,45 +52,45 @@ const TitlecAdd = () => {
     mode: "onSubmit",
   });
 
-//   const handleGetUsers = async () => {
-//     try {
-//       setLoading(true);
+  const handleGetUsers = async () => {
+    try {
+      setLoading(true);
 
-//       const data = await getAllUser();
-//       const roleDoctor = data?.docs;
+      const data = await getAllUser();
+      const roleDoctor = data?.docs;
 
-//       const filteredUsers = roleDoctor.filter(
-//         (user: any) => user.role === "VT-00000002"
-//       );
+      const filteredUsers = roleDoctor.filter(
+        (user: any) => user.role === "VT-00000002"
+      );
 
-//       if (filteredUsers.length > 0) {
-//         const array: any = [];
-//         filteredUsers.forEach((item: any) => {
-//           array.push({ ...item, label: item?.name, value: item?._id });
-//         });
-//         setUser(array);
-//       } else {
-//         console.log("Không có người dùng có quyền truy cập");
-//       }
+      if (filteredUsers.length > 0) {
+        const array: any = [];
+        filteredUsers.forEach((item: any) => {
+          array.push({ ...item, label: item?.name, value: item?._id });
+        });
+        setUser(array);
+      } else {
+        console.log("Không có người dùng có quyền truy cập");
+      }
 
-//       setLoading(false);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-//   useEffect(() => {
-//     handleGetUsers();
-//   }, []);
+  useEffect(() => {
+    handleGetUsers();
+  }, []);
 
-  const handleCreateClinic = async (values: TDataClinic) => {
+  const handleCreateRole = async (values: TDataClinic) => {
     try {
       const data = {
         ...values,
         status,
         doctorInClinic: user.length > 0 ? user[0]._id : "",
       };
-      const res = await createClinic(data);
+      const res = await createRole(data);
 
       if (res?.clinic) {
         toast.success(res?.message);
@@ -168,7 +169,7 @@ const TitlecAdd = () => {
             <div className="flex items-center gap-x-5">
               <Button to="/configuration/clinic">Đóng</Button>
               <Button
-                onClick={handleSubmit(handleCreateClinic)}
+                onClick={handleSubmit(handleCreateRole)}
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
               >
