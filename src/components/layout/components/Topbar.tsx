@@ -9,6 +9,7 @@ import { BiUser, BiLogOut } from "react-icons/bi";
 import { authLogout } from "../../../redux/auth/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import Notification from "./Notification";
 
 const Topbar = ({ user }: { user: any }) => {
   const [show, setShow] = useState(true);
@@ -38,12 +39,6 @@ const Topbar = ({ user }: { user: any }) => {
     navigate("/login");
   };
 
-  // const notification = () => {
-  //   return (
-
-  //   )
-  // }
-
   return (
     <React.Fragment>
       <div className="fixed top-0 left-0 right-0 z-10 w-full bg-white">
@@ -63,12 +58,7 @@ const Topbar = ({ user }: { user: any }) => {
               </span>
             </div>
             <div className="flex items-center gap-x-10">
-              <div className="relative">
-                <IconBell></IconBell>
-                <span className=" items-center absolute w-[20px] h-[20px] rounded-full -top-2 -right-3 text-sm  flex      justify-center bg-red-400  text-white">
-                  9+
-                </span>
-              </div>
+              <Notification />
               <div
                 className="flex items-center justify-between gap-x-2"
                 ref={nodeRef}

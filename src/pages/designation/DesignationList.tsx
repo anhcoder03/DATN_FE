@@ -308,6 +308,7 @@ const DesignationList = () => {
           </Button>,
         ]}
         onCancel={() => setOpenModal(false)}
+        style={{ width: '80%', maxHeight: '70vh' }}
       >
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo

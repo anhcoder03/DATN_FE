@@ -16,11 +16,14 @@ import { UpdateExamination, getOneExamination } from "../../../services/examinat
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const DetailBooking = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [data, setData] = useState<any>();
   const [deltail, setDeltail] = useState<any>();
-  const { control, handleSubmit } = useForm({});
+  const { control } = useForm({});
   const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -59,7 +62,7 @@ const DetailBooking = () => {
       toast.success('chuyển trạng thái thành công!');
       navigate(`/reception/${id}`);
     }else {
-      toast.error('Đã có lỗi sảy ra!!!')
+      toast.error(response?.message)
     }
   };
 
@@ -196,7 +199,13 @@ const DetailBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                to={`/reception/booking/update/${id}`}
+                onClick={() => {
+                  if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+                    toast.warning('Bạn không có quyền thực hiện hành động này!')
+                    return
+                  }
+                  navigate(`/reception/booking/update/${id}`)
+                }}
               >
                 Chỉnh sửa
               </Button>

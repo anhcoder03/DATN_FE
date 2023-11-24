@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { store } from "../redux/store";
-// import { store } from "../stores/app.store";
 // import { history } from "./history";
 
 class Http {
@@ -11,19 +10,17 @@ class Http {
       baseURL: `http://localhost:8000`,
       timeout: 10000,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
     });
-    
-    this.api.interceptors.request.use(
-      (config: { headers: { [x: string]: string } }) => {
-        const accessToken = store.getState().auth.auth?.accessToken;
-        if (accessToken) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
-        }
-        return config;
+
+    this.api.interceptors.request.use((config: { headers: { [x: string]: string; }; }) => {
+      const accessToken = store.getState().auth.auth?.accessToken;
+      if (accessToken) {
+        config.headers["Authorization"] = `Bearer ${accessToken}`;
       }
-    );
+      return config;
+    });
 
     // this.api.interceptors.response.use(
     //   (res) => res,
