@@ -149,16 +149,7 @@ const CustomerAdd = () => {
           onSubmit={handleSubmit(handleCreateCustomer)}
         >
           <Heading>Thông tin khách hàng</Heading>
-
           <Row>
-            <Field>
-              <Label htmlFor="_id">Mã khách hàng</Label>
-              <Input
-                control={control}
-                name="_id"
-                placeholder="Nhập mã khách hàng"
-              />
-            </Field>
             <Field>
               <Label htmlFor="name">
                 <span className="star-field">*</span>
@@ -186,6 +177,17 @@ const CustomerAdd = () => {
                 placeholder="dd/mm/yyyy"
                 name="dateOfBirth"
               ></Flatpickr>
+            </Field>
+            <Field>
+              <Label htmlFor="citizenId">
+                <span className="star-field">*</span>
+                Căn cước công dân
+              </Label>
+              <Input
+                control={control}
+                name="citizenId"
+                placeholder="Nhập số CCCD"
+              />
             </Field>
           </Row>
           <Row>
@@ -278,17 +280,6 @@ const CustomerAdd = () => {
             </Field>
           </Row>
           <Row>
-            <Field>
-              <Label htmlFor="citizenId">
-                <span className="star-field">*</span>
-                Căn cước công dân
-              </Label>
-              <Input
-                control={control}
-                name="citizenId"
-                placeholder="Nhập số CCCD"
-              />
-            </Field>
             <Field>
               <Label htmlFor="note">Ghi chú</Label>
               <Input control={control} name="note" placeholder="Nhập ghi chú" />

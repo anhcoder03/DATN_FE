@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
-import { Link } from "react-router-dom";
 import Select from "react-select";
-import { optionDoctor, optionNVTD } from "../../constants/options";
 import { ModalBooking } from "../modal";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type TFilterCustomer = {
   handleSearch: (e: any) => void;
@@ -23,6 +25,7 @@ const FilterReceptionBook = ({
   dataStaffs,
   handleSearchByStaffId,
 }: TFilterCustomer) => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -38,6 +41,9 @@ const FilterReceptionBook = ({
       handleSearch(e.target.value);
     }
   };
+
+  const navigate = useNavigate();
+
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -84,15 +90,21 @@ const FilterReceptionBook = ({
           >
             <IconSetting></IconSetting>
           </button>
-          <Link
-            to={"/reception/addBooking"}
-            className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
+          <div
+            className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
+            onClick={() => {
+              if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+                toast.warning('Bạn không có quyền thực hiện hành động này!')
+                return
+              }
+              navigate("/reception/addBooking");
+            }}
           >
             <div className="flex items-center p-1 bg-white rounded-lg text-primary">
               <IconPlus></IconPlus>
             </div>
             <span className="flex items-center text-sm text-white">Thêm</span>
-          </Link>
+          </div>
         </div>
       </div>
       <ModalBooking

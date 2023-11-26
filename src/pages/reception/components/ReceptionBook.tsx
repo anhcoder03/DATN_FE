@@ -144,7 +144,6 @@ const ReceptionBook = () => {
       _id: id,
     };
     const response: any = await UpdateExamination(params);
-    console.log('response', response)
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
@@ -207,6 +206,7 @@ const ReceptionBook = () => {
         setOpenModal(false);
         handleGetExamination();
       } else {
+        toast.error(res?.message);
         setOpenModal(false);
       }
       return;

@@ -46,30 +46,49 @@ const DetailBooking = () => {
         note: resData?.note,
         staffId: resData?.staffId,
         day_booking: resData?.day_booking,
+        _id: resData?._id
       });
     } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error('Đã có lỗi sảy ra!!');
     }
   }
 
-  const handleChangeStatus = async () => {
+  const handleChangeStatus = async (id: any) => {
     const params = {
       status: "recetion",
-      _id: id
+      _id: id,
     };
     const response: any = await UpdateExamination(params);
-    if(response?.examination) {
-      toast.success('chuyển trạng thái thành công!');
+    if (response?.examination) {
+      toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
-    }else {
-      toast.error(response?.message)
+    } else {
+      toast.error(response?.message);
     }
   };
 
-  const onOk = () => {
-    handleChangeStatus();
-    setOpenModal(false);
-  }
+  const onOk = async () => {
+    if (deltail?.type == "remove") {
+      const res = await UpdateExamination({
+        _id: deltail?.data?._id,
+        status: "cancel_schedule",
+      });
+      if (res?.examination) {
+        toast.success("Huỷ đặt lịch thành công!");
+        setOpenModal(false);
+        navigate(`/reception`)
+      } else {
+        toast.error(res?.message);
+        setOpenModal(false);
+      }
+      return;
+    }
+    if (deltail?.type == "statusReception") {
+      handleChangeStatus(deltail?.data?._id);
+      setOpenModal(false);
+      return;
+    }
+  };
 
   const handleModal = (data: any) => {
     setOpenModal(true);
@@ -212,9 +231,16 @@ const DetailBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                onClick={() => handleModal(data)}
+                onClick={() => handleModal({type: 'statusReception', data: data})}
               >
                 Tiếp đón
+              </Button>
+              <Button
+                type="submit"
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                onClick={() => handleModal({type: 'remove', data: data})}
+              >
+                Huỷ
               </Button>
             </div>
           </div>
@@ -229,12 +255,22 @@ const DetailBooking = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {deltail?._id}
-              </span>
-            </div>
+        {deltail?.type == "remove" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {deltail?.data?._id}
+            </span>
+          </div>
+        )}
+        {deltail?.type == "statusReception" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {deltail?.data?._id}
+            </span>
+          </div>
+        )}
       </Modal>
     </Layout>
   );

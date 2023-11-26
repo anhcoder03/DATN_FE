@@ -47,7 +47,7 @@ import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 import { getMessagingToken, onMessageListener } from "./firebase";
 import StatitisPage from "./pages/statitis";
 import Information from "./pages/auth/Information";
-import Examination_view from "./pages/examination_view/examination_view";
+import Examination_view from "./pages/examination_view/Examination_view";
 function App() {
   useEffect(() => {
     getMessagingToken();

@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import IconPrint from "../../../assets/images/ic-print.svg";
 
 const ReceptionCustomer = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [receptions, setReceptions] = useState<any[]>();
   const [reception, setReception] = useState<any>();
   const [dataPrint, setDataPrint] = useState<any>();
@@ -199,7 +200,7 @@ const ReceptionCustomer = () => {
     };
     const res: any = await UpdateExamination(params);
     if (res?.examination) {
-      location.reload();
+      handleGetExaminaton();
       toast.success(res?.message);
       return;
     }
@@ -228,7 +229,13 @@ const ReceptionCustomer = () => {
           />
         </button>
         <button
-          onClick={() => gotoDetail(row?._id)}
+          onClick={() => {
+            if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+              toast.warning('Bạn không có quyền thực hiện hành động này!')
+              return
+            }
+            gotoDetail(row?._id)
+          } }
           className="button-nutri text-[#585858]"
         >
           <img
@@ -276,6 +283,10 @@ const ReceptionCustomer = () => {
   };
 
   const gotoDetail = (id: any) => {
+    if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+      toast.warning('Bạn không có quyền thực hiện hành động này!')
+      return
+    }
     navigate(`/reception/${id}`);
   };
 
