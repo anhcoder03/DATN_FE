@@ -34,7 +34,7 @@ const ReceptionDone = () => {
     },
     {
       name: "Tên bệnh nhân",
-      selector: (row: any) => row?.customerId.name,
+      selector: (row: any) => row?.customerId?.name ?? "---",
     },
     {
       name: "Tuổi",
@@ -44,7 +44,7 @@ const ReceptionDone = () => {
     {
       name: "Giới tính",
       selector: (row: { customerId: { gender: any } }) =>
-        row?.customerId?.gender,
+        row?.customerId?.gender ?? "---",
     },
     {
       name: "Số điện thoại",
