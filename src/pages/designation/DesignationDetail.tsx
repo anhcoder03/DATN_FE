@@ -44,7 +44,7 @@ const DesignationDetail = () => {
       if (response?.message) {
         toast.success(response?.message);
         setOpenModal(false);
-        getOneService();
+        navigate(`/designation/list`)
       } else {
         toast.error(response?.message);
       }

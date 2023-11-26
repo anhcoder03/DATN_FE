@@ -132,7 +132,7 @@ const ReceptionWaiting = () => {
     };
     const res: any = await UpdateExamination(params);
     if (res?.examination) {
-      location.reload();
+      handleGetExaminaton();
       toast.success(res?.message);
       return;
     }
