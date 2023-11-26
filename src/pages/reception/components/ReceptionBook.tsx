@@ -24,6 +24,7 @@ const ReceptionBook = () => {
     { value: 50, label: "50 bản ghi" },
     { value: 100, label: "100 bản ghi" },
   ];
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [bookings, setBookings] = useState<any[]>();
   const [booking, setBooking] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -143,11 +144,12 @@ const ReceptionBook = () => {
       _id: id,
     };
     const response: any = await UpdateExamination(params);
+    console.log('response', response)
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
     } else {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error(response?.message);
     }
   };
 
@@ -168,7 +170,13 @@ const ReceptionBook = () => {
           <IconTrash />
         </button>
         <button
-          onClick={() => navigate(`/reception/booking/update/${row?._id}`)}
+          onClick={() => {
+            if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+              toast.warning('Bạn không có quyền thực hiện hành động này!')
+              return
+            }
+            navigate(`/reception/booking/update/${row?._id}`) 
+          }}
           className="button-nutri text-[#585858]"
         >
           <img
@@ -192,7 +200,7 @@ const ReceptionBook = () => {
     if (booking?.type == "remove") {
       const res = await UpdateExamination({
         _id: booking?.data?._id,
-        status: "cancel",
+        status: "cancel_schedule",
       });
       if (res?.examination) {
         toast.success("Huỷ đặt lịch thành công!");

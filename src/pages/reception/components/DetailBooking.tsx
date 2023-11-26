@@ -12,15 +12,22 @@ import moment from "moment";
 import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { Textarea } from "../../../components/textarea";
-import { UpdateExamination, getOneExamination } from "../../../services/examination.service";
+import {
+  UpdateExamination,
+  getOneExamination,
+} from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const DetailBooking = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
+  const [status, setStatus] = useState("");
   const [data, setData] = useState<any>();
   const [deltail, setDeltail] = useState<any>();
-  const { control, handleSubmit } = useForm({});
+  const { control } = useForm({});
   const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -51,28 +58,34 @@ const DetailBooking = () => {
 
   const handleChangeStatus = async () => {
     const params = {
-      status: "recetion",
-      _id: id
+      status: status,
+      _id: id,
     };
     const response: any = await UpdateExamination(params);
-    if(response?.examination) {
-      toast.success('chuyển trạng thái thành công!');
-      navigate(`/reception/${id}`);
-    }else {
-      toast.error('Đã có lỗi sảy ra!!!')
+    if (response?.examination) {
+      if (status === "recetion") {
+        toast.success("chuyển trạng thái thành công!");
+        navigate(`/reception/${id}`);
+      } else {
+        toast.success("Hủy đặt lịch khách hàng thành công!");
+        navigate(`/reception`);
+      }
+    } else {
+      toast.error(response?.message);
     }
   };
 
   const onOk = () => {
     handleChangeStatus();
     setOpenModal(false);
-  }
+  };
 
-  const handleModal = (data: any) => {
+  const handleModal = (data: any, statusNew: any) => {
     setOpenModal(true);
+    setStatus(statusNew);
     setDeltail(data);
   };
-  
+
   return (
     <Layout>
       <div className="relative h-full only-view">
@@ -196,16 +209,34 @@ const DetailBooking = () => {
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                to={`/reception/booking/update/${id}`}
+                onClick={() => {
+                  if (
+                    auth?.role?.roleNumber == 1 ||
+                    auth?.role?.roleNumber == 3
+                  ) {
+                    toast.warning(
+                      "Bạn không có quyền thực hiện hành động này!"
+                    );
+                    return;
+                  }
+                  navigate(`/reception/booking/update/${id}`);
+                }}
               >
                 Chỉnh sửa
               </Button>
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                onClick={() => handleModal(data)}
+                onClick={() => handleModal(data, "recetion")}
               >
                 Tiếp đón
+              </Button>
+              <Button
+                type="submit"
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 rounded-md disabled:opacity-50 disabled:pointer-events-none text-[#fd4858] bg-[#fd485833]"
+                onClick={() => handleModal(data, "cancel_schedule")}
+              >
+                Hủy
               </Button>
             </div>
           </div>
@@ -220,12 +251,15 @@ const DetailBooking = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {deltail?._id}
-              </span>
-            </div>
+        <div className="flex flex-col items-center justify-center py-4 text-sm">
+          <p>
+            Bạn có chắc muốn {status === "recetion" ? "tiếp đón" : "hủy "} phiếu
+            đặt lịch này?
+          </p>
+          <span className="text-center text-[#ff5c75] font-bold">
+            {deltail?._id}
+          </span>
+        </div>
       </Modal>
     </Layout>
   );

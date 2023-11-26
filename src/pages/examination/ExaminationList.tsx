@@ -28,6 +28,7 @@ import { Button, Modal } from "antd";
 import { getAllByName } from "../../services/role.service";
 import { getAllClinic } from "../../services/clinic.service";
 
+
 const ExaminationList = () => {
   const [examinations, setExamination] = useState<any[]>([]);
   const [itemExamination, setItemExamination] = useState<any>();
@@ -40,6 +41,8 @@ const ExaminationList = () => {
   const [clinics, setClinics] = useState<any[]>([]);
 
   const componentRef = useRef(null);
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
+  
 
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },

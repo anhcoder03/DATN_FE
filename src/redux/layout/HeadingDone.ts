@@ -7,7 +7,7 @@ const headings = [
   },
   {
     name: "Tên bệnh nhân",
-    selector: (row: any) => row?.customerId.name,
+    selector: (row: any) => row?.customerId?.name ?? "---",
   },
 
   {
@@ -17,11 +17,13 @@ const headings = [
   },
   {
     name: "Phòng khám",
-    selector: (row: { clinicId: { name: any } }) => row?.clinicId?.name,
+    selector: (row: { clinicId: { name: any } }) =>
+      row?.clinicId?.name ?? "---",
   },
   {
     name: "Bác sĩ",
-    selector: (row: { doctorId: { name: any } }) => row?.doctorId.name,
+    selector: (row: { doctorId: { name: any } }) =>
+      row?.doctorId?.name ?? "---",
   },
 ];
 const serializedHeadings = headings.map((heading) => {

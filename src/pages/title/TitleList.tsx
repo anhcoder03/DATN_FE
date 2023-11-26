@@ -109,6 +109,7 @@ const TitleList = () => {
       <Heading>Quản Lý Chức Danh</Heading>
       <div className="">
         <FilterTitle
+          check = {false}
           handleStatusChange={handleStatusChange}
           handleSearch={handleSearch}
         ></FilterTitle>
@@ -134,14 +135,6 @@ const TitleList = () => {
                 </td>
                 <td>
                   <div className="table-action">
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        navigate(`/configuration/title/update/${item?._id}`);
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
-                    </div>
                     <button
                       className="button-nutri text-[#585858]"
                       onClick={() => handleShowModel(item)}

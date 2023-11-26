@@ -82,8 +82,8 @@ const ReceptionCustomer = () => {
     },
     {
       name: "Ngày tiếp đón",
-      selector: (row: { day_welcome: moment.MomentInput }) =>
-        moment(row?.day_welcome).format("DD/MM/YYYY"),
+      selector: (row: { day_welcome: moment.MomentInput }) => 
+      moment(row?.day_welcome).format("DD/MM/YYYY") == 'Invalid date' ? '---' : moment(row?.day_welcome).format("DD/MM/YYYY"),
     },
     {
       name: "Nhân viên tiếp đón",
@@ -339,7 +339,6 @@ const ReceptionCustomer = () => {
       return toast.warning("Tính năng đang phát triển");
     }
   };
-  console.log("reception", reception);
 
   return (
     <>
