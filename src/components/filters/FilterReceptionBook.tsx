@@ -90,21 +90,26 @@ const FilterReceptionBook = ({
           >
             <IconSetting></IconSetting>
           </button>
-          <div
-            className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
-            onClick={() => {
-              if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-                toast.warning('Bạn không có quyền thực hiện hành động này!')
-                return
-              }
-              navigate("/reception/addBooking");
-            }}
-          >
-            <div className="flex items-center p-1 bg-white rounded-lg text-primary">
-              <IconPlus></IconPlus>
-            </div>
-            <span className="flex items-center text-sm text-white">Thêm</span>
-          </div>
+          {
+            auth?.role?.roleNumber == 1 ? null : (
+              <div
+                className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
+                onClick={() => {
+                  if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+                    toast.warning('Bạn không có quyền thực hiện hành động này!')
+                    return
+                  }
+                  navigate("/reception/addBooking");
+                }}
+              >
+                <div className="flex items-center p-1 bg-white rounded-lg text-primary">
+                  <IconPlus></IconPlus>
+                </div>
+                <span className="flex items-center text-sm text-white">Thêm</span>
+              </div>
+            )
+          }
+          
         </div>
       </div>
       <ModalBooking

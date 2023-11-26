@@ -9,7 +9,14 @@ const LabelStatusStyles = styled.span`
   font-weight: 400;
 `;
 type LabelStatusType = {
-  type: "recetion" | "waiting" | "running" | "done" | "cancelling" | "cancel";
+  type:
+    | "recetion"
+    | "waiting"
+    | "running"
+    | "done"
+    | "cancel_schedule"
+    | "cancel"
+    | "booking";
 };
 const LabelStatus = ({ type }: LabelStatusType) => {
   let children = "";
@@ -31,13 +38,17 @@ const LabelStatus = ({ type }: LabelStatusType) => {
       styleClassName = "text-[#fff] bg-primary";
       children = "Đã khám";
       break;
-    case "cancelling":
+    case "cancel_schedule":
       styleClassName = "bg-[#555559] text-[#fff]";
-      children = "Chờ hủy";
+      children = "Đã hủy lịch";
       break;
     case "cancel":
       children = "Đã hủy";
       styleClassName = "bg-[#fd4858] text-white";
+      break;
+    case "booking":
+      children = "Đặt lịch";
+      styleClassName = "bg-[#545532] text-white";
       break;
 
     default:

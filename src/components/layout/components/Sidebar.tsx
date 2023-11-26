@@ -9,6 +9,8 @@ import {
   IconProduct,
   IconUser,
 } from "../../icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 type TMenu = {
   path: string;
@@ -36,7 +38,6 @@ const menuExamination: TMenu[] = [
 const menuSell: TMenu[] = [
   { path: "/order", title: "Đơn hàng", icon: <IconDocument /> },
   { path: "/prescription", title: "Kê đơn", icon: <IconDocument /> },
-  { path: "/sell", title: "Bán hàng", icon: <IconDocument /> },
 ];
 const menuPartner: TMenu[] = [
   {
@@ -83,13 +84,14 @@ const menuConfiguration: TMenu[] = [
 ];
 const menuStatistical: TMenu[] = [
   {
-    path: "/statistical/overview",
-    title: "Thống kê tổng quan",
+    path: "/dashboard",
+    title: "Thống kê",
     icon: <IconProduct />,
   },
 ];
 
 const Sidebar = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const NavLinkClass =
     "block font-medium py-3 pl-10  border-l-[5px] text-sm link-menu ";
   return (
@@ -141,6 +143,22 @@ const Sidebar = () => {
                   </div>
                 </NavLink>
               ))}
+              <NavLink
+                to={"http://localhost:5174"}
+                target="_blank"
+                className={({ isActive }) =>
+                  isActive
+                    ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
+                    : `hover:text-primary ${NavLinkClass}`
+                }
+              >
+                <div className="flex items-center gap-x-3">
+                  <span>
+                    <IconDocument />
+                  </span>
+                  <span className="menu-title">Bán hàng</span>
+                </div>
+              </NavLink>
             </div>
           </div>
 
@@ -191,53 +209,57 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-
-          <div>
-            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
-              CẤU HÌNH
-            </h4>
-            <div className="flex flex-col ">
-              {menuConfiguration?.map((item) => (
-                <NavLink
-                  key={item.title}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    isActive
-                      ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
-                      : `hover:text-primary ${NavLinkClass}`
-                  }
-                >
-                  <div className="flex items-center gap-x-3">
-                    <span>{item.icon}</span>
-                    <span className="menu-title">{item.title}</span>
-                  </div>
-                </NavLink>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
-              THỐNG KÊ
-            </h4>
-            <div className="flex flex-col ">
-              {menuStatistical?.map((item) => (
-                <NavLink
-                  key={item.title}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    isActive
-                      ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
-                      : `hover:text-primary ${NavLinkClass}`
-                  }
-                >
-                  <div className="flex items-center gap-x-3">
-                    <span>{item.icon}</span>
-                    <span className="menu-title">{item.title}</span>
-                  </div>
-                </NavLink>
-              ))}
-            </div>
-          </div>
+          {auth?.role?.roleNumber == 1 ? null : (
+            <>
+              <div>
+                <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+                  CẤU HÌNH
+                </h4>
+                <div className="flex flex-col ">
+                  {menuConfiguration?.map((item) => (
+                    <NavLink
+                      key={item.title}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        isActive
+                          ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
+                          : `hover:text-primary ${NavLinkClass}`
+                      }
+                    >
+                      <div className="flex items-center gap-x-3">
+                        <span>{item.icon}</span>
+                        <span className="menu-title">{item.title}</span>
+                      </div>
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+                  THỐNG KÊ
+                </h4>
+                <div className="flex flex-col ">
+                  {menuStatistical?.map((item) => (
+                    <NavLink
+                      key={item.title}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        isActive
+                          ? ` text-primary bg-primary50 ${NavLinkClass}border-l-primary`
+                          : `hover:text-primary ${NavLinkClass}`
+                      }
+                    >
+                      <div className="flex items-center gap-x-3">
+                        <span>{item.icon}</span>
+                        <span className="menu-title">{item.title}</span>
+                      </div>
+                    </NavLink>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+          
         </PerfectScrollbar>
       </div>
     </React.Fragment>

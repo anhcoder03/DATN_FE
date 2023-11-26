@@ -216,36 +216,41 @@ const ReceptionCustomer = () => {
         >
           <img width={20} height={20} src={IconPrint} alt="print" />
         </button>
-        <button
-          onClick={() => handleUpdate({ type: "waiting", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconPhieuKham}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
-        <button
-          onClick={() => {
-            if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-              toast.warning('Bạn không có quyền thực hiện hành động này!')
-              return
-            }
-            gotoDetail(row?._id)
-          } }
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconEdit}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
+        {auth?.role?.roleNumber == 1 ? null : (
+          <>
+            <button
+              onClick={() => handleUpdate({ type: "waiting", data: row })}
+              className="button-nutri text-[#585858]"
+            >
+              <img
+                style={{ border: "none" }}
+                src={IconPhieuKham}
+                width={20}
+                height={20}
+                alt=""
+              />
+            </button>
+            <button
+              onClick={() => {
+                if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+                  toast.warning('Bạn không có quyền thực hiện hành động này!')
+                  return
+                }
+                gotoDetail(row?._id)
+              } }
+              className="button-nutri text-[#585858]"
+            >
+              <img
+                style={{ border: "none" }}
+                src={IconEdit}
+                width={20}
+                height={20}
+                alt=""
+              />
+            </button>
+          </>
+        )}
+        
         <button
           onClick={() => handleUpdate({ type: "cancel", data: row })}
           className="button-nutri text-[#585858]"

@@ -12,7 +12,10 @@ import moment from "moment";
 import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { Textarea } from "../../../components/textarea";
-import { UpdateExamination, getOneExamination } from "../../../services/examination.service";
+import {
+  UpdateExamination,
+  getOneExamination,
+} from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
@@ -94,7 +97,7 @@ const DetailBooking = () => {
     setOpenModal(true);
     setDeltail(data);
   };
-  
+
   return (
     <Layout>
       <div className="relative h-full only-view">
@@ -215,33 +218,43 @@ const DetailBooking = () => {
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/reception">Đóng</Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={() => {
-                  if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-                    toast.warning('Bạn không có quyền thực hiện hành động này!')
-                    return
-                  }
-                  navigate(`/reception/booking/update/${id}`)
-                }}
-              >
-                Chỉnh sửa
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                onClick={() => handleModal({type: 'statusReception', data: data})}
-              >
-                Tiếp đón
-              </Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                onClick={() => handleModal({type: 'remove', data: data})}
-              >
-                Huỷ
-              </Button>
+              {auth?.role?.roleNumber == 1 ? null : (
+                <>
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                    onClick={() => {
+                      if (
+                        auth?.role?.roleNumber == 1 ||
+                        auth?.role?.roleNumber == 3
+                      ) {
+                        toast.warning(
+                          "Bạn không có quyền thực hiện hành động này!"
+                        );
+                        return;
+                      }
+                      navigate(`/reception/booking/update/${id}`);
+                    }}
+                  >
+                    Chỉnh sửa
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                    onClick={() => handleModal({type: 'statusReception', data: data})}
+                  >
+                    Tiếp đón
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                    onClick={() => handleModal({type: 'remove', data: data})}
+                  >
+                    Huỷ
+                  </Button>
+                </>
+              )}
+              
             </div>
           </div>
         </div>

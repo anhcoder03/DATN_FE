@@ -155,7 +155,9 @@ const ReceptionBook = () => {
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
-      <div className="flex items-center gap-x-3">
+      <>
+      {auth?.role?.roleNumber == 1 ? null : (
+        <div className="flex items-center gap-x-3">
         <button
           onClick={() => handleUpdate({ type: "statusReception", data: row })}
           className="button-nutri text-[#585858]"
@@ -187,6 +189,10 @@ const ReceptionBook = () => {
           />
         </button>
       </div>
+      )}
+      
+      </>
+      
     ),
   };
   const newHeading = [...deserializedHeadings, action];
