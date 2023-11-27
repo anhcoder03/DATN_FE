@@ -13,6 +13,8 @@ import { deleteProduct, getAllProduct } from "../../services/medicine.service";
 import profilePic from "../../assets/images/users/no-img.jpg";
 import FilterProduct from "./components/FilterProduct";
 import moment from "moment";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
@@ -21,6 +23,7 @@ const optionsPagination = [
 ];
 
 const ProductList = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [products, setProducts] = useState<IMedicine[]>([]);
   const [product, setProduct] = useState<IMedicine>();
   const [loading, setLoading] = useState(false);
@@ -48,10 +51,12 @@ const ProductList = () => {
     "Trạng thái",
     "Thao tác",
   ];
+
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleGetProducts = async () => {
     try {
       setLoading(true);
@@ -64,6 +69,7 @@ const ProductList = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     document.title = "Danh sách sản phẩm";
     urlParams.set("page", query._page as any);
@@ -82,6 +88,7 @@ const ProductList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleStatusChange = (selectedOpiton: any) => {
     setQuery({ ...query, _status: selectedOpiton.value });
     if (selectedOpiton.value != "") {
@@ -101,6 +108,7 @@ const ProductList = () => {
     setOpenModal(true);
     setProduct(data);
   };
+
   const onOk = async () => {
     const res = await deleteProduct(product?._id);
     console.log(res);
@@ -113,6 +121,7 @@ const ProductList = () => {
     }
     setOpenModal(false);
   };
+
   const gotoDetail = (item: any) => {
     navigate(`/product/view/${item?._id}`);
   };
@@ -152,22 +161,25 @@ const ProductList = () => {
                 <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
                 <td onClick={() => gotoDetail(item)}>{item?.status}</td>
                 <td>
-                  <div className="table-action">
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        navigate(`/product/update/${item?._id}`);
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
+                  {auth?.role?.roleNumber == 2 ? null : (
+                    <div className="table-action">
+                      <div
+                        className="button-nutri"
+                        onClick={() => {
+                          navigate(`/product/update/${item?._id}`);
+                        }}
+                      >
+                        <img width={20} height={20} src={IconEdit} alt="edit" />
+                      </div>
+                      <button
+                        className="button-nutri text-[#585858]"
+                        onClick={() => handleShowModel(item)}
+                      >
+                        <IconTrash></IconTrash>
+                      </button>
                     </div>
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
-                  </div>
+                  )}
+                  
                 </td>
               </tr>
             ))}

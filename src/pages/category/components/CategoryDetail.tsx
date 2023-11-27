@@ -12,7 +12,10 @@ import Heading from "../../../components/common/Heading";
 import { useNavigate, useParams } from "react-router-dom";
 import { getOneCategory } from "../../../services/category.service";
 import useUploadImage from "../../../hooks/useUploadImage";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 const CategoryDetail = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { id } = useParams();
   const { image, setImage } = useUploadImage();
   const navigate = useNavigate();
@@ -70,13 +73,15 @@ const CategoryDetail = () => {
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/category/list">Đóng</Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={() => handleGotoUpdate()}
-              >
-                Chỉnh sửa
-              </Button>
+              {auth?.role?.roleNumber == 2 ? null : (
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  onClick={() => handleGotoUpdate()}
+                >
+                  Chỉnh sửa
+                </Button>
+              )}
             </div>
           </div>
         </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Layout } from "../../../components/layout";
 import { Table } from "../../../components/table";
 import IconEdit from "../../../assets/images/icon-edit.png";
-import profilePic from "../../../assets/images/users/no-img.jpg";
 import { useNavigate } from "react-router";
 import { IconTrash } from "../../../components/icons";
 import { Pagination } from "../../../components/pagination";
@@ -15,12 +14,15 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import FilterPrescription from "../components/filter/FilterPrescription";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
   { value: 100, label: "100 bản ghi" },
 ];
 const PrescriptionList = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [prescriptions, setPrescriptions] = useState<any>();
   const [prescription, setPrescription] = useState<any>();
   const [totalPages, setTotalPages] = useState(1);
@@ -95,7 +97,6 @@ const PrescriptionList = () => {
   };
   const onOk = async () => {
     const res = await deletePrescription(prescription?._id);
-    console.log("onOk", res);
     if (res?.message) {
       toast.success(res?.message);
       setOpenModal(false);
@@ -135,22 +136,27 @@ const PrescriptionList = () => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
-                <div className="table-action">
-                  <div
-                    className="button-nutri"
-                    onClick={() => {
-                      navigate(`/product/update/${item?._id}`);
-                    }}
-                  >
-                    <img width={20} height={20} src={IconEdit} alt="edit" />
-                  </div>
-                  <button
-                    className="button-nutri text-[#585858]"
-                    onClick={() => handleShowModel(item)}
-                  >
-                    <IconTrash></IconTrash>
-                  </button>
-                </div>
+                {
+                  auth?.role?.roleNumber == 2 ? null : (
+                    <div className="table-action">
+                      <div
+                        className="button-nutri"
+                        onClick={() => {
+                          navigate(`/product/update/${item?._id}`);
+                        }}
+                      >
+                        <img width={20} height={20} src={IconEdit} alt="edit" />
+                      </div>
+                      <button
+                        className="button-nutri text-[#585858]"
+                        onClick={() => handleShowModel(item)}
+                      >
+                        <IconTrash></IconTrash>
+                      </button>
+                    </div>
+                  )
+                }
+                
               </td>
             </tr>
           ))}

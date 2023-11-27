@@ -11,8 +11,11 @@ import moment from "moment";
 import { getOnePrescription } from "../../../services/prescription.service";
 import { Button } from "../../../components/button";
 import { Textarea } from "../../../components/textarea";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const PrescriptionDetail = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>();
@@ -181,14 +184,21 @@ const PrescriptionDetail = () => {
               >
                 In đơn
               </Button>
-              <Button to="">Tạo đơn Offline</Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                // onClick={handleSubmit(handleCreatePrescription)}
-              >
-                Tạo đơn Online
-              </Button>
+              {
+                auth?.role?.roleNumber == 2 ? null : (
+                  <>
+                    <Button to="">Tạo đơn Offline</Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      // onClick={handleSubmit(handleCreatePrescription)}
+                    >
+                      Tạo đơn Online
+                    </Button>
+                  </>
+                )
+              }
+              
             </div>
           </div>
         </div>
