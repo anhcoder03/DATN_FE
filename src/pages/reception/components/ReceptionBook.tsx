@@ -144,7 +144,6 @@ const ReceptionBook = () => {
       _id: id,
     };
     const response: any = await UpdateExamination(params);
-    console.log('response', response)
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
@@ -156,7 +155,9 @@ const ReceptionBook = () => {
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
-      <div className="flex items-center gap-x-3">
+      <>
+      {auth?.role?.roleNumber == 1 ? null : (
+        <div className="flex items-center gap-x-3">
         <button
           onClick={() => handleUpdate({ type: "statusReception", data: row })}
           className="button-nutri text-[#585858]"
@@ -188,6 +189,10 @@ const ReceptionBook = () => {
           />
         </button>
       </div>
+      )}
+      
+      </>
+      
     ),
   };
   const newHeading = [...deserializedHeadings, action];
@@ -207,6 +212,7 @@ const ReceptionBook = () => {
         setOpenModal(false);
         handleGetExamination();
       } else {
+        toast.error(res?.message);
         setOpenModal(false);
       }
       return;

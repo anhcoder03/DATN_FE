@@ -29,8 +29,9 @@ import {
 } from "../../../services/examination.service";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  deleteServiceByExamination,
   getServiceByIdExam,
+  updateServiceByExam,
+  deleteServiceByExamination
 } from "../../../services/designation.service";
 
 const WelcomeUpdate = () => {
@@ -41,11 +42,12 @@ const WelcomeUpdate = () => {
   const [staffs, setStaffs] = useState<any[]>([]);
   const [doctorId, setDoctorId] = useState<any>(null);
   const [clinicId, setClinicId] = useState<any>(null);
-  const [serviceByExam, setServiceByExam] = useState<any[]>([]);
+  const [serviceByExam, setServiceByExam] = useState<any>([]);
   const [openModal, setOpenModal] = useState(false);
   const [service, setService] = useState<any>(null);
   const [isPayment, setIsPayment] = useState(false);
   const [lengthService, setLengthService] = useState(0);
+  const [deltail, setDeltail] = useState<any>();
   const navigate = useNavigate();
   const [dataServices, setDataServices] = useState([
     {
@@ -247,7 +249,6 @@ const WelcomeUpdate = () => {
   };
 
   const handleUpdate = async (values: any) => {
-    console.log('1111');
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
     }
@@ -340,7 +341,7 @@ const WelcomeUpdate = () => {
     } else {
       const res = await deleteServiceByExamination(service?._id);
       if (res?.designation) {
-        toast.success("Xóa dịch vụ khám thành công");
+        toast.success("Huỷ dịch vụ khám thành công");
         await handleGetServiceByExam();
       } else {
         toast.error("Đã có lỗi xảy ra!");
@@ -356,6 +357,11 @@ const WelcomeUpdate = () => {
     }
     setOpenModal(true);
   };
+
+  const handleModal = (data: any) => {
+    setDeltail(data);
+    setOpenModal(true);
+  }
 
   return (
     <Layout>
@@ -670,7 +676,7 @@ const WelcomeUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
                 onClick={() => {
-                  handleSubmit(handleUpdate);
+                  handleModal({type: 'cancel', data: data})
                 }}
               >
                 Hủy
@@ -688,6 +694,14 @@ const WelcomeUpdate = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
+        {
+          deltail?.type == 'cancel' && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn huỷ đặt lịch này không!</p>
+            </div>
+          )
+        }
+        
         <div className="flex flex-col items-center justify-center py-4 text-sm">
           <p>Bạn có chắc muốn huỷ dịch vụ này</p>
         </div>

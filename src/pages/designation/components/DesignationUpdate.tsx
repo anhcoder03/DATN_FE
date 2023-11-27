@@ -103,7 +103,7 @@ const DesignationDetail = () => {
     }
     const response: any = await updateServiceByExam(params);
     if(response?.designation) {
-      toast.success('Cập nhât dịch vụ chỉ định thành công');
+      toast.success('Cập nhật dịch vụ chỉ định thành công');
       navigate(`/designation/list`);
     }else {
       toast.error('Đã có lỗi sảy ra')

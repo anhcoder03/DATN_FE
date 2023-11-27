@@ -18,11 +18,9 @@ import Select from "react-select";
 import { getAllCustomer } from "../../../services/customer.service";
 import { getAllStaff } from "../../../services/staff.service";
 import { Textarea } from "../../../components/textarea";
-import { UpdateExamination, createExamination, getOneExamination } from "../../../services/examination.service";
+import { UpdateExamination, getOneExamination } from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { isEmpty } from "lodash";
 
 const UpdateBooking = () => {
@@ -84,7 +82,7 @@ const UpdateBooking = () => {
       toast.error('Đã có lỗi sảy ra!!!')
     }
   }
-  console.log('siuData', data)
+
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
     const ListArr: any = [];
@@ -129,6 +127,7 @@ const UpdateBooking = () => {
       toast.error('Có lỗi sảy ra!!!');
     }
   }
+  
   useEffect(() => {
     const arrayError: any = Object.values(errors);
     if (arrayError.length > 0) {

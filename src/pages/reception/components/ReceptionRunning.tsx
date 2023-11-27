@@ -123,7 +123,7 @@ const ReceptionRunning = () => {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <div className="flex items-center gap-x-[2px]">
-        <button
+        {/* <button
           onClick={() => console.log(row._id)}
           className="button-nutri text-[#585858]"
         >
@@ -134,7 +134,7 @@ const ReceptionRunning = () => {
             height={20}
             alt=""
           />
-        </button>
+        </button> */}
       </div>
     ),
   };

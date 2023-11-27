@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
-import { Link } from "react-router-dom";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 import Select from "react-select";
-import {
-  optionClinic,
-  optionDoctor,
-  optionNVTD,
-} from "../../constants/options";
 import { ModalReception } from "../modal";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type TFilterReceptionCustomer = {
   handleSearch: (e: any) => void;
@@ -35,7 +33,9 @@ const FilterReceptionCustomer = ({
   dataDoctors,
   clinics,
 }: TFilterReceptionCustomer) => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
   const showModal = () => {
     setOpen(true);
   };
@@ -47,6 +47,7 @@ const FilterReceptionCustomer = ({
   const handleCancel = () => {
     setOpen(false);
   };
+
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSearch(e.target.value);
@@ -112,15 +113,26 @@ const FilterReceptionCustomer = ({
           >
             <IconSetting></IconSetting>
           </button>
-          <Link
-            to={"/reception/add"}
-            className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
-          >
-            <div className="flex items-center p-1 bg-white rounded-lg text-primary">
-              <IconPlus></IconPlus>
-            </div>
-            <span className="flex items-center text-sm text-white">Thêm</span>
-          </Link>
+          {
+            auth?.role?.roleNumber == 1 ? null : (
+              <div
+                className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
+                onClick={() => {
+                  if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+                    toast.warning('Bạn không có quyền thực hiện hành động này!')
+                    return
+                  }
+                  navigate("/reception/add");
+                }}
+              >
+                <div className="flex items-center p-1 bg-white rounded-lg text-primary">
+                  <IconPlus></IconPlus>
+                </div>
+                <span className="flex items-center text-sm text-white">Thêm</span>
+              </div>
+            )
+          }
+          
         </div>
       </div>
       <ModalReception
