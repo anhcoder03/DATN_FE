@@ -14,9 +14,12 @@ import { Textarea } from "../../components/textarea";
 import { Button } from "../../components/button";
 import { Modal } from "antd";
 import { toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 
 const DesignationDetail = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { control, handleSubmit } = useForm();
   const [designation, setDesignation] = useState<any>({});
   const [oneDesignation, setOneDesignation] = useState<any>();
@@ -350,43 +353,47 @@ const DesignationDetail = () => {
                   In
                 </Button>
               )}
-              {designation?.status == 'waiting' && (
+              {auth?.role?.roleNumber == 2 ? null : (
                 <>
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                  onClick={() => handleShowModel({type: 'running', data: designation})}
-                >
-                  Đang thực hiện
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                  onClick={() => handleShowModel({type: 'cancel', data: designation})}
-                >
-                  Hủy
-                </Button>
+                  {designation?.status == 'waiting' && (
+                    <>
+                      <Button
+                        type="submit"
+                        className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                        onClick={() => handleShowModel({type: 'running', data: designation})}
+                      >
+                        Đang thực hiện
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                        onClick={() => handleShowModel({type: 'cancel', data: designation})}
+                      >
+                        Hủy
+                      </Button>
+                    </>
+                  )}
+                  {
+                    designation?.status == 'running' && (
+                      <Button
+                        type="submit"
+                        className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                        onClick={() => handleShowModel({type: 'done', data: designation})}
+                      >
+                        Hoàn thành
+                      </Button>
+                    )
+                  }
+                  {designation?.status !== 'done' && (
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick = {() => navigate(`/designation/update/${id}`)}
+                    >
+                      Chỉnh sửa
+                    </Button>
+                  )}
                 </>
-              )}
-              {
-                designation?.status == 'running' && (
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                    onClick={() => handleShowModel({type: 'done', data: designation})}
-                  >
-                    Hoàn thành
-                  </Button>
-                )
-              }
-              {designation?.status !== 'done' && (
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                  onClick = {() => navigate(`/designation/update/${id}`)}
-                >
-                  Chỉnh sửa
-                </Button>
               )}
               
             </div>

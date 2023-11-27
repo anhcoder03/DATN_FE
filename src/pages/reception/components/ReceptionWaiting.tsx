@@ -16,6 +16,7 @@ import { Button, Modal } from "antd";
 import { toast } from "react-toastify";
 
 const ReceptionWaiting = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [receptions, setReceptions] = useState<any[]>();
   const [reception, setReception] = useState<any>();
   const [openModal, setOpenModal] = useState(false);
@@ -141,20 +142,26 @@ const ReceptionWaiting = () => {
   const action = {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
-      <div className="flex items-center gap-x-[2px]">
-        <button
-          onClick={() => handleModal({ type: "cancel", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconTrash2}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
-      </div>
+      <>
+      {auth?.role?.roleNumber == 2 ? null : (
+        <div className="flex items-center gap-x-[2px]">
+          <button
+            onClick={() => handleModal({ type: "cancel", data: row })}
+            className="button-nutri text-[#585858]"
+          >
+            <img
+              style={{ border: "none" }}
+              src={IconTrash2}
+              width={20}
+              height={20}
+              alt=""
+            />
+          </button>
+        </div>
+      )}
+      
+      </>
+      
     ),
   };
   const newHeading = [...deserializedHeadings, action];
