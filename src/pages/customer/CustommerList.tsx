@@ -82,7 +82,7 @@ const CustommerList = () => {
       urlParams.set("name", e);
       navigate(`?${urlParams}`);
     } else {
-      urlParams.delete("name", e);
+      urlParams.delete("name");
       navigate(`?${urlParams}`);
     }
   };
