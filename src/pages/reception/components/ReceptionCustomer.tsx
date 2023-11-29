@@ -216,7 +216,7 @@ const ReceptionCustomer = () => {
         >
           <img width={20} height={20} src={IconPrint} alt="print" />
         </button>
-        {auth?.role?.roleNumber == 1 ? null : (
+        {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) ? null : (
           <>
             <button
               onClick={() => handleUpdate({ type: "waiting", data: row })}
@@ -250,19 +250,22 @@ const ReceptionCustomer = () => {
             </button>
           </>
         )}
-        
-        <button
-          onClick={() => handleUpdate({ type: "cancel", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconTrash2}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
+        {
+          auth?.role?.roleNumber == 3 ? null : (
+            <button
+              onClick={() => handleUpdate({ type: "cancel", data: row })}
+              className="button-nutri text-[#585858]"
+            >
+              <img
+                style={{ border: "none" }}
+                src={IconTrash2}
+                width={20}
+                height={20}
+                alt=""
+              />
+            </button>
+          )
+        }
       </div>
     ),
   };

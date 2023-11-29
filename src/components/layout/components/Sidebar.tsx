@@ -209,7 +209,7 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-          {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 2) ? null : (
+          {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
             <>
               <div>
                 <h4 className="heading-menu px-5 py-3 text-xs font-medium">
