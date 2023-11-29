@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import { IconPlus, IconSearch } from "../../../components/icons";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 type TFilterCategory = {
   handleSearch: (e: any) => void;
 };
 
 const FilterCategory = ({ handleSearch }: TFilterCategory) => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSearch(e.target.value);
     }
   };
+  
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -24,17 +28,19 @@ const FilterCategory = ({ handleSearch }: TFilterCategory) => {
             />
           </div>
         </div>
-        <div className="flex items-end gap-2">
-          <Link
-            to={"/category/add"}
-            className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
-          >
-            <div className="flex items-center p-1 bg-white rounded-lg text-primary">
-              <IconPlus></IconPlus>
-            </div>
-            <span className="flex items-center text-sm text-white">Thêm</span>
-          </Link>
-        </div>
+        {auth?.role?.roleNumber == 2 ? null : (
+          <div className="flex items-end gap-2">
+            <Link
+              to={"/category/add"}
+              className="flex gap-2 px-3 py-2 rounded-lg bg-primary"
+            >
+              <div className="flex items-center p-1 bg-white rounded-lg text-primary">
+                <IconPlus></IconPlus>
+              </div>
+              <span className="flex items-center text-sm text-white">Thêm</span>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

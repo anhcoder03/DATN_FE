@@ -14,6 +14,8 @@ import Pagination from "./../../components/pagination/Pagination";
 import { toast } from "react-toastify";
 import FilterCategory from "./components/FilterCategory";
 import profilePic from "../../assets/images/users/no-img.jpg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
@@ -21,6 +23,7 @@ const optionsPagination = [
 ];
 
 const CategoryList = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [categorys, setCategorys] = useState<any>();
   const [category, setCategory] = useState<any>();
   const [loading, setLoading] = useState(false);
@@ -119,22 +122,25 @@ const CategoryList = () => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.name}</td>
               <td>
-                <div className="table-action">
-                  <div
-                    className="button-nutri"
-                    onClick={() => {
-                      navigate(`/category/update/${item?._id}`);
-                    }}
-                  >
-                    <img width={20} height={20} src={IconEdit} alt="edit" />
+                {auth?.role?.roleNumber == 2 ? null : (
+                  <div className="table-action">
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        navigate(`/category/update/${item?._id}`);
+                      }}
+                    >
+                      <img width={20} height={20} src={IconEdit} alt="edit" />
+                    </div>
+                    <button
+                      className="button-nutri text-[#585858]"
+                      onClick={() => handleShowModel(item)}
+                    >
+                      <IconTrash></IconTrash>
+                    </button>
                   </div>
-                  <button
-                    className="button-nutri text-[#585858]"
-                    onClick={() => handleShowModel(item)}
-                  >
-                    <IconTrash></IconTrash>
-                  </button>
-                </div>
+                )}
+                
               </td>
             </tr>
           ))}

@@ -18,6 +18,8 @@ import { getAllClinic } from "../../services/clinic.service";
 import { LabelStatusDesignation } from "../../components/label";
 import { toast } from "react-toastify";
 import IconPrint from "../../assets/images/ic-print.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const headings = [
   "Mã Phiếu",
@@ -35,6 +37,7 @@ const optionsPagination = [
 ];
 
 const DesignationList = () => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [totalPages, setTotalPages] = useState(1);
   const [openModal, setOpenModal] = useState(false);
 
@@ -255,24 +258,30 @@ const DesignationList = () => {
                       <img width={20} height={20} src={IconPrint} alt="print" />
                     </div>
                   )}
-                  {item?.status !== 'done' && (
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        navigate(`/designation/update/${item?._id}`);
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
-                    </div>
-                  )}
-                  {item?.status == 'waiting' && (
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
-                  )}
+                  {
+                    auth?.role?.roleNumber == 2 ? null : (
+                      <>
+                      {item?.status !== 'done' && (
+                        <div
+                          className="button-nutri"
+                          onClick={() => {
+                            navigate(`/designation/update/${item?._id}`);
+                          }}
+                        >
+                          <img width={20} height={20} src={IconEdit} alt="edit" />
+                        </div>
+                      )}
+                      {item?.status == 'waiting' && (
+                        <button
+                          className="button-nutri text-[#585858]"
+                          onClick={() => handleShowModel(item)}
+                        >
+                          <IconTrash></IconTrash>
+                        </button>
+                      )}
+                      </>
+                    )
+                  }
                 </div>
               </td>
             </tr>
