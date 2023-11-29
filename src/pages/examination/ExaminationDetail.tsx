@@ -16,6 +16,8 @@ import { toast } from "react-toastify";
 import { useReactToPrint } from "react-to-print";
 import { PrintExamination } from "../../components/print";
 import { getServiceByIdExam } from "../../services/designation.service";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 const schema = yup.object({
   customerId: yup.string().required("Bệnh nhân không được để trống!"),
@@ -28,6 +30,7 @@ export interface IDataTabs {
   name: string;
 }
 const ExaminationDetail = (props: any) => {
+  const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const navigate = useNavigate();
   const [dataPrint, setDataPrint] = useState<any>();
   const [services, setServices] = useState<any[]>([]);
@@ -172,42 +175,51 @@ const ExaminationDetail = (props: any) => {
               <Button to="/examination">Đóng</Button>
               {data?.status === "waiting" && (
                 <>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                    onClick={() => handleChangeStatus("cancel")}
-                  >
-                    Hủy khám
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                    onClick={() => handleChangeStatus("running")}
-                  >
-                    Khám
-                  </Button>
+                {auth?.role?.roleNumber == 3 ? null : (
+                  <>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                      onClick={() => handleChangeStatus("cancel")}
+                    >
+                      Hủy khám
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => handleChangeStatus("running")}
+                    >
+                      Khám
+                    </Button>
+                  </>
+                )}
                 </>
               )}
               {data?.status === "done" && (
                 <>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                    onClick={() => handleChangeStatus("running")}
-                  >
-                    Đang khám
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                    onClick={() => handleClickPrint(data)}
-                  >
-                    In phiếu
-                  </Button>
+                {auth?.role?.roleNumber == 3 ? null : (
+                  <>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                      onClick={() => handleChangeStatus("running")}
+                    >
+                      Đang khám
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => handleClickPrint(data)}
+                    >
+                      In phiếu
+                    </Button>
+                  </>
+                )}
                 </>
               )}
               {data?.status === "running" && (
                 <>
+                {auth?.role?.roleNumber == 3 ? null : (
                   <Button
                     type="submit"
                     className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
@@ -215,16 +227,21 @@ const ExaminationDetail = (props: any) => {
                   >
                     Hoàn thành khám
                   </Button>
+                )}
                 </>
               )}
               {data?.status !== "done" && (
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                  onClick={() => navigate(`/examination/${id}`)}
-                >
-                  Chỉnh sửa
-                </Button>
+                <>
+                  {auth?.role?.roleNumber == 3 ? null : (
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => navigate(`/examination/${id}`)}
+                    >
+                      Chỉnh sửa
+                    </Button>
+                  )}                
+                </>
               )}
             </div>
           </div>

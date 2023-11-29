@@ -185,7 +185,7 @@ const PrescriptionDetail = () => {
                 In đơn
               </Button>
               {
-                auth?.role?.roleNumber == 2 ? null : (
+                (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
                   <>
                     <Button to="">Tạo đơn Offline</Button>
                     <Button

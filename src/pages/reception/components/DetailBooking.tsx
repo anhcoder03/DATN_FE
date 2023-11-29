@@ -218,7 +218,7 @@ const DetailBooking = () => {
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/reception">Đóng</Button>
-              {auth?.role?.roleNumber == 1 ? null : (
+              {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) ? null : (
                 <>
                   <Button
                     type="submit"

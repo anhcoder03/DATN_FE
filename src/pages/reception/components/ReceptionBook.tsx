@@ -156,7 +156,7 @@ const ReceptionBook = () => {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <>
-      {auth?.role?.roleNumber == 1 ? null : (
+      {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) ? null : (
         <div className="flex items-center gap-x-3">
         <button
           onClick={() => handleUpdate({ type: "statusReception", data: row })}
@@ -190,7 +190,6 @@ const ReceptionBook = () => {
         </button>
       </div>
       )}
-      
       </>
       
     ),

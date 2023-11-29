@@ -143,7 +143,7 @@ const ReceptionWaiting = () => {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <>
-      {auth?.role?.roleNumber == 2 ? null : (
+      {(auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
         <div className="flex items-center gap-x-[2px]">
           <button
             onClick={() => handleModal({ type: "cancel", data: row })}

@@ -91,7 +91,7 @@ const FilterReceptionBook = ({
             <IconSetting></IconSetting>
           </button>
           {
-            auth?.role?.roleNumber == 1 ? null : (
+            (auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) ? null : (
               <div
                 className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
                 onClick={() => {
