@@ -48,6 +48,7 @@ import Information from "./pages/auth/Information";
 import Examination_view from "./pages/examination_view/Examination_view";
 import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
+import OrderDetail from "./pages/order/components/OrderDetail";
 function App() {
   useEffect(() => {
     getMessagingToken();
@@ -243,6 +244,10 @@ function App() {
     {
       path: "order",
       element: <OrderList />,
+    },
+    {
+      path: "order/:id/view",
+      element: <OrderDetail />,
     },
   ]);
   return (

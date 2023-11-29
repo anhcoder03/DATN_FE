@@ -1,5 +1,5 @@
 export interface IOption {
-  value: string;
+  value: string | number;
   label: string;
 }
 export interface IDataAddress {
@@ -29,6 +29,30 @@ export const optionDoctor: IOption[] = [
   { value: "dfđ", label: "Nguyễn Phi Anh" },
   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 ];
+export const optionOrderType: IOption[] = [
+  { value: "", label: "Loại đơn" },
+  { value: 0, label: "Kê đơn" },
+  {
+    value: 1,
+    label: "Bán tại cửa hàng",
+  },
+];
+export const optionOrderPaymentStatus: IOption[] = [
+  { value: "", label: "Trạng thái thanh toán" },
+  { value: 1, label: "Đã thanh toán" },
+  { value: 0, label: "Chưa thanh oán" },
+];
+
+export const optionOrderStatus: IOption[] = [
+  { value: "", label: "Trạng thái thực hiện" },
+  {
+    value: 0,
+    label: "Đang chờ",
+  },
+  { value: 1, label: "Đã thực hiện" },
+  { value: 2, label: "Đã hủy" },
+];
+
 export const optionGender: IOption[] = [
   { value: "", label: "-Giới tính-" },
   { value: "Nam", label: "Nam" },
