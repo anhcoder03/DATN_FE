@@ -30,7 +30,6 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import {
   getServiceByIdExam,
-  updateServiceByExam,
   deleteServiceByExamination
 } from "../../../services/designation.service";
 
@@ -349,6 +348,24 @@ const WelcomeUpdate = () => {
     }
     setOpenModal(false);
   };
+
+  console.log('deltail', deltail)
+
+  const handleCancelReception = async () => {
+    const params = {
+      status: 'cancel', 
+      _id: deltail?.data?._id
+    }
+    const response : any = await UpdateExamination(params);
+    if(response?.examination) {
+      toast.success('Huỷ tiếp đón thành công!');
+      navigate('/reception');
+      setOpenModal(false);
+    }else {
+      toast.error(response?.message);
+      setOpenModal(false);
+    }
+  }
 
   const handleShowModel = (serviceItem: any, paymentStatus: any) => {
     setService(serviceItem);
@@ -688,23 +705,23 @@ const WelcomeUpdate = () => {
       <Modal
         centered
         open={openModal}
-        onOk={handleDeleteService}
+        onOk={deltail?.type == 'cancel' ? handleCancelReception : handleDeleteService}
         onCancel={() => setOpenModal(false)}
       >
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
         {
-          deltail?.type == 'cancel' && (
+          deltail?.type == 'cancel' ? (
             <div className="flex flex-col items-center justify-center py-4 text-sm">
               <p>Bạn có chắc muốn huỷ đặt lịch này không!</p>
             </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn huỷ dịch vụ này</p>
+            </div>
           )
         }
-        
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn huỷ dịch vụ này</p>
-        </div>
       </Modal>
     </Layout>
   );

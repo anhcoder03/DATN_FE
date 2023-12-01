@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import firebase from "firebase/app";
 import "firebase/messaging";
 import {
@@ -7,12 +6,13 @@ import {
 } from "../services/notifyToken.service";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCN7dlY5xzFuetxlyfbgHMDbFf2xeZ_UNg",
-  authDomain: "medipro-70534.firebaseapp.com",
-  projectId: "medipro-70534",
-  storageBucket: "medipro-70534.appspot.com",
-  messagingSenderId: "813333591051",
-  appId: "1:813333591051:web:470ee5bbbecf89b774830e",
+  apiKey: "AIzaSyCXvOQf6nsQr42mwK_1bzABTcoJ-65dCOs",
+  authDomain: "medipro-fpoly.firebaseapp.com",
+  projectId: "medipro-fpoly",
+  storageBucket: "medipro-fpoly.appspot.com",
+  messagingSenderId: "576687108742",
+  appId: "1:576687108742:web:f0d29f3834ded1f8385707",
+  measurementId: "G-D443NCRH2R",
 };
 
 if (!firebase.apps.length) {
@@ -34,7 +34,7 @@ export const getMessagingToken = async () => {
   try {
     currentToken = await messaging.getToken({
       vapidKey:
-        "BF5Qqv-QKdiuy5XOEWeKnlZflIRMyihZiBBXE-aSlJiOecUegO-9zAOK6HCmmZEDB4dQrNbJpZfFblTywPknyps",
+        "BKMuGA7Z7GP2PV4Bh2AOQixlIsPScFXer7TSIsXb-cXZjxUbQAiQZH2Aw0iTDB234yFakgB8iKob6O8cE99DoBs",
     });
     const registrationTokens = await getAllNotifyToken();
 

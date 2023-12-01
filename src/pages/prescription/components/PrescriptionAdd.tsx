@@ -51,6 +51,7 @@ const PrescriptionAdd = () => {
       setLoading(false);
       setData({
         customer: data?.examination?.customer,
+        customerId: data?.examination?.customerId,
         doctorId: data?.examination?.doctorId,
       });
     } catch (error) {
@@ -66,7 +67,6 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      routeOfDrug: "",
     },
   ]);
   const [day_welcome, setDayWelcome] = useState(new Date());
@@ -103,6 +103,7 @@ const PrescriptionAdd = () => {
     };
     setProduct([...product, newData]);
   };
+
   const handleRemoveMedicine = (index: number) => {
     let newMedicineExam = cloneDeep(product);
     newMedicineExam.splice(index, 1);
@@ -116,12 +117,12 @@ const PrescriptionAdd = () => {
           dosage: "",
           timesUsePerDay: 1,
           how_using: "",
-          routeOfDrug: "",
         },
       ];
     }
     setProduct(newMedicineExam);
   };
+
   const handleGetProducts = async () => {
     try {
       setLoading(true);
@@ -138,6 +139,7 @@ const PrescriptionAdd = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     // document.title = "Danh sách sản phẩm";
     urlParams.set("page", query._page as any);
@@ -167,18 +169,20 @@ const PrescriptionAdd = () => {
 
     getCustomers();
   }, []);
+
   const handleCreatePrescription = async (values: any) => {
     const params = {
-      medicalExaminationSlipId: data?.customer?._id,
+      medicalExaminationSlipId: id,
       doctorId: data?.doctorId?._id,
       diagnostic: data?.diagnostic,
       reExaminationDate: data?.reExaminationDate,
       advice: data?.advice,
       note: data?.note,
+      medicines: product,
     };
     try {
       const res = await createPrescription(params);
-      if (res?.customer) {
+      if (res?.prescription) {
         toast.success(res?.message);
         navigate("/prescription");
       } else {
@@ -189,6 +193,7 @@ const PrescriptionAdd = () => {
       toast.error("An error occurred while creating the prescription.");
     }
   };
+
   const handleChangeInput = (event?: any) => {
     let { value, name } = event.target;
     if (value === " ") return;
@@ -197,7 +202,20 @@ const PrescriptionAdd = () => {
       [name]: value,
     });
   };
-  console.log("data", data);
+  const handleChange = (value: any, fieldName: any, index: any) => {
+    const updatedProduct = [...product];
+    if (fieldName === "quantity" || fieldName === "timesUsePerDay") {
+      const parsedValue = isNaN(Number(value)) ? value : Number(value);
+      updatedProduct[index][fieldName] = parsedValue;
+    } else {
+      updatedProduct[index][fieldName] = value;
+    }
+    setProduct(updatedProduct);
+  };
+  const communeName = data?.customerId?.commune?.name ?? '';
+  const districtName = data?.customerId?.district?.name ?? '';
+  const provinceName = data?.customerId?.province?.name ?? '';
+  const combinedNames = `${communeName}, ${districtName}, ${provinceName}`;
 
   return (
     <Layout>
@@ -219,7 +237,7 @@ const PrescriptionAdd = () => {
                   control={control}
                   name="customerId"
                   className="border-none font-semibold text-black"
-                  value={data?.customer?.name}
+                  value={data?.customerId?.name}
                 />
               </Field>
               <Field>
@@ -255,7 +273,7 @@ const PrescriptionAdd = () => {
                 <Input
                   control={control}
                   className="border-none font-semibold text-black"
-                  value={"---"}
+                  value={combinedNames}
                 />
               </Field>
               <Field>
@@ -342,13 +360,13 @@ const PrescriptionAdd = () => {
             <table className="w-full custom-table">
               <thead className="bg-[#f4f6f8] text-sm">
                 <th style={{ width: "20%" }}>Tên thuốc</th>
-                <th style={{ width: "7%" }}>Số lượng</th>
+                <th style={{ width: "8%" }}>Số lượng</th>
                 <th style={{ width: "13%" }}>Đơn vị bán</th>
                 <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
-                <th style={{ width: "20%" }}>Liều lượng</th>
+                <th style={{ width: "8%" }}>Liều lượng</th>
                 <th>Số lần sử dụng/ngày</th>
                 <th style={{ width: "20%" }}>Cách sử dụng</th>
-                <th style={{ width: "10%" }}>Hoạt động</th>
+                <th style={{ width: "10%" }}>Hành động</th>
               </thead>
               <tbody>
                 {product.map((item: any, index: any) => (
@@ -359,13 +377,25 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={products}
+                        onChange={(selectedOption: any) => handleChange(selectedOption._id, 'medicineId', index)}
+                        value={products?.filter(
+                          (option: any) => item?.medicineId == option.value
+                        )}
                       ></Select>
                     </td>
                     <td>
                       <Input
                         control={control}
                         placeholder="0"
-                        className="border font-semibold text-black rounded-md px-3"
+                        value={item?.quantity}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          const regex = /^\d*$/;
+                          if (regex.test(inputValue) || inputValue === '') {
+                            handleChange(inputValue, 'quantity', index);
+                          }
+                        }}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
                       />
                     </td>
                     <td>
@@ -374,24 +404,7 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={dataTypeImportProduct}
-                        // onChange={(value: any) => {
-                        //   handleChange(
-                        //     {
-                        //       target: { name: "service_id", value: value },
-                        //     },
-                        //     index
-                        //   );
-                        // }}
-                        // value={
-                        //   serviceByExam
-                        //     ? services.find(
-                        //         (option) => option.value === item?.service_id
-                        //       )
-                        //     : services?.filter(
-                        //         (option: any) =>
-                        //           item?.service_id === option.value
-                        //       )
-                        // }
+                        onChange={(value: any) => handleChange(value?.value, 'unit_selling', index)}
                       ></Select>
                     </td>
                     <td>
@@ -400,46 +413,51 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={dataTypeImportProduct}
-                        // onChange={(value: any) => {
-                        //   handleChange(
-                        //     {
-                        //       target: { name: "service_id", value: value },
-                        //     },
-                        //     index
-                        //   );
-                        // }}
-                        // value={
-                        //   serviceByExam
-                        //     ? services.find(
-                        //         (option) => option.value === item?.service_id
-                        //       )
-                        //     : services?.filter(
-                        //         (option: any) =>
-                        //           item?.service_id === option.value
-                        //       )
-                        // }
+                        onChange={(value: any) => handleChange(value?.value, 'unit_using', index)}
                       ></Select>
                     </td>
                     <td>
                       <Input
                         control={control}
-                        placeholder="Nhập thông tin liều lượng thuốc"
-                        className="border font-semibold text-black rounded-md px-3"
+                        placeholder="0"
+                        value={item?.dosage}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          const regex = /^\d*$/;
+                          if (regex.test(inputValue) || inputValue === '') {
+                            handleChange(inputValue, 'dosage', index);
+                          }
+                        }}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
                       />
                     </td>
                     <td>
                       <Input
                         control={control}
                         placeholder="0"
-                        className="border font-semibold text-black rounded-md px-3"
+                        value={item?.timesUsePerDay}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          const regex = /^\d*$/;
+                          if (regex.test(inputValue) || inputValue === '') {
+                            handleChange(inputValue, 'timesUsePerDay', index);
+                          }
+                        }}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
                       />
                     </td>
                     <td>
                       <Input
                         control={control}
                         placeholder="Cách sử dụng"
-                        className="border font-semibold text-black rounded-md px-3"
+                        value={item?.how_using}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          handleChange(inputValue, 'how_using', index);
+                        }}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
                       />
+
                     </td>
                     <td>
                       <div className="flex items-center gap-x-2">
@@ -466,22 +484,25 @@ const PrescriptionAdd = () => {
                 ))}
               </tbody>
             </table>
+
           </div>
-          <div className="flex justify-end w-full">
+        </form>
+        <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
+          <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/customer/list">Đóng</Button>
-              <button
+              <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreatePrescription)}
               >
                 Lưu
-              </button>
+              </Button>
             </div>
           </div>
-        </form>
-      </div>
-    </Layout>
+        </div>
+      </div >
+    </Layout >
   );
 };
 

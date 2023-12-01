@@ -42,7 +42,6 @@ const ExaminationList = () => {
 
   const componentRef = useRef(null);
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
-  
 
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
@@ -211,96 +210,101 @@ const ExaminationList = () => {
     name: "Thao tác",
     cell: (row: any) => (
       <div className="flex items-center gap-x-[2px]">
-        {row?.status === "running" && (
+        {auth?.role?.roleNumber == 3 ? null : (
           <>
-            <button
-              onClick={() => navigate(`/examination/${row?._id}`)}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconEdit}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
-            <button
-              onClick={() => handleShowModel({ type: "done", data: row })}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconExamDone}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
+            {row?.status === "running" && (
+              <>
+                <button
+                  onClick={() => navigate(`/examination/${row?._id}`)}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconEdit}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+                <button
+                  onClick={() => handleShowModel({ type: "done", data: row })}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconExamDone}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+              </>
+            )}
+            {row?.status === "done" && (
+              <>
+                <button
+                  onClick={() => getService(row)}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img width={20} height={20} src={IconPrint} alt="print" />
+                </button>
+                <button
+                  onClick={() => handleChangeStatus("running", row._id)}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconBack}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+              </>
+            )}
+            {row?.status === "waiting" && (
+              <>
+                <button
+                  onClick={() => handleChangeStatus("running", row._id)}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconExam}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+                <button
+                  onClick={() => navigate(`/examination/${row?._id}`)}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconEdit}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+                <button
+                  onClick={() => handleShowModel({ type: "cancel", data: row })}
+                  className="button-nutri text-[#585858]"
+                >
+                  <img
+                    style={{ border: "none" }}
+                    src={IconTrash2}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </button>
+              </>
+            )}
           </>
         )}
-        {row?.status === "done" && (
-          <>
-            <button
-              onClick={() => getService(row)}
-              className="button-nutri text-[#585858]"
-            >
-              <img width={20} height={20} src={IconPrint} alt="print" />
-            </button>
-            <button
-              onClick={() => handleChangeStatus("running", row._id)}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconBack}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
-          </>
-        )}
-        {row?.status === "waiting" && (
-          <>
-            <button
-              onClick={() => handleChangeStatus("running", row._id)}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconExam}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
-            <button
-              onClick={() => navigate(`/examination/${row?._id}`)}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconEdit}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
-            <button
-              onClick={() => handleShowModel({ type: "cancel", data: row })}
-              className="button-nutri text-[#585858]"
-            >
-              <img
-                style={{ border: "none" }}
-                src={IconTrash2}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </button>
-          </>
-        )}
+        
       </div>
     ),
   };

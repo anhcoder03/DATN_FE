@@ -56,8 +56,6 @@ const Notification = () => {
     }
   };
 
-  console.log("dataNoti", dataNoti, totalElements);
-
   return (
     <>
       <div style={{ position: "relative" }} ref={nodeRef}>

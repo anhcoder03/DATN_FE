@@ -137,7 +137,7 @@ const PrescriptionList = () => {
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
                 {
-                  auth?.role?.roleNumber == 2 ? null : (
+                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3 ) ? null : (
                     <div className="table-action">
                       <div
                         className="button-nutri"

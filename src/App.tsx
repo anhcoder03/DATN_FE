@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 import Login from "./pages/auth/Login";
@@ -47,12 +47,30 @@ import Information from "./pages/auth/Information";
 import Examination_view from "./pages/examination_view/Examination_view";
 import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
+import OrderDetail from "./pages/order/components/OrderDetail";
+
+const DEFAULT_NOTIFY = {
+  title: "",
+  body: "",
+  link: "",
+};
+
 function App() {
+  const [notify, setNotify] = useState(DEFAULT_NOTIFY);
   useEffect(() => {
     getMessagingToken();
   }, []);
   useEffect(() => {
-    onMessageListener();
+    (async () => {
+      try {
+        const payload = await onMessageListener();
+        // fetch api Notification
+        // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.
+        console.log("Receive In-App notification SUCCEED:", payload);
+      } catch (error) {
+        console.log("Receive In-App notification ERROR:", error);
+      }
+    })();
   });
 
   const router = createBrowserRouter([
@@ -242,6 +260,10 @@ function App() {
     {
       path: "order",
       element: <OrderList />,
+    },
+    {
+      path: "order/:id/view",
+      element: <OrderDetail />,
     },
   ]);
   return (
