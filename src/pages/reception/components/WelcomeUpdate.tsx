@@ -31,7 +31,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   getServiceByIdExam,
   updateServiceByExam,
-  deleteServiceByExamination
+  deleteServiceByExamination,
 } from "../../../services/designation.service";
 
 const WelcomeUpdate = () => {
@@ -55,6 +55,7 @@ const WelcomeUpdate = () => {
       price: "",
     },
   ]);
+  console.log(dataServices, "dataServices");
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
   const {
@@ -287,7 +288,7 @@ const WelcomeUpdate = () => {
       toast.error(res?.message);
     }
   };
-  
+
   const handleCreateWaiting = async (values: any) => {
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
@@ -361,7 +362,7 @@ const WelcomeUpdate = () => {
   const handleModal = (data: any) => {
     setDeltail(data);
     setOpenModal(true);
-  }
+  };
 
   return (
     <Layout>
@@ -604,17 +605,9 @@ const WelcomeUpdate = () => {
                                 index
                               );
                             }}
-                            value={
-                              serviceByExam
-                                ? services.find(
-                                    (option) =>
-                                      option.value === item?.service_id
-                                  )
-                                : services?.filter(
-                                    (option: any) =>
-                                      item?.service_id === option.value
-                                  )
-                            }
+                            value={services?.filter(
+                              (option: any) => item?.service_id === option.value
+                            )}
                           ></Select>
                         </td>
                         <td>{PriceUtils.format(item?.price || 0, "đ")}</td>
@@ -676,7 +669,7 @@ const WelcomeUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
                 onClick={() => {
-                  handleModal({type: 'cancel', data: data})
+                  handleModal({ type: "cancel", data: data });
                 }}
               >
                 Hủy
@@ -694,14 +687,12 @@ const WelcomeUpdate = () => {
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
-        {
-          deltail?.type == 'cancel' && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn huỷ đặt lịch này không!</p>
-            </div>
-          )
-        }
-        
+        {deltail?.type == "cancel" && (
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ đặt lịch này không!</p>
+          </div>
+        )}
+
         <div className="flex flex-col items-center justify-center py-4 text-sm">
           <p>Bạn có chắc muốn huỷ dịch vụ này</p>
         </div>

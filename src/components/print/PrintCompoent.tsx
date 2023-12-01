@@ -73,6 +73,7 @@ const ReceptionPrint = styled.div`
   }
 `;
 const PrintCompoent = ({ componentRef, dataPrint }: any) => {
+  console.log("dataPrint", dataPrint);
   return (
     <div style={{ position: "relative" }} className="hidden">
       <div className="print-content reception-print" ref={componentRef}>
@@ -98,6 +99,11 @@ const PrintCompoent = ({ componentRef, dataPrint }: any) => {
           </div>
           <div className="line-head"></div>
           <div className="print-info">
+            <div className="flex items-center justify-center">
+              <span>STT: </span>
+              <h3>{dataPrint?.waitingCode}</h3>
+            </div>
+            <div className="line-head"></div>
             <div className="name">{dataPrint?.customerId?.name}</div>
           </div>
           <div className="list-info">
