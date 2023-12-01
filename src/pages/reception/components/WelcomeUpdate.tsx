@@ -54,6 +54,7 @@ const WelcomeUpdate = () => {
       price: "",
     },
   ]);
+  console.log(dataServices, "dataServices");
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
   const {
@@ -286,7 +287,7 @@ const WelcomeUpdate = () => {
       toast.error(res?.message);
     }
   };
-  
+
   const handleCreateWaiting = async (values: any) => {
     if (!doctorId) {
       return toast.warning("Vui lòng chọn bác sĩ phòng khám");
@@ -378,7 +379,7 @@ const WelcomeUpdate = () => {
   const handleModal = (data: any) => {
     setDeltail(data);
     setOpenModal(true);
-  }
+  };
 
   return (
     <Layout>
@@ -621,17 +622,9 @@ const WelcomeUpdate = () => {
                                 index
                               );
                             }}
-                            value={
-                              serviceByExam
-                                ? services.find(
-                                    (option) =>
-                                      option.value === item?.service_id
-                                  )
-                                : services?.filter(
-                                    (option: any) =>
-                                      item?.service_id === option.value
-                                  )
-                            }
+                            value={services?.filter(
+                              (option: any) => item?.service_id === option.value
+                            )}
                           ></Select>
                         </td>
                         <td>{PriceUtils.format(item?.price || 0, "đ")}</td>
@@ -693,7 +686,7 @@ const WelcomeUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
                 onClick={() => {
-                  handleModal({type: 'cancel', data: data})
+                  handleModal({ type: "cancel", data: data });
                 }}
               >
                 Hủy
