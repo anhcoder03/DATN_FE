@@ -24,7 +24,6 @@ const authSlice = createSlice({
     refreshToken: (state, { payload }) => {
       if (state.auth && payload.accessToken) {
         state.auth.accessToken = payload.accessToken;
-        state.auth.refreshToken = payload.refreshToken;
       }
     },
   },
