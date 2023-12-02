@@ -50,12 +50,10 @@ const Login = () => {
       ).unwrap();
       console.log(response);
       toast.success(response?.message);
-      if (response?.user?.role === ROLE.ADMIN) {
+      if (response?.user?.role.roleNumber === ROLE.ADMIN) {
         return navigate("/dashboard");
       }
-      if (response?.user) {
-        return navigate("/");
-      }
+      return navigate("/");
     } catch (error: any) {
       toast.error(error);
     }
