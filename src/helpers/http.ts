@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { store } from "../redux/store";
-import { refreshToken } from "../redux/auth/authSlice";
-// import { history } from "./history";
+import { authLogout, refreshToken } from "../redux/auth/authSlice";
 
 class Http {
   [x: string]: any;
@@ -34,16 +33,20 @@ class Http {
           const errorResponseData = err.response.data; // Lấy thông tin lỗi từ phản hồi
 
           if (errorResponseData.message === "Token đã hết hạn!") {
-            const response = await this.api.post("/refreshToken", {
-              refreshToken: refreshTokenz,
-            });
-            store.dispatch(refreshToken(response.data));
-            this.api.defaults.headers.common["Authorization"] =
-              response.data.accessToken;
-            originalRequest.headers["Authorization"] =
-              response.data.accessToken;
+            try {
+              const response = await this.api.post("/refreshToken", {
+                refreshToken: refreshTokenz,
+              });
+              store.dispatch(refreshToken(response.data));
+              this.api.defaults.headers.common["Authorization"] =
+                response.data.accessToken;
+              originalRequest.headers["Authorization"] =
+                response.data.accessToken;
 
-            return this.api(originalRequest);
+              return this.api(originalRequest);
+            } catch (error) {
+              store.dispatch(authLogout());
+            }
           }
         }
         return Promise.reject(err);
