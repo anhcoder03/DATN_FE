@@ -1,5 +1,9 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  BrowserRouter as Router,
+  RouterProvider,
+} from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 import Login from "./pages/auth/Login";
 import CategoryAdd from "./pages/category/CategoryAdd";
@@ -48,6 +52,7 @@ import Examination_view from "./pages/examination_view/Examination_view";
 import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
 import OrderDetail from "./pages/order/components/OrderDetail";
+import AppRouter from "./routes/router";
 
 const DEFAULT_NOTIFY = {
   title: "",
@@ -268,9 +273,9 @@ function App() {
   ]);
   return (
     <React.Fragment>
-      <Suspense fallback={<LoadingPage />}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <Router>
+        <AppRouter />
+      </Router>
     </React.Fragment>
   );
 }
