@@ -353,7 +353,7 @@ const DesignationDetail = () => {
                   In
                 </Button>
               )}
-              {auth?.role?.roleNumber == 2 ? null : (
+              {(auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
                 <>
                   {designation?.status == 'waiting' && (
                     <>

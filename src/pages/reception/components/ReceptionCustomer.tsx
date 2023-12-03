@@ -83,8 +83,10 @@ const ReceptionCustomer = () => {
     },
     {
       name: "Ngày tiếp đón",
-      selector: (row: { day_welcome: moment.MomentInput }) => 
-      moment(row?.day_welcome).format("DD/MM/YYYY") == 'Invalid date' ? '---' : moment(row?.day_welcome).format("DD/MM/YYYY"),
+      selector: (row: { day_welcome: moment.MomentInput }) =>
+        moment(row?.day_welcome).format("DD/MM/YYYY") == "Invalid date"
+          ? "---"
+          : moment(row?.day_welcome).format("DD/MM/YYYY"),
     },
     {
       name: "Nhân viên tiếp đón",
@@ -216,7 +218,7 @@ const ReceptionCustomer = () => {
         >
           <img width={20} height={20} src={IconPrint} alt="print" />
         </button>
-        {auth?.role?.roleNumber == 1 ? null : (
+        {auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3 ? null : (
           <>
             <button
               onClick={() => handleUpdate({ type: "waiting", data: row })}
@@ -232,12 +234,15 @@ const ReceptionCustomer = () => {
             </button>
             <button
               onClick={() => {
-                if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-                  toast.warning('Bạn không có quyền thực hiện hành động này!')
-                  return
+                if (
+                  auth?.role?.roleNumber == 1 ||
+                  auth?.role?.roleNumber == 3
+                ) {
+                  toast.warning("Bạn không có quyền thực hiện hành động này!");
+                  return;
                 }
-                gotoDetail(row?._id)
-              } }
+                gotoDetail(row?._id);
+              }}
               className="button-nutri text-[#585858]"
             >
               <img
@@ -250,19 +255,20 @@ const ReceptionCustomer = () => {
             </button>
           </>
         )}
-        
-        <button
-          onClick={() => handleUpdate({ type: "cancel", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconTrash2}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
+        {auth?.role?.roleNumber == 3 ? null : (
+          <button
+            onClick={() => handleUpdate({ type: "cancel", data: row })}
+            className="button-nutri text-[#585858]"
+          >
+            <img
+              style={{ border: "none" }}
+              src={IconTrash2}
+              width={20}
+              height={20}
+              alt=""
+            />
+          </button>
+        )}
       </div>
     ),
   };
@@ -288,9 +294,9 @@ const ReceptionCustomer = () => {
   };
 
   const gotoDetail = (id: any) => {
-    if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-      toast.warning('Bạn không có quyền thực hiện hành động này!')
-      return
+    if (auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
+      toast.warning("Bạn không có quyền thực hiện hành động này!");
+      return;
     }
     navigate(`/reception/${id}`);
   };
@@ -308,7 +314,7 @@ const ReceptionCustomer = () => {
 
   const handleDayChange = (date: any) => {
     setQuery({ ...query, day_welcome: date });
-    urlParams.set("day_welcome", date);
+    urlParams.set("day_welcome", moment(date).toISOString());
     navigate(`?${urlParams}`);
   };
 
@@ -424,7 +430,7 @@ const ReceptionCustomer = () => {
           )}
           {reception?.type == "waiting" && (
             <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc chuyển trạng thái của tiếp đón này không?</p>
+              <p>Bạn có chắc tạo phiếu khám này không?</p>
               <span className="text-center text-[#ff5c75] font-bold">
                 {reception?.data?._id}
               </span>

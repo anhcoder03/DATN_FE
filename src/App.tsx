@@ -1,61 +1,39 @@
-import React, { Suspense, useEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import React, { Suspense, useEffect, useState } from "react";
+import {
+  createBrowserRouter,
+  BrowserRouter as Router,
+  RouterProvider,
+} from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
-import Login from "./pages/auth/Login";
-import CategoryAdd from "./pages/category/CategoryAdd";
-import CategoryList from "./pages/category/CategoryList";
-import CategoryDetail from "./pages/category/components/CategoryDetail";
-import CategoryUpdate from "./pages/category/components/CategoryUpdate";
-import ClinicAdd from "./pages/clinic/ClinicAdd";
-import ClinicList from "./pages/clinic/ClinicList";
-import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
-import TitleList from "./pages/title/TitleList";
-import ConfigUserUpdateContainer from "./pages/configuration/user/edit";
-import ConfigUserListContainer from "./pages/configuration/user/list";
-import ConfigUserAddContainer from "./pages/configuration/user/new";
-import CustomerDetail from "./pages/customer/components/CustomerDetail";
-import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
-import CustomerAdd from "./pages/customer/CustomerAdd";
-import CustommerList from "./pages/customer/CustommerList";
-import ExaminationList from "./pages/examination/ExaminationList";
-import Home from "./pages/Home";
-import PrescriptionListContainer from "./pages/prescription/list/PrescriptionList";
-import ProductAdd from "./pages/product/components/ProductAdd";
-import ProductDetail from "./pages/product/components/ProductDetail";
-import ProductUpdate from "./pages/product/components/ProductUpdate";
-import ProductList from "./pages/product/ProductList";
-import AddBooking from "./pages/reception/components/AddBooking";
-import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
-import ReceptionList from "./pages/reception/ReceptionList";
-import ServiceDetail from "./pages/service/components/ServiceDetail";
-import ServiceUpdate from "./pages/service/components/ServiceUpdate";
-import DetailBooking from "./pages/reception/components/DetailBooking";
-import UpdateBooking from "./pages/reception/components/UpdateBooking";
-import ServiceAdd from "./pages/service/ServiceAdd";
-import ServiceList from "./pages/service/ServiceList";
-import DesignationList from "./pages/designation/DesignationList";
-import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
-import ReceptionView from "./pages/reception/components/ReceptionView";
-import DesignationDetail from "./pages/designation/DesignationDetail";
-import DesigantionUpdate from "./pages/designation/components/DesignationUpdate";
-import ExaminationDetail from "./pages/examination/ExaminationDetail";
-import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
-import PrescriptionDetail from "./pages/prescription/components/PrescriptionDetail";
-import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
 import { getMessagingToken, onMessageListener } from "./firebase";
 import Information from "./pages/auth/Information";
 import Examination_view from "./pages/examination_view/Examination_view";
 import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
 import ClinicDetail from "./pages/clinic/components/ClinicDetail";
+import AppRouter from "./routes/router";
+const DEFAULT_NOTIFY = {
+  title: "",
+  body: "",
+  link: "",
+};
 function App() {
+  const [notify, setNotify] = useState(DEFAULT_NOTIFY);
   useEffect(() => {
     getMessagingToken();
   }, []);
   useEffect(() => {
-    onMessageListener();
+    (async () => {
+      try {
+        const payload = await onMessageListener();
+        // fetch api Notification
+        // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.
+        console.log("Receive In-App notification SUCCEED:", payload);
+      } catch (error) {
+        console.log("Receive In-App notification ERROR:", error);
+      }
+    })();
   });
-
   const router = createBrowserRouter([
     { path: "", element: <Home /> },
     {
@@ -246,7 +224,9 @@ function App() {
   return (
     <React.Fragment>
       <Suspense fallback={<LoadingPage />}>
-        <RouterProvider router={router} />
+        <Router>
+          <AppRouter />
+        </Router>
       </Suspense>
     </React.Fragment>
   );

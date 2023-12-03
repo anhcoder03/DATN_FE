@@ -139,9 +139,15 @@ const ReceptionBook = () => {
   });
 
   const handleChangeStatus = async (id: any) => {
+    const now = new Date();
+    const nowVietnam = new Date(
+      now.getTime() + now.getTimezoneOffset() * 60000 + 7 * 60 * 60 * 1000
+    );
+    const day_welcome = nowVietnam.toISOString().slice(0, -1);
     const params = {
       status: "recetion",
       _id: id,
+      day_welcome,
     };
     const response: any = await UpdateExamination(params);
     if (response?.examination) {
@@ -156,43 +162,46 @@ const ReceptionBook = () => {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <>
-      {auth?.role?.roleNumber == 1 ? null : (
-        <div className="flex items-center gap-x-3">
-        <button
-          onClick={() => handleUpdate({ type: "statusReception", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <img width={20} height={20} src={IconHand} alt="tiếp đón" />
-        </button>
-        <button
-          onClick={() => handleUpdate({ type: "remove", data: row })}
-          className="button-nutri text-[#585858]"
-        >
-          <IconTrash />
-        </button>
-        <button
-          onClick={() => {
-            if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-              toast.warning('Bạn không có quyền thực hiện hành động này!')
-              return
-            }
-            navigate(`/reception/booking/update/${row?._id}`) 
-          }}
-          className="button-nutri text-[#585858]"
-        >
-          <img
-            style={{ border: "none" }}
-            src={IconEdit}
-            width={20}
-            height={20}
-            alt=""
-          />
-        </button>
-      </div>
-      )}
-      
+        {auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3 ? null : (
+          <div className="flex items-center gap-x-3">
+            <button
+              onClick={() =>
+                handleUpdate({ type: "statusReception", data: row })
+              }
+              className="button-nutri text-[#585858]"
+            >
+              <img width={20} height={20} src={IconHand} alt="tiếp đón" />
+            </button>
+            <button
+              onClick={() => handleUpdate({ type: "remove", data: row })}
+              className="button-nutri text-[#585858]"
+            >
+              <IconTrash />
+            </button>
+            <button
+              onClick={() => {
+                if (
+                  auth?.role?.roleNumber == 1 ||
+                  auth?.role?.roleNumber == 3
+                ) {
+                  toast.warning("Bạn không có quyền thực hiện hành động này!");
+                  return;
+                }
+                navigate(`/reception/booking/update/${row?._id}`);
+              }}
+              className="button-nutri text-[#585858]"
+            >
+              <img
+                style={{ border: "none" }}
+                src={IconEdit}
+                width={20}
+                height={20}
+                alt=""
+              />
+            </button>
+          </div>
+        )}
       </>
-      
     ),
   };
   const newHeading = [...deserializedHeadings, action];

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import moment from "moment";
+import IconTrash2 from "../../assets/images/icon-trash2.png";
 
 type TFilterReceptionCustomer = {
   handleSearch: (e: any) => void;
@@ -35,7 +37,7 @@ const FilterReceptionCustomer = ({
 }: TFilterReceptionCustomer) => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const showModal = () => {
     setOpen(true);
   };
@@ -53,6 +55,7 @@ const FilterReceptionCustomer = ({
       handleSearch(e.target.value);
     }
   };
+
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
@@ -70,7 +73,6 @@ const FilterReceptionCustomer = ({
             <Flatpickr
               options={{
                 locale: Vietnamese,
-                allowInput: true,
                 dateFormat: "d/m/Y",
                 altInputClass: "date-range",
                 maxDate: "today",
@@ -80,6 +82,9 @@ const FilterReceptionCustomer = ({
               }}
               placeholder="Ngày tiếp đón"
             ></Flatpickr>
+            <div className="flex items-center w-4">
+              <img src={IconTrash2} alt="icon" />
+            </div>
             <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>
@@ -113,26 +118,26 @@ const FilterReceptionCustomer = ({
           >
             <IconSetting></IconSetting>
           </button>
-          {
-            auth?.role?.roleNumber == 1 ? null : (
-              <div
-                className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
-                onClick={() => {
-                  if(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) {
-                    toast.warning('Bạn không có quyền thực hiện hành động này!')
-                    return
-                  }
-                  navigate("/reception/add");
-                }}
-              >
-                <div className="flex items-center p-1 bg-white rounded-lg text-primary">
-                  <IconPlus></IconPlus>
-                </div>
-                <span className="flex items-center text-sm text-white">Thêm</span>
+          {auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3 ? null : (
+            <div
+              className="flex gap-2 px-3 py-2 rounded-lg bg-primary cursor-pointer"
+              onClick={() => {
+                if (
+                  auth?.role?.roleNumber == 1 ||
+                  auth?.role?.roleNumber == 3
+                ) {
+                  toast.warning("Bạn không có quyền thực hiện hành động này!");
+                  return;
+                }
+                navigate("/reception/add");
+              }}
+            >
+              <div className="flex items-center p-1 bg-white rounded-lg text-primary">
+                <IconPlus></IconPlus>
               </div>
-            )
-          }
-          
+              <span className="flex items-center text-sm text-white">Thêm</span>
+            </div>
+          )}
         </div>
       </div>
       <ModalReception

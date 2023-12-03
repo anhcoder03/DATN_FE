@@ -11,6 +11,7 @@ import {
 } from "../../icons";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { ROLE } from "../../../constants/define";
 
 type TMenu = {
   path: string;
@@ -98,30 +99,33 @@ const Sidebar = () => {
     <React.Fragment>
       <div className="fixed bottom-0 left-0  w-[250px] z-10 shadowSidebar top-16 bg-white sidebar">
         <PerfectScrollbar>
-          <div>
-            <h4 className="heading-menu px-5 py-3 text-xs font-medium">
-              KHÁM BỆNH
-            </h4>
-            <div className="flex flex-col ">
-              {menuExamination?.map((item) => (
-                <NavLink
-                  key={item.title}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    isActive
-                      ? ` text-primary bg-primary50 ${NavLinkClass} border-l-primary`
-                      : `hover:text-primary ${NavLinkClass}`
-                  }
-                >
-                  <div className="flex items-center gap-x-3">
-                    <span>{item.icon}</span>
-                    <span className="menu-title">{item.title}</span>
-                  </div>
-                </NavLink>
-              ))}
+          {auth?.role?.roleNumber === ROLE.ADMIN ||
+          auth?.role?.roleNumber === ROLE.DOCTOR ||
+          auth?.role?.roleNumber === ROLE.STAFFRECEPTION ? (
+            <div>
+              <h4 className="heading-menu px-5 py-3 text-xs font-medium">
+                KHÁM BỆNH
+              </h4>
+              <div className="flex flex-col ">
+                {menuExamination?.map((item) => (
+                  <NavLink
+                    key={item.title}
+                    to={item.path}
+                    className={({ isActive }) =>
+                      isActive
+                        ? ` text-primary bg-primary50 ${NavLinkClass} border-l-primary`
+                        : `hover:text-primary ${NavLinkClass}`
+                    }
+                  >
+                    <div className="flex items-center gap-x-3">
+                      <span>{item.icon}</span>
+                      <span className="menu-title">{item.title}</span>
+                    </div>
+                  </NavLink>
+                ))}
+              </div>
             </div>
-          </div>
-
+          ) : null}
           <div>
             <h4 className="heading-menu px-5 py-3 text-xs font-medium">
               BÁN HÀNG
@@ -209,7 +213,7 @@ const Sidebar = () => {
               ))}
             </div>
           </div>
-          {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 2) ? null : (
+          {auth?.role?.roleNumber === ROLE.ADMIN ? (
             <>
               <div>
                 <h4 className="heading-menu px-5 py-3 text-xs font-medium">
@@ -258,8 +262,7 @@ const Sidebar = () => {
                 </div>
               </div>
             </>
-          )}
-          
+          ) : null}
         </PerfectScrollbar>
       </div>
     </React.Fragment>
