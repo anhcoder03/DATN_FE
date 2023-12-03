@@ -104,6 +104,9 @@ const ClinicList = () => {
     setOpenModal(true);
     setClinic(data);
   };
+  const gotoDetail = (item: any) => {
+    navigate(`/configuration/clinic/${item?._id}`);
+  };
   return (
     <Layout>
       <Heading>Quản Lý Phòng Khám</Heading>
@@ -120,11 +123,14 @@ const ClinicList = () => {
                 style={{ cursor: "pointer" }}
                 key={item._id}
               >
-                <td>{item?._id}</td>
-                <td>{item?.name}</td>
-                <td>{item?.description}</td>
-                <td>{item?.doctorInClinic?.name}</td>
+                <td onClick={() => gotoDetail(item)}>{item?._id}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.name}</td>
+                <td onClick={() => gotoDetail(item)}>{item?.description}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  {item?.doctorInClinic?.name}
+                </td>
                 <td
+                  onClick={() => gotoDetail(item)}
                   style={{
                     cursor: "pointer",
                     color:

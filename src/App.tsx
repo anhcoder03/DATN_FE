@@ -47,6 +47,7 @@ import Information from "./pages/auth/Information";
 import Examination_view from "./pages/examination_view/Examination_view";
 import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
+import ClinicDetail from "./pages/clinic/components/ClinicDetail";
 function App() {
   useEffect(() => {
     getMessagingToken();
@@ -130,14 +131,12 @@ function App() {
       element: <ClinicUpdate />,
     },
     {
+      path: "configuration/clinic/:id",
+      element: <ClinicDetail />,
+    },
+    {
       path: "configuration/title",
       element: <TitleList />,
-    },
-    {
-      path: "configuration/title/add",
-    },
-    {
-      path: "configuration/title/update/:id",
     },
     {
       path: "category/view/:id",
@@ -235,7 +234,7 @@ function App() {
     },
     // examination
     {
-      path: "examination_view",
+      path: "examination_view/:id",
       element: <Examination_view />,
     },
     //order
