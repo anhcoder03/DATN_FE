@@ -378,6 +378,7 @@ const ReceptionCustomer = () => {
         data={receptions}
         gotoDetail={gotoDetail}
       ></Table3>
+      
       <Pagination
         handlePageClick={handlePageClick}
         pageCount={totalPages}
