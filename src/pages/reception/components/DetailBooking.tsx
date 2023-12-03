@@ -49,17 +49,23 @@ const DetailBooking = () => {
         note: resData?.note,
         staffId: resData?.staffId,
         day_booking: resData?.day_booking,
-        _id: resData?._id
+        _id: resData?._id,
       });
     } catch (error) {
-      toast.error('Đã có lỗi sảy ra!!');
+      toast.error("Đã có lỗi sảy ra!!");
     }
   }
 
   const handleChangeStatus = async (id: any) => {
+    const now = new Date();
+    const nowVietnam = new Date(
+      now.getTime() + now.getTimezoneOffset() * 60000 + 7 * 60 * 60 * 1000
+    );
+    const day_welcome = nowVietnam.toISOString().slice(0, -1);
     const params = {
       status: "recetion",
       _id: id,
+      day_welcome,
     };
     const response: any = await UpdateExamination(params);
     if (response?.examination) {
@@ -79,7 +85,7 @@ const DetailBooking = () => {
       if (res?.examination) {
         toast.success("Huỷ đặt lịch thành công!");
         setOpenModal(false);
-        navigate(`/reception`)
+        navigate(`/reception`);
       } else {
         toast.error(res?.message);
         setOpenModal(false);
@@ -218,7 +224,8 @@ const DetailBooking = () => {
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/reception">Đóng</Button>
-              {(auth?.role?.roleNumber == 1 || auth?.role?.roleNumber == 3) ? null : (
+              {auth?.role?.roleNumber == 1 ||
+              auth?.role?.roleNumber == 3 ? null : (
                 <>
                   <Button
                     type="submit"
@@ -241,20 +248,21 @@ const DetailBooking = () => {
                   <Button
                     type="submit"
                     className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                    onClick={() => handleModal({type: 'statusReception', data: data})}
+                    onClick={() =>
+                      handleModal({ type: "statusReception", data: data })
+                    }
                   >
                     Tiếp đón
                   </Button>
                   <Button
                     type="submit"
                     className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                    onClick={() => handleModal({type: 'remove', data: data})}
+                    onClick={() => handleModal({ type: "remove", data: data })}
                   >
                     Huỷ
                   </Button>
                 </>
               )}
-              
             </div>
           </div>
         </div>
