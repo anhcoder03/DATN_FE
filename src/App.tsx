@@ -12,6 +12,47 @@ import DashboardPage from "./pages/dashboard";
 import OrderList from "./pages/order/OrderList";
 import ClinicDetail from "./pages/clinic/components/ClinicDetail";
 import AppRouter from "./routes/router";
+import { Home } from "react-feather";
+import ReceptionList from "./pages/reception/ReceptionList";
+import WelcomeUpdate from "./pages/reception/components/WelcomeUpdate";
+import ReceptionAdd from "./pages/reception/components/ReceptionAdd";
+import AddBooking from "./pages/reception/components/AddBooking";
+import ReceptionView from "./pages/reception/components/ReceptionView";
+import ExaminationList from "./pages/examination/ExaminationList";
+import ExaminationDetail from "./pages/examination/ExaminationDetail";
+import ExaminationUpdate from "./pages/examination/update/ExaminationUpdate";
+import CustommerList from "./pages/customer/CustommerList";
+import CustomerAdd from "./pages/customer/CustomerAdd";
+import CustomerDetail from "./pages/customer/components/CustomerDetail";
+import CustomerUpdate from "./pages/customer/components/CustomerUpdate";
+import CategoryList from "./pages/category/CategoryList";
+import CategoryAdd from "./pages/category/CategoryAdd";
+import CategoryUpdate from "./pages/category/components/CategoryUpdate";
+import ClinicList from "./pages/clinic/ClinicList";
+import ClinicAdd from "./pages/clinic/ClinicAdd";
+import ClinicUpdate from "./pages/clinic/components/ClinicUpdate";
+import TitleList from "./pages/title/TitleList";
+import CategoryDetail from "./pages/category/components/CategoryDetail";
+import PrescriptionDetail from "./pages/prescription/components/PrescriptionDetail";
+import PrescriptionAdd from "./pages/prescription/components/PrescriptionAdd";
+// import PrescriptionListContainer "./pages/prescription/list/PrescriptionList"
+import Login from "./pages/auth/Login";
+import ProductAdd from "./pages/product/components/ProductAdd";
+import ProductList from "./pages/product/ProductList";
+import ProductDetail from "./pages/product/components/ProductDetail";
+import ProductUpdate from "./pages/product/components/ProductUpdate";
+import ServiceList from "./pages/service/ServiceList";
+import ServiceAdd from "./pages/service/ServiceAdd";
+import ServiceDetail from "./pages/service/components/ServiceDetail";
+import ServiceUpdate from "./pages/service/components/ServiceUpdate";
+import DetailBooking from "./pages/reception/components/DetailBooking";
+import UpdateBooking from "./pages/reception/components/UpdateBooking";
+import ConfigUserListContainer from "./pages/configuration/user/list";
+import ConfigUserAddContainer from "./pages/configuration/user/new";
+import ConfigUserUpdateContainer from "./pages/configuration/user/edit";
+import DesignationList from "./pages/designation/DesignationList";
+import DesignationDetail from "./pages/designation/DesignationDetail";
+import DesigantionUpdate from "./pages/designation/components/DesignationUpdate";
 const DEFAULT_NOTIFY = {
   title: "",
   body: "",
@@ -120,10 +161,10 @@ function App() {
       path: "category/view/:id",
       element: <CategoryDetail />,
     },
-    {
-      path: "prescription",
-      element: <PrescriptionListContainer />,
-    },
+    // {
+    //   path: "prescription",
+    //   element: <PrescriptionListContainer />,
+    // },
     {
       path: "prescription/view/:id",
       element: <PrescriptionDetail />,
