@@ -75,7 +75,7 @@ const Prescription = (props: any) => {
       console.log(error);
     }
   };
-  console.log(prescriptions, "prescriptions");
+  console.log(prescription, "prescriptions");
 
   useEffect(() => {
     document.title = "Danh sách đơn thuốc";
@@ -99,6 +99,7 @@ const Prescription = (props: any) => {
     navigate(`?${urlParams}`);
   };
   const handleShowModel = (data: any) => {
+    console.log(data , "dataModel");
     setOpenModal(true);
     setPrescription(data);
   };
@@ -112,8 +113,10 @@ const Prescription = (props: any) => {
       navigate(`?${urlParams}`);
     }
   };
+  console.log(prescription , "prescriptions");
+  
   const onOk = async () => {
-    const res = await deletePrescription(prescriptions?._id);
+    const res = await deletePrescription(prescription?._id);
     if (res?.message) {
       toast.success(res?.message);
       setOpenModal(false);
