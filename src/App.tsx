@@ -1,9 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import {
-  createBrowserRouter,
-  BrowserRouter as Router,
-  RouterProvider,
-} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 
 import { getMessagingToken, onMessageListener } from "./firebase";

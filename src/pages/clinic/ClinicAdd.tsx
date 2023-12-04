@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { getAllUser } from "../../services/user.service";
 
 type TDataClinic = {
-  _id: string;
   name: string;
   status: string;
   description: string;
@@ -24,7 +23,6 @@ type TDataClinic = {
 };
 
 const schema = yup.object({
-  _id: yup.string().trim().required("Mã phòng khám đã tồn tại!"),
   name: yup.string().trim().required("Tên phòng khám không được để trống!"),
   description: yup
     .string()
@@ -116,14 +114,6 @@ const ClinicAdd = () => {
         <form className="w-full p-5 bg-white">
           <Heading>Thông tin phòng khám</Heading>
           <Row>
-            <Field>
-              <Label htmlFor="_id">Mã phòng khám</Label>
-              <Input
-                control={control}
-                name="_id"
-                placeholder="PK + Mã phòng khám"
-              />
-            </Field>
             <Field>
               <Label htmlFor="name">
                 <span className="star-field">*</span>

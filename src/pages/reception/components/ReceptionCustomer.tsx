@@ -431,7 +431,7 @@ const ReceptionCustomer = () => {
           )}
           {reception?.type == "waiting" && (
             <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc chuyển trạng thái của tiếp đón này không?</p>
+              <p>Bạn có chắc tạo phiếu khám này không?</p>
               <span className="text-center text-[#ff5c75] font-bold">
                 {reception?.data?._id}
               </span>
