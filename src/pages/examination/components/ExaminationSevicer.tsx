@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "../../../components/table";
-import { getServiceByIdExam } from "../../../services/designation.service";
-import { Link, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import { LabelStatusDesignation } from "../../../components/label";
-import PriceUtils from "../../../helpers/PriceUtils";
 import { calculateTotalPrice } from "../../../helpers/calculateTotalPrice";
 
-type Props = {};
-
-const ExaminationSevicer = (props: Props) => {
-  const [data, setData] = useState<any>();
-  const { id } = useParams();
-  console.log();
-
+const ExaminationSevicer = ({ data }: { data: any[] }) => {
   const headings = [
     "STT",
     "Mã dịch vụ - Tên dịch vụ",
@@ -23,28 +14,13 @@ const ExaminationSevicer = (props: Props) => {
     "Trạng thái thanh toán",
     "Trạng thái thực hiện",
   ];
-  useEffect(() => {
-    if (id) {
-      loadData();
-    }
-  }, [id]);
-  async function loadData() {
-    try {
-      const response = await getServiceByIdExam(id);
-      const resData = response?.docs;
-      setData(resData);
-    } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
-    }
-  }
 
-  console.log(data, "dataMMM");
   const checkpayment = (status: any) => {
     switch (status) {
       case "unpaid":
         return <span style={{ color: "#ffa726" }}>Chưa thanh toán</span>;
       case "paid":
-        return <span style={{ color: "green" }}>Chưa thanh toán</span>;
+        return <span style={{ color: "green" }}>Đã thanh toán</span>;
     }
   };
   return (
