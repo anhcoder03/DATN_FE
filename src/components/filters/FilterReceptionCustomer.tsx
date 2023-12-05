@@ -22,6 +22,9 @@ type TFilterReceptionCustomer = {
   dataStaffs: any[];
   dataDoctors: any[];
   clinics: any[];
+  day_welcome: any,
+  setQuery: any,
+  query: any
 };
 
 const FilterReceptionCustomer = ({
@@ -34,7 +37,11 @@ const FilterReceptionCustomer = ({
   dataStaffs,
   dataDoctors,
   clinics,
+  day_welcome,
+  setQuery,
+  query
 }: TFilterReceptionCustomer) => {
+  
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -74,15 +81,18 @@ const FilterReceptionCustomer = ({
               options={{
                 locale: Vietnamese,
                 dateFormat: "d/m/Y",
-                altInputClass: "date-range",
-                maxDate: "today",
+                altInputClass: 'date-range',
               }}
               onChange={([date]) => {
                 handleDayChange(date);
               }}
               placeholder="Ngày tiếp đón"
+              value={[day_welcome]}
             ></Flatpickr>
-            <div className="flex items-center w-4">
+            <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
+              ...query,
+              day_welcome: null
+            })}>
               <img src={IconTrash2} alt="icon" />
             </div>
             <div className="flex items-center">

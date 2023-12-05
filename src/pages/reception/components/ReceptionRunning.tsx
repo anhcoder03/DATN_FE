@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-import { FilterReceptionWaiting } from "../../../components/filters";
 import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
 import { getAllExamination } from "../../../services/examination.service";
@@ -8,7 +7,9 @@ import moment from "moment";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination";
-import IconTrash2 from "../../../assets/images/icon-trash2.png";
+import { getAllByName } from "../../../services/role.service";
+import { getAllClinic } from "../../../services/clinic.service";
+import FilterReceptionRunning from "../../../components/filters/FilterReceptioRunning";
 
 const ReceptionRunning = () => {
   const [receptions, setReceptions] = useState<any[]>();
@@ -20,9 +21,17 @@ const ReceptionRunning = () => {
     _sort: "createdAt",
     _order: "desc",
     status: "running",
+    doctorId: null,
+    search: null,
+    staffId: null,
+    clinicId: null,
+    day_running: null
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
+  const [dataStaffs, setDataStaffs] = useState<any[]>([]);
+  const [dataDoctors, setDataDoctors] = useState<any[]>([]);
+  const [clinics, setClinics] = useState<any[]>([]);
   // const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
@@ -103,6 +112,101 @@ const ReceptionRunning = () => {
     handleGetExaminaton();
   }, [query]);
 
+  useEffect(() => {
+    handleGetDoctors();
+    handleGetStaffs();
+    handleGetClinic();
+  }, []);
+
+  async function handleGetStaffs() {
+    const response = await getAllByName({ name: "Nhân viên tiếp đón" });
+    const ListArr: any = [];
+    response?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setDataStaffs([{ value: "", label: "-Nhân viên tiếp đón-" }, ...ListArr]);
+  }
+
+  async function handleGetDoctors() {
+    const response = await getAllByName({ name: "Bác sĩ" });
+    const ListArr: any = [];
+    response?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setDataDoctors([{ value: "", label: "-Bác sĩ-" }, ...ListArr]);
+  }
+
+  async function handleGetClinic() {
+    const response = await getAllClinic({ _status: "active", _limit: 100 });
+    const ListArr: any = [];
+    response?.docs?.map((e: any) => {
+      ListArr?.push({
+        ...e,
+        value: e?._id,
+        label: e?.name,
+      });
+    });
+    setClinics([{ value: "", label: "-Phòng-" }, ...ListArr]);
+  }
+
+  const handleSearchByStaffId = (selectedOpiton: any) => {
+    setQuery({ ...query, staffId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("staff", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("staff");
+      navigate(`?${urlParams}`);
+    }
+  };
+
+  const handleSearchByDoctorId = (selectedOpiton: any) => {
+    setQuery({ ...query, doctorId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("doctor", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("doctor");
+      navigate(`?${urlParams}`);
+    }
+  };
+
+  const handleSearchByClinic = (selectedOpiton: any) => {
+    setQuery({ ...query, clinicId: selectedOpiton.value });
+    if (selectedOpiton.value !== "") {
+      urlParams.set("clinic", selectedOpiton.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("clinic");
+      navigate(`?${urlParams}`);
+    }
+  };
+
+  const handleSearch = (e: any) => {
+    setQuery({ ...query, search: e });
+    if (e !== "") {
+      urlParams.set("s", e);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("s");
+      navigate(`?${urlParams}`);
+    }
+  };
+
+  const handleDayChange = (date: any) => {
+    setQuery({ ...query, day_running: date });
+    urlParams.set("day_running", moment(date).toISOString());
+    navigate(`?${urlParams}`);
+  };
+
   const selectedHeading = useSelector(
     (state: RootState) => state.headingWaiting.selectedHeadings
   );
@@ -138,6 +242,7 @@ const ReceptionRunning = () => {
       </div>
     ),
   };
+
   const newHeading = [...deserializedHeadings, action];
 
   // const onOk = async () => {
@@ -148,6 +253,7 @@ const ReceptionRunning = () => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
@@ -155,9 +261,23 @@ const ReceptionRunning = () => {
   const gotoDetail = (id: string) => {
     navigate(`/reception/${id}/view`);
   };
+
   return (
     <>
-      <FilterReceptionWaiting columns={columns}></FilterReceptionWaiting>
+      <FilterReceptionRunning 
+        columns={columns}
+        dataStaffs={dataStaffs}
+        dataDoctors={dataDoctors}
+        clinics={clinics}
+        handleSearchByStaffId={handleSearchByStaffId}
+        handleSearchByDoctorId={handleSearchByDoctorId}
+        handleSearch={handleSearch}
+        handleDayChange={handleDayChange}
+        handleClinicChange={handleSearchByClinic}
+        setQuery={setQuery}
+        query={query}
+        day_running={query?.day_running}
+      ></FilterReceptionRunning>
       <Table3
         isLoading={loading}
         columns={newHeading}

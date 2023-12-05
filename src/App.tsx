@@ -1,10 +1,11 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { Link, BrowserRouter as Router } from "react-router-dom";
 import LoadingPage from "./components/common/LoadingPage";
 
 import { getMessagingToken, onMessageListener } from "./firebase";
 
 import AppRouter from "./routes/router";
+import { toast } from "react-toastify";
 
 const DEFAULT_NOTIFY = {
   title: "",
@@ -14,13 +15,31 @@ const DEFAULT_NOTIFY = {
 
 function App() {
   const [notify, setNotify] = useState(DEFAULT_NOTIFY);
+
   useEffect(() => {
     getMessagingToken();
   }, []);
+
+  const router_notify = (notify: any) => {
+    return (
+      <div>
+        <Link to={notify?.link}>{notify?.body}</Link>
+      </div>
+    )
+  }
+
+  const toastify = () => {
+    toast.info(router_notify)
+  }
+
+  console.log("notify", notify)
+
   useEffect(() => {
     (async () => {
       try {
-        const payload = await onMessageListener();
+        const payload: any = await onMessageListener();
+        setNotify(payload?.data)
+        // toastify();
         // fetch api Notification
         // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.
         console.log("Receive In-App notification SUCCEED:", payload);

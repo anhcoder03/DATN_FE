@@ -84,7 +84,7 @@ const notiMenu = (dropdownRef: any, showMenuNoti: any, dataNoti: any) => {
     }
     const lastTwoWords = words?.slice(-2); // Lấy 2 từ cuối cùng thành mảng mới
     const firstLetters = lastTwoWords?.map((word: any) => word?.charAt(0)); // Lấy chữ cái đầu của từng từ
-    return firstLetters?.join(""); // Ghép chữ cái đầu thành chuỗi kết quả
+    return firstLetters?.join("").toUpperCase(); // Ghép chữ cái đầu thành chuỗi kết quả
   };
 
   const checkOnClick = async (id: number) => {
@@ -114,7 +114,7 @@ const notiMenu = (dropdownRef: any, showMenuNoti: any, dataNoti: any) => {
         {dataNoti?.map((item: any) => {
           return (
             <Link
-              to={`/reception/${item?.examinationId}/view`}
+              to={item?.link}
               className="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
               style={{
                 background:
