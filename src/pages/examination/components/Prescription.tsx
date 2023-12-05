@@ -11,19 +11,19 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import IconPrint from "../../../assets/images/ic-print.svg";
-
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useNavigate, useParams } from "react-router-dom";
-
 import { Link } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Printprescription from "../../../components/print/Printprescription";
+
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
   { value: 100, label: "100 bản ghi" },
 ];
+
 const Prescription = (props: any) => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { id } = useParams();
@@ -75,7 +75,6 @@ const Prescription = (props: any) => {
       console.log(error);
     }
   };
-  console.log(prescription, "prescriptions");
 
   useEffect(() => {
     document.title = "Danh sách đơn thuốc";
@@ -84,7 +83,6 @@ const Prescription = (props: any) => {
     navigate(`?${urlParams}`);
     handleGetPrescription();
   }, [query]);
-  console.log("prescriptions", prescriptions);
 
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
@@ -113,7 +111,6 @@ const Prescription = (props: any) => {
       navigate(`?${urlParams}`);
     }
   };
-  console.log(prescription , "prescriptions");
   
   const onOk = async () => {
     const res = await deletePrescription(prescription?._id);
@@ -128,12 +125,12 @@ const Prescription = (props: any) => {
   };
   const handleClickPrint = () => {
     setOpenModal(true);
-    // setDataPrint(item);
     setAction({ type: "print" });
     setTimeout(() => {
       handlePrint();
     }, 500);
   };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between bg-white border-b-gray-200 p-5 rounded-tr-md rounded-tl-md  w-full">
@@ -157,7 +154,7 @@ const Prescription = (props: any) => {
       </div>
       <Printprescription
         componentRef={componentRef}
-      // dataPrint={dataPrint}
+        dataPrint={prescriptions}
       ></Printprescription>
       <div className="bg-white">
         <Table
@@ -202,7 +199,7 @@ const Prescription = (props: any) => {
                         onClick={() => handleClickPrint()}
                         className="button-nutri text-[#585858]"
                       >
-                        <img width={20} height={20} src={IconPrint} alt="print" />
+                      <img width={20} height={20} src={IconPrint} alt="print" />
                       </button>
                     </div>
                   )

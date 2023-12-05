@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Layout } from "../../../components/layout";
 import Heading from "../../../components/common/Heading";
 import { Row } from "../../../components/row";
@@ -13,16 +13,31 @@ import { Button } from "../../../components/button";
 import { Textarea } from "../../../components/textarea";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useReactToPrint } from "react-to-print";
+import Printprescription from "../../../components/print/Printprescription";
 
 const PrescriptionDetail = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { id } = useParams();
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState<any>();
   const { control, setValue, reset } = useForm<any>({});
+  const [openModal, setOpenModal] = useState(false);
+  const [action, setAction] = useState<any>()
+
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => {
+      setOpenModal(false);
+    },
+    copyStyles: true,
+  });
+
   useEffect(() => {
     loadData(id);
   }, [id]);
+
   const loadData = async (id: any) => {
     try {
       setLoading(true);
@@ -34,13 +49,23 @@ const PrescriptionDetail = () => {
       console.log(error);
     }
   };
+
+  const handleClickPrint = () => {
+    setOpenModal(true);
+    setAction({ type: "print" });
+    setTimeout(() => {
+      handlePrint();
+    }, 500);
+  };
+
+
   return (
     <Layout>
       <div className="relative h-full">
         <Heading>Xem chi tiết kê đơn</Heading>
         <div
           className="w-full p-5 bg-white "
-          // onSubmit={handleSubmit(handleCreatePrescription)}
+        // onSubmit={handleSubmit(handleCreatePrescription)}
         >
           <Heading>Thông tin kê đơn</Heading>
           <Row>
@@ -171,78 +196,78 @@ const PrescriptionDetail = () => {
           </Field>
         </div>
         <div className="p-5 bg-white rounded-xl my-5">
-        <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
-            <table className="w-full custom-table">
-              <thead className="bg-[#f4f6f8] text-sm">
-                <th style={{ width: "20%" }}>Tên thuốc</th>
-                <th style={{ width: "8%" }}>Số lượng</th>
-                <th style={{ width: "13%" }}>Đơn vị bán</th>
-                <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
-                <th style={{ width: "8%" }}>Liều lượng</th>
-                <th>Số lần sử dụng/ngày</th>
-                <th style={{ width: "20%" }}>Cách sử dụng</th>
-                {/* <th style={{ width: "10%" }}>Hành động</th> */}
-              </thead>
-              <tbody>
+          <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
+          <table className="w-full custom-table">
+            <thead className="bg-[#f4f6f8] text-sm">
+              <th style={{ width: "20%" }}>Tên thuốc</th>
+              <th style={{ width: "8%" }}>Số lượng</th>
+              <th style={{ width: "13%" }}>Đơn vị bán</th>
+              <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
+              <th style={{ width: "8%" }}>Liều lượng</th>
+              <th>Số lần sử dụng/ngày</th>
+              <th style={{ width: "20%" }}>Cách sử dụng</th>
+              {/* <th style={{ width: "10%" }}>Hành động</th> */}
+            </thead>
+            <tbody>
               {data?.medicines?.map((item: any, index: any) => (
-                  <tr className="hover:bg-transparent">
-                    <td>
+                <tr className="hover:bg-transparent">
+                  <td>
                     <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.medicineId?.name}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.quantity}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
-                        <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.unit_selling}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
+                      control={control}
+                      placeholder="0"
+                      value={item?.medicineId?.name}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
                     <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.unit_using}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
+                      control={control}
+                      placeholder="0"
+                      value={item?.quantity}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
                     <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.dosage}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
+                      control={control}
+                      placeholder="0"
+                      value={item?.unit_selling}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
                     <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.timesUsePerDay}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    <td>
+                      control={control}
+                      placeholder="0"
+                      value={item?.unit_using}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
                     <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.how_using}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
-                      />
-                    </td>
-                    {/* <td>
+                      control={control}
+                      placeholder="0"
+                      value={item?.dosage}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      control={control}
+                      placeholder="0"
+                      value={item?.timesUsePerDay}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  <td>
+                    <Input
+                      control={control}
+                      placeholder="0"
+                      value={item?.how_using}
+                      className="border font-semibold text-black rounded-md px-3 mb-1"
+                    />
+                  </td>
+                  {/* <td>
                       <div className="flex items-center gap-x-2">
                         <button
                           type="button"
@@ -263,17 +288,18 @@ const PrescriptionDetail = () => {
                         )}
                       </div>
                     </td> */}
-                  </tr>
-                ))}
+                </tr>
+              ))}
 
-              </tbody>
-           </table>
+            </tbody>
+          </table>
         </div>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
               <Button to="/prescription">Đóng</Button>
               <Button
+                onClick={() => handleClickPrint()}
                 to=""
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
               >
@@ -286,19 +312,25 @@ const PrescriptionDetail = () => {
                     <Button
                       type="submit"
                       className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                      // onClick={handleSubmit(handleCreatePrescription)}
+                    // onClick={handleSubmit(handleCreatePrescription)}
                     >
                       Tạo đơn Online
                     </Button>
                   </>
                 )
               }
-              
             </div>
           </div>
         </div>
       </div>
-      
+      {
+        action?.type == "print" &&
+        <Printprescription
+          componentRef={componentRef}
+          dataPrint={data}
+          check={true}
+        ></Printprescription>
+      }
     </Layout>
   );
 };

@@ -89,8 +89,6 @@ const ReceptionPrint = styled.div`
 `;
 
 const PrintExamination = ({ componentRef, dataPrint }: any) => {
-  console.log("dataPrint", dataPrint);
-
   const getFullAddress = () => {
     const address: any[] = [
       `${
