@@ -46,6 +46,9 @@ import CategoryList from "../pages/category/CategoryList";
 import CategoryAdd from "../pages/category/CategoryAdd";
 import CategoryUpdate from "../pages/category/components/CategoryUpdate";
 import NotFound from "../pages/NotFound";
+import CustomerUpdate from "../pages/customer/components/CustomerUpdate";
+import CategoryDetail from "../pages/category/components/CategoryDetail";
+import ClinicDetail from "../pages/clinic/components/ClinicDetail";
 export const doctorRouter: any[] = [
   {
     path: "reception",
@@ -135,6 +138,10 @@ export const publiRouter: any[] = [
     element: CustomerAdd,
   },
   {
+    path: "customer/update/:id",
+    element: CustomerUpdate,
+  },
+  {
     path: "customer/:id",
     element: CustomerDetail,
   },
@@ -171,6 +178,10 @@ export const publiRouter: any[] = [
     path: "category/update/:id",
     element: CategoryUpdate,
   },
+  {
+    path: "category/view/:id",
+    element: CategoryDetail,
+  },
 ];
 
 export const adminRouter: any[] = [
@@ -189,6 +200,10 @@ export const adminRouter: any[] = [
   {
     path: "configuration/user/:id/edit",
     element: ConfigUserUpdateContainer,
+  },
+  {
+    path: "configuration/clinic/:id",
+    element: ClinicDetail,
   },
   {
     path: "service/list",
