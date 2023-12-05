@@ -59,8 +59,8 @@ const ExaminationList = () => {
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
-    _sort: "createdAt",
-    _order: "asc",
+    // _sort: "day_waiting",
+    // _order: "asc",
     status,
     day_welcome: null,
     search: null,
@@ -303,7 +303,6 @@ const ExaminationList = () => {
             )}
           </>
         )}
-        
       </div>
     ),
   };
@@ -443,8 +442,9 @@ const ExaminationList = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_welcome: date });
-    urlParams.set("day", date);
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_welcome: dateInUtcPlus7.format() as any });
+    urlParams.set("day", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 

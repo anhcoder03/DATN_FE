@@ -132,7 +132,9 @@ const ReceptionAdd = () => {
 
   const handleRemoveService = (index: number) => {
     let newServiceExam = cloneDeep(dataServices);
-    newServiceExam.splice(index, 1);
+    newServiceExam.splice(index
+      
+      , 1);
     if (newServiceExam?.length === 0) {
       newServiceExam = [
         {
@@ -145,7 +147,6 @@ const ReceptionAdd = () => {
   };
 
   const handleUpdateService = (dataRela: any, index: number) => {
-    console.log(dataRela);
     let newServiceExam = cloneDeep(dataServices);
     newServiceExam[index] = dataRela;
     setDataServices(newServiceExam);
@@ -207,7 +208,6 @@ const ReceptionAdd = () => {
       examinationServiceId,
       day_welcome,
     };
-    console.log(data.day_welcome);
     const res = await createExamination(data);
     if (res?.examination) {
       toast.success(res?.message);

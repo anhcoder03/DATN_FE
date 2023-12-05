@@ -7,7 +7,7 @@ import {
   getAllExamination,
 } from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
-import moment from "moment";
+import moment from "moment-timezone";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination";
@@ -21,6 +21,7 @@ import { getAllClinic } from "../../../services/clinic.service";
 import { Button, Modal } from "antd";
 import { toast } from "react-toastify";
 import IconPrint from "../../../assets/images/ic-print.svg";
+import { getServiceByIdExam } from "../../../services/designation.service";
 
 
 const ReceptionCustomer = () => {
@@ -191,15 +192,28 @@ const ReceptionCustomer = () => {
     };
   });
 
+  const [services, setServices] = useState<any>()
+
+  const service = async (val: any) => {
+    try {
+      setLoading(true);
+      const data = await getServiceByIdExam(val);
+      setLoading(false);
+      setServices(data.docs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleUpdate = (data: any) => {
+    service(data?.data?._id)
     setOpenModal(true);
     setReception(data);
   };
 
-  const handleChangeStatus = async () => {
+  const handleChangeStatus = async (val: any) => {
     const params = {
       _id: reception?.data?._id,
-      status: "cancel",
+      status: val,
     };
     const res: any = await UpdateExamination(params);
     if (res?.examination) {
@@ -314,8 +328,9 @@ const ReceptionCustomer = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_welcome: date });
-    urlParams.set("day_welcome", moment(date).toISOString());
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_welcome: dateInUtcPlus7.format() as any });
+    urlParams.set("day_welcome", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 
@@ -353,13 +368,18 @@ const ReceptionCustomer = () => {
   };
 
   const onOk = () => {
-    if (reception?.type == "cancel") {
-      handleChangeStatus();
+    if (reception?.type == "waiting" && services?.length > 0) {
+      handleChangeStatus(reception?.type);
       setOpenModal(false);
       return;
+    }else {
+      toast.warning("Không được để trống chỉ định dịch vụ !")
+      setOpenModal(false);
     }
-    if (reception?.type == "waiting") {
-      return toast.warning("Tính năng đang phát triển");
+    if (reception?.type == "cancel") {
+      handleChangeStatus(reception?.type);
+      setOpenModal(false);
+      return;
     }
   };
 
@@ -434,7 +454,7 @@ const ReceptionCustomer = () => {
           )}
           {reception?.type == "waiting" && (
             <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc tạo phiếu khám này không?</p>
+              <p>Bạn có chắc chắn muốn chuyển trạng thái tiếp đón này không?</p>
               <span className="text-center text-[#ff5c75] font-bold">
                 {reception?.data?._id}
               </span>

@@ -69,6 +69,7 @@ const PrescriptionAdd = () => {
       how_using: "",
     },
   ]);
+    
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -99,7 +100,6 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      routeOfDrug: "",
     };
     setProduct([...product, newData]);
   };

@@ -17,7 +17,7 @@ import { RootState } from "../../../redux/store";
 const PrescriptionDetail = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const { id } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading , setLoading] = useState(false);
   const [data, setData] = useState<any>();
   const { control, setValue, reset } = useForm<any>({});
   useEffect(() => {
@@ -27,7 +27,6 @@ const PrescriptionDetail = () => {
     try {
       setLoading(true);
       const data: any = await getOnePrescription(id);
-      console.log("datafataaa", data);
       setLoading(false);
       reset(data);
       setData(data);
@@ -35,9 +34,6 @@ const PrescriptionDetail = () => {
       console.log(error);
     }
   };
-
-  console.log("data", data);
-
   return (
     <Layout>
       <div className="relative h-full">
@@ -174,6 +170,105 @@ const PrescriptionDetail = () => {
             />
           </Field>
         </div>
+        <div className="p-5 bg-white rounded-xl my-5">
+        <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
+            <table className="w-full custom-table">
+              <thead className="bg-[#f4f6f8] text-sm">
+                <th style={{ width: "20%" }}>Tên thuốc</th>
+                <th style={{ width: "8%" }}>Số lượng</th>
+                <th style={{ width: "13%" }}>Đơn vị bán</th>
+                <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
+                <th style={{ width: "8%" }}>Liều lượng</th>
+                <th>Số lần sử dụng/ngày</th>
+                <th style={{ width: "20%" }}>Cách sử dụng</th>
+                {/* <th style={{ width: "10%" }}>Hành động</th> */}
+              </thead>
+              <tbody>
+              {data?.medicines?.map((item: any, index: any) => (
+                  <tr className="hover:bg-transparent">
+                    <td>
+                    <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.medicineId?.name}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                      <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.quantity}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                        <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.unit_selling}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                    <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.unit_using}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                    <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.dosage}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                    <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.timesUsePerDay}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    <td>
+                    <Input
+                        control={control}
+                        placeholder="0"
+                        value={item?.how_using}
+                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                      />
+                    </td>
+                    {/* <td>
+                      <div className="flex items-center gap-x-2">
+                        <button
+                          type="button"
+                          className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
+                          onClick={() => {
+                            handleRemoveMedicine(index);
+                          }}
+                        >
+                          <IconTrash />
+                        </button>
+                        {product?.length == index + 1 && (
+                          <button
+                            className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
+                            onClick={handleAddMedicine}
+                          >
+                            <IconPlus></IconPlus>
+                          </button>
+                        )}
+                      </div>
+                    </td> */}
+                  </tr>
+                ))}
+
+              </tbody>
+           </table>
+        </div>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
@@ -203,6 +298,7 @@ const PrescriptionDetail = () => {
           </div>
         </div>
       </div>
+      
     </Layout>
   );
 };

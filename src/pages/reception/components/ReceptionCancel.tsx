@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CalcUtils from "../../../helpers/CalcULtils";
 import moment from "moment";
 import { Table3 } from "../../../components/table";
