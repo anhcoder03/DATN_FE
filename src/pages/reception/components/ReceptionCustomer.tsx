@@ -371,7 +371,7 @@ const ReceptionCustomer = () => {
       setOpenModal(false);
       return;
     }else {
-      toast.warning("Không được để chống chỉ định dịnh vụ")
+      toast.warning("Không được để trống chỉ định dịch vụ !")
       setOpenModal(false);
     }
     if (reception?.type == "cancel") {
