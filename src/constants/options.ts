@@ -10,6 +10,7 @@ export interface IDataAddress {
   name: string;
   phone_code: number;
 }
+
 export const optionClinic: IOption[] = [
   { value: "", label: "-Trạng thái-" },
   { value: "active", label: "Đang hoạt động" },
@@ -29,6 +30,7 @@ export const optionDoctor: IOption[] = [
   { value: "dfđ", label: "Nguyễn Phi Anh" },
   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 ];
+
 export const optionOrderType: IOption[] = [
   { value: "", label: "Loại đơn" },
   { value: 0, label: "Kê đơn" },
@@ -37,6 +39,7 @@ export const optionOrderType: IOption[] = [
     label: "Bán tại cửa hàng",
   },
 ];
+
 export const optionOrderPaymentStatus: IOption[] = [
   { value: "", label: "Trạng thái thanh toán" },
   { value: 1, label: "Đã thanh toán" },
@@ -71,6 +74,7 @@ export const optionNVCS: IOption[] = [
   { value: "dfđ", label: "Nguyễn Phi Anh" },
   { value: "dfsfssđ", label: "Chu Tuấn Phương" },
 ];
+
 export const optionNVTD: IOption[] = [
   { value: "bac", label: "Nguyễn Hồng Sơn" },
   { value: "dfđ", label: "Nguyễn Phi Anh" },
@@ -86,12 +90,14 @@ export const dataTypeImportProduct: IOption[] = [
   { value: "Vỉ", label: "Vỉ" },
   { value: "Viên", label: "Viên" },
 ];
+
 export const optionStatusDesignation: IOption[] = [
   { value: "", label: "-Trạng thái thực hiên-" },
   { value: "waiting", label: "Chờ thực hiện" },
   { value: "done", label: "Đã thực hiện" },
   { value: "canceled", label: "Đã hủy" },
 ];
+
 export const optionPaymentStatus: IOption[] = [
   { value: "", label: "-Trạng thái thanh toán-" },
   { value: "paid", label: "Đã thanh toán" },
@@ -103,3 +109,18 @@ export const optionService: IOption[] = [
   { value: "1", label: "Đang hoạt động" },
   { value: "0", label: "Không hoạt động" },
 ];
+
+export const Status_cancel: any[] = [
+  {
+    value: '',
+    label: '-Trạng thái-'
+  },
+  {
+    value: 'cancel',
+    label: 'Huỷ phiếu khám'
+  },
+  {
+    value: 'cancel_schedule',
+    label: 'Huỷ đặt lịch'
+  }
+]

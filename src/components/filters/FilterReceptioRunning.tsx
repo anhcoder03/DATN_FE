@@ -4,10 +4,10 @@ import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import IconCalendarBlack from "../../assets/images/icon/ic_calendar-black.svg";
 import Select from "react-select";
-import { ModalDone } from "../modal";
+import { ModalWaiting } from "../modal";
 import IconTrash2 from "../../assets/images/icon-trash2.png";
 
-const FilterReceptionDone = (props: any) => {
+const FilterReceptionRunning = (props: any) => {
   const { 
     columns,
     handleSearch,
@@ -20,9 +20,10 @@ const FilterReceptionDone = (props: any) => {
     clinics,
     setQuery,
     query,
-    day_done
+    day_waiting
   } = props;
   const [open, setOpen] = useState(false);
+
   const showModal = () => {
     setOpen(true);
   };
@@ -41,13 +42,10 @@ const FilterReceptionDone = (props: any) => {
     }
   };
 
-  console.log("siuQuery", query);
-  
-
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
-      <div className="flex items-center gap-2 filter-wrapper">
+        <div className="flex items-center gap-2 filter-wrapper">
           <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[300px]">
             <IconSearch></IconSearch>
             <input
@@ -69,11 +67,11 @@ const FilterReceptionDone = (props: any) => {
                 handleDayChange(date);
               }}
               placeholder="Ngày tiếp đón"
-              value={[day_done]}
+              value={[day_waiting]}
             ></Flatpickr>
             <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
               ...query,
-              day_done: null
+              day_waiting: null
             })}>
               <img src={IconTrash2} alt="icon" />
             </div>
@@ -118,14 +116,14 @@ const FilterReceptionDone = (props: any) => {
           </Link> */}
         </div>
       </div>
-      <ModalDone
+      <ModalWaiting
         open={open}
         handleCancel={handleCancel}
         handleOk={handleOk}
         headings={columns}
-      ></ModalDone>
+      ></ModalWaiting>
     </div>
   );
 };
 
-export default FilterReceptionDone;
+export default FilterReceptionRunning;

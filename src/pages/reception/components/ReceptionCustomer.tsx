@@ -22,6 +22,7 @@ import { Button, Modal } from "antd";
 import { toast } from "react-toastify";
 import IconPrint from "../../../assets/images/ic-print.svg";
 
+
 const ReceptionCustomer = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [receptions, setReceptions] = useState<any[]>();
@@ -40,7 +41,7 @@ const ReceptionCustomer = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_welcome: null,
+    day_welcome: moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
     doctorId: null,
   });
   const [totalPages, setTotalPages] = useState(1);
@@ -374,6 +375,9 @@ const ReceptionCustomer = () => {
         columns={columns}
         handleDayChange={handleDayChange}
         handleClinicChange={handleSearchByClinic}
+        day_welcome={query?.day_welcome}
+        setQuery={setQuery}
+        query={query}
       ></FilterReceptionCustomer>
       <Table3
         isLoading={loading}
