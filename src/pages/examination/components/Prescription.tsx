@@ -97,7 +97,6 @@ const Prescription = (props: any) => {
     navigate(`?${urlParams}`);
   };
   const handleShowModel = (data: any) => {
-    console.log(data , "dataModel");
     setOpenModal(true);
     setPrescription(data);
   };
