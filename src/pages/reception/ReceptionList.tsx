@@ -87,7 +87,6 @@ const ReceptionList = () => {
       navigate(`?${urlParams}`);
     }
     if (key === "6") {
-      console.log('tabsíuiu', dataTabs[5])
       urlParams.set("tab", dataTabs[5].name);
       navigate(`?${urlParams}`);
     }

@@ -98,7 +98,7 @@ const ReceptionCancel = () => {
       console.log(error);
     }
   };
-  console.log(receptions);
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
