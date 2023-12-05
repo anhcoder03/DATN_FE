@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Layout } from "../../../components/layout";
 import { Table } from "../../../components/table";
 import IconEdit from "../../../assets/images/icon-edit.png";
@@ -10,17 +10,21 @@ import {
   deletePrescription,
   getAllPrescription,
 } from "../../../services/prescription.service";
+import IconPrint from "../../../assets/images/ic-print.svg";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import FilterPrescription from "../components/filter/FilterPrescription";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useReactToPrint } from "react-to-print";
+import Printprescription from "../../../components/print/Printprescription";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
   { value: 100, label: "100 bản ghi" },
 ];
+
 const PrescriptionList = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [prescriptions, setPrescriptions] = useState<any>();
@@ -29,6 +33,7 @@ const PrescriptionList = () => {
   const [totalDocs, setTotalDocs] = useState(1);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [action, setAction] = useState<any>()
 
   const urlParams = new URLSearchParams(location.search);
   const [query, setQuery] = useState({
@@ -40,6 +45,17 @@ const PrescriptionList = () => {
   const gotoDetail = (item: any) => {
     navigate(`/prescription/view/${item?._id}`);
   };
+
+  const componentRef = useRef(null);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => {
+      setOpenModal(false);
+    },
+    copyStyles: true,
+  });
+
   const headings = [
     "Mã Đơn",
     "Khách Hàng",
@@ -67,7 +83,6 @@ const PrescriptionList = () => {
     navigate(`?${urlParams}`);
     handleGetPrescription();
   }, [query]);
-  console.log("prescriptions", prescriptions);
 
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
@@ -107,6 +122,13 @@ const PrescriptionList = () => {
     setOpenModal(false);
   };
 
+  const handleClickPrint = (item: any) => {
+    setOpenModal(true);
+    setAction({ type: "print", value: item });
+    setTimeout(() => {
+      handlePrint();
+    }, 500);
+  };
   return (
     <Layout>
       <Heading>Danh sách đơn thuốc</Heading>
@@ -137,7 +159,7 @@ const PrescriptionList = () => {
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
                 {
-                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3 ) ? null : (
+                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
                     <div className="table-action">
                       <div
                         className="button-nutri"
@@ -148,6 +170,12 @@ const PrescriptionList = () => {
                         <img width={20} height={20} src={IconEdit} alt="edit" />
                       </div>
                       <button
+                        onClick={() => handleClickPrint(item)}
+                        className="button-nutri text-[#585858]"
+                      >
+                        <img width={20} height={20} src={IconPrint} alt="print" />
+                      </button>
+                      <button
                         className="button-nutri text-[#585858]"
                         onClick={() => handleShowModel(item)}
                       >
@@ -156,7 +184,7 @@ const PrescriptionList = () => {
                     </div>
                   )
                 }
-                
+
               </td>
             </tr>
           ))}
@@ -170,23 +198,35 @@ const PrescriptionList = () => {
           totalPages={totalPages}
         ></Pagination>
       </div>
-      <Modal
-        centered
-        open={openModal}
-        onOk={onOk}
-        onCancel={() => setOpenModal(false)}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
-          <span className="text-center text-[#ff5c75] font-bold">
-            {prescription?._id}
-          </span>
-        </div>
-      </Modal>
+      {
+        action?.type != "print" &&
+        <Modal
+          centered
+          open={openModal}
+          onOk={onOk}
+          onCancel={() => setOpenModal(false)}
+        >
+          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+            Thông Báo
+          </h1>
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
+            <span className="text-center text-[#ff5c75] font-bold">
+              {prescription?._id}
+            </span>
+          </div>
+        </Modal>
+      }
+      {
+        action?.type == "print" &&
+        <Printprescription
+          componentRef={componentRef}
+          dataPrint={action?.value}
+          check={true}
+        ></Printprescription>
+      }
     </Layout>
+
   );
 };
 

@@ -347,8 +347,11 @@ const ExaminationDetail = () => {
                 Danh sách dịch vụ khám
               </h3>
               <div className="flex flex-col">
-                {services?.map((i) => (
-                  <div className="flex justify-between items-center border-b border-b-gray-200 p-2">
+                {services?.map((i, index) => (
+                  <div
+                    className="flex justify-between items-center border-b border-b-gray-200 p-2"
+                    key={index}
+                  >
                     <span>{i?.service_examination?.name}</span>
                     <span>
                       {PriceUtils.format(i?.service_examination?.price)}
