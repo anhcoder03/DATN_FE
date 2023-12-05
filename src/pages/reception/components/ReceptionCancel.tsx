@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CalcUtils from "../../../helpers/CalcULtils";
 import moment from "moment";
 import { Table3 } from "../../../components/table";
 import { Pagination } from "../../../components/pagination";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import IconTrash2 from "../../../assets/images/icon-trash2.png";
 import { useNavigate } from "react-router-dom";
 import { getAllExamination } from "../../../services/examination.service";
-import FilterReceptionDone from "../../../components/filters/FilterReceptionDone";
+
 import FilterReceptionCancel from "../../../components/filters/FilterReceptionCancel";
 
 const ReceptionCancel = () => {

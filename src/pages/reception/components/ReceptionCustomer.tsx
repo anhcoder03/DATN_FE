@@ -7,7 +7,7 @@ import {
   getAllExamination,
 } from "../../../services/examination.service";
 import { Table3 } from "../../../components/table";
-import moment from "moment";
+import moment from "moment-timezone";
 import CalcUtils from "../../../helpers/CalcULtils";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../../components/pagination";
@@ -313,8 +313,9 @@ const ReceptionCustomer = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_welcome: date });
-    urlParams.set("day_welcome", moment(date).toISOString());
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_welcome: dateInUtcPlus7.format() as any });
+    urlParams.set("day_welcome", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 
@@ -381,7 +382,7 @@ const ReceptionCustomer = () => {
         data={receptions}
         gotoDetail={gotoDetail}
       ></Table3>
-      
+
       <Pagination
         handlePageClick={handlePageClick}
         pageCount={totalPages}

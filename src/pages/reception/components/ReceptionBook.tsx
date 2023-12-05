@@ -249,8 +249,9 @@ const ReceptionBook = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_booking: date });
-    urlParams.set("day_booking", date);
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_booking: dateInUtcPlus7.format() as any });
+    urlParams.set("day_booking", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 

@@ -303,7 +303,6 @@ const ExaminationList = () => {
             )}
           </>
         )}
-        
       </div>
     ),
   };
@@ -443,8 +442,9 @@ const ExaminationList = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_welcome: date });
-    urlParams.set("day", date);
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_welcome: dateInUtcPlus7.format() as any });
+    urlParams.set("day", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 
