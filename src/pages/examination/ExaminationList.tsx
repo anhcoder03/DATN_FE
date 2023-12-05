@@ -59,8 +59,8 @@ const ExaminationList = () => {
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
-    _sort: "createdAt",
-    _order: "asc",
+    // _sort: "day_waiting",
+    // _order: "asc",
     status,
     day_welcome: null,
     search: null,
