@@ -100,7 +100,6 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      routeOfDrug: "",
     };
     setProduct([...product, newData]);
   };
