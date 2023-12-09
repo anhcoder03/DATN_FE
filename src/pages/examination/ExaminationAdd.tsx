@@ -20,7 +20,7 @@ export interface IDataTabs {
 }
 const ExaminationAdd = (props: any) => {
   const navigate = useNavigate();
-  const id = useParams();
+  const id: any = useParams();
 
   const dataTabs: IDataTabs[] = [
     {
@@ -31,7 +31,7 @@ const ExaminationAdd = (props: any) => {
     },
     {
       title: "CHỈ ĐỊNH DỊCH VỤ",
-      children: <ExaminationSevicer />,
+      children: <ExaminationSevicer data={[]} />,
       id: "2",
       name: "recetion",
     },

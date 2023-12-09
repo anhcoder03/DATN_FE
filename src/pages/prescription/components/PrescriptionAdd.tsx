@@ -276,52 +276,15 @@ const PrescriptionAdd = () => {
                   value={combinedNames}
                 />
               </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  Thời gian tái khám
-                </Label>
-                <div className="relative border-b border-b-gray-200 pb-3">
-                  <Flatpickr
-                    value={data?.reExaminationDate}
-                    options={{
-                      locale: Vietnamese,
-                      allowInput: true,
-                      enableTime: true,
-                      dateFormat: "d/m/Y H:i",
-                      altInputClass: "date-range",
-                      time_24hr: true,
-                      minDate: "today",
-                    }}
-                    onChange={([date]) => {
-                      setData({
-                        ...data,
-                        reExaminationDate: moment(date).format(),
-                      });
-                    }}
-                    placeholder="dd/mm/yyyy"
-                    name="reExaminationDate"
-                  ></Flatpickr>
-                  <div className="absolute top-0 right-0">
-                    <img src={IconCalendar} alt="icon" />
-                  </div>
-                </div>
-              </Field>
             </Row>
             <Row>
               <Field>
                 <Label className="font-semibold" htmlFor="note">
                   Chẩn đoán
                 </Label>
-                <Textarea
-                  control={control}
-                  className="outline-none input-primary"
-                  name="diagnostic"
-                  placeholder="Nhập chẩn đoán bệnh"
-                  value={data?.diagnostic}
-                  onChange={(val: any) => {
-                    handleChangeInput(val);
-                  }}
-                />
+                <div className="!border-transparent font-semibold text-black">
+                  {data?.diagnostic || '---'}
+                </div>
               </Field>
               <Field>
                 <Label className="font-semibold" htmlFor="note">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconSearch, IconSetting } from "../icons";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
@@ -20,10 +20,10 @@ const FilterReceptionWaiting = (props: any) => {
     clinics,
     setQuery,
     query,
-    day_running
+    day_waiting
   } = props;
   const [open, setOpen] = useState(false);
-
+  const [date, setDate] = useState<any>();
   const showModal = () => {
     setOpen(true);
   };
@@ -41,6 +41,21 @@ const FilterReceptionWaiting = (props: any) => {
       handleSearch(e.target.value);
     }
   };
+
+  useEffect(() => {
+    // format date
+    if(day_waiting !== null) {
+      const parsedDate = new Date(day_waiting);
+      const formattedDate = parsedDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      setDate(formattedDate)
+    }else {
+      setDate(day_waiting)
+    }
+  },[day_waiting])
 
   return (
     <div className="">
@@ -67,11 +82,11 @@ const FilterReceptionWaiting = (props: any) => {
                 handleDayChange(date);
               }}
               placeholder="Ngày tiếp đón"
-              value={[day_running]}
+              value={[date]}
             ></Flatpickr>
             <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
               ...query,
-              day_running: null
+              day_waiting: null
             })}>
               <img src={IconTrash2} alt="icon" />
             </div>

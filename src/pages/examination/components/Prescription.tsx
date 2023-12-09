@@ -183,7 +183,8 @@ const Prescription = (props: any) => {
                       <div
                         className="button-nutri"
                         onClick={() => {
-                          navigate(`/product/update/${item?._id}`);
+                          // navigate(`/product/update/${item?._id}`);
+                          toast.info('đang làm nha')
                         }}
                       >
                         <img width={20} height={20} src={IconEdit} alt="edit" />

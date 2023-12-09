@@ -113,7 +113,7 @@ export const optionService: IOption[] = [
 export const Status_cancel: any[] = [
   {
     value: '',
-    label: '-Trạng thái-'
+    label: '-Trạng thái huỷ-'
   },
   {
     value: 'cancel',

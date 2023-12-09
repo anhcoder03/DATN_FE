@@ -44,6 +44,7 @@ const FilterReceptionCustomer = ({
   
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<any>();
   const navigate = useNavigate();
   const showModal = () => {
     setOpen(true);
@@ -62,6 +63,23 @@ const FilterReceptionCustomer = ({
       handleSearch(e.target.value);
     }
   };
+
+  useEffect(() => {
+    // format date
+    if(day_welcome !== null) {
+      const parsedDate = new Date(day_welcome);
+      const formattedDate = parsedDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      setDate(formattedDate)
+    }else {
+      setDate(day_welcome)
+    }
+  },[day_welcome])
+
+  
 
   return (
     <div className="">
@@ -87,7 +105,7 @@ const FilterReceptionCustomer = ({
                 handleDayChange(date);
               }}
               placeholder="Ngày tiếp đón"
-              value={[day_welcome]}
+              value={[date]}
             ></Flatpickr>
             <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
               ...query,

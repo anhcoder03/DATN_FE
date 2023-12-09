@@ -28,8 +28,11 @@ function App() {
     )
   }
 
-  const toastify = () => {
-    toast.info(router_notify)
+  const toastify = (noti: any) => {
+    // setNotify(noti)
+    return (
+      toast.info('Thông báo đẩy!!!!')
+    )
   }
 
   console.log("notify", notify)
@@ -38,7 +41,7 @@ function App() {
     (async () => {
       try {
         const payload: any = await onMessageListener();
-        setNotify(payload?.data)
+          toastify(payload?.data)
         // toastify();
         // fetch api Notification
         // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.

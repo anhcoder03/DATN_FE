@@ -25,7 +25,7 @@ const ReceptionRunning = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_running: null
+    day_running: moment()
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -202,8 +202,9 @@ const ReceptionRunning = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_running: date });
-    urlParams.set("day_running", moment(date).toISOString());
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_running: dateInUtcPlus7.format() as any });
+    urlParams.set("day_running", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 

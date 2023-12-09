@@ -53,14 +53,17 @@ const ExaminationDetail = () => {
     },
     copyStyles: true,
   });
+  
   const [data, setData] = useState<any>({});
   const { id } = useParams();
+
   useEffect(() => {
     if (id !== undefined) {
       loadData();
       getService();
     }
   }, [id]);
+
   async function loadData() {
     try {
       const response = await getOneExamination(id);
@@ -72,6 +75,7 @@ const ExaminationDetail = () => {
       toast.error("Đã có lỗi sảy ra!!!");
     }
   }
+
   async function getService() {
     try {
       const response = await getServiceByIdExam(id);
@@ -102,15 +106,18 @@ const ExaminationDetail = () => {
       name: "prescription",
     },
   ];
+
   useEffect(() => {
     document.title = "Chi tiết phiếu khám";
   }, []);
+
   const handleSelectTab = (key: string) => {
     if (key === "1") {
     }
     if (key === "2") {
     }
   };
+
   const handleChangeStatus = async (status: string) => {
     if (status === "cancel") {
       const now = new Date();
@@ -132,7 +139,7 @@ const ExaminationDetail = () => {
       }
     } else {
       const isPayment = findPayment(services);
-      if (isPayment) {
+      if (isPayment && status == 'done') {
         toast.warning("Vui lòng thanh toán trước khi hoàn thành");
         return;
       }

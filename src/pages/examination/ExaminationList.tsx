@@ -62,7 +62,7 @@ const ExaminationList = () => {
     // _sort: "day_waiting",
     // _order: "asc",
     status,
-    day_welcome: null,
+    day_welcome: moment(),
     search: null,
     clinicId: null,
     doctorId: null,
@@ -101,6 +101,7 @@ const ExaminationList = () => {
     navigate(`?${urlParams}`);
     handleGetExaminaton();
   }, [query]);
+
   useEffect(() => {
     async function handleGetDoctors() {
       const response = await getAllByName({ name: "Bác sĩ" });
@@ -116,6 +117,7 @@ const ExaminationList = () => {
     }
     handleGetDoctors();
   }, []);
+
   useEffect(() => {
     async function handleGetClinic() {
       const response = await getAllClinic({ _status: "active", _limit: 100 });
@@ -196,10 +198,12 @@ const ExaminationList = () => {
       selector: eval(heading.selector),
     };
   });
+
   // const handleUpdate = (data: any) => {
   //   setOpenModal(true);
   //   setReception(data);
   // };
+
   const statusColumn = {
     name: "Trạng thái",
     cell: (row: any) => <LabelStatus type={row?.status} />,
@@ -460,6 +464,9 @@ const ExaminationList = () => {
         handleClinicChange={handleSearchByClinic}
         clinics={clinics}
         dataDoctors={dataDoctors}
+        day_welcome = {query?.day_welcome}
+        query = {query}
+        setQuery = {setQuery}
       ></FilterExamination>
       <Table3
         columns={newHeading}
