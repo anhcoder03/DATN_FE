@@ -12,8 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TDataResponse, handleLogin } from "../../redux/auth/handler";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ROLE } from "../../constants/define";
+import ModalLoginOTP, {
+  ModalLoginOTPMethods,
+} from "./components/ModalLoginOTP";
 
 type TLogin = {
   email: string;
@@ -42,6 +45,7 @@ const Login = () => {
   const [typePassWord, setTypePassWord] = useState("password");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const modalRef = useRef<ModalLoginOTPMethods>(null);
   const handleSignin = async (values: TLogin) => {
     if (!isValid) return;
     try {
@@ -140,7 +144,11 @@ const Login = () => {
               <div className="w-full h-[1px] bg-[#22222226]"></div>
             </div>
           </Field>
-          <Button className=" bg-white text-primary border border-primary rounded-md font-medium  h-[50px]">
+          <Button
+            type="button"
+            className=" bg-white text-primary border border-primary rounded-md font-medium  h-[50px]"
+            onClick={() => modalRef.current?.setOpen()}
+          >
             Đăng nhập bằng OTP
           </Button>
         </form>
@@ -150,6 +158,7 @@ const Login = () => {
           <img src={bgLogin} alt="login-bg" />
         </div>
       </div>
+      <ModalLoginOTP ref={modalRef} />
     </div>
   );
 };

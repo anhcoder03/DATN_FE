@@ -579,3 +579,11 @@ small {
 .ant-modal-content {
   width: 700px !important;
 }
+.hidden-action {
+  -moz-appearance: textfield;
+}
+.hidden-action::-webkit-inner-spin-button,
+.hidden-action::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
