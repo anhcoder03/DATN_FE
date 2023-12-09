@@ -33,13 +33,14 @@ const PrescriptionList = () => {
   const [totalDocs, setTotalDocs] = useState(1);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [action, setAction] = useState<any>()
+  const [action, setAction] = useState<any>();
 
   const urlParams = new URLSearchParams(location.search);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     search: "",
+    createdAt: null,
   });
   const navigate = useNavigate();
   const gotoDetail = (item: any) => {
@@ -158,33 +159,31 @@ const PrescriptionList = () => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
-                {
-                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
-                    <div className="table-action">
-                      <div
-                        className="button-nutri"
-                        onClick={() => {
-                          navigate(`/product/update/${item?._id}`);
-                        }}
-                      >
-                        <img width={20} height={20} src={IconEdit} alt="edit" />
-                      </div>
-                      <button
-                        onClick={() => handleClickPrint(item)}
-                        className="button-nutri text-[#585858]"
-                      >
-                        <img width={20} height={20} src={IconPrint} alt="print" />
-                      </button>
-                      <button
-                        className="button-nutri text-[#585858]"
-                        onClick={() => handleShowModel(item)}
-                      >
-                        <IconTrash></IconTrash>
-                      </button>
+                {auth?.role?.roleNumber == 2 ||
+                auth?.role?.roleNumber == 3 ? null : (
+                  <div className="table-action">
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        navigate(`/product/update/${item?._id}`);
+                      }}
+                    >
+                      <img width={20} height={20} src={IconEdit} alt="edit" />
                     </div>
-                  )
-                }
-
+                    <button
+                      onClick={() => handleClickPrint(item)}
+                      className="button-nutri text-[#585858]"
+                    >
+                      <img width={20} height={20} src={IconPrint} alt="print" />
+                    </button>
+                    <button
+                      className="button-nutri text-[#585858]"
+                      onClick={() => handleShowModel(item)}
+                    >
+                      <IconTrash></IconTrash>
+                    </button>
+                  </div>
+                )}
               </td>
             </tr>
           ))}
@@ -198,8 +197,7 @@ const PrescriptionList = () => {
           totalPages={totalPages}
         ></Pagination>
       </div>
-      {
-        action?.type != "print" &&
+      {action?.type != "print" && (
         <Modal
           centered
           open={openModal}
@@ -216,17 +214,15 @@ const PrescriptionList = () => {
             </span>
           </div>
         </Modal>
-      }
-      {
-        action?.type == "print" &&
+      )}
+      {action?.type == "print" && (
         <Printprescription
           componentRef={componentRef}
           dataPrint={action?.value}
           check={true}
         ></Printprescription>
-      }
+      )}
     </Layout>
-
   );
 };
 

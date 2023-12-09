@@ -1,9 +1,6 @@
-import React from "react";
 import { Layout } from "../components/layout";
 
-interface Props {}
-
-const Home = (props: Props) => {
+const Home = () => {
   return (
     <Layout>
       <div></div>

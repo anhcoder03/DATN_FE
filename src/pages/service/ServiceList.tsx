@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Heading from "../../components/common/Heading";
 import { Table } from "../../components/table";
 import { Layout } from "../../components/layout";

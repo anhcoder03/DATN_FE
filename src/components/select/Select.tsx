@@ -25,7 +25,7 @@ const AppSelect = ({
       defaultValue={options[0]}
       className="text-gray16"
       options={options}
-      menuPlacement={menuPlacement}
+      menuPlacement={menuPlacement as any}
     />
   );
 };

@@ -1,8 +1,8 @@
-import { Card, DatePicker, Typography } from 'antd';
-import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
-import { statisticCancellationRate } from '../../../services/dashboard.service';
+import { Card, DatePicker, Typography } from "antd";
+import moment from "moment";
+import React, { useEffect, useMemo, useState } from "react";
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { statisticCancellationRate } from "../../../services/dashboard.service";
 
 type KPIProps = {};
 
@@ -11,7 +11,7 @@ type DataType = {
   value: number;
 };
 
-const COLORS = ['#54B2FE', '#F391C6'];
+const COLORS = ["#54B2FE", "#F391C6"];
 
 const RADIAN = Math.PI / 180;
 
@@ -22,8 +22,8 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
 
   const defaultDay = useMemo(() => {
     return [
-      moment().startOf('month').toDate(),
-      moment().endOf('month').toDate(),
+      moment().startOf("month").toDate(),
+      moment().endOf("month").toDate(),
     ];
   }, []);
 
@@ -63,9 +63,10 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
       <text
         x={x}
         y={y}
-        fill='white'
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline='central'>
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
@@ -75,40 +76,42 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
     <Card
       extra={
         <DatePicker.RangePicker
-          format='DD-MM-YYYY'
+          format="DD-MM-YYYY"
           onChange={(e) => {
             if (e) {
-              setDay([e[0]!.startOf('d').toDate(), e[1]!.endOf('d').toDate()]);
+              setDay([e[0]!.startOf("d").toDate(), e[1]!.endOf("d").toDate()]);
             }
             if (!e) {
               setDay(defaultDay);
             }
           }}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           allowClear
         />
       }
-      title={<Typography.Title level={4}>Tỉ lệ hủy lịch</Typography.Title>}>
+      title={<Typography.Title level={4}>Tỉ lệ hủy lịch</Typography.Title>}
+    >
       <ResponsiveContainer aspect={2 / 1}>
         <PieChart width={100}>
           <Pie
             data={data}
-            dataKey='value'
-            nameKey='name'
-            cx='50%'
-            cy='50%'
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
             outerRadius={80}
-            fill='#8884d8'
+            fill="#8884d8"
             labelLine={false}
-            label={renderCustomizedLabel}>
-            {data?.map((entry, index) => (
+            label={renderCustomizedLabel}
+          >
+            {data?.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}
               />
             ))}
           </Pie>
-          <Legend key='name' />
+          <Legend key="name" />
         </PieChart>
       </ResponsiveContainer>
     </Card>

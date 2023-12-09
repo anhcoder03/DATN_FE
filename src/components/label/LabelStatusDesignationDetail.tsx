@@ -29,10 +29,10 @@ const LabelStatusDesignationDetail = ({ type }: LabelStatusType) => {
       styleClassName = "bg-[#fd4858] text-white";
       break;
 
-    case 'running': 
-      children = 'Đang thực hiện';
-      styleClassName = "text-[#fff] btn-info"
-
+    case "running":
+      children = "Đang thực hiện";
+      styleClassName = "text-[#fff] btn-info";
+      break;
     default:
       break;
   }
