@@ -12,7 +12,6 @@ import Filter from "./components/Filter";
 import { ORDERSTATUS } from "../../constants/define";
 import IconTrash2 from "../../assets/images/icon-trash2.png";
 
-type Props = {};
 const headings = [
   "Mã đơn",
   "Nguồn đơn",
@@ -28,7 +27,7 @@ const optionsPagination = [
   { value: 100, label: "100 bản ghi" },
 ];
 
-const OrderList = (props: Props) => {
+const OrderList = () => {
   const urlParams = new URLSearchParams(location.search);
   const [query, setQuery] = useState({
     _page: 1,
@@ -45,9 +44,9 @@ const OrderList = (props: Props) => {
   const navigate = useNavigate();
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
+  console.log(orders, "ordersĐ");
 
   const handleGetAllOrder = async () => {
     try {

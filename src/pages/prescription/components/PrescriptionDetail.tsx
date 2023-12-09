@@ -23,7 +23,7 @@ const PrescriptionDetail = () => {
   const [data, setData] = useState<any>();
   const { control, setValue, reset } = useForm<any>({});
   const [openModal, setOpenModal] = useState(false);
-  const [action, setAction] = useState<any>()
+  const [action, setAction] = useState<any>();
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
@@ -58,14 +58,13 @@ const PrescriptionDetail = () => {
     }, 500);
   };
 
-
   return (
     <Layout>
       <div className="relative h-full">
         <Heading>Xem chi tiết kê đơn</Heading>
         <div
           className="w-full p-5 bg-white "
-        // onSubmit={handleSubmit(handleCreatePrescription)}
+          // onSubmit={handleSubmit(handleCreatePrescription)}
         >
           <Heading>Thông tin kê đơn</Heading>
           <Row>
@@ -209,7 +208,7 @@ const PrescriptionDetail = () => {
               {/* <th style={{ width: "10%" }}>Hành động</th> */}
             </thead>
             <tbody>
-              {data?.medicines?.map((item: any, index: any) => (
+              {data?.medicines?.map((item: any) => (
                 <tr className="hover:bg-transparent">
                   <td>
                     <Input
@@ -290,7 +289,6 @@ const PrescriptionDetail = () => {
                     </td> */}
                 </tr>
               ))}
-
             </tbody>
           </table>
         </div>
@@ -305,32 +303,30 @@ const PrescriptionDetail = () => {
               >
                 In đơn
               </Button>
-              {
-                (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
-                  <>
-                    <Button to="">Tạo đơn Offline</Button>
-                    <Button
-                      type="submit"
-                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+              {auth?.role?.roleNumber == 2 ||
+              auth?.role?.roleNumber == 3 ? null : (
+                <>
+                  <Button to="">Tạo đơn Offline</Button>
+                  <Button
+                    type="submit"
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                     // onClick={handleSubmit(handleCreatePrescription)}
-                    >
-                      Tạo đơn Online
-                    </Button>
-                  </>
-                )
-              }
+                  >
+                    Tạo đơn Online
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
-      {
-        action?.type == "print" &&
+      {action?.type == "print" && (
         <Printprescription
           componentRef={componentRef}
           dataPrint={data}
           check={true}
         ></Printprescription>
-      }
+      )}
     </Layout>
   );
 };

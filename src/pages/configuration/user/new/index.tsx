@@ -58,7 +58,7 @@ const ConfigUserAddContainer = () => {
   useEffect(() => {
     const arrayError = Object.values(errors);
     if (arrayError.length > 0) {
-      toast.warning(arrayError[0]?.message);
+      toast.warning(arrayError[0]?.message as any);
     }
   });
 

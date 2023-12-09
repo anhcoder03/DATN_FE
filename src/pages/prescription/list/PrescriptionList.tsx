@@ -33,13 +33,14 @@ const PrescriptionList = () => {
   const [totalDocs, setTotalDocs] = useState(1);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const [action, setAction] = useState<any>()
+  const [action, setAction] = useState<any>();
 
   const urlParams = new URLSearchParams(location.search);
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
     search: "",
+    createdAt: null,
   });
   const navigate = useNavigate();
   const gotoDetail = (item: any) => {
@@ -183,9 +184,7 @@ const PrescriptionList = () => {
                         <IconTrash></IconTrash>
                       </button>
                     </div>
-                  )
-                }
-
+                )}
               </td>
             </tr>
           ))}
@@ -199,8 +198,7 @@ const PrescriptionList = () => {
           totalPages={totalPages}
         ></Pagination>
       </div>
-      {
-        action?.type != "print" &&
+      {action?.type != "print" && (
         <Modal
           centered
           open={openModal}
@@ -217,17 +215,15 @@ const PrescriptionList = () => {
             </span>
           </div>
         </Modal>
-      }
-      {
-        action?.type == "print" &&
+      )}
+      {action?.type == "print" && (
         <Printprescription
           componentRef={componentRef}
           dataPrint={action?.value}
           check={true}
         ></Printprescription>
-      }
+      )}
     </Layout>
-
   );
 };
 

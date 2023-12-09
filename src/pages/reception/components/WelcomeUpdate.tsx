@@ -54,7 +54,7 @@ const WelcomeUpdate = () => {
       price: "",
     },
   ]);
-  console.log(dataServices, "dataServices");
+
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
   const {
@@ -337,7 +337,7 @@ const WelcomeUpdate = () => {
 
   const handleDeleteService = async () => {
     if (isPayment) {
-      toast.error("Dịch vụ đã thanh toán không thể hủy!");
+      toast.warning("Dịch vụ đã thanh toán không thể hủy!");
     } else {
       const res = await deleteServiceByExamination(service?._id);
       if (res?.designation) {
@@ -612,6 +612,8 @@ const WelcomeUpdate = () => {
                             className="mb-2 react-select"
                             classNamePrefix="react-select"
                             options={services}
+                            menuPlacement="top"
+                            maxMenuHeight={250}
                             onChange={(value: any) => {
                               handleChange(
                                 {

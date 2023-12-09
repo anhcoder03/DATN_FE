@@ -1,26 +1,10 @@
-// import axios from "axios";
-// import { TDataResponse } from "../pages/auth/Information";
-// import Http from "../helpers/http";
-
-// const http = new Http();
-// export const login = (data: any) => {
-//   return axios.post("http://localhost:8000/signin", data);
-// };
-// export const changePassword = async (data: any) => {
-//   try {
-//     const response: TDataResponse = await http.update("/changePassword", data);
-//     return response;
-//   } catch (error) {
-//     return error;
-//   }
-// };
-
 import axios from "axios";
 import { TDataResponse } from "../pages/auth/Information";
 
 export const login = (data: any) => {
   return axios.post("http://localhost:8000/signin", data);
 };
+
 export const changePassword = async (
   _id: any,
   password: any,
@@ -42,6 +26,58 @@ export const changePassword = async (
       }
     );
     return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loginOTP = async (data: any) => {
+  try {
+    const response = await axios.post(`http://localhost:8000/sendOTP`, data);
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const verifyTokenOTP = async (data: any) => {
+  try {
+    const response = await axios.post(`http://localhost:8000/verifyOTP`, data);
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const forgotPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/forgotPassword`,
+      data
+    );
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+export const verifyOTPForgotPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/verifyOTPForgotPassword`,
+      data
+    );
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+export const resetPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/resetPassword`,
+      data
+    );
+    return response?.data;
   } catch (error) {
     return error;
   }

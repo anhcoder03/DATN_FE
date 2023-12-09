@@ -154,7 +154,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               <Label className="font-semibold" htmlFor="_id">
                 Thời gian tiếp đón
               </Label>
-              <div className="relative border-b border-b-gray-200 pb-3">
+              {/* <div className="relative border-b border-b-gray-200 pb-3">
                 <Flatpickr
                   value={day_welcome}
                   options={{
@@ -174,7 +174,16 @@ const ExaminationInfo = ({ data }: { data: any }) => {
                 <div className="absolute top-0 right-0">
                   <img src={IconCalendar} alt="icon" />
                 </div>
-              </div>
+              </div> */}
+              <Input
+                control={control}
+                className="border-none font-semibold text-black"
+                value={
+                  day_welcome
+                    ? moment(day_welcome).format('DD/MM/YYYY HH:mm')
+                    : "---"
+                }
+              />
             </Field>
           </Row>
         </div>

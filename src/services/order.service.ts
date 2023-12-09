@@ -10,14 +10,15 @@ export const getAllOrder = async (params: any) => {
     console.error(error);
   }
 };
-// export const getOnePrescription = async (id: any) => {
-//     try {
-//         const response = await http.get(`/prescriptions/${id}`);
-//         return response.prescription;
-//     } catch (error) {
-//         return error;
-//     }
-// };
+
+export const getOneOrder = async (id: any) => {
+    try {
+        const response = await http.get(`/orders/${id}`);
+        return response.order;
+    } catch (error) {
+        return error;
+    }
+};
 // export const createPrescription = async (data: any) => {
 //     try {
 //         const response = await http.post(`/prescriptions`, data);

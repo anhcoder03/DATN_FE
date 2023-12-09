@@ -69,7 +69,7 @@ const PrescriptionAdd = () => {
       how_using: "",
     },
   ]);
-    
+
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -170,7 +170,7 @@ const PrescriptionAdd = () => {
     getCustomers();
   }, []);
 
-  const handleCreatePrescription = async (values: any) => {
+  const handleCreatePrescription = async () => {
     const params = {
       medicalExaminationSlipId: id,
       doctorId: data?.doctorId?._id,
@@ -212,9 +212,9 @@ const PrescriptionAdd = () => {
     }
     setProduct(updatedProduct);
   };
-  const communeName = data?.customerId?.commune?.name ?? '';
-  const districtName = data?.customerId?.district?.name ?? '';
-  const provinceName = data?.customerId?.province?.name ?? '';
+  const communeName = data?.customerId?.commune?.name ?? "";
+  const districtName = data?.customerId?.district?.name ?? "";
+  const provinceName = data?.customerId?.province?.name ?? "";
   const combinedNames = `${communeName}, ${districtName}, ${provinceName}`;
 
   return (
@@ -340,7 +340,9 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={products}
-                        onChange={(selectedOption: any) => handleChange(selectedOption._id, 'medicineId', index)}
+                        onChange={(selectedOption: any) =>
+                          handleChange(selectedOption._id, "medicineId", index)
+                        }
                         value={products?.filter(
                           (option: any) => item?.medicineId == option.value
                         )}
@@ -354,8 +356,8 @@ const PrescriptionAdd = () => {
                         onChange={(e) => {
                           const inputValue = e.target.value;
                           const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === '') {
-                            handleChange(inputValue, 'quantity', index);
+                          if (regex.test(inputValue) || inputValue === "") {
+                            handleChange(inputValue, "quantity", index);
                           }
                         }}
                         className="border font-semibold text-black rounded-md px-3 mb-1"
@@ -367,7 +369,9 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={dataTypeImportProduct}
-                        onChange={(value: any) => handleChange(value?.value, 'unit_selling', index)}
+                        onChange={(value: any) =>
+                          handleChange(value?.value, "unit_selling", index)
+                        }
                       ></Select>
                     </td>
                     <td>
@@ -376,7 +380,9 @@ const PrescriptionAdd = () => {
                         className="mb-2 react-select"
                         menuPlacement="top"
                         options={dataTypeImportProduct}
-                        onChange={(value: any) => handleChange(value?.value, 'unit_using', index)}
+                        onChange={(value: any) =>
+                          handleChange(value?.value, "unit_using", index)
+                        }
                       ></Select>
                     </td>
                     <td>
@@ -387,8 +393,8 @@ const PrescriptionAdd = () => {
                         onChange={(e) => {
                           const inputValue = e.target.value;
                           const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === '') {
-                            handleChange(inputValue, 'dosage', index);
+                          if (regex.test(inputValue) || inputValue === "") {
+                            handleChange(inputValue, "dosage", index);
                           }
                         }}
                         className="border font-semibold text-black rounded-md px-3 mb-1"
@@ -402,8 +408,8 @@ const PrescriptionAdd = () => {
                         onChange={(e) => {
                           const inputValue = e.target.value;
                           const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === '') {
-                            handleChange(inputValue, 'timesUsePerDay', index);
+                          if (regex.test(inputValue) || inputValue === "") {
+                            handleChange(inputValue, "timesUsePerDay", index);
                           }
                         }}
                         className="border font-semibold text-black rounded-md px-3 mb-1"
@@ -416,11 +422,10 @@ const PrescriptionAdd = () => {
                         value={item?.how_using}
                         onChange={(e) => {
                           const inputValue = e.target.value;
-                          handleChange(inputValue, 'how_using', index);
+                          handleChange(inputValue, "how_using", index);
                         }}
                         className="border font-semibold text-black rounded-md px-3 mb-1"
                       />
-
                     </td>
                     <td>
                       <div className="flex items-center gap-x-2">
@@ -447,7 +452,6 @@ const PrescriptionAdd = () => {
                 ))}
               </tbody>
             </table>
-
           </div>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
@@ -464,12 +468,9 @@ const PrescriptionAdd = () => {
             </div>
           </div>
         </div>
-      </div >
-    </Layout >
+      </div>
+    </Layout>
   );
 };
 
 export default PrescriptionAdd;
-function setTotalPages(totalPages: any) {
-  throw new Error("Function not implemented.");
-}

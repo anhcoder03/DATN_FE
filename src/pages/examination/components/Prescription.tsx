@@ -13,7 +13,7 @@ import { Modal } from "antd";
 import IconPrint from "../../../assets/images/ic-print.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Printprescription from "../../../components/print/Printprescription";
@@ -24,9 +24,8 @@ const optionsPagination = [
   { value: 100, label: "100 bản ghi" },
 ];
 
-const Prescription = (props: any) => {
+const Prescription = ({ id }: any) => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
-  const { id } = useParams();
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -39,7 +38,7 @@ const Prescription = (props: any) => {
   const [prescription, setPrescription] = useState<any>();
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
-  const [action, setAction] = useState<any>()
+  const [action, setAction] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
@@ -47,11 +46,13 @@ const Prescription = (props: any) => {
     _page: 1,
     _limit: 25,
     search: "",
+    createdAt: null,
   });
   const navigate = useNavigate();
   const gotoDetail = (item: any) => {
     navigate(`/prescription/view/${item?._id}`);
   };
+  
   const headings = [
     "Mã Đơn",
     "Khách Hàng",
@@ -60,6 +61,7 @@ const Prescription = (props: any) => {
     "Trạng Thái Đơn Thuốc",
     "Hành Động",
   ];
+
   const handleGetPrescription = async () => {
     try {
       setLoading(true);
@@ -67,7 +69,9 @@ const Prescription = (props: any) => {
       setLoading(false);
       if (data != undefined) {
         setTotalPages(data.totalPages);
-        const arr = data.docs?.filter((d: any) => d?.medicalExaminationSlipId?._id == id)
+        const arr = data.docs?.filter(
+          (d: any) => d?.medicalExaminationSlipId?._id == id
+        );
         setTotalDocs(arr?.length);
         setPrescriptions(arr);
       }
@@ -88,18 +92,22 @@ const Prescription = (props: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
   const handleDayChange = (date: any) => {
     setQuery({ ...query, createdAt: date });
     urlParams.set("createdAt", date);
     navigate(`?${urlParams}`);
   };
+
   const handleShowModel = (data: any) => {
     setOpenModal(true);
     setPrescription(data);
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -110,7 +118,7 @@ const Prescription = (props: any) => {
       navigate(`?${urlParams}`);
     }
   };
-  
+
   const onOk = async () => {
     const res = await deletePrescription(prescription?._id);
     if (res?.message) {
@@ -122,6 +130,7 @@ const Prescription = (props: any) => {
     }
     setOpenModal(false);
   };
+
   const handleClickPrint = () => {
     setOpenModal(true);
     setAction({ type: "print" });
@@ -202,9 +211,7 @@ const Prescription = (props: any) => {
                       <img width={20} height={20} src={IconPrint} alt="print" />
                       </button>
                     </div>
-                  )
-                }
-
+                )}
               </td>
             </tr>
           ))}
@@ -217,27 +224,26 @@ const Prescription = (props: any) => {
           totalDocs={totalDocs}
           totalPages={totalPages}
         ></Pagination>
-        {
-          action?.type !== "print" &&
+        {action?.type !== "print" && (
           <Modal
-          centered
-          open={openModal}
-          onOk={onOk}
-          onCancel={() => setOpenModal(false)}
-        >
-          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-            Thông Báo
-          </h1>
-          <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {prescription?._id}
-            </span>
-          </div>
-        </Modal>
-        }
+            centered
+            open={openModal}
+            onOk={onOk}
+            onCancel={() => setOpenModal(false)}
+          >
+            <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+              Thông Báo
+            </h1>
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {prescription?._id}
+              </span>
+            </div>
+          </Modal>
+        )}
       </div>
-    </div >
+    </div>
   );
 };
 

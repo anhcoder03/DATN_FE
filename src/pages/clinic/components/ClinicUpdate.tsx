@@ -53,7 +53,7 @@ const ClinicUpdate = () => {
 
   const handleGetUsers = async () => {
     try {
-      const data = await getAllUser();
+      const data = await getAllUser({ limit: 1000 });
       const roleDoctor = data?.docs;
 
       const filteredUsers = roleDoctor.filter(
@@ -154,7 +154,10 @@ const ClinicUpdate = () => {
             </Field>
             <Field>
               <Label htmlFor="status">Trạng Thái</Label>
-              <Radio.Group onChange={onChange} value={tempStatus}>
+              <Radio.Group
+                onChange={(e: any) => onChange(e)}
+                value={tempStatus}
+              >
                 <div className="flex items-center">
                   <Radio
                     className="flex items-center h-[34px]"

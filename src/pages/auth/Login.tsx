@@ -12,8 +12,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { TDataResponse, handleLogin } from "../../redux/auth/handler";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ROLE } from "../../constants/define";
+import ModalLoginOTP, {
+  ModalLoginOTPMethods,
+} from "./components/ModalLoginOTP";
 
 type TLogin = {
   email: string;
@@ -40,15 +43,18 @@ const Login = () => {
     mode: "onSubmit",
   });
   const [typePassWord, setTypePassWord] = useState("password");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const modalRef = useRef<ModalLoginOTPMethods>(null);
   const handleSignin = async (values: TLogin) => {
     if (!isValid) return;
     try {
+      setLoading(true);
       const response: TDataResponse = await dispatch(
         handleLogin(values) as any
       ).unwrap();
-      console.log(response);
+      setLoading(false);
       toast.success(response?.message);
       if (response?.user?.role.roleNumber === ROLE.ADMIN) {
         return navigate("/dashboard");
@@ -120,7 +126,10 @@ const Login = () => {
           </Field>
           <Field>
             <div className="flex justify-end">
-              <Link to={""} className="text-primary font-medium">
+              <Link
+                to={"/check-forget-password"}
+                className="text-primary font-medium"
+              >
                 Quên mật khẩu?
               </Link>
             </div>
@@ -130,6 +139,7 @@ const Login = () => {
             type="submit"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
             onClick={handleSubmit(handleSignin)}
+            isLoading={loading}
           >
             Đăng nhập
           </Button>
@@ -140,7 +150,11 @@ const Login = () => {
               <div className="w-full h-[1px] bg-[#22222226]"></div>
             </div>
           </Field>
-          <Button className=" bg-white text-primary border border-primary rounded-md font-medium  h-[50px]">
+          <Button
+            type="button"
+            className=" bg-white text-primary border border-primary rounded-md font-medium  h-[50px]"
+            onClick={() => modalRef.current?.setOpen()}
+          >
             Đăng nhập bằng OTP
           </Button>
         </form>
@@ -150,6 +164,7 @@ const Login = () => {
           <img src={bgLogin} alt="login-bg" />
         </div>
       </div>
+      <ModalLoginOTP ref={modalRef} />
     </div>
   );
 };

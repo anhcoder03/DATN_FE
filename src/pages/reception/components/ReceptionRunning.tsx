@@ -226,7 +226,7 @@ const ReceptionRunning = () => {
 
   const action = {
     name: "Thao tác",
-    cell: (row: { _id: any }) => (
+    cell: () => (
       <div className="flex items-center gap-x-[2px]">
         {/* <button
           onClick={() => console.log(row._id)}
@@ -265,7 +265,7 @@ const ReceptionRunning = () => {
 
   return (
     <>
-      <FilterReceptionRunning 
+      <FilterReceptionRunning
         columns={columns}
         dataStaffs={dataStaffs}
         dataDoctors={dataDoctors}

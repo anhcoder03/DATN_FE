@@ -7,7 +7,7 @@ type IFilterTitle = {
   handleStatusChange: (status: any) => void;
 };
 
-const FilterTitle = ( { check ,handleSearch, handleStatusChange }: any) => {
+const FilterTitle = ({ handleSearch, handleStatusChange }: IFilterTitle) => {
   const handleKeyDown = (e: any) => {
     if (e.key === "Enter") {
       handleSearch(e.target.value);

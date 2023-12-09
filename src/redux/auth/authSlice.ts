@@ -26,6 +26,9 @@ const authSlice = createSlice({
         state.auth.accessToken = payload.accessToken;
       }
     },
+    setLogin: (state, { payload }) => {
+      state.auth = payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(handleLogin.pending, (state) => {
@@ -44,5 +47,5 @@ const authSlice = createSlice({
     });
   },
 });
-export const { refreshToken, authLogout } = authSlice.actions;
+export const { refreshToken, authLogout, setLogin } = authSlice.actions;
 export default authSlice.reducer;
