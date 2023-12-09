@@ -50,6 +50,7 @@ import CustomerUpdate from "../pages/customer/components/CustomerUpdate";
 import CategoryDetail from "../pages/category/components/CategoryDetail";
 import ClinicDetail from "../pages/clinic/components/ClinicDetail";
 import ForgotPassword from "../pages/auth/ForgotPassword";
+import Examination_view from "../pages/examination_view/Examination_view";
 export const doctorRouter: any[] = [
   {
     path: "reception",
@@ -113,6 +114,10 @@ export const publiRouter: any[] = [
   {
     path: "check-forget-password",
     element: ForgotPassword,
+  },
+  {
+    path: "examination_view/:id",
+    element: Examination_view,
   },
   {
     path: "account",
