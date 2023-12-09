@@ -25,7 +25,7 @@ const ReceptionRunning = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_running: null
+    day_running: null,
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -225,7 +225,7 @@ const ReceptionRunning = () => {
 
   const action = {
     name: "Thao tác",
-    cell: (row: { _id: any }) => (
+    cell: () => (
       <div className="flex items-center gap-x-[2px]">
         {/* <button
           onClick={() => console.log(row._id)}
@@ -264,7 +264,7 @@ const ReceptionRunning = () => {
 
   return (
     <>
-      <FilterReceptionRunning 
+      <FilterReceptionRunning
         columns={columns}
         dataStaffs={dataStaffs}
         dataDoctors={dataDoctors}

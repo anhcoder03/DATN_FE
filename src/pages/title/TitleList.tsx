@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import { Layout } from "../../components/layout";
 import Heading from "../../components/common/Heading";
 import { Pagination } from "../../components/pagination";
-import IconEdit from "../../assets/images/icon-edit.png";
 import { Table } from "../../components/table";
 import { IconTrash } from "../../components/icons";
-import { deleteClinic, getAllClinic } from "../../services/clinic.service";
 import { useNavigate } from "react-router-dom";
-import FilterClinic from "../configuration/user/components/filter/index";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import FilterTitle from "./components/FilterTitle";
@@ -22,12 +19,7 @@ const TitleList = () => {
   const urlParams = new URLSearchParams(location.search);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const headings = [
-    "Mã Chức danh",
-    "Tên Chức danh",
-    "Trạng thái",
-    "Thao Tác",
-  ];
+  const headings = ["Mã Chức danh", "Tên Chức danh", "Trạng thái", "Thao Tác"];
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
@@ -57,7 +49,7 @@ const TitleList = () => {
       console.log(error);
     }
   };
-  
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
@@ -81,7 +73,7 @@ const TitleList = () => {
     setQuery({ ...query, _status: selectedOpiton.value });
     if (selectedOpiton.value != "") {
       urlParams.set("status", selectedOpiton.value);
-            navigate(`?${urlParams}`);
+      navigate(`?${urlParams}`);
     } else {
       urlParams.delete("status");
       navigate(`?${urlParams}`);
@@ -103,19 +95,18 @@ const TitleList = () => {
     setOpenModal(true);
     setRole(data);
   };
-  
+
   return (
     <Layout>
       <Heading>Quản Lý Chức Danh</Heading>
       <div className="">
         <FilterTitle
-          check = {false}
           handleStatusChange={handleStatusChange}
           handleSearch={handleSearch}
         ></FilterTitle>
         <div className="bg-white">
           <Table headings={headings} loading={loading} length={title?.length}>
-            {title?.map((item : any ) => (
+            {title?.map((item: any) => (
               <tr
                 className="text-xs"
                 style={{ cursor: "pointer" }}
@@ -124,14 +115,14 @@ const TitleList = () => {
                 <td>{item?._id}</td>
                 <td>{item?.name}</td>
                 <td
-                  className={item?.status !== 1 ? "text-danger" : "text-success" }
+                  className={
+                    item?.status !== 1 ? "text-danger" : "text-success"
+                  }
                   style={{
                     cursor: "pointer",
                   }}
                 >
-                  {item?.status ===1
-                    ? "Đang hoạt động"
-                    : "Ngừng hoạt động"}
+                  {item?.status === 1 ? "Đang hoạt động" : "Ngừng hoạt động"}
                 </td>
                 <td>
                   <div className="table-action">

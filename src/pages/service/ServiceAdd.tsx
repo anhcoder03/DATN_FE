@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Field } from "../../components/field";
 import { Label } from "../../components/label";
 import { Row } from "../../components/row";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Heading from "../../components/common/Heading";
 import { Button } from "../../components/button";
 import * as yup from "yup";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { createService } from "../../services/service.service";
 const schema = yup.object({
   name: yup.string().trim().required("Tên danh mục không được để trống!"),
-  price: yup.number().required('Giá dịch vụ không được để trống')
+  price: yup.number().required("Giá dịch vụ không được để trống"),
 });
 
 const ServiceAdd = () => {
@@ -43,7 +43,6 @@ const ServiceAdd = () => {
       toast.warning(arrayError[0]?.message);
     }
   });
-  
 
   return (
     <Layout>

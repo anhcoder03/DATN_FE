@@ -53,7 +53,7 @@ const ClinicAdd = () => {
     try {
       setLoading(true);
 
-      const data = await getAllUser();
+      const data = await getAllUser({ limit: 1000 });
       const roleDoctor = data?.docs;
 
       const filteredUsers = roleDoctor.filter(
@@ -103,7 +103,7 @@ const ClinicAdd = () => {
   useEffect(() => {
     const arrayError = Object.values(errors);
     if (arrayError.length > 0) {
-      toast.warning(arrayError[0]?.message);
+      toast.warning(arrayError[0]?.message as any);
     }
   }, [errors]);
 

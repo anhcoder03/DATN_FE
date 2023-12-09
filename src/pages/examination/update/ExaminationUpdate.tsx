@@ -17,7 +17,7 @@ export interface IDataTabs {
   id: string;
   name: string;
 }
-const ExaminationUpdate = (props: any) => {
+const ExaminationUpdate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 

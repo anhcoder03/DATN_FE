@@ -5,7 +5,7 @@ export interface IUser {
   email: string;
   phone: number;
   avatar: string;
-  role: string;
+  role: any;
   createdAt: string;
   updatedAt: string;
 }

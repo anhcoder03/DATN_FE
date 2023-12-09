@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Layout } from "../../../components/layout";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../../components/button";
@@ -11,12 +11,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { getOneService, updateService } from "../../../services/service.service";
+import {
+  getOneService,
+  updateService,
+} from "../../../services/service.service";
 
 const ServiceUpdate = () => {
   const schema = yup.object({
     name: yup.string().trim().required("Tên danh mục không được để trống!"),
-    price: yup.number().required('Giá dịch vụ không được để trống')
+    price: yup.number().required("Giá dịch vụ không được để trống"),
   });
   const navigate = useNavigate();
   const {

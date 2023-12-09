@@ -1,4 +1,3 @@
-import React from "react";
 import { Layout } from "../../components/layout";
 import {
   Chart as ChartJS,
@@ -16,8 +15,6 @@ import {
 } from "chart.js";
 import faker from "faker";
 import { Bar, Pie, Chart } from "react-chartjs-2";
-
-type Props = {};
 
 ChartJS.register(
   CategoryScale,
@@ -120,7 +117,7 @@ export const data2 = {
   ],
 };
 
-const StatitisPage = (props: Props) => {
+const StatitisPage = () => {
   return (
     <Layout>
       <div className="grid grid-cols-2  w-full items-start gap-10 justify-between">

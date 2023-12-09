@@ -35,16 +35,19 @@ const OrderDetail = () => {
 
   // Hàm chuyển đổi số thành chuỗi tiền tệ Việt Nam
   function formatCurrency(number: any) {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(number);
   }
   console.log(order, "dataaVV");
 
-  const totalPrice = order?.medicines?.reduce((accumulator : any, currentValue : any) => {
-    return accumulator + currentValue.price;
-  }, 0);
+  const totalPrice = order?.medicines?.reduce(
+    (accumulator: any, currentValue: any) => {
+      return accumulator + currentValue.price;
+    },
+    0
+  );
   return (
     <Layout>
       <div className="relative h-full">
@@ -141,7 +144,7 @@ const OrderDetail = () => {
               <th style={{ width: "20%" }}>Ghi chú</th>
             </thead>
             <tbody>
-              {order?.medicines?.map((item: any, index: any) => (
+              {order?.medicines?.map((item: any) => (
                 <tr className="hover:bg-transparent">
                   <td>
                     <Input
@@ -189,14 +192,13 @@ const OrderDetail = () => {
           </table>
           <div className=" font-bold mt-4 ml-5">
             <span>Tổng tiền hàng : {formatCurrency(totalPrice)}</span>
-             <br />
+            <br />
             <span>Thành tiền: {formatCurrency(totalPrice)}</span>
           </div>
         </div>
       </div>
     </Layout>
-  )
-
+  );
 };
 
 export default OrderDetail;
