@@ -48,3 +48,37 @@ export const verifyTokenOTP = async (data: any) => {
     return error;
   }
 };
+
+export const forgotPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/forgotPassword`,
+      data
+    );
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+export const verifyOTPForgotPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/verifyOTPForgotPassword`,
+      data
+    );
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};
+export const resetPassword = async (data: any) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:8000/resetPassword`,
+      data
+    );
+    return response?.data;
+  } catch (error) {
+    return error;
+  }
+};

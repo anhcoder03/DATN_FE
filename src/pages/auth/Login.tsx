@@ -43,16 +43,18 @@ const Login = () => {
     mode: "onSubmit",
   });
   const [typePassWord, setTypePassWord] = useState("password");
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const modalRef = useRef<ModalLoginOTPMethods>(null);
   const handleSignin = async (values: TLogin) => {
     if (!isValid) return;
     try {
+      setLoading(true);
       const response: TDataResponse = await dispatch(
         handleLogin(values) as any
       ).unwrap();
-      console.log(response);
+      setLoading(false);
       toast.success(response?.message);
       if (response?.user?.role.roleNumber === ROLE.ADMIN) {
         return navigate("/dashboard");
@@ -124,7 +126,10 @@ const Login = () => {
           </Field>
           <Field>
             <div className="flex justify-end">
-              <Link to={""} className="text-primary font-medium">
+              <Link
+                to={"/check-forget-password"}
+                className="text-primary font-medium"
+              >
                 Quên mật khẩu?
               </Link>
             </div>
@@ -134,6 +139,7 @@ const Login = () => {
             type="submit"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
             onClick={handleSubmit(handleSignin)}
+            isLoading={loading}
           >
             Đăng nhập
           </Button>
