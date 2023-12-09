@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconSearch, IconSetting } from "../icons";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
@@ -23,6 +23,7 @@ const FilterReceptionDone = (props: any) => {
     day_done
   } = props;
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<any>();
   const showModal = () => {
     setOpen(true);
   };
@@ -41,67 +42,79 @@ const FilterReceptionDone = (props: any) => {
     }
   };
 
-  console.log("siuQuery", query);
-  
+  useEffect(() => {
+    // format date
+    if(day_done !== null) {
+      const parsedDate = new Date(day_done);
+      const formattedDate = parsedDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      setDate(formattedDate)
+    }else {
+      setDate(day_done)
+    }
+  },[day_done])
 
   return (
     <div className="">
       <div className="flex flex-wrap items-center justify-between gap-5 p-5 bg-white rounded-tl-lg rounded-tr-lg">
-      <div className="flex items-center gap-2 filter-wrapper">
-          <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[300px]">
-            <IconSearch></IconSearch>
-            <input
-              type="text"
-              className="w-full bg-transparent border-none outline-none"
-              placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-          <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
-            <Flatpickr
-              options={{
-                locale: Vietnamese,
-                allowInput: true,
-                dateFormat: "d/m/Y",
-                altInputClass: "date-range",
-              }}
-              onChange={([date]) => {
-                handleDayChange(date);
-              }}
-              placeholder="Ngày tiếp đón"
-              value={[day_done]}
-            ></Flatpickr>
-            <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
-              ...query,
-              day_done: null
-            })}>
-              <img src={IconTrash2} alt="icon" />
+        <div className="flex items-center gap-2 filter-wrapper">
+            <div className="filter-search flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px] min-w-[300px]">
+              <IconSearch></IconSearch>
+              <input
+                type="text"
+                className="w-full bg-transparent border-none outline-none"
+                placeholder="Tên, số điện thoại hoặc mã bệnh nhân"
+                onKeyDown={handleKeyDown}
+              />
             </div>
-            <div className="flex items-center">
-              <img src={IconCalendarBlack} alt="icon" />
+            <div className="filter-date flex items-center bg-transparent border border-gray-200 px-2 py-1 gap-2 rounded-lg h-[40px]">
+              <Flatpickr
+                options={{
+                  locale: Vietnamese,
+                  allowInput: true,
+                  dateFormat: "d/m/Y",
+                  altInputClass: "date-range",
+                }}
+                onChange={([date]) => {
+                  handleDayChange(date);
+                }}
+                placeholder="Ngày tiếp đón"
+                value={[date]}
+              ></Flatpickr>
+              <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
+                ...query,
+                day_done: null
+              })}>
+                <img src={IconTrash2} alt="icon" />
+              </div>
+              <div className="flex items-center">
+                <img src={IconCalendarBlack} alt="icon" />
+              </div>
             </div>
-          </div>
-          <Select
-            options={dataDoctors}
-            className="react-select"
-            classNamePrefix="react-select select-small"
-            placeholder="-Bác sĩ-"
-            onChange={handleSearchByDoctorId}
-          ></Select>
-          <Select
-            options={clinics}
-            className="react-select"
-            classNamePrefix="react-select select-small"
-            placeholder="-Phòng khám-"
-            onChange={handleClinicChange}
-          ></Select>
-          <Select
-            options={dataStaffs}
-            className="react-select"
-            classNamePrefix="react-select select-small"
-            placeholder="-Nhân viên tiếp đón-"
-            onChange={handleSearchByStaffId}
-          ></Select>
+            <Select
+              options={dataDoctors}
+              className="react-select"
+              classNamePrefix="react-select select-small"
+              placeholder="-Bác sĩ-"
+              onChange={handleSearchByDoctorId}
+            ></Select>
+            <Select
+              options={clinics}
+              className="react-select"
+              classNamePrefix="react-select select-small"
+              placeholder="-Phòng khám-"
+              onChange={handleClinicChange}
+            ></Select>
+            <Select
+              options={dataStaffs}
+              className="react-select"
+              classNamePrefix="react-select select-small"
+              placeholder="-Nhân viên tiếp đón-"
+              onChange={handleSearchByStaffId}
+            ></Select>
         </div>
         <div className="flex items-end gap-2">
           <button

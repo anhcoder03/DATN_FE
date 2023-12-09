@@ -159,30 +159,31 @@ const PrescriptionList = () => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
-                {auth?.role?.roleNumber == 2 ||
-                auth?.role?.roleNumber == 3 ? null : (
-                  <div className="table-action">
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        navigate(`/product/update/${item?._id}`);
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
+                {
+                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
+                    <div className="table-action">
+                      <div
+                        className="button-nutri"
+                        onClick={() => {
+                          // navigate(`/product/update/${item?._id}`);
+                          toast.info('ubbutiii')
+                        }}
+                      >
+                        <img width={20} height={20} src={IconEdit} alt="edit" />
+                      </div>
+                      <button
+                        onClick={() => handleClickPrint(item)}
+                        className="button-nutri text-[#585858]"
+                      >
+                        <img width={20} height={20} src={IconPrint} alt="print" />
+                      </button>
+                      <button
+                        className="button-nutri text-[#585858]"
+                        onClick={() => handleShowModel(item)}
+                      >
+                        <IconTrash></IconTrash>
+                      </button>
                     </div>
-                    <button
-                      onClick={() => handleClickPrint(item)}
-                      className="button-nutri text-[#585858]"
-                    >
-                      <img width={20} height={20} src={IconPrint} alt="print" />
-                    </button>
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
-                  </div>
                 )}
               </td>
             </tr>

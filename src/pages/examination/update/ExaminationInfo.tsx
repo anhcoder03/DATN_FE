@@ -16,30 +16,19 @@ import { toast } from "react-toastify";
 import { Textarea } from "../../../components/textarea";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
-import {
-  UpdateExamination,
-  createExamination,
-  getOneExamination,
-} from "../../../services/examination.service";
+import { UpdateExamination } from "../../../services/examination.service";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../../components/button";
-
-type Props = {
-  id: String | undefined;
-};
 
 const schema = yup.object({
   // customerId: yup.string().required("Bệnh nhân không được để trống!"),
   // staffId: yup.string().required("Nhân viên tiếp đón không được để trống!"),
 });
-const ExaminationInfo = (props: Props) => {
-  const id = props?.id;
-  const auth = useSelector((state: RootState) => state.auth.auth);
-  const [doctorId, setDoctorId] = useState<any>(null);
+const ExaminationInfo = (props: any) => {
+  const { data, setData } = props;
   const navigate = useNavigate();
 
   const [day_welcome, setDayWelcome] = useState(new Date());
-  const [data, setData] = useState<any>();
   const {
     control,
     handleSubmit,
@@ -66,11 +55,12 @@ const ExaminationInfo = (props: Props) => {
     const response: any = await UpdateExamination(cloneData);
     if (response?.examination) {
       toast.success("Cập nhật phiếu khám thành công!");
-      navigate(`/examination/${id}/view`);
+      navigate(`/examination/${data?._id}/view`);
     } else {
       toast.error("Đã có lỗi sảy ra!!!");
     }
   };
+
   const handleDoneExamination = async (values: any) => {
     const now = new Date();
     const nowVietnam = new Date(
@@ -93,7 +83,7 @@ const ExaminationInfo = (props: Props) => {
     const response: any = await UpdateExamination(cloneData);
     if (response?.examination) {
       toast.success("Cập nhật phiếu khám thành công!");
-      navigate(`/examination/${id}/view`);
+      navigate(`/examination/${data?._id}/view`);
     } else {
       toast.error("Đã có lỗi sảy ra!!!");
     }
@@ -105,24 +95,6 @@ const ExaminationInfo = (props: Props) => {
       toast.warning(arrayError[0]?.message);
     }
   }, [errors]);
-
-  useEffect(() => {
-    if (id !== undefined) {
-      loadData();
-    }
-  }, [id]);
-  async function loadData() {
-    try {
-      const response = await getOneExamination(id);
-      const resData = response?.examination;
-      console.log(resData, "resData");
-      setData({
-        ...resData,
-      });
-    } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
-    }
-  }
 
   function calculateAge(dateOfBirth: any) {
     const today = new Date();
@@ -142,9 +114,10 @@ const ExaminationInfo = (props: Props) => {
 
   const dateOfBirth = data?.customerId?.dateOfBirth;
   const ageWithDetails = dateOfBirth ? calculateAge(dateOfBirth) : "---";
+
   return (
     <div className="relative">
-      <form className="flex bg-grayF3  justify-between gap-x-10 w-full pb-16">
+      <form className="flex bg-grayF3 justify-between gap-x-10 w-full pb-16">
         <div className="flex flex-col gap-y-10 w-1/2">
           <div className="p-5 bg-white rounded-xl">
             <Heading>

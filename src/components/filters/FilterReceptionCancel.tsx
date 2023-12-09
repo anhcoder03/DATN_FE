@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconSearch, IconSetting } from "../icons";
 import Flatpickr from "react-flatpickr";
 import { Vietnamese } from "flatpickr/dist/l10n/vn";
@@ -21,9 +21,11 @@ const FilterReceptionCancel = (props: any) => {
     clinics,
     setQuery,
     query,
-    day_cancel
+    day_cancel,
+    handleChangeStatus
    } = props;
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<any>();
   const showModal = () => {
     setOpen(true);
   };
@@ -41,6 +43,21 @@ const FilterReceptionCancel = (props: any) => {
       handleSearch(e.target.value);
     }
   };
+
+  useEffect(() => {
+    // format date
+    if(day_cancel !== null) {
+      const parsedDate = new Date(day_cancel);
+      const formattedDate = parsedDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      setDate(formattedDate)
+    }else {
+      setDate(day_cancel)
+    }
+  },[day_cancel])
 
   return (
     <div className="">
@@ -67,7 +84,7 @@ const FilterReceptionCancel = (props: any) => {
                   handleDayChange(date);
                 }}
                 placeholder="Ngày tiếp đón"
-                value={[day_cancel]}
+                value={[date]}
               ></Flatpickr>
               <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
                 ...query,
@@ -99,6 +116,13 @@ const FilterReceptionCancel = (props: any) => {
               classNamePrefix="react-select select-small"
               placeholder="-Nhân viên tiếp đón-"
               onChange={handleSearchByStaffId}
+            ></Select>
+            <Select
+              options={Status_cancel}
+              className="react-select"
+              classNamePrefix="react-select select-small"
+              placeholder="-Trạng thái huỷ-"
+              onChange={handleChangeStatus}
             ></Select>
         </div>
         <div className="flex items-end gap-2">

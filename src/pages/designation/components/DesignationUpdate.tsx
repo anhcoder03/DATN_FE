@@ -372,69 +372,6 @@ const DesignationDetail = () => {
                 </Field>
               </Row>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
-              <Heading>
-                Thông tin thanh toán
-                <div className="inline-flex gap-x-3 items-center ml-10 ">
-                  <span className="text-sm">Tổng tiền: </span>
-                  <span className="text-[#eda119]">
-                    {PriceUtils.format(
-                      designation?.service_examination?.price
-                    ) || "---"}
-                  </span>
-                </div>
-              </Heading>
-              <Row className="grid-cols-1 gap-y-5">
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Hình thức
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      designation?.payment_method
-                        ? designation?.payment_method
-                        : "Tiền mặt"
-                    }
-                  ></Input>
-                </Field>
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Tài khoản quỹ
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      designation?.payment_method
-                        ? designation?.payment_method
-                        : "Nguyễn Phi Anh - 03324222 - MB Bank"
-                    }
-                  ></Input>
-                </Field>
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Số tiền
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      PriceUtils.format(
-                        designation?.service_examination?.price
-                      ) || "---"
-                    }
-                  ></Input>
-                </Field>
-              </Row>
-            </div>
           </div>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">

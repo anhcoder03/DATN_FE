@@ -29,7 +29,7 @@ const ReceptionCancel = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_cancel: null
+    day_cancel: moment()
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -93,6 +93,7 @@ const ReceptionCancel = () => {
       selector: (row: any) => row?.note || "---",
     },
   ];
+
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
@@ -197,6 +198,23 @@ const ReceptionCancel = () => {
     }
   };
 
+  const handleChangeStatus = (selectStatus: any) => {
+    if(selectStatus?.value == '') {
+      setQuery({ ...query, status: status });
+      urlParams.set("status", status);
+      navigate(`?${urlParams}`);
+      return
+    }
+    setQuery({ ...query, status: selectStatus.value });
+    if (selectStatus.value !== "") {
+      urlParams.set("status", selectStatus.value);
+      navigate(`?${urlParams}`);
+    } else {
+      urlParams.delete("status");
+      navigate(`?${urlParams}`);
+    }
+  }
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -209,8 +227,9 @@ const ReceptionCancel = () => {
   };
 
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, day_cancel: date });
-    urlParams.set("day_cancel", moment(date).toISOString());
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, day_cancel: dateInUtcPlus7.format() as any });
+    urlParams.set("day_cancel", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 
@@ -261,6 +280,7 @@ const ReceptionCancel = () => {
         handleSearch={handleSearch}
         handleDayChange={handleDayChange}
         handleClinicChange={handleSearchByClinic}
+        handleChangeStatus = {handleChangeStatus}
         setQuery={setQuery}
         query={query}
         day_cancel={query?.day_cancel}

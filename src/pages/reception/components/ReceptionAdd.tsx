@@ -436,6 +436,8 @@ const ReceptionAdd = () => {
                           className="mb-2 react-select"
                           classNamePrefix="react-select"
                           options={services}
+                          menuPlacement="top"
+                          maxMenuHeight={250}
                           onChange={(value: any) => {
                             handleChange(
                               {

@@ -41,10 +41,9 @@ const ReceptionBook = () => {
     _order: "desc",
     status: "booking",
     search: "",
-    day_booking: null,
+    day_booking: moment(),
     staffId: null,
   });
-
   const columns = [
     {
       name: "Tên bệnh nhân",
@@ -274,6 +273,9 @@ const ReceptionBook = () => {
         handleDayChange={handleDayChange}
         dataStaffs={dataStaffs}
         handleSearchByStaffId={handleSearchByStaffId}
+        day_booking = {query?.day_booking}
+        query = {query}
+        setQuery = {setQuery}
       ></FilterReceptionBook>
       <Table3
         isLoading={loading}

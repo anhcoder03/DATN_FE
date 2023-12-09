@@ -52,6 +52,7 @@ const Prescription = ({ id }: any) => {
   const gotoDetail = (item: any) => {
     navigate(`/prescription/view/${item?._id}`);
   };
+  
   const headings = [
     "Mã Đơn",
     "Khách Hàng",
@@ -60,6 +61,7 @@ const Prescription = ({ id }: any) => {
     "Trạng Thái Đơn Thuốc",
     "Hành Động",
   ];
+
   const handleGetPrescription = async () => {
     try {
       setLoading(true);
@@ -90,18 +92,22 @@ const Prescription = ({ id }: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
   const handleDayChange = (date: any) => {
     setQuery({ ...query, createdAt: date });
     urlParams.set("createdAt", date);
     navigate(`?${urlParams}`);
   };
+
   const handleShowModel = (data: any) => {
     setOpenModal(true);
     setPrescription(data);
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -124,6 +130,7 @@ const Prescription = ({ id }: any) => {
     }
     setOpenModal(false);
   };
+
   const handleClickPrint = () => {
     setOpenModal(true);
     setAction({ type: "print" });
@@ -179,30 +186,31 @@ const Prescription = ({ id }: any) => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
-                {auth?.role?.roleNumber == 2 ||
-                auth?.role?.roleNumber == 3 ? null : (
-                  <div className="table-action">
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        navigate(`/product/update/${item?._id}`);
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
-                    </div>
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
-                    <button
-                      onClick={() => handleClickPrint()}
-                      className="button-nutri text-[#585858]"
-                    >
+                {
+                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
+                    <div className="table-action">
+                      <div
+                        className="button-nutri"
+                        onClick={() => {
+                          // navigate(`/product/update/${item?._id}`);
+                          toast.info('đang làm nha')
+                        }}
+                      >
+                        <img width={20} height={20} src={IconEdit} alt="edit" />
+                      </div>
+                      <button
+                        className="button-nutri text-[#585858]"
+                        onClick={() => handleShowModel(item)}
+                      >
+                        <IconTrash></IconTrash>
+                      </button>
+                      <button
+                        onClick={() => handleClickPrint()}
+                        className="button-nutri text-[#585858]"
+                      >
                       <img width={20} height={20} src={IconPrint} alt="print" />
-                    </button>
-                  </div>
+                      </button>
+                    </div>
                 )}
               </td>
             </tr>
