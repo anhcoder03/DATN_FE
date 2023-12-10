@@ -224,6 +224,8 @@ const ReceptionAdd = () => {
     }
   }, [errors]);
 
+  console.log('siuData', data)
+
   return (
     <Layout>
       <div className="relative-h-full">

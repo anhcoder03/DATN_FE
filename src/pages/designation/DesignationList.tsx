@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Layout } from "../../components/layout";
 import {
   deleteServiceByExamination,
@@ -20,6 +20,8 @@ import { toast } from "react-toastify";
 import IconPrint from "../../assets/images/ic-print.svg";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { useReactToPrint } from "react-to-print";
+import DesignationPrint from "./components/DesignationPrint";
 
 const headings = [
   "Mã Phiếu",
@@ -61,6 +63,20 @@ const DesignationList = () => {
   });
   const urlParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+  const componentRef = useRef(null);
+  const [dataPrint, setDataPrint] = useState<any>();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    copyStyles: true,
+  });
+
+  const handlePrintDes = (data: any) => {
+    setOpenModal(true);
+    setDataPrint(data)
+    setTimeout(() => {
+      handlePrint();
+    }, 1000);
+  }
 
   const handlegetAllDesignation = async () => {
     try {
@@ -74,9 +90,11 @@ const DesignationList = () => {
       console.log(error);
     }
   };
+  
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -193,16 +211,21 @@ const DesignationList = () => {
   };
   
   const onOk = async () => {
-    const res = await deleteServiceByExamination(designation?._id);
-    if (res?.designation) {
-      toast.success(res?.message);
-      setOpenModal(false);
-      handlegetAllDesignation();
-    } else {
-      toast.error(res?.message);
+    if(designation?.type == 'cancel') {
+      console.log('designation', designation)
+      const res = await deleteServiceByExamination(designation?.data?._id);
+      if (res?.designation) {
+        toast.success('Huỷ dịch vụ thành công!');
+        setOpenModal(false);
+        handlegetAllDesignation();
+      } else {
+        toast.error(res?.message);
+      }
     }
     setOpenModal(false);
   };
+
+  console.log("siudataPrint", dataPrint)
 
   return (
     <Layout>
@@ -252,7 +275,7 @@ const DesignationList = () => {
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        toast.info('đang làm nha!!')
+                        handlePrintDes(item)
                       }}
                     >
                       <img width={20} height={20} src={IconPrint} alt="print" />
@@ -274,7 +297,7 @@ const DesignationList = () => {
                       {item?.status == 'waiting' && (
                         <button
                           className="button-nutri text-[#585858]"
-                          onClick={() => handleShowModel(item)}
+                          onClick={() => handleShowModel({type: 'cancel', data: item})}
                         >
                           <IconTrash></IconTrash>
                         </button>
@@ -296,39 +319,54 @@ const DesignationList = () => {
           totalPages={totalPages}
         ></Pagination>
       </div>
-      <Modal
-        centered
-        open={openModal}
-        footer={[
-          <Button
-            className="bg-primary50 text-primary"
-            key="back"
-            onClick={() => setOpenModal(false)}
-          >
-            Hủy
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={onOk}
-            className="bg-primary50 text-primary"
-          >
-            Xác nhận
-          </Button>,
-        ]}
-        onCancel={() => setOpenModal(false)}
-        style={{ width: '80%', maxHeight: '70vh' }}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc hủy dịch vụ chỉ định này không?</p>
-          <span className="text-center text-[#ff5c75] font-bold">
-            {designation?._id}
-          </span>
+      {openModal && dataPrint !== undefined ? (
+        <div style={{height: 0, overflow: 'hidden'}}>
+          <DesignationPrint
+            componentRef = {componentRef}
+            dataPrint = {dataPrint}
+          />
         </div>
-      </Modal>
+      ) : (
+        <Modal
+          centered
+          open={openModal}
+          footer={[
+            <Button
+              className="bg-primary50 text-primary"
+              key="back"
+              onClick={() => setOpenModal(false)}
+            >
+              Hủy
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={onOk}
+              className="bg-primary50 text-primary"
+            >
+              Xác nhận
+            </Button>,
+          ]}
+          onCancel={() => setOpenModal(false)}
+          style={{ width: '80%', maxHeight: '70vh' }}
+        >
+          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+            Thông Báo
+          </h1>
+          {
+            designation?.type == 'cancel' && (
+              <div className="flex flex-col items-center justify-center py-4 text-sm">
+                <p>Bạn có chắc hủy dịch vụ chỉ định này không?</p>
+                <span className="text-center text-[#ff5c75] font-bold">
+                  {designation?.data?._id}
+                </span>
+              </div>
+            )
+          }
+          
+        </Modal>
+      )}
+      
     </Layout>
   );
 };
