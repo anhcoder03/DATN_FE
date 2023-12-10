@@ -42,7 +42,7 @@ const ReceptionCustomer = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_welcome: moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    day_welcome: moment(),
     doctorId: null,
   });
   const [totalPages, setTotalPages] = useState(1);

@@ -25,20 +25,22 @@ function App() {
       <div>
         <Link to={notify?.link}>{notify?.body}</Link>
       </div>
-    )
-  }
+    );
+  };
 
-  const toastify = () => {
-    toast.info(router_notify)
-  }
+  const toastify = (noti: any) => {
+    console.log(noti);
+    // setNotify(noti)
+    return toast.info("Thông báo đẩy!!!!");
+  };
 
-  console.log("notify", notify)
+  console.log("notify", notify);
 
   useEffect(() => {
     (async () => {
       try {
         const payload: any = await onMessageListener();
-        setNotify(payload?.data)
+        toastify(payload?.data);
         // toastify();
         // fetch api Notification
         // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.

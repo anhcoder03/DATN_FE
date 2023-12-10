@@ -30,7 +30,7 @@ const ExaminationSevicer = ({ data }: { data: any[] }) => {
           return (
             <tr key={index}>
               <td>{index + 1}</td>
-              <td>{item?._id}</td>
+              <td>{`${item?.service_examination?.serviceId} - ${item?.service_examination?.name}`}</td>
               <td>{item?.doctorId?.name}</td>
               <td>
                 {item?.service_examination?.price

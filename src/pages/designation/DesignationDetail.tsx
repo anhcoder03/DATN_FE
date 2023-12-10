@@ -276,7 +276,7 @@ const DesignationDetail = () => {
                 </Field>
               </Row>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
+            {/* <div className="p-5 bg-white w-full rounded-xl">
               <Heading>
                 Thông tin thanh toán
                 <div className="inline-flex gap-x-3 items-center ml-10 ">
@@ -338,7 +338,7 @@ const DesignationDetail = () => {
                   ></Input>
                 </Field>
               </Row>
-            </div>
+            </div> */}
           </div>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">

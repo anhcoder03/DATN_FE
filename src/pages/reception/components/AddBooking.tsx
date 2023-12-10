@@ -89,7 +89,6 @@ const AddBooking = () => {
       day_booking: data?.day_booking,
       status: 'booking'
     }
-    
     const res = await createExamination(params);
     if (res?.examination) {
       toast.success('Tạo đặt lịch thành công!');
@@ -138,7 +137,7 @@ const AddBooking = () => {
                   setData({
                     ...data,
                     customer: val?._id,
-                    dateOfBirth: moment(val?.dateOfBirth).unix(),
+                    dateOfBirth: val?.dateOfBirth,
                     gender: val?.gender,
                     phone: val?.phone
                   });
@@ -160,7 +159,7 @@ const AddBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field>
+            <Field className='only-view'>
               <Label htmlFor="phone">
                 <span className="star-field">*</span>
                 Số điện thoại
@@ -188,9 +187,14 @@ const AddBooking = () => {
                     dateFormat: "d/m/Y H:i",
                     altInputClass: "date-range",
                     time_24hr: true,
+                    minDate: 'today'
                   }}
                   onChange={([date]) => {
                     setValue("day_booking", date);
+                    setData({
+                      ...data,
+                      day_booking: date
+                    })
                   }}
                   placeholder="dd/mm/yyyy"
                   name="day_booking"
@@ -202,34 +206,18 @@ const AddBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field>
+            <Field className='only-view'>
               <Label htmlFor="_id">Năm sinh</Label>
-              <div className="relative border-b border-b-gray-200 pb-3">
-                <Flatpickr
-                  options={{
-                    locale: Vietnamese,
-                    allowInput: true,
-                    dateFormat: "d/m/Y",
-                    altInputClass: "date-range",
-                    maxDate: "today",
-                  }}
-                  onChange={([date]) => {
-                    setValue("dateOfBirth", date);
-                    console.log('datên', date, data);
-                    
-                    setData({
-                      ...data,
-                      dateOfBirth: date
-                    })
-                  }}
-                  value={data?.dateOfBirth}
-                  placeholder="dd/mm/yyyy"
-                  name="dateOfBirth"
-                ></Flatpickr>
-                <div className="absolute top-0 right-0">
-                  <img src={IconCalendar} alt="icon" />
-                </div>
-              </div>
+              <Input
+                control={control}
+                className="border-none"
+                name="date"
+                value={
+                  data?.dateOfBirth
+                    ? moment(data?.dateOfBirth).format('DD/MM/YYYY')
+                    : "---"
+                }
+              />
             </Field>
             <Field>
               <Label htmlFor="">Tuổi</Label>
@@ -247,7 +235,7 @@ const AddBooking = () => {
           </Row>
           <Row className="grid-cols-2 ">
             <Field>
-              <Label htmlFor="staffId">Nhân viên tiếp đón</Label>
+              <Label htmlFor="staffId"><span className="star-field">*</span>Nhân viên tiếp đón</Label>
               <Select
                 placeholder="Chọn nhân viên tiếp đón"
                 className="mb-2 !text-xs hover:!border-transparent react-select"

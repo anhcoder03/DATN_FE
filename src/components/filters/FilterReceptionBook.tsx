@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconPlus, IconSearch, IconSetting } from "../icons";
 import Select from "react-select";
 import { ModalBooking } from "../modal";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import IconTrash2 from "../../assets/images/icon-trash2.png";
 
 type TFilterCustomer = {
   handleSearch: (e: any) => void;
@@ -16,6 +17,9 @@ type TFilterCustomer = {
   handleSearchByStaffId: (id: any) => void;
   columns: any;
   dataStaffs: any[];
+  day_booking: any;
+  query: any;
+  setQuery: any
 };
 
 const FilterReceptionBook = ({
@@ -24,9 +28,13 @@ const FilterReceptionBook = ({
   handleSearch,
   dataStaffs,
   handleSearchByStaffId,
+  day_booking,
+  query,
+  setQuery
 }: TFilterCustomer) => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<any>();
   const showModal = () => {
     setOpen(true);
   };
@@ -41,6 +49,21 @@ const FilterReceptionBook = ({
       handleSearch(e.target.value);
     }
   };
+
+  useEffect(() => {
+    // format date
+    if(day_booking !== null) {
+      const parsedDate = new Date(day_booking);
+      const formattedDate = parsedDate.toLocaleDateString('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      setDate(formattedDate)
+    }else {
+      setDate(day_booking)
+    }
+  },[day_booking])
 
   const navigate = useNavigate();
 
@@ -61,16 +84,21 @@ const FilterReceptionBook = ({
             <Flatpickr
               options={{
                 locale: Vietnamese,
-                allowInput: true,
                 dateFormat: "d/m/Y",
-                altInputClass: "date-range",
-                maxDate: "today",
+                altInputClass: 'date-range',
               }}
               onChange={([date]) => {
                 handleDayChange(date);
               }}
-              placeholder="Ngày đặt lịch"
+              placeholder="Ngày tiếp đón"
+              value={[date]}
             ></Flatpickr>
+            <div className="flex items-center w-4 cursor-pointer" onClick={() => setQuery({
+              ...query,
+              day_booking: null
+            })}>
+              <img src={IconTrash2} alt="icon" />
+            </div>
             <div className="flex items-center">
               <img src={IconCalendarBlack} alt="icon" />
             </div>

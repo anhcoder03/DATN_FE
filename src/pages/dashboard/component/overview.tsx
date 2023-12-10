@@ -1,9 +1,7 @@
-'use client';
-
-import { Card, Col, Row, Typography } from 'antd';
-import React from 'react';
-import TotalRevenue from './total-revenue';
-import TotalCustomer from './total-customer';
+import { Card, Col, Row, Typography } from "antd";
+import React from "react";
+import TotalRevenue from "./total-revenue";
+import TotalCustomer from "./total-customer";
 
 type OverviewContainerProps = {};
 

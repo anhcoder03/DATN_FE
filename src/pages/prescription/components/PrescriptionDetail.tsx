@@ -126,7 +126,7 @@ const PrescriptionDetail = () => {
             </Field>
             <Field className={"only-view"}>
               <Label className="font-semibold" htmlFor="phone">
-                Thời gian tái khám
+                Thời gian kê đơn
               </Label>
               <Input
                 control={control}
@@ -134,7 +134,7 @@ const PrescriptionDetail = () => {
                 className="!border-transparent font-semibold text-black"
                 value={
                   data?.createdAt
-                    ? moment(data?.createdAt).format("HH:mm:ss DD/MM/YYYY")
+                    ? moment(data?.createdAt).format("DD/MM/YYYY")
                     : "---"
                 }
               ></Input>
@@ -152,7 +152,7 @@ const PrescriptionDetail = () => {
                 value={data?.diagnostic}
               /> */}
               <div className="!border-transparent font-semibold text-black">
-                {data?.diagnostic}
+                {data?.diagnostic || '---'}
               </div>
             </Field>
             <Field className={"only-view"}>
@@ -166,7 +166,7 @@ const PrescriptionDetail = () => {
                 value={data?.advice}
               /> */}
               <div className="!border-transparent font-semibold text-black">
-                {data?.advice}
+                {data?.advice || '---'}
               </div>
             </Field>
             <Field className={"only-view"}>
