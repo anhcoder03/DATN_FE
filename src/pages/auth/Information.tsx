@@ -197,6 +197,7 @@ const Information = () => {
           setCurrentPassword("");
           setNewPassword("");
         }}
+        className="modal-change-password"
         footer={
           <div className="flex items-center justify-end mt-4">
             <Button
