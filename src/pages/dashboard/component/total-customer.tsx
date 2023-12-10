@@ -4,27 +4,15 @@ import CountUp from 'react-countup';
 import { formatMoney } from '../../../common/money';
 import { statisticTotalCustomer } from '../../../services/dashboard.service';
 
-type TotalCustomerProps = {};
+type TotalCustomerProps = {
+  data?: number;
+};
 
 const formatter: StatisticProps['formatter'] = (value) => (
   <CountUp end={Number(value)} formattingFn={(v) => formatMoney(v) || '0'} />
 );
 
-const TotalCustomer: React.FC<TotalCustomerProps> = () => {
-  const [data, setData] = useState<number>();
-
-  useEffect(() => {
-    statisticTotalCustomer()
-      .then((r) => {
-        startTransition(() => {
-          setData(r?.totalCustomer);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+const TotalCustomer: React.FC<TotalCustomerProps> = ({ data }) => {
   return (
     <Card>
       <Statistic

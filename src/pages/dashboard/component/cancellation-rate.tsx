@@ -1,44 +1,42 @@
-import { Card, DatePicker, Typography } from "antd";
-import moment from "moment";
-import React, { useEffect, useMemo, useState } from "react";
-import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { statisticCancellationRate } from "../../../services/dashboard.service";
+import { Card, DatePicker, Typography } from 'antd';
+import moment from 'moment';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { statisticCancellationRate } from '../../../services/dashboard.service';
+import DatePickerCustomSelect from '../../../components/custom-picker';
 
-type KPIProps = {};
+type KPIProps = {
+  data?: DataType[];
+};
 
 type DataType = {
   name: string;
   value: number;
 };
 
-const COLORS = ["#54B2FE", "#F391C6"];
+const COLORS = ['#54B2FE', '#F391C6'];
 
 const RADIAN = Math.PI / 180;
 
-const CancellationRateContainer: React.FC<KPIProps> = () => {
+const CancellationRateContainer: React.FC<KPIProps> = ({ data: prev }) => {
   const [data, setData] = useState<DataType[]>();
 
-  const [day, setDay] = useState<Date[]>();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const defaultDay = useMemo(() => {
-    return [
-      moment().startOf("month").toDate(),
-      moment().endOf("month").toDate(),
-    ];
+  const fetch = useCallback(({ from, to }: { from: string; to: string }) => {
+    setLoading(true);
+    statisticCancellationRate({
+      from,
+      to,
+    }).then((r) => {
+      setLoading(false);
+      setData(r.value!);
+    });
   }, []);
 
   useEffect(() => {
-    statisticCancellationRate({
-      from: moment(day?.[0] ?? defaultDay[0])
-        .utc()
-        .format(),
-      to: moment(day?.[1] ?? defaultDay[1])
-        .utc()
-        .format(),
-    }).then((r) => {
-      setData(r.data ?? []);
-    });
-  }, [day, defaultDay]);
+    setData(prev);
+  }, [prev]);
 
   const renderCustomizedLabel = ({
     cx,
@@ -63,10 +61,9 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
       <text
         x={x}
         y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
+        fill='white'
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline='central'>
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
@@ -74,36 +71,31 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
 
   return (
     <Card
+      loading={loading}
       extra={
-        <DatePicker.RangePicker
-          format="DD-MM-YYYY"
-          onChange={(e) => {
-            if (e) {
-              setDay([e[0]!.startOf("d").toDate(), e[1]!.endOf("d").toDate()]);
-            }
-            if (!e) {
-              setDay(defaultDay);
-            }
-          }}
-          style={{ width: "100%" }}
-          allowClear
+        <DatePickerCustomSelect
+          defaultPicker='month'
+          onChangeTime={(s, e) =>
+            fetch({
+              from: s,
+              to: e,
+            })
+          }
         />
       }
-      title={<Typography.Title level={4}>Tỉ lệ hủy lịch</Typography.Title>}
-    >
+      title={<Typography.Title level={4}>Tỉ lệ hủy lịch</Typography.Title>}>
       <ResponsiveContainer aspect={2 / 1}>
         <PieChart width={100}>
           <Pie
             data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
+            dataKey='value'
+            nameKey='name'
+            cx='50%'
+            cy='50%'
             outerRadius={80}
-            fill="#8884d8"
+            fill='#8884d8'
             labelLine={false}
-            label={renderCustomizedLabel}
-          >
+            label={renderCustomizedLabel}>
             {data?.map((_, index) => (
               <Cell
                 key={`cell-${index}`}
@@ -111,7 +103,7 @@ const CancellationRateContainer: React.FC<KPIProps> = () => {
               />
             ))}
           </Pie>
-          <Legend key="name" />
+          <Legend key='name' />
         </PieChart>
       </ResponsiveContainer>
     </Card>

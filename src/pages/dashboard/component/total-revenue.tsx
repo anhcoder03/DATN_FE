@@ -4,29 +4,15 @@ import CountUp from 'react-countup';
 import { formatMoney } from '../../../common/money';
 import { statisticTotalRevenue } from '../../../services/dashboard.service';
 
-type TotalRevenueProps = {};
+type TotalRevenueProps = {
+  data?: { totalAmount: number; actualAmount: number };
+};
 
 const formatter: StatisticProps['formatter'] = (value) => (
   <CountUp end={Number(value)} formattingFn={(v) => formatMoney(v) || '0'} />
 );
 
-const TotalRevenue: React.FC<TotalRevenueProps> = () => {
-  const [expectedRevenue, setExpectedRevenue] = useState<number>();
-  const [actualRevenue, setActualRevenue] = useState<number>();
-
-  useEffect(() => {
-    statisticTotalRevenue()
-      .then((r) => {
-        startTransition(() => {
-          setExpectedRevenue(r?.totalAmount);
-          setActualRevenue(r?.actualAmount);
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+const TotalRevenue: React.FC<TotalRevenueProps> = ({ data }) => {
   return (
     <>
       <Col xs={24} sm={24} md={8}>
@@ -37,7 +23,7 @@ const TotalRevenue: React.FC<TotalRevenueProps> = () => {
                 Doanh thu dự kiến (VNĐ)
               </Typography.Title>
             }
-            value={expectedRevenue}
+            value={data?.totalAmount}
             formatter={formatter}
           />
         </Card>
@@ -50,7 +36,7 @@ const TotalRevenue: React.FC<TotalRevenueProps> = () => {
                 Doanh thu thực tế (VNĐ)
               </Typography.Title>
             }
-            value={actualRevenue}
+            value={data?.actualAmount}
             formatter={formatter}
           />
         </Card>

@@ -1,6 +1,6 @@
 import { Card, DatePicker, Typography } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -13,54 +13,49 @@ import {
   YAxis,
 } from 'recharts';
 import { statisticTotalUser } from '../../../services/dashboard.service';
+import DatePickerCustomSelect from '../../../components/custom-picker';
 
-type KPIProps = {};
+type KPIProps = {
+  data?: DataType[];
+};
 
 type DataType = {
   name: string;
   value: number;
 };
 
-const TotalUser: React.FC<KPIProps> = () => {
+const TotalUser: React.FC<KPIProps> = ({ data: prev }) => {
   const [data, setData] = useState<DataType[]>();
 
-  const [day, setDay] = useState<Date[]>();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const defaultDay = useMemo(() => {
-    return [
-      moment().startOf('month').toDate(),
-      moment().endOf('month').toDate(),
-    ];
+  const fetch = useCallback(({ from, to }: { from: string; to: string }) => {
+    setLoading(true);
+    statisticTotalUser({
+      from,
+      to,
+    }).then((r) => {
+      setLoading(false);
+      setData(r.value!);
+    });
   }, []);
 
   useEffect(() => {
-    statisticTotalUser({
-      from: moment(day?.[0] ?? defaultDay[0])
-        .utc()
-        .format(),
-      to: moment(day?.[1] ?? defaultDay[1])
-        .utc()
-        .format(),
-    }).then((r) => {
-      setData(r.data ?? []);
-    });
-  }, [day, defaultDay]);
+    setData(prev);
+  }, [prev]);
 
   return (
     <Card
+      loading={loading}
       extra={
-        <DatePicker.RangePicker
-          format='DD-MM-YYYY'
-          onChange={(e) => {
-            if (e) {
-              setDay([e[0]!.startOf('d').toDate(), e[1]!.endOf('d').toDate()]);
-            }
-            if (!e) {
-              setDay(defaultDay);
-            }
-          }}
-          style={{ width: '100%' }}
-          allowClear
+        <DatePickerCustomSelect
+          defaultPicker='month'
+          onChangeTime={(s, e) =>
+            fetch({
+              from: s,
+              to: e,
+            })
+          }
         />
       }
       title={<Typography.Title level={4}>Số lượng nhân sự</Typography.Title>}>
