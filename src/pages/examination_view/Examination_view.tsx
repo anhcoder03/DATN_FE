@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../../assets/logo-icon.png";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
+import { getOneExamination } from "../../services/examination.service";
+import { toast } from "react-toastify";
+import moment from "moment";
+import { getServiceByIdExam } from "../../services/designation.service";
+import {
+  getAllPrescription,
+  getOnePrescription,
+} from "../../services/prescription.service";
+import PriceUtils from "../../helpers/PriceUtils";
+import { calculateTotalPricePrescription } from "../../helpers/calculateTotalPrice";
 const ReceptionPrint = styled.div`
   /* padding: 50px 100px; */
   background: #fff;
@@ -89,7 +99,77 @@ const ReceptionPrint = styled.div`
   }
 `;
 const Examination_view = () => {
+  const [data, setData] = useState<any>({});
+  const [services, setServices] = useState<any[]>([]);
+  const [prescription, setPrescription] = useState<any[]>([]);
   const { id } = useParams();
+  useEffect(() => {
+    if (id !== undefined) {
+      loadData();
+      getService();
+      getPrescription();
+    }
+  }, [id]);
+  async function loadData() {
+    try {
+      const response = await getOneExamination(id);
+      const resData = response?.examination;
+      setData({
+        ...resData,
+      });
+    } catch (error) {
+      toast.error("Đã có lỗi sảy ra!!!");
+    }
+  }
+  async function getService() {
+    try {
+      const response = await getServiceByIdExam(id);
+      const resData = response?.docs;
+      setServices(resData);
+    } catch (error) {
+      toast.error("Đã có lỗi sảy ra!!!");
+    }
+  }
+  async function getPrescription() {
+    try {
+      const response = await getAllPrescription({ search: id, limit: 20 });
+      setPrescription(response.docs);
+    } catch (error) {
+      toast.error("Đã có lỗi sảy ra!!!");
+    }
+  }
+  const getFullAddress = () => {
+    const address: any[] = [
+      `${
+        data?.customerId?.detailedAddress
+          ? `${data?.customerId?.detailedAddress},`
+          : ""
+      }${
+        data?.customerId?.commune ? `${data?.customerId?.commune?.name}, ` : ""
+      }${
+        data?.customerId?.district
+          ? `${data?.customerId?.district?.name}, `
+          : ""
+      }${
+        data?.customerId?.province ? `${data?.customerId?.province?.name}` : ""
+      }`,
+    ];
+
+    if (address.length > 0) {
+      return address?.filter((e: any) => e != null)?.join(", ");
+    } else {
+      return "---";
+    }
+  };
+  function formatCurrency(number: any) {
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(number);
+  }
+  console.log("data", data);
+  console.log("services", services);
+  console.log("prescription", prescription);
 
   return (
     <div style={{ position: "relative" }}>
@@ -134,52 +214,52 @@ const Examination_view = () => {
             </div>
             <div>
               <p className="text-sm">
-                <span>MÃ SỐ PK: PK_200122313</span>
+                <span>MÃ SỐ PK: {data._id}</span>
               </p>
             </div>
           </div>
           <div className="title-print">
-            <h1 className="mb-3">PHIẾU KẾT QUẢ KHÁM BỆNH ONLINE</h1>
+            <h1 className="mb-3">PHIẾU KẾT QUẢ KHÁM BỆNH</h1>
           </div>
 
           <div className="text-sm mb-3">
             <div>
               <span>Họ và tên: </span>
               <span className="uppercase font-semibold pl-3">
-                Nguyễn Hồng Sơn
+                {data?.customerId?.name}
               </span>
             </div>
             <div>
               <span>Mã bệnh nhân: </span>
-              <span className="uppercase font-semibold pl-3">PH20433</span>
+              <span className="uppercase font-semibold pl-3">
+                {data?.customerId?._id}
+              </span>
             </div>
             <div>
               <span>Số điện thoại: </span>
-              <span className="uppercase font-semibold pl-3">0384707136</span>
+              <span className="uppercase font-semibold pl-3">
+                {data?.customerId?.phone}
+              </span>
             </div>
             <div>
               <span>Ngày sinh: </span>
               <span className="uppercase font-semibold pl-3">
-                {/* {dataPrint?.customerId?.dateOfBirth &&
-                  moment(dataPrint?.customerId?.dateOfBirth).format(
-                    "DD/MM/YYYY"
-                  )} */}
-                04/06/2003
+                {data?.customerId?.dateOfBirth &&
+                  moment(data?.customerId?.dateOfBirth).format("DD/MM/YYYY")}
               </span>
             </div>
             <div>
               <span>Giới tính: </span>
               <span className="uppercase font-semibold pl-3">
-                {/* {dataPrint?.customerId?.gender} */}
-                Nam
+                {data?.customerId?.gender}
               </span>
             </div>
             <div>
               <span>Địa chỉ: </span>
               <span className="font-semibold">
-                {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                {/* {getFullAddress()} */}
-                Hưng Đạo, Đông Lỗ, Hiệp Hòa, Bắc Giang
+                {`${data?.customerId?.detailedAddress} - ${data?.customerId?.commune?.name} - ${data?.customerId?.district?.name} - ${data?.customerId?.province?.name}`}
+                <br />
+                {getFullAddress()}
               </span>
             </div>
           </div>
@@ -190,14 +270,13 @@ const Examination_view = () => {
             </h1>
             <div>
               <span>Triệu chứng: </span>
-              <span className="font-medium">Cảm cúm</span>
+              <span className="font-medium">{data?.symptom || "---"}</span>
             </div>
 
             <div>
               <span>Bệnh sử: </span>
               <span className="font-medium">
-                {/* {dataPrint?.medicalHistory || "---"} */}
-                Đau ốm suốt ngày
+                {data?.medicalHistory || "---"}
               </span>
             </div>
           </div>
@@ -213,16 +292,16 @@ const Examination_view = () => {
                   <th>Kết quả</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr className="border border-black">
-                  <td>Khám cổ</td>
-                  <td>Khám tym</td>
-                </tr>
-                <tr className="border border-black">
-                  <td>Khám cổ</td>
-                  <td>Khám tym</td>
-                </tr>
-              </tbody>
+              {services.map((item) => {
+                return (
+                  <tbody>
+                    <tr>
+                      <td>{item?.service_examination?.name}</td>
+                      <td>{item?.mainResults || "---"}</td>
+                    </tr>
+                  </tbody>
+                );
+              })}
             </table>
           </div>
 
@@ -231,11 +310,10 @@ const Examination_view = () => {
               <span>
                 Ngày giờ khám:{" "}
                 <span className="font-semibold">
-                  {/* {moment(dataPrint?.day_running)
+                  {moment(data?.day_running)
                     .subtract(24, "hours")
                     .add(7, "hours")
-                    .format("hh:mm DD/MM/yyyy")} */}
-                  04/06/2003
+                    .format("hh:mm DD/MM/yyyy")}
                 </span>
               </span>
             </div>
@@ -243,24 +321,23 @@ const Examination_view = () => {
               <span>
                 Ngày giờ kết thúc:{" "}
                 <span className="font-semibold">
-                  {/* {moment(dataPrint?.day_done)
+                  {moment(data?.day_done)
                     .add(7, "hours")
-                    .format("hh:mm DD/MM/yyyy")} */}
-                  04/06/2003
+                    .format("hh:mm DD/MM/yyyy")}
                 </span>
               </span>
             </div>
             <div>
               <span>
                 Chuẩn đoán:{" "}
-                <span className="font-semibold">Ung thu giai đoạn cuối</span>
+                <span className="font-semibold">{data?.diagnostic}</span>
               </span>
             </div>
             <div>
               <span>
                 Kết quả:{" "}
                 <span className="font-semibold">
-                  {/* {dataPrint?.conclude} */}
+                  {data?.conclude}
                   Ung thu thật
                 </span>
               </span>
@@ -268,10 +345,7 @@ const Examination_view = () => {
             <div>
               <span>
                 Dặn dò:{" "}
-                <span className="font-semibold">
-                  {/* {dataPrint?.advice || "---"} */}
-                  Uống nhiều bia rượu lên
-                </span>
+                <span className="font-semibold">{data?.advice || "---"}</span>
               </span>
             </div>
           </div>
@@ -279,10 +353,7 @@ const Examination_view = () => {
           <div className="flex mt-10 my-3 justify-end pb-10">
             <div>
               <h3 className="text-sm font-semibold">Ký xác nhận bác sĩ</h3>
-              <p className="text-sm text-center">
-                {/* {dataPrint?.doctorId?.name} */}
-                Nguyễn Hồng Sơn
-              </p>
+              <p className="text-sm text-center">{data?.doctorId?.name}</p>
             </div>
           </div>
         </ReceptionPrint>
@@ -294,152 +365,155 @@ const Examination_view = () => {
           }}
           className=""
         >
-          <ReceptionPrint
-            style={{
-              paddingLeft: 50,
-              paddingRight: 50,
-              maxWidth: "900px",
-              margin: "0 auto",
-            }}
-          >
-            <div className="flex items-start justify-between my-4 pt-10">
-              <div className="w-[70%] flex items-start gap-x-2 text-xs">
+          {services.map((item: any) => {
+            return (
+              <ReceptionPrint
+                style={{
+                  paddingLeft: 50,
+                  paddingRight: 50,
+                  maxWidth: "900px",
+                  margin: "0 auto",
+                }}
+              >
+                <div className="flex items-start justify-between my-4 pt-10">
+                  <div className="w-[70%] flex items-start gap-x-2 text-xs">
+                    <div>
+                      <img src={Logo} alt="" height="50" width={50} />
+                    </div>
+                    <div className="text-sm">
+                      <h3
+                        className="text-[18px] font-semibold"
+                        style={{ textTransform: "uppercase" }}
+                      >
+                        Phòng khám Dr.Medipro
+                      </h3>
+                      <p>
+                        Địa chỉ:{" "}
+                        <span>
+                          Số 3, Nguyễn Trãi, KP Đông Tân, TP Dĩ An, Bình Dương
+                        </span>
+                      </p>
+                      <p>
+                        Điện thoại: <span>1900 57 15 48</span>
+                      </p>
+                      <p>
+                        Email: <span>nvtdMedipro@gmail.com</span>
+                      </p>
+                      <p>
+                        Website: <span>https://mediro.com.vn</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm">
+                      <span>MÃ PHIẾU: {item?._id}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="title-print">
+                  <h1 className="mb-3">DỊCH VỤ CHỈ ĐỊNH</h1>
+                </div>
+
+                <div className="text-sm mb-3">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <span>Tên khách hàng: </span>
+                      <span className="uppercase font-semibold pl-3">
+                        {item?.customerId?.name}
+                      </span>
+                    </div>
+                    <div>
+                      <span>Mã chứng từ: </span>
+                      <span className="uppercase font-semibold pl-3">
+                        {item?.examinationId}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span>Phòng Khám: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.clinicId?.name}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Bác sỹ: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.doctorId?.name}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Ngày tạo: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.createdAt &&
+                        moment(item?.createdAt).format("DD/MM/YYYY")}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Giới tính: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?.gender}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Địa chỉ: </span>
+                    <span className="font-semibold">
+                      {`${data?.customerId?.detailedAddress} - ${data?.customerId?.commune?.name} - ${data?.customerId?.district?.name} - ${data?.customerId?.province?.name}`}
+                      <br />
+                      {getFullAddress()}
+                    </span>
+                  </div>
+                </div>
                 <div>
-                  <img src={Logo} alt="" height="50" width={50} />
+                  <h1 className="uppercase my-3 font-semibold text-sm">
+                    Thông tin dịch vụ
+                  </h1>
+                  <table className="border border-black">
+                    <thead>
+                      <tr className="border border-black">
+                        <th>Tên dịch vụ</th>
+                        <th>Đơn giá</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border border-black">
+                        <td>{item?.service_examination?.name}</td>
+                        <td>
+                          {formatCurrency(item?.service_examination?.price)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <div className="text-sm">
-                  <h3
-                    className="text-[18px] font-semibold"
-                    style={{ textTransform: "uppercase" }}
-                  >
-                    Phòng khám Dr.Medipro
-                  </h3>
-                  <p>
-                    Địa chỉ:{" "}
-                    <span>
-                      Số 3, Nguyễn Trãi, KP Đông Tân, TP Dĩ An, Bình Dương
+                  <h1 className="uppercase mb-3 font-semibold text-sm pt-5">
+                    Thông tin khám bệnh
+                  </h1>
+                  <div className="pb-5">
+                    <span className="pb-5 block">Kết quả và kết luận: </span>
+                    <span className="font-medium">{item?.mainResults}</span>
+                  </div>
+                </div>
+                <div className="text-sm border-t-[2px]">
+                  <div className="py-5">
+                    <span className="font-medium text-red-600">
+                      Tổng tiền:{" "}
+                      {formatCurrency(item?.service_examination?.price)}
                     </span>
-                  </p>
-                  <p>
-                    Điện thoại: <span>1900 57 15 48</span>
-                  </p>
-                  <p>
-                    Email: <span>nvtdMedipro@gmail.com</span>
-                  </p>
-                  <p>
-                    Website: <span>https://mediro.com.vn</span>
-                  </p>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <p className="text-sm">
-                  <span>MÃ PHIẾU: PK_200122313</span>
-                </p>
-              </div>
-            </div>
-            <div className="title-print">
-              <h1 className="mb-3">DỊCH VỤ CHỈ ĐỊNH</h1>
-            </div>
-
-            <div className="text-sm mb-3">
-              <div className="flex justify-between items-center">
-                <div>
-                  <span>Tên khách hàng: </span>
-                  <span className="uppercase font-semibold pl-3">
-                    Nguyễn Hồng Sơn
-                  </span>
+                <div className="flex mt-10 my-3 justify-end pb-10">
+                  <div>
+                    <h3 className="text-sm font-semibold">
+                      Ký xác nhận bác sĩ
+                    </h3>
+                    <p className="text-sm text-center">
+                      {item?.doctorId?.name}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <span>Mã chứng từ: </span>
-                  <span className="uppercase font-semibold pl-3">
-                    PK-00000004
-                  </span>
-                </div>
-              </div>
-              <div>
-                <span>Phòng Khám: </span>
-                <span className="uppercase font-semibold pl-3">433</span>
-              </div>
-              <div>
-                <span>Bác sỹ: </span>
-                <span className="uppercase font-semibold pl-3">
-                  Nguyễn Hồng Sơn
-                </span>
-              </div>
-              <div>
-                <span>Ngày tạo: </span>
-                <span className="uppercase font-semibold pl-3">04/06/2003</span>
-              </div>
-              <div>
-                <span>Giới tính: </span>
-                <span className="uppercase font-semibold pl-3">Nam</span>
-              </div>
-              <div>
-                <span>Địa chỉ: </span>
-                <span className="font-semibold">
-                  Hưng Đạo, Đông Lỗ, Hiệp Hòa, Bắc Giang
-                </span>
-              </div>
-            </div>
-            <div>
-              <h1 className="uppercase my-3 font-semibold text-sm">
-                Thông tin dịch vụ
-              </h1>
-              <table className="border border-black">
-                <thead>
-                  <tr className="border border-black">
-                    <th>Tên dịch vụ</th>
-                    <th>Đơn giá</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border border-black">
-                    <td>Khám cổ</td>
-                    <td>250.000đ</td>
-                  </tr>
-                  <tr className="border border-black">
-                    <td>Khám cổ</td>
-                    <td>250.000đ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="text-sm">
-              <h1 className="uppercase mb-3 font-semibold text-sm pt-5">
-                Thông tin khám bệnh
-              </h1>
-              <div className="pb-5">
-                <span className="pb-5 block">Kết quả và kết luận: </span>
-                <span className="font-medium">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-                  quos, ullam facere debitis et inventore natus ratione? Fuga
-                  minus totam vel excepturi libero, ad tenetur sapiente et
-                  blanditiis, eos cupiditate fugit adipisci provident nulla!
-                  Error fugit perferendis, ut, totam itaque quae quam labore,
-                  sapiente eum aliquid ipsa autem ipsam? Illo cumque ea
-                  distinctio nemo asperiores facilis iure sit excepturi totam
-                  tenetur quibusdam, omnis at quae? Quod necessitatibus
-                  inventore accusamus omnis hic cum quia iure deserunt ea
-                  facilis enim eum quis consequatur ipsa, distinctio, delectus
-                  voluptas dolor fugiat quasi eaque repellendus tenetur labore?
-                  Hic fugiat, corporis commodi deserunt reprehenderit id atque.
-                </span>
-              </div>
-            </div>
-            <div className="text-sm border-t-[2px]">
-              <div className="py-5">
-                <span className="font-medium text-red-600">
-                  Tổng tiền: 150.000đ
-                </span>
-              </div>
-            </div>
-            <div className="flex mt-10 my-3 justify-end pb-10">
-              <div>
-                <h3 className="text-sm font-semibold">Ký xác nhận bác sĩ</h3>
-                <p className="text-sm text-center">Nguyễn Hồng Sơn</p>
-              </div>
-            </div>
-          </ReceptionPrint>
+              </ReceptionPrint>
+            );
+          })}
         </div>
         {/* THÔNG TIN PHIẾU THUỐC */}\
         <div
@@ -449,316 +523,182 @@ const Examination_view = () => {
           }}
           className=""
         >
-          <ReceptionPrint
-            style={{
-              paddingLeft: 50,
-              paddingRight: 50,
-              maxWidth: "900px",
-              margin: "0 auto",
-            }}
-          >
-            <div className="flex items-start justify-between my-4 pt-10">
-              <div className="w-[70%] flex items-start gap-x-2 text-xs">
-                <div>
-                  <img src={Logo} alt="" height="50" width={50} />
+          {prescription.map((item) => {
+            return (
+              <ReceptionPrint
+                style={{
+                  paddingLeft: 50,
+                  paddingRight: 50,
+                  maxWidth: "900px",
+                  margin: "0 auto",
+                }}
+              >
+                <div className="flex items-start justify-between my-4 pt-10">
+                  <div className="w-[70%] flex items-start gap-x-2 text-xs">
+                    <div>
+                      <img src={Logo} alt="" height="50" width={50} />
+                    </div>
+                    <div className="text-sm">
+                      <h3
+                        className="text-[18px] font-semibold"
+                        style={{ textTransform: "uppercase" }}
+                      >
+                        Phòng khám Dr.Medipro
+                      </h3>
+                      <p>
+                        Địa chỉ:{" "}
+                        <span>
+                          Số 3, Nguyễn Trãi, KP Đông Tân, TP Dĩ An, Bình Dương
+                        </span>
+                      </p>
+                      <p>
+                        Điện thoại: <span>1900 57 15 48</span>
+                      </p>
+                      <p>
+                        Email: <span>nvtdMedipro@gmail.com</span>
+                      </p>
+                      <p>
+                        Website: <span>https://mediro.com.vn</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-sm">
-                  <h3
-                    className="text-[18px] font-semibold"
-                    style={{ textTransform: "uppercase" }}
-                  >
-                    Phòng khám Dr.Medipro
-                  </h3>
-                  <p>
-                    Địa chỉ:{" "}
-                    <span>
-                      Số 3, Nguyễn Trãi, KP Đông Tân, TP Dĩ An, Bình Dương
+                <div className="title-print">
+                  <h1 className="mb-3">PHIẾU CÔNG KHAI LẤY THUỐC</h1>
+                </div>
+
+                <div className="text-sm mb-3">
+                  <div>
+                    <span>Họ và tên: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?.name}
                     </span>
-                  </p>
-                  <p>
-                    Điện thoại: <span>1900 57 15 48</span>
-                  </p>
-                  <p>
-                    Email: <span>nvtdMedipro@gmail.com</span>
-                  </p>
-                  <p>
-                    Website: <span>https://mediro.com.vn</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="title-print">
-              <h1 className="mb-3">PHIẾU CÔNG KHAI LẤY THUỐC</h1>
-            </div>
-
-            <div className="text-sm mb-3">
-              <div>
-                <span>Họ và tên: </span>
-                <span className="uppercase font-semibold pl-3">
-                  Nguyễn Hồng Sơn
-                </span>
-              </div>
-              <div>
-                <span>Mã bệnh nhân: </span>
-                <span className="uppercase font-semibold pl-3">PH20433</span>
-              </div>
-              <div>
-                <span>Số điện thoại: </span>
-                <span className="uppercase font-semibold pl-3">0384707136</span>
-              </div>
-              <div>
-                <span>Ngày sinh: </span>
-                <span className="uppercase font-semibold pl-3">
-                  {/* {dataPrint?.customerId?.dateOfBirth &&
-                  moment(dataPrint?.customerId?.dateOfBirth).format(
-                    "DD/MM/YYYY"
-                  )} */}
-                  04/06/2003
-                </span>
-              </div>
-              <div>
-                <span>Giới tính: </span>
-                <span className="uppercase font-semibold pl-3">
-                  {/* {dataPrint?.customerId?.gender} */}
-                  Nam
-                </span>
-              </div>
-              <div>
-                <span>Bác sỹ: </span>
-                <span className="font-semibold">
-                  {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                  {/* {getFullAddress()} */}
-                  Nguyễn Hồng Sơn
-                </span>
-              </div>
-              <div>
-                <span>Địa chỉ: </span>
-                <span className="font-semibold">
-                  {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                  {/* {getFullAddress()} */}
-                  Hưng Đạo, Đông Lỗ, Hiệp Hòa, Bắc Giang
-                </span>
-              </div>
-            </div>
-
-            <div className="text-xs">
-              <h1 className="uppercase mb-3 font-semibold text-sm">
-                Thông tin khám bệnh
-              </h1>
-              <div>
-                <span>Chẩn đoán: </span>
-                <span className="font-medium">Cảm cúm</span>
-              </div>
-
-              <div>
-                <span>Lời dặn: </span>
-                <span className="font-medium">
-                  {/* {dataPrint?.medicalHistory || "---"} */}
-                  Đau ốm suốt ngày
-                </span>
-              </div>
-              <div>
-                <span>Chú thích: </span>
-                <span className="font-medium">
-                  {/* {dataPrint?.medicalHistory || "---"} */}
-                  Đau ốm suốt ngày
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <h1 className="uppercase my-3 font-semibold text-sm">
-                Thông tin thuốc bệnh nhân
-              </h1>
-              <table className="border border-black">
-                <thead>
-                  <tr className="border border-black">
-                    <th>Tên thuốc</th>
-                    <th>Số lượng</th>
-                    <th>Đơn vị</th>
-                    <th>Ngày, tháng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border border-black">
-                    <td>Thuốc ho</td>
-                    <td>5</td>
-                    <td>Gói</td>
-                    <td>04/06/2023</td>
-                    <td>40.000đ</td>
-                    <td>200.000đ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex mt-10 my-3 justify-end pb-10">
-              <div>
-                <h3 className="text-sm font-semibold">Ký xác nhận bác sĩ</h3>
-                <p className="text-sm text-center">
-                  {/* {dataPrint?.doctorId?.name} */}
-                  Nguyễn Hồng Sơn
-                </p>
-              </div>
-            </div>
-          </ReceptionPrint>
-          <ReceptionPrint
-            style={{
-              paddingLeft: 50,
-              paddingRight: 50,
-              maxWidth: "900px",
-              margin: "0 auto",
-            }}
-          >
-            <div className="flex items-start justify-between my-4 pt-10">
-              <div className="w-[70%] flex items-start gap-x-2 text-xs">
-                <div>
-                  <img src={Logo} alt="" height="50" width={50} />
-                </div>
-                <div className="text-sm">
-                  <h3
-                    className="text-[18px] font-semibold"
-                    style={{ textTransform: "uppercase" }}
-                  >
-                    Phòng khám Dr.Medipro
-                  </h3>
-                  <p>
-                    Địa chỉ:{" "}
-                    <span>
-                      Số 3, Nguyễn Trãi, KP Đông Tân, TP Dĩ An, Bình Dương
+                  </div>
+                  <div>
+                    <span>Mã bệnh nhân: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?._id}
                     </span>
-                  </p>
-                  <p>
-                    Điện thoại: <span>1900 57 15 48</span>
-                  </p>
-                  <p>
-                    Email: <span>nvtdMedipro@gmail.com</span>
-                  </p>
-                  <p>
-                    Website: <span>https://mediro.com.vn</span>
-                  </p>
+                  </div>
+                  <div>
+                    <span>Số điện thoại: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?.phone}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Ngày sinh: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?.dateOfBirth &&
+                        moment(item?.customerId?.dateOfBirth).format(
+                          "DD/MM/YYYY"
+                        )}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Giới tính: </span>
+                    <span className="uppercase font-semibold pl-3">
+                      {item?.customerId?.gender}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Bác sỹ: </span>
+                    <span className="font-semibold">
+                      {item?.doctorId?.name}
+                    </span>
+                  </div>
+                  <div>
+                    <span>Địa chỉ: </span>
+                    <span className="font-semibold">
+                      {`${item?.customerId?.detailedAddress} - ${item?.customerId?.commune?.name} - ${item?.customerId?.district?.name} - ${item?.customerId?.province?.name}`}
+                      <br />
+                      {getFullAddress()}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="title-print">
-              <h1 className="mb-3">PHIẾU CÔNG KHAI LẤY THUỐC</h1>
-            </div>
 
-            <div className="text-sm mb-3">
-              <div>
-                <span>Họ và tên: </span>
-                <span className="uppercase font-semibold pl-3">
-                  Nguyễn Hồng Sơn
-                </span>
-              </div>
-              <div>
-                <span>Mã bệnh nhân: </span>
-                <span className="uppercase font-semibold pl-3">PH20433</span>
-              </div>
-              <div>
-                <span>Số điện thoại: </span>
-                <span className="uppercase font-semibold pl-3">0384707136</span>
-              </div>
-              <div>
-                <span>Ngày sinh: </span>
-                <span className="uppercase font-semibold pl-3">
-                  {/* {dataPrint?.customerId?.dateOfBirth &&
-                  moment(dataPrint?.customerId?.dateOfBirth).format(
-                    "DD/MM/YYYY"
-                  )} */}
-                  04/06/2003
-                </span>
-              </div>
-              <div>
-                <span>Giới tính: </span>
-                <span className="uppercase font-semibold pl-3">
-                  {/* {dataPrint?.customerId?.gender} */}
-                  Nam
-                </span>
-              </div>
-              <div>
-                <span>Bác sỹ: </span>
-                <span className="font-semibold">
-                  {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                  {/* {getFullAddress()} */}
-                  Nguyễn Hồng Sơn
-                </span>
-              </div>
-              <div>
-                <span>Địa chỉ: </span>
-                <span className="font-semibold">
-                  {/* {`${dataPrint?.customerId?.detailedAddress} - ${dataPrint?.customerId?.commune?.name} - ${dataPrint?.customerId?.district?.name} - ${dataPrint?.customerId?.province?.name}`} */}
-                  {/* {getFullAddress()} */}
-                  Hưng Đạo, Đông Lỗ, Hiệp Hòa, Bắc Giang
-                </span>
-              </div>
-            </div>
+                <div className="text-xs">
+                  <h1 className="uppercase mb-3 font-semibold text-sm">
+                    Thông tin khám bệnh
+                  </h1>
+                  <div>
+                    <span>Chẩn đoán: </span>
+                    <span className="font-medium">
+                      {item?.diagnostic || "---"}
+                    </span>
+                  </div>
 
-            <div className="text-xs">
-              <h1 className="uppercase mb-3 font-semibold text-sm">
-                Thông tin khám bệnh
-              </h1>
-              <div>
-                <span>Chẩn đoán: </span>
-                <span className="font-medium">Cảm cúm</span>
-              </div>
+                  <div>
+                    <span>Lời dặn: </span>
+                    <span className="font-medium">{item?.advice || "---"}</span>
+                  </div>
+                  <div>
+                    <span>Chú thích: </span>
+                    <span className="font-medium">{item?.note || "---"}</span>
+                  </div>
+                </div>
 
-              <div>
-                <span>Lời dặn: </span>
-                <span className="font-medium">
-                  {/* {dataPrint?.medicalHistory || "---"} */}
-                  Đau ốm suốt ngày
-                </span>
-              </div>
-              <div>
-                <span>Chú thích: </span>
-                <span className="font-medium">
-                  {/* {dataPrint?.medicalHistory || "---"} */}
-                  Đau ốm suốt ngày
-                </span>
-              </div>
-            </div>
+                <div>
+                  <h1 className="uppercase my-3 font-semibold text-sm">
+                    Thông tin thuốc bệnh nhân
+                  </h1>
 
-            <div>
-              <h1 className="uppercase my-3 font-semibold text-sm">
-                Thông tin thuốc bệnh nhân
-              </h1>
-              <table className="border border-black">
-                <thead>
-                  <tr className="border border-black">
-                    <th>Tên thuốc</th>
-                    <th>Số lượng</th>
-                    <th>Đơn vị</th>
-                    <th>Ngày, tháng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border border-black">
-                    <td>Thuốc ho</td>
-                    <td>5</td>
-                    <td>Gói</td>
-                    <td>04/06/2023</td>
-                    <td>40.000đ</td>
-                    <td>200.000đ</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex mt-10 my-3 justify-end pb-10">
-              <div>
-                <h3 className="text-sm font-semibold">Ký xác nhận bác sĩ</h3>
-                <p className="text-sm text-center">
-                  {/* {dataPrint?.doctorId?.name} */}
-                  Nguyễn Hồng Sơn
-                </p>
-              </div>
-            </div>
-          </ReceptionPrint>
+                  <table className="border border-black">
+                    <thead>
+                      <tr className="border border-black">
+                        <th>Tên thuốc</th>
+                        <th>Số lượng</th>
+                        <th>Đơn vị bán</th>
+                        <th>Đơn vị sử dụng</th>
+                        <th>Ngày, tháng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                      </tr>
+                    </thead>
+                    {item?.medicines.map((item: any) => {
+                      return (
+                        <tbody>
+                          <tr className="border border-black">
+                            <td>{item?.medicineId?.name}</td>
+                            <td>{item?.quantity}</td>
+                            <td>{item?.unit_selling}</td>
+                            <td>{item?.unit_using}</td>
+                            <td>04/06/2023</td>
+                            <td>{formatCurrency(item?.medicineId?.price)}</td>
+                            <td>
+                              {PriceUtils.format(
+                                item?.medicineId?.price * item?.quantity
+                              )}
+                            </td>
+                          </tr>
+                        </tbody>
+                      );
+                    })}
+                  </table>
+                </div>
+                <div className="text-sm border-t-[2px]">
+                  <div className="py-5">
+                    <span className="font-medium text-red-600">
+                      Tổng tiền:{" "}
+                      {formatCurrency(
+                        calculateTotalPricePrescription(prescription)
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex mt-10 my-3 justify-end pb-10">
+                  <div>
+                    <h3 className="text-sm font-semibold">
+                      Ký xác nhận bác sĩ
+                    </h3>
+                    <p className="text-sm text-center">
+                      {item?.doctorId?.name}
+                    </p>
+                  </div>
+                </div>
+              </ReceptionPrint>
+            );
+          })}
         </div>
       </div>
     </div>
