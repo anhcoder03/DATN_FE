@@ -16,7 +16,15 @@ export function calculateTotalPriceNoFomat(data: any) {
   }
   return totalPrice;
 }
-
+export function calculateTotalPricePrescription(data: any) {
+  let totalPrice = 0;
+  for (const prescription of data) {
+    for (const item of prescription?.medicines || []) {
+      totalPrice += item?.medicineId?.price * item?.quantity;
+    }
+  }
+  return totalPrice;
+}
 export function totalPrice(data: any) {
   let totalPrice = 0;
   for (const item of data) {
