@@ -274,6 +274,16 @@ const ExaminationDetail = () => {
         <div className="relative-h-full">
           <Heading>
             Chi tiết phiếu khám: <span>{id}</span>
+            {data?.status === "cancel" && (
+              <div className="flex items-center gap-x-3 text-sm">
+                <span className="text-red-500 font-bold text-sm">
+                  Lý do hủy:
+                </span>
+                <span className="text-red-500">
+                  {data?.cancel_reason ?? "---"}
+                </span>
+              </div>
+            )}
           </Heading>
         </div>
         <AppTaps
@@ -370,20 +380,19 @@ const ExaminationDetail = () => {
                   )}
                 </>
               )}
-              {data?.status !== "done" ||
-                (data?.status !== "cancel" && (
-                  <>
-                    {auth?.role?.roleNumber == 3 ? null : (
-                      <Button
-                        type="submit"
-                        className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                        onClick={() => navigate(`/examination/${id}`)}
-                      >
-                        Chỉnh sửa
-                      </Button>
-                    )}
-                  </>
-                ))}
+              {data?.status !== "done" || data?.status !== "cancel" ? (
+                <>
+                  {auth?.role?.roleNumber == 3 ? null : (
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => navigate(`/examination/${id}`)}
+                    >
+                      Chỉnh sửa
+                    </Button>
+                  )}
+                </>
+              ) : null}
             </div>
           </div>
         </div>

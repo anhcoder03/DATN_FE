@@ -51,7 +51,17 @@ const ReceptionView = () => {
     <Layout>
       <div>
         <div className="relative-h-full">
-          <Heading>Xem chi tiết tiếp đón</Heading>
+          <Heading>
+            {data?.status === "cancel_schedule"
+              ? "Xem chi tiết lịch khám, Tư vấn"
+              : "Xem chi tiết tiếp đón"}
+            <div className="text-base flex items-center gap-x-3">
+              <span className="text-red-500 font-bold">Lý do hủy:</span>
+              <span className="text-red-500">
+                {data?.cancel_reason ?? "---"}
+              </span>
+            </div>
+          </Heading>
           <form className="flex  justify-between gap-x-10 w-full pb-16">
             <div className="p-5 bg-white w-1/2 rounded-xl">
               <Heading>
