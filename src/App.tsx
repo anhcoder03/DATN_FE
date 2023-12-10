@@ -29,6 +29,7 @@ function App() {
   };
 
   const toastify = (noti: any) => {
+    console.log(noti);
     // setNotify(noti)
     return toast.info("Thông báo đẩy!!!!");
   };
