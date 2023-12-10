@@ -594,7 +594,9 @@ small {
   width: 100%;
 }
 
-.modal-payment .ant-modal-content {
+.modal-payment .ant-modal-content,
+.modal-login-otp .ant-modal-content,
+.modal-change-password .ant-modal-content {
   max-width: 700px !important;
   width: 100%;
 }

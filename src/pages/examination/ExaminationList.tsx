@@ -348,6 +348,7 @@ const ExaminationList = () => {
 
   const handleChangeStatus = async (status: string, id: any) => {
     if (status === "cancel") {
+      console.log(cancelRequester);
       if (!cancelRequester || cancelRequester === "") {
         toast.error("Vui lòng chọn người yêu cầu hủy!");
         return;

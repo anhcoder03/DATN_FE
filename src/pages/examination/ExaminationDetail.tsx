@@ -380,7 +380,7 @@ const ExaminationDetail = () => {
                   )}
                 </>
               )}
-              {data?.status !== "done" || data?.status !== "cancel" ? (
+              {data?.status !== "done" && data?.status !== "cancel" ? (
                 <>
                   {auth?.role?.roleNumber == 3 ? null : (
                     <Button

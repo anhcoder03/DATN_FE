@@ -111,6 +111,7 @@ const ModalLoginOTP = React.forwardRef<
         </h1>
       }
       footer={null}
+      className="modal-login-otp"
     >
       {hasOTP ? (
         <form className="max-w-[400px] mx-auto my-5">
