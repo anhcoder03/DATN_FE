@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import CalcUtils from "../../helpers/CalcULtils";
 import { Table3 } from "../../components/table";
-import { LabelStatus } from "../../components/label";
+import { Label, LabelStatus } from "../../components/label";
 import IconEdit from "../../assets/images/icon-edit.png";
 import { Pagination } from "../../components/pagination";
 import IconPrint from "../../assets/images/ic-print.svg";
@@ -24,9 +24,11 @@ import { useReactToPrint } from "react-to-print";
 import { getServiceByIdExam } from "../../services/designation.service";
 import { toast } from "react-toastify";
 import { PrintExamination } from "../../components/print";
-import { Button, Modal } from "antd";
+import { Button, Modal, Radio, RadioChangeEvent } from "antd";
 import { getAllByName } from "../../services/role.service";
 import { getAllClinic } from "../../services/clinic.service";
+import { Field } from "../../components/field";
+import TextArea from "antd/es/input/TextArea";
 
 const ExaminationList = () => {
   const [examinations, setExamination] = useState<any[]>([]);
@@ -38,6 +40,8 @@ const ExaminationList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [dataDoctors, setDataDoctors] = useState<any[]>([]);
   const [clinics, setClinics] = useState<any[]>([]);
+  const [cancelRequester, setCancelRequester] = useState<any>();
+  const [cancelReason, setCancelReason] = useState<string>();
 
   const componentRef = useRef(null);
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
@@ -344,6 +348,14 @@ const ExaminationList = () => {
 
   const handleChangeStatus = async (status: string, id: any) => {
     if (status === "cancel") {
+      if (!cancelRequester || cancelRequester === "") {
+        toast.error("Vui lòng chọn người yêu cầu hủy!");
+        return;
+      }
+      if (!cancelReason || cancelReason === "") {
+        toast.error("Vui lòng nhập lý do hủy!");
+        return;
+      }
       const now = new Date();
       const nowVietnam = new Date(
         now.getTime() + now.getTimezoneOffset() * 60000 + 7 * 60 * 60 * 1000
@@ -353,8 +365,11 @@ const ExaminationList = () => {
         status,
         day_cancel,
         _id: id,
+        cancel_requester: cancelRequester,
+        cancel_reason: cancelReason,
       };
       const response: any = await UpdateExamination(params);
+      setOpenModal(false);
       if (response?.examination) {
         toast.success("chuyển trạng thái thành công!");
         handleGetExaminaton();
@@ -373,6 +388,7 @@ const ExaminationList = () => {
         _id: id,
       };
       const response: any = await UpdateExamination(params);
+      setOpenModal(false);
       if (response?.examination) {
         toast.success("Chuyển trạng thái thành công!");
         handleGetExaminaton();
@@ -390,13 +406,9 @@ const ExaminationList = () => {
   const onOk = async () => {
     if (itemExamination?.type == "cancel") {
       handleChangeStatus("cancel", itemExamination?.data?._id);
-      setOpenModal(false);
-      return;
     }
     if (itemExamination?.type == "done") {
       handleChangeStatus("done", itemExamination?.data?._id);
-      setOpenModal(false);
-      return;
     }
   };
 
@@ -451,6 +463,10 @@ const ExaminationList = () => {
     urlParams.set("day", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
+  const onChange = (e: RadioChangeEvent) => {
+    console.log(e.target.value);
+    setCancelRequester(e.target.value);
+  };
 
   return (
     <Layout>
@@ -464,9 +480,9 @@ const ExaminationList = () => {
         handleClinicChange={handleSearchByClinic}
         clinics={clinics}
         dataDoctors={dataDoctors}
-        day_welcome = {query?.day_welcome}
-        query = {query}
-        setQuery = {setQuery}
+        day_welcome={query?.day_welcome}
+        query={query}
+        setQuery={setQuery}
       ></FilterExamination>
       <Table3
         columns={newHeading}
@@ -509,17 +525,54 @@ const ExaminationList = () => {
             </Button>,
           ]}
           onCancel={() => setOpenModal(false)}
+          className="custom-modal"
         >
           <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-            Thông Báo
+            {itemExamination?.type === "cancel"
+              ? "Hủy Phiếu Khám ?"
+              : "Hoàn Thành Khám ?"}
           </h1>
           {itemExamination?.type == "cancel" && (
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc hủy phiếu khám này không?</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {itemExamination?.data?._id}
-              </span>
-            </div>
+            <>
+              <Field className={"grid-cols-1 w-full my-2"}>
+                <Label htmlFor="cancel_requester">
+                  <span className="star-field">*</span> Người yêu cầu hủy
+                </Label>
+                <Radio.Group onChange={onChange}>
+                  <div className="flex items-center">
+                    <Radio
+                      className="flex items-center h-[34px]"
+                      value={itemExamination?.data?.customerId?._id}
+                    >
+                      Khách hàng
+                    </Radio>
+                    <Radio
+                      className="flex items-center h-[34px]"
+                      value={itemExamination?.data?.doctorId?._id}
+                    >
+                      Bác sĩ
+                    </Radio>
+                  </div>
+                </Radio.Group>
+              </Field>
+              <Field>
+                <Label className="font-semibold" htmlFor="note">
+                  <span className="star-field">*</span> Lý do hủy khám
+                </Label>
+                <TextArea
+                  className="outline-none input-primary  focus:!shadow-none"
+                  name="medicalHistory"
+                  placeholder="Nhập lý do hủy khám"
+                  onChange={(e) => setCancelReason(e.target.value)}
+                />
+              </Field>
+              <div className="my-5">
+                <span>* Chú ý:</span>
+                <p className="text-sm font-semibold">
+                  Khi hủy phiếu khám, các dịch vụ chỉ định cũng đồng thời bị hủy
+                </p>
+              </div>
+            </>
           )}
           {itemExamination?.type == "done" && (
             <div className="flex flex-col items-center justify-center py-4 text-sm">

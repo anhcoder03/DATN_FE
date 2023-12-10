@@ -59,3 +59,12 @@ export const updateServiceByIdExamination = async (data: any) => {
     return error;
   }
 };
+
+export const createServiceByExam = async (data: any) => {
+  try {
+    const response = await http.post(`/serviceByExamination`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
