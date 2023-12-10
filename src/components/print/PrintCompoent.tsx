@@ -73,7 +73,6 @@ const ReceptionPrint = styled.div`
   }
 `;
 const PrintCompoent = ({ componentRef, dataPrint }: any) => {
-  console.log("dataPrint", dataPrint);
   return (
     <div style={{ position: "relative" }} className="hidden">
       <div className="print-content reception-print" ref={componentRef}>

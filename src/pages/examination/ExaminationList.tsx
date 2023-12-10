@@ -464,6 +464,7 @@ const ExaminationList = () => {
     urlParams.set("day", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
+  
   const onChange = (e: RadioChangeEvent) => {
     console.log(e.target.value);
     setCancelRequester(e.target.value);

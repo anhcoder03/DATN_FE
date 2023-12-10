@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Layout } from "../../components/layout";
 import { useParams, useNavigate } from "react-router-dom";
 import { deleteServiceByExamination, getOneServiceByExam, updateServiceByExam } from "../../services/designation.service";
@@ -16,6 +16,8 @@ import { Modal } from "antd";
 import { toast } from 'react-toastify';
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { useReactToPrint } from "react-to-print";
+import DesignationPrint from "./components/DesignationPrint";
 
 
 const DesignationDetail = () => {
@@ -26,6 +28,21 @@ const DesignationDetail = () => {
   const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const componentRef = useRef(null);
+
+  const [dataPrint, setDataPrint] = useState<any>();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    copyStyles: true,
+  });
+
+  const handlePrintDes = (data: any) => {
+    setOpenModal(true);
+    setDataPrint(data)
+    setTimeout(() => {
+      handlePrint();
+    }, 1000);
+  }
 
   useEffect(() => {
     getOneService();
@@ -349,8 +366,9 @@ const DesignationDetail = () => {
                 <Button
                   type="submit"
                   className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  onClick={() => handlePrintDes(designation)}
                 >
-                  In
+                  In phiếu
                 </Button>
               )}
               {(auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
@@ -400,41 +418,51 @@ const DesignationDetail = () => {
           </div>
         </div>
       </div>
-      <Modal
-        centered
-        open={openModal}
-        onOk={onOk}
-        onCancel={() => setOpenModal(false)}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        {oneDesignation?.type == 'cancel' && (
-          <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn huỷ đơn dịch vụ này không?</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {oneDesignation?.name}
-            </span>
-          </div>
-        )}
-        {oneDesignation?.type == 'running' && (
-          <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
-            <p>Bạn có chắc chắn muốn thực hiện đơn dịch vụ này không?</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {oneDesignation?.name}
-            </span>
-          </div>
-        )}
-        {oneDesignation?.type == 'done' && (
-          <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
-            <p>Bạn có chắc chắn muốn hoàn thành đơn dịch vụ này không?</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {oneDesignation?.name}
-            </span>
-          </div>
-        )}
-        
-      </Modal>
+      {
+        openModal && dataPrint !== undefined ? (
+          <DesignationPrint
+            dataPrint = {dataPrint}
+            componentRef = {componentRef}
+          />
+        ) : (
+          <Modal
+            centered
+            open={openModal}
+            onOk={onOk}
+            onCancel={() => setOpenModal(false)}
+          >
+            <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+              Thông Báo
+            </h1>
+            {oneDesignation?.type == 'cancel' && (
+              <div className="flex flex-col items-center justify-center py-4 text-sm">
+                <p>Bạn có chắc muốn huỷ đơn dịch vụ này không?</p>
+                <span className="text-center text-[#ff5c75] font-bold">
+                  {oneDesignation?.name}
+                </span>
+              </div>
+            )}
+            {oneDesignation?.type == 'running' && (
+              <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
+                <p>Bạn có chắc chắn muốn thực hiện đơn dịch vụ này không?</p>
+                <span className="text-center text-[#ff5c75] font-bold">
+                  {oneDesignation?.name}
+                </span>
+              </div>
+            )}
+            {oneDesignation?.type == 'done' && (
+              <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
+                <p>Bạn có chắc chắn muốn hoàn thành đơn dịch vụ này không?</p>
+                <span className="text-center text-[#ff5c75] font-bold">
+                  {oneDesignation?.name}
+                </span>
+              </div>
+            )}
+            
+          </Modal>
+        )
+      }
+      
     </Layout>
   );
 };

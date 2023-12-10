@@ -158,7 +158,7 @@ const UpdateBooking = () => {
                   setData({
                     ...data,
                     customer: val?._id,
-                    dateOfBirth: moment(val?.dateOfBirth).unix(),
+                    dateOfBirth: val?.dateOfBirth,
                     gender: val?.gender,
                     phone: val?.phone
                   });
@@ -181,7 +181,7 @@ const UpdateBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field>
+            <Field className='only-view'>
               <Label htmlFor="phone">
                 <span className="star-field">*</span>
                 Số điện thoại
@@ -189,7 +189,7 @@ const UpdateBooking = () => {
               <Input
                 control={control}
                 name="phone"
-                value={data?.phone}
+                value={data?.phone || '---'}
                 placeholder="Nhập số điện thoại"
               >
                 <div className="p-2 bg-white">
@@ -223,34 +223,18 @@ const UpdateBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field>
+            <Field className='only-view'>
               <Label htmlFor="_id">Năm sinh</Label>
-              <div className="relative border-b border-b-gray-200 pb-3">
-                <Flatpickr
-                  options={{
-                    locale: Vietnamese,
-                    allowInput: true,
-                    dateFormat: "d/m/Y",
-                    altInputClass: "date-range",
-                    maxDate: "today",
-                  }}
-                  onChange={([date]) => {
-                    setValue("dateOfBirth", date);
-                    console.log('datên', date, data);
-                    
-                    setData({
-                      ...data,
-                      dateOfBirth: date
-                    })
-                  }}
-                  value={data?.dateOfBirth}
-                  placeholder="dd/mm/yyyy"
-                  name="dateOfBirth"
-                ></Flatpickr>
+                <Input
+                  control={control}
+                  type="text"
+                  value = {
+                    data?.dateOfBirth ? moment(data?.dateOfBirth).format('DD/MM/YYYY') : '---'
+                  }
+                />
                 <div className="absolute top-0 right-0">
                   <img src={IconCalendar} alt="icon" />
                 </div>
-              </div>
             </Field>
             <Field>
               <Label htmlFor="">Tuổi</Label>
@@ -268,7 +252,7 @@ const UpdateBooking = () => {
           </Row>
           <Row className="grid-cols-2 ">
             <Field>
-              <Label htmlFor="staffId">Nhân viên tiếp đón</Label>
+              <Label htmlFor="staffId"><span className="star-field">*</span>Nhân viên tiếp đón</Label>
               <Select
                 placeholder="Chọn nhân viên tiếp đón"
                 className="mb-2 react-select"
