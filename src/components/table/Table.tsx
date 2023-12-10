@@ -6,11 +6,18 @@ interface ITableProps {
   children: React.ReactNode;
   loading?: boolean;
   length?: number | undefined;
+  className?: string;
 }
 
-const Table = ({ children, loading, length, headings }: ITableProps) => {
+const Table = ({
+  children,
+  loading,
+  length,
+  headings,
+  className,
+}: ITableProps) => {
   return (
-    <div className="table-wrapper">
+    <div className={`table-wrapper ${className}`}>
       <table>
         <thead className="">
           <tr className="">

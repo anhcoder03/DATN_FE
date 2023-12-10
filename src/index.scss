@@ -313,6 +313,9 @@ code {
   display: none;
 }
 // react-select
+.react-select__menu-list {
+  max-height: 150px !important;
+}
 .react-select__control,
 .select-small__control {
   min-height: 34px;
@@ -576,9 +579,7 @@ small {
   background-color: #25c2e3;
   border-color: #25c2e3;
 }
-.ant-modal-content {
-  width: 700px !important;
-}
+
 .hidden-action {
   -moz-appearance: textfield;
 }
@@ -586,4 +587,14 @@ small {
 .hidden-action::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.custom-modal .ant-modal-content {
+  max-width: 500px !important;
+  width: 100%;
+}
+
+.modal-payment .ant-modal-content {
+  max-width: 700px !important;
+  width: 100%;
 }

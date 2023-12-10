@@ -25,23 +25,21 @@ function App() {
       <div>
         <Link to={notify?.link}>{notify?.body}</Link>
       </div>
-    )
-  }
+    );
+  };
 
   const toastify = (noti: any) => {
     // setNotify(noti)
-    return (
-      toast.info('Thông báo đẩy!!!!')
-    )
-  }
+    return toast.info("Thông báo đẩy!!!!");
+  };
 
-  console.log("notify", notify)
+  console.log("notify", notify);
 
   useEffect(() => {
     (async () => {
       try {
         const payload: any = await onMessageListener();
-          toastify(payload?.data)
+        toastify(payload?.data);
         // toastify();
         // fetch api Notification
         // bật toast hiển thị thông tin thông báo, bấm vào bất kỳ đoạn nào trong thông báo cũng redirect đến link trong thông báo được.
