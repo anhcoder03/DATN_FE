@@ -180,7 +180,40 @@ const PrescriptionAdd = () => {
       note: data?.note,
       medicines: product,
     };
+
     try {
+      let checkMedicineId = false;
+      product.forEach((item: any) => {
+        if (item.medicineId === "") {
+          return (checkMedicineId = true);
+        }
+      });
+
+      if (checkMedicineId) {
+        return toast.warning("Thuốc không được được để trống");
+      }
+      let checkUnitSelling = false; // đơn vị bán
+      product.forEach((item: any) => {
+        if (item.unit_selling === "") {
+          return (checkUnitSelling = true);
+        }
+      });
+
+      if (checkUnitSelling) {
+        return toast.warning("Đơn vị bán không được được để trống");
+      }
+
+      let checkUnitUsing = false;
+      product.forEach((item: any) => {
+        if (item.unit_using === "") {
+          return (checkUnitUsing = true);
+        }
+      });
+
+      if (checkUnitUsing) {
+        return toast.warning("Đơn vị sử dụng không được được để trống");
+      }
+
       const res = await createPrescription(params);
       if (res?.prescription) {
         toast.success(res?.message);
@@ -283,7 +316,7 @@ const PrescriptionAdd = () => {
                   Chẩn đoán
                 </Label>
                 <div className="!border-transparent font-semibold text-black">
-                  {data?.diagnostic || '---'}
+                  {data?.diagnostic || "---"}
                 </div>
               </Field>
               <Field>
