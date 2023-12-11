@@ -6,6 +6,7 @@ import { Pagination } from "../../../components/pagination";
 import {
   deletePrescription,
   getAllPrescription,
+  getPrescriptionByExamination,
 } from "../../../services/prescription.service";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -52,7 +53,7 @@ const Prescription = ({ id }: any) => {
   const gotoDetail = (item: any) => {
     navigate(`/prescription/view/${item?._id}`);
   };
-  
+
   const headings = [
     "Mã Đơn",
     "Khách Hàng",
@@ -65,15 +66,12 @@ const Prescription = ({ id }: any) => {
   const handleGetPrescription = async () => {
     try {
       setLoading(true);
-      const data = await getAllPrescription(query);
+      const data = await getPrescriptionByExamination(id, query);
       setLoading(false);
       if (data != undefined) {
+        setPrescriptions(data.docs);
         setTotalPages(data.totalPages);
-        const arr = data.docs?.filter(
-          (d: any) => d?.medicalExaminationSlipId?._id == id
-        );
-        setTotalDocs(arr?.length);
-        setPrescriptions(arr);
+        setTotalDocs(data.totalDocs);
       }
     } catch (error) {
       console.log(error);
@@ -95,12 +93,6 @@ const Prescription = ({ id }: any) => {
 
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
-  };
-
-  const handleDayChange = (date: any) => {
-    setQuery({ ...query, createdAt: date });
-    urlParams.set("createdAt", date);
-    navigate(`?${urlParams}`);
   };
 
   const handleShowModel = (data: any) => {
@@ -139,6 +131,12 @@ const Prescription = ({ id }: any) => {
     }, 500);
   };
 
+  const handleKeyDown = (e: any) => {
+    if (e.key === "Enter") {
+      setQuery({ ...query, search: e.target.value });
+    }
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between bg-white border-b-gray-200 p-5 rounded-tr-md rounded-tl-md  w-full">
@@ -148,6 +146,7 @@ const Prescription = ({ id }: any) => {
             type="text"
             className="w-full bg-transparent border-none outline-none"
             placeholder="Mã đơn"
+            onKeyDown={(e: any) => handleKeyDown(e)}
           />
         </div>
         <Link
@@ -186,31 +185,31 @@ const Prescription = ({ id }: any) => {
               </td>
               <td onClick={() => gotoDetail(item)}>{item?.status}</td>
               <td>
-                {
-                  (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
-                    <div className="table-action">
-                      <div
-                        className="button-nutri"
-                        onClick={() => {
-                          // navigate(`/product/update/${item?._id}`);
-                          toast.info('đang làm nha')
-                        }}
-                      >
-                        <img width={20} height={20} src={IconEdit} alt="edit" />
-                      </div>
-                      <button
-                        className="button-nutri text-[#585858]"
-                        onClick={() => handleShowModel(item)}
-                      >
-                        <IconTrash></IconTrash>
-                      </button>
-                      <button
-                        onClick={() => handleClickPrint()}
-                        className="button-nutri text-[#585858]"
-                      >
-                      <img width={20} height={20} src={IconPrint} alt="print" />
-                      </button>
+                {auth?.role?.roleNumber == 2 ||
+                auth?.role?.roleNumber == 3 ? null : (
+                  <div className="table-action">
+                    <div
+                      className="button-nutri"
+                      onClick={() => {
+                        // navigate(`/product/update/${item?._id}`);
+                        toast.info("đang làm nha");
+                      }}
+                    >
+                      <img width={20} height={20} src={IconEdit} alt="edit" />
                     </div>
+                    <button
+                      className="button-nutri text-[#585858]"
+                      onClick={() => handleShowModel(item)}
+                    >
+                      <IconTrash></IconTrash>
+                    </button>
+                    <button
+                      onClick={() => handleClickPrint()}
+                      className="button-nutri text-[#585858]"
+                    >
+                      <img width={20} height={20} src={IconPrint} alt="print" />
+                    </button>
+                  </div>
                 )}
               </td>
             </tr>

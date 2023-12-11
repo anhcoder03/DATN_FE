@@ -3,46 +3,61 @@ import Http from "../helpers/http";
 const http = new Http();
 
 export const getAllPrescription = async (params: any) => {
-    try {
-        const response = await http.get(`/prescriptions`, params);
-        return response.prescriptions;
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const response = await http.get(`/prescriptions`, params);
+    return response.prescriptions;
+  } catch (error) {
+    console.error(error);
+  }
 };
 export const getOnePrescription = async (id: any) => {
-    try {
-        const response = await http.get(`/prescriptions/${id}`);
-        return response.prescription;
-    } catch (error) {
-        return error;
-    }
+  try {
+    const response = await http.get(`/prescriptions/${id}`);
+    return response.prescription;
+  } catch (error) {
+    return error;
+  }
 };
 export const createPrescription = async (data: any) => {
-    try {
-        const response = await http.post(`/prescriptions`, data);
-        return response;
-    } catch (error) {
-        return error;
-    }
+  try {
+    const response = await http.post(`/prescriptions`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
 };
 export const updatePrescription = async (data: any) => {
-    try {
-        const response = await http.update(`/prescriptions/${data?._id}`, data);
-        console.log('respon', response, data);
+  try {
+    const response = await http.update(`/prescriptions/${data?._id}`, data);
+    console.log("respon", response, data);
 
-        return response;
-    } catch (error) {
-        console.log("errorr", error);
+    return response;
+  } catch (error) {
+    console.log("errorr", error);
 
-        return error;
-    }
+    return error;
+  }
 };
 export const deletePrescription = async (id: any) => {
-    try {
-        const response = await http.delete(`/prescriptions`, id);
-        return response;
-    } catch (error) {
-        return error;
-    }
+  try {
+    const response = await http.delete(`/prescriptions`, id);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const getPrescriptionByExamination = async (
+  id: string | number,
+  params: any
+) => {
+  try {
+    const response = await http.get(
+      `/prescriptions-by-examination/${id}`,
+      params
+    );
+    return response.prescriptions;
+  } catch (error) {
+    console.error(error);
+  }
 };
