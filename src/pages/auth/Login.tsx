@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-between min-h-screen h-full">
+    <div className="flex items-center justify-between h-full min-h-screen">
       <div className="flex items-center gap-y-12 flex-col justify-center w-full md:w-1/2 h-full max-w-[400px] mx-auto">
         <div className="mx-auto">
           <Link className="logo-login" to="/">
@@ -85,7 +85,7 @@ const Login = () => {
             </h3>
           </Link>
         </div>
-        <form className="w-full flex flex-col gap-y-5">
+        <form className="flex flex-col w-full gap-y-5">
           <Field>
             <Label htmlFor="phone" className="text-base font-medium">
               Email
@@ -101,7 +101,7 @@ const Login = () => {
                 <Mail />
               </span>
             </Input>
-            <div className="text-red-500 text-sm h-5">
+            <div className="h-5 text-sm text-red-500">
               {errors.email && errors.email.message}
             </div>
           </Field>
@@ -120,7 +120,7 @@ const Login = () => {
                 <Eye onClick={handleChangeType} />
               </span>
             </Input>
-            <div className="text-red-500 text-sm h-5">
+            <div className="h-5 text-sm text-red-500">
               {errors.password && errors.password.message}
             </div>
           </Field>
@@ -128,7 +128,7 @@ const Login = () => {
             <div className="flex justify-end">
               <Link
                 to={"/check-forget-password"}
-                className="text-primary font-medium"
+                className="font-medium text-primary"
               >
                 Quên mật khẩu?
               </Link>
@@ -136,15 +136,16 @@ const Login = () => {
           </Field>
 
           <Button
-            type="submit"
+            type="button"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
             onClick={handleSubmit(handleSignin)}
             isLoading={loading}
+            disabled={loading}
           >
             Đăng nhập
           </Button>
           <Field>
-            <div className="mt-3 mb-3 flex items-center justify-between text-center gap-x-5">
+            <div className="flex items-center justify-between mt-3 mb-3 text-center gap-x-5">
               <div className="w-full h-[1px] bg-[#22222226]"></div>
               <span>hoặc</span>
               <div className="w-full h-[1px] bg-[#22222226]"></div>

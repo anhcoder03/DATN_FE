@@ -119,13 +119,6 @@ const ExaminationDetail = () => {
     document.title = "Chi tiết phiếu khám";
   }, []);
 
-  const handleSelectTab = (key: string) => {
-    if (key === "1") {
-    }
-    if (key === "2") {
-    }
-  };
-
   const handleChangeStatus = async (status: string) => {
     if (status === "cancel") {
       if (!cancelRequester || cancelRequester === "") {
@@ -182,14 +175,9 @@ const ExaminationDetail = () => {
         loadData();
         setOpenModalExam(false);
       } else {
-        toast.error("Đã có lỗi sảy ra!!!");
+        toast.error("Đã có lỗi xảy ra ra!!!");
       }
     } else {
-      const noPayment = findPayment(services);
-      if (noPayment) {
-        toast.warning("Vui lòng thanh toán trước khi hoàn thành");
-        return;
-      }
       const now = new Date();
       const nowVietnam = new Date(
         now.getTime() + now.getTimezoneOffset() * 60000 + 7 * 60 * 60 * 1000
@@ -275,8 +263,8 @@ const ExaminationDetail = () => {
           <Heading>
             Chi tiết phiếu khám: <span>{id}</span>
             {data?.status === "cancel" && (
-              <div className="flex items-center gap-x-3 text-sm">
-                <span className="text-red-500 font-bold text-sm">
+              <div className="flex items-center text-sm gap-x-3">
+                <span className="text-sm font-bold text-red-500">
                   Lý do hủy:
                 </span>
                 <span className="text-red-500">
@@ -290,7 +278,6 @@ const ExaminationDetail = () => {
           keyActive="1"
           className="p-0 custom-tab"
           data={dataTabs}
-          selectTab={handleSelectTab}
         ></AppTaps>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
           <div className="flex justify-end w-full px-5">
@@ -452,7 +439,7 @@ const ExaminationDetail = () => {
               <div className="flex flex-col">
                 {services?.map((i, index) => (
                   <div
-                    className="flex justify-between items-center border-b border-b-gray-200 p-2"
+                    className="flex items-center justify-between p-2 border-b border-b-gray-200"
                     key={index}
                   >
                     <span>{i?.service_examination?.name}</span>
@@ -462,19 +449,19 @@ const ExaminationDetail = () => {
                   </div>
                 ))}
               </div>
-              <div className="flex my-1 justify-end gap-x-3">
+              <div className="flex justify-end my-1 gap-x-3">
                 <span>Tổng: </span>
                 <span className="text-sm font-semibold text-primary">
                   {calculateTotalPrice(services)}
                 </span>
               </div>
-              <div className="flex my-1 justify-end gap-x-3">
+              <div className="flex justify-end my-1 gap-x-3">
                 <span>Đã thanh toán: </span>
                 <span className="text-sm font-semibold text-red-500">
                   {PriceUtils.format(fintPricePaymented(services))}
                 </span>
               </div>
-              <div className="flex my-1 justify-end gap-x-3">
+              <div className="flex justify-end my-1 gap-x-3">
                 <span>Tổng tiền cần thanh toán: </span>
                 <span className="text-sm font-semibold text-primary">
                   {PriceUtils.format(findPriceTotal(services))}

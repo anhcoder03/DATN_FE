@@ -1,22 +1,15 @@
+import { PRESCRIPTION_STATUS } from "./define";
+
 export const renderStatus = (status: any) => {
-    if(status == 1) {
-      return (
-        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
-      )
-    }
-    if(status == 2) {
-      return (
-        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
-      )
-    }
-    if(status == 3) {
-      return (
-        <span style={{color: '#FD4858'}}>Đã huỷ</span>
-      )
-    }
-    else {
-      return (
-        <span>---</span>
-      )
-    }
+  if (status == PRESCRIPTION_STATUS.PENDDING) {
+    return <span className="text-[#EDA119]">Chưa thực hiện</span>;
   }
+  if (status == PRESCRIPTION_STATUS.DONE) {
+    return <span className="text-primary">Đã thực hiện</span>;
+  }
+  if (status == PRESCRIPTION_STATUS.CANCEL) {
+    return <span className="text-[#FD4858]">Đã huỷ</span>;
+  } else {
+    return <span>---</span>;
+  }
+};

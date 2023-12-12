@@ -9,9 +9,7 @@ import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/button";
-import {
-  createPrescription
-} from "../../../services/prescription.service";
+import { createPrescription } from "../../../services/prescription.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllCustomer } from "../../../services/customer.service";
 import { Textarea } from "../../../components/textarea";
@@ -27,6 +25,7 @@ const PrescriptionAdd = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [products, setProducts] = useState<IMedicine[]>([]);
   const [data, setData] = useState<any>();
+  const [address, setAddress] = useState({});
 
   useEffect(() => {
     loadData(id);
@@ -40,6 +39,8 @@ const PrescriptionAdd = () => {
         customer: data?.examination?.customer,
         customerId: data?.examination?.customerId,
         doctorId: data?.examination?.doctorId,
+        advice: data?.examination?.advice,
+        diagnostic: data?.examination?.diagnostic,
       });
     } catch (error) {
       console.log(error);
@@ -54,7 +55,7 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      price: 0
+      price: 0,
     },
   ]);
 
@@ -74,6 +75,7 @@ const PrescriptionAdd = () => {
     setValue,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<any>({
     // resolver: yupResolver<any>(schema),
     mode: "onSubmit",
@@ -87,7 +89,7 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      price: 0
+      price: 0,
     };
     setProduct([...product, newData]);
   };
@@ -159,10 +161,10 @@ const PrescriptionAdd = () => {
   }, []);
 
   const handleCreatePrescription = async () => {
-    let totalAmount = product?.reduce((prev: any, item: any) => {
-      prev = prev + (item?.price * item?.quantity)
-      return prev
-    },0)
+    const totalAmount: number = product?.reduce((prev: any, item: any) => {
+      prev = prev + item?.price * item?.quantity;
+      return prev;
+    }, 0);
     const converProduct = product?.map((item: any) => {
       return {
         medicineId: item?.medicineId,
@@ -172,19 +174,18 @@ const PrescriptionAdd = () => {
         dosage: item?.dosage,
         timesUsePerDay: item?.timesUsePerDay,
         how_using: item?.how_using,
-      }
-    })
+      };
+    });
     const params = {
       medicalExaminationSlipId: id,
       doctorId: data?.doctorId?._id,
       diagnostic: data?.diagnostic,
-      reExaminationDate: data?.reExaminationDate,
       advice: data?.advice,
       note: data?.note,
       medicines: converProduct,
       status: 1,
       paymentStatus: 0,
-      totalAmount: totalAmount
+      totalAmount: totalAmount,
     };
     try {
       let checkMedicineId = false;
@@ -235,7 +236,7 @@ const PrescriptionAdd = () => {
   };
 
   const handleChangeInput = (event?: any) => {
-    let { value, name } = event.target;
+    const { value, name } = event.target;
     if (value === " ") return;
     setData({
       ...data,
@@ -248,9 +249,9 @@ const PrescriptionAdd = () => {
     if (fieldName === "quantity" || fieldName === "timesUsePerDay") {
       const parsedValue = isNaN(Number(value)) ? value : Number(value);
       updatedProduct[index][fieldName] = parsedValue;
-    } else if(fieldName == 'medicineId'){
-      updatedProduct[index]['medicineId'] = value?._id;
-      updatedProduct[index]['price'] = value?.price;
+    } else if (fieldName == "medicineId") {
+      updatedProduct[index]["medicineId"] = value?._id;
+      updatedProduct[index]["price"] = value?.price;
     } else {
       updatedProduct[index][fieldName] = value;
     }
@@ -281,7 +282,7 @@ const PrescriptionAdd = () => {
                 <Input
                   control={control}
                   name="customerId"
-                  className="border-none font-semibold text-black"
+                  className="font-semibold text-black border-none"
                   value={data?.customerId?.name}
                 />
               </Field>
@@ -292,7 +293,7 @@ const PrescriptionAdd = () => {
                 </Label>
                 <Input
                   control={control}
-                  className="border-none font-semibold text-black"
+                  className="font-semibold text-black border-none"
                   name="doctorId"
                   value={data?.doctorId?.name}
                 />
@@ -306,8 +307,12 @@ const PrescriptionAdd = () => {
                 </Label>
                 <Input
                   control={control}
-                  className="border-none font-semibold text-black"
-                  value={combinedNames}
+                  className="font-semibold text-black border-none"
+                  value={
+                    data?.customerId
+                      ? `${data?.customerId?.commune.name}, ${data?.customerId?.district?.name}, ${data?.customerId?.province?.name}`
+                      : "---"
+                  }
                 />
               </Field>
             </Row>
@@ -324,16 +329,9 @@ const PrescriptionAdd = () => {
                 <Label className="font-semibold" htmlFor="note">
                   Lời dặn
                 </Label>
-                <Textarea
-                  control={control}
-                  className="outline-none input-primary"
-                  name="advice"
-                  placeholder="Nhập lời dặn cho khách hàng"
-                  value={data?.advice}
-                  onChange={(val: any) => {
-                    handleChangeInput(val);
-                  }}
-                />
+                <div className="!border-transparent font-semibold text-black">
+                  {data?.advice || "---"}
+                </div>
               </Field>
             </Row>
             <Field>
@@ -352,7 +350,7 @@ const PrescriptionAdd = () => {
               />
             </Field>
           </div>
-          <div className="p-5 bg-white rounded-xl my-5">
+          <div className="p-5 my-5 bg-white rounded-xl">
             <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
             <table className="w-full custom-table">
               <thead className="bg-[#f4f6f8] text-sm">
@@ -394,7 +392,7 @@ const PrescriptionAdd = () => {
                             handleChange(inputValue, "quantity", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -431,7 +429,7 @@ const PrescriptionAdd = () => {
                             handleChange(inputValue, "dosage", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -446,7 +444,7 @@ const PrescriptionAdd = () => {
                             handleChange(inputValue, "timesUsePerDay", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -458,7 +456,7 @@ const PrescriptionAdd = () => {
                           const inputValue = e.target.value;
                           handleChange(inputValue, "how_using", index);
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
