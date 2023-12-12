@@ -42,6 +42,7 @@ const WelcomeUpdate = () => {
   const [doctorId, setDoctorId] = useState<any>(null);
   const [clinicId, setClinicId] = useState<any>(null);
   const [serviceByExam, setServiceByExam] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
   const [service, setService] = useState<any>(null);
   const [isPayment, setIsPayment] = useState(false);
@@ -279,7 +280,9 @@ const WelcomeUpdate = () => {
       customerId: data?.customerId?._id || data?.customerId,
       staffId: data?.staffId?._id || data?.staffId,
     };
+    setLoading(true);
     const res = await UpdateExamination(cloneData);
+    setLoading(false);
     if (res?.examination) {
       toast.success(res?.message);
       navigate(`/reception`);
@@ -319,7 +322,9 @@ const WelcomeUpdate = () => {
       customerId: data?.customerId?._id || data?.customerId,
       staffId: data?.staffId?._id || data?.staffId,
     };
+    setLoading(true);
     const res = await UpdateExamination(cloneData);
+    setLoading(false);
     if (res?.examination) {
       toast.success("Tạo phiếu khám thành công!");
       navigate(`/examination/${id}/view`);
@@ -355,7 +360,9 @@ const WelcomeUpdate = () => {
       status: "cancel",
       _id: deltail?.data?._id,
     };
+    setLoading(true);
     const response: any = await UpdateExamination(params);
+    setLoading(false);
     if (response?.examination) {
       toast.success("Huỷ tiếp đón thành công!");
       navigate("/reception");
@@ -672,6 +679,8 @@ const WelcomeUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleUpdate)}
+                disabled={loading}
+                isLoading={loading}
               >
                 Lưu
               </Button>
@@ -679,6 +688,8 @@ const WelcomeUpdate = () => {
                 type="button"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreateWaiting)}
+                disabled={loading}
+                isLoading={loading}
               >
                 Tạo phiếu khám
               </Button>
@@ -704,13 +715,14 @@ const WelcomeUpdate = () => {
             : handleDeleteService
         }
         onCancel={() => setOpenModal(false)}
+        confirmLoading={loading}
       >
         <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
           Thông Báo
         </h1>
         {deltail?.type == "cancel" ? (
           <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn huỷ đặt lịch này không!</p>
+            <p>Bạn có chắc muốn huỷ tiếp đón này không!</p>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-4 text-sm">

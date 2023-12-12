@@ -1,9 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Layout } from "../../components/layout";
 import { useParams, useNavigate } from "react-router-dom";
-import { deleteServiceByExamination, getOneServiceByExam, updateServiceByExam } from "../../services/designation.service";
+import {
+  deleteServiceByExamination,
+  getOneServiceByExam,
+  updateServiceByExam,
+} from "../../services/designation.service";
 import Heading from "../../components/common/Heading";
-import { Label, LabelStatusDesignationDetail } from "../../components/label";
+import {
+  Label,
+  LabelStatusDesignation,
+  LabelStatusDesignationDetail,
+} from "../../components/label";
 import { Row } from "../../components/row";
 import { Field } from "../../components/field";
 import { Input } from "../../components/input";
@@ -13,15 +21,16 @@ import PriceUtils from "../../helpers/PriceUtils";
 import { Textarea } from "../../components/textarea";
 import { Button } from "../../components/button";
 import { Modal } from "antd";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useReactToPrint } from "react-to-print";
 import DesignationPrint from "./components/DesignationPrint";
-
+import { PAYMENT_METHOD, PAYMENT_STATUS } from "../../constants/define";
 
 const DesignationDetail = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
+  const [loading, setLoading] = useState<boolean>(false);
   const { control, handleSubmit } = useForm();
   const [designation, setDesignation] = useState<any>({});
   const [oneDesignation, setOneDesignation] = useState<any>();
@@ -33,16 +42,22 @@ const DesignationDetail = () => {
   const [dataPrint, setDataPrint] = useState<any>();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    onAfterPrint: () => {
+      setLoading(false);
+      setOpenModal(false);
+      setDataPrint({});
+    },
     copyStyles: true,
   });
 
   const handlePrintDes = (data: any) => {
     setOpenModal(true);
-    setDataPrint(data)
+    setDataPrint(data);
+    setLoading(true);
     setTimeout(() => {
       handlePrint();
     }, 1000);
-  }
+  };
 
   useEffect(() => {
     getOneService();
@@ -55,26 +70,29 @@ const DesignationDetail = () => {
 
   const handleShowModel = (data: any) => {
     setOpenModal(true);
+    setLoading(true);
     setOneDesignation(data);
   };
 
   const onOk = async () => {
-    if(oneDesignation?.type == 'cancel') {
-      const response = await deleteServiceByExamination(oneDesignation?.data?._id);
+    if (oneDesignation?.type == "cancel") {
+      const response = await deleteServiceByExamination(
+        oneDesignation?.data?._id
+      );
       if (response?.message) {
         toast.success(response?.message);
         setOpenModal(false);
-        navigate(`/designation/list`)
+        navigate(`/designation/list`);
       } else {
         toast.error(response?.message);
       }
     }
 
-    if(oneDesignation?.type == 'running') {
+    if (oneDesignation?.type == "running") {
       const params = {
         _id: id,
-        status: 'running'
-      }
+        status: "running",
+      };
       const response: any = await updateServiceByExam(params);
       if (response?.message) {
         toast.success(response?.message);
@@ -85,11 +103,11 @@ const DesignationDetail = () => {
       }
     }
 
-    if(oneDesignation?.type == 'done') {
+    if (oneDesignation?.type == "done") {
       const params = {
         _id: id,
-        status: 'done'
-      }
+        status: "done",
+      };
       const response: any = await updateServiceByExam(params);
       if (response?.message) {
         toast.success(response?.message);
@@ -99,19 +117,19 @@ const DesignationDetail = () => {
         toast.error(response?.message);
       }
     }
-    
+
     setOpenModal(false);
   };
 
   return (
     <Layout>
       <div className="relative-h-full">
-        <Heading>Xem chi tiết đơn dịch vụ</Heading>
+        <Heading>Xem chi tiết đơn dịch vụ: {id}</Heading>
         <form className="flex  justify-between gap-x-10 w-full pb-16">
           <div className="flex flex-col gap-y-5 w-[60%]">
             <div className="p-5 bg-white w-full rounded-xl">
               <Heading>
-                Thông tin chung{" "}
+                Thông tin chung
                 <LabelStatusDesignationDetail type={designation?.status} />
               </Heading>
               <Row>
@@ -260,14 +278,24 @@ const DesignationDetail = () => {
             <div className="p-5 bg-white w-full rounded-xl">
               <Heading>Hình ảnh và tệp kết quả</Heading>
               <Label htmlFor="mainResults">Chèn link</Label>
-              <tbody style={{lineHeight: 2}}>
-                  {designation?.fileResult && designation?.fileResult?.map((item: any) => {
+              <tbody style={{ lineHeight: 2 }}>
+                {designation?.fileResult &&
+                  designation?.fileResult?.map((item: any) => {
                     return (
                       <tr>
-                        <a style={{color: "#3183FF", marginLeft: 20, marginTop: 15}} href={item?.url} target="_blank">{item?.url}</a>
+                        <a
+                          style={{
+                            color: "#3183FF",
+                            marginLeft: 20,
+                            marginTop: 15,
+                          }}
+                          href={item?.url}
+                          target="_blank"
+                        >
+                          {item?.url}
+                        </a>
                       </tr>
-                      
-                    )
+                    );
                   })}
               </tbody>
             </div>
@@ -293,69 +321,53 @@ const DesignationDetail = () => {
                 </Field>
               </Row>
             </div>
-            {/* <div className="p-5 bg-white w-full rounded-xl">
+            <div className="p-5 bg-white w-full rounded-xl">
               <Heading>
                 Thông tin thanh toán
                 <div className="inline-flex gap-x-3 items-center ml-10 ">
-                  <span className="text-sm">Tổng tiền: </span>
-                  <span className="text-[#eda119]">
-                    {PriceUtils.format(
+                  {/* {PriceUtils.format(
                       designation?.service_examination?.price
-                    ) || "---"}
-                  </span>
+                    ) || "---"} */}
+                  <LabelStatusDesignation type={designation?.paymentStatus} />
                 </div>
               </Heading>
-              <Row className="grid-cols-1 gap-y-5">
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Hình thức
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      designation?.payment_method
-                        ? designation?.payment_method
-                        : "Tiền mặt"
-                    }
-                  ></Input>
-                </Field>
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Tài khoản quỹ
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      designation?.payment_method
-                        ? designation?.payment_method
-                        : "Nguyễn Phi Anh - 03324222 - MB Bank"
-                    }
-                  ></Input>
-                </Field>
-                <Field className={"only-view"}>
-                  <Label className="font-semibold" htmlFor="phone">
-                    <span className="star-field">*</span>
-                    Số tiền
-                  </Label>
-                  <Input
-                    control={control}
-                    placeholder="----"
-                    className="!border-transparent font-semibold text-black"
-                    value={
-                      PriceUtils.format(
-                        designation?.service_examination?.price
-                      ) || "---"
-                    }
-                  ></Input>
-                </Field>
-              </Row>
-            </div> */}
+              {designation.paymentStatus === PAYMENT_STATUS.PAID && (
+                <Row className="grid-cols-1 gap-y-5">
+                  <Field className={"only-view"}>
+                    <Label className="font-semibold" htmlFor="phone">
+                      <span className="star-field">*</span>
+                      Hình thức
+                    </Label>
+                    <Input
+                      control={control}
+                      placeholder="----"
+                      className="!border-transparent font-semibold text-black"
+                      value={
+                        designation?.paymentMethod == PAYMENT_METHOD.BANK
+                          ? "Chuyển khoản"
+                          : "Tiền mặt"
+                      }
+                    ></Input>
+                  </Field>
+                  <Field className={"only-view"}>
+                    <Label className="font-semibold" htmlFor="phone">
+                      <span className="star-field">*</span>
+                      Số tiền
+                    </Label>
+                    <Input
+                      control={control}
+                      placeholder="----"
+                      className="!border-transparent font-semibold text-black"
+                      value={
+                        PriceUtils.format(
+                          designation?.service_examination?.price
+                        ) || "---"
+                      }
+                    ></Input>
+                  </Field>
+                </Row>
+              )}
+            </div>
           </div>
         </form>
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
@@ -367,102 +379,111 @@ const DesignationDetail = () => {
                   type="submit"
                   className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                   onClick={() => handlePrintDes(designation)}
+                  isLoading={loading}
+                  disabled={loading}
                 >
                   In phiếu
                 </Button>
               )}
-              {(auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
+              {auth?.role?.roleNumber == 2 ||
+              auth?.role?.roleNumber == 3 ? null : (
                 <>
-                  {designation?.status == 'waiting' && (
+                  {designation?.status == "waiting" && (
                     <>
                       <Button
                         type="submit"
                         className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                        onClick={() => handleShowModel({type: 'running', data: designation})}
+                        onClick={() =>
+                          handleShowModel({
+                            type: "running",
+                            data: designation,
+                          })
+                        }
                       >
                         Đang thực hiện
                       </Button>
                       <Button
                         type="submit"
                         className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                        onClick={() => handleShowModel({type: 'cancel', data: designation})}
+                        onClick={() =>
+                          handleShowModel({ type: "cancel", data: designation })
+                        }
                       >
                         Hủy
                       </Button>
                     </>
                   )}
-                  {
-                    designation?.status == 'running' && (
-                      <Button
-                        type="submit"
-                        className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                        onClick={() => handleShowModel({type: 'done', data: designation})}
-                      >
-                        Hoàn thành
-                      </Button>
-                    )
-                  }
-                  {designation?.status !== 'done' && (
+                  {designation?.status == "running" && (
                     <Button
                       type="submit"
                       className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                      onClick = {() => navigate(`/designation/update/${id}`)}
+                      onClick={() =>
+                        handleShowModel({ type: "done", data: designation })
+                      }
+                    >
+                      Hoàn thành
+                    </Button>
+                  )}
+                  {designation?.status !== "done" && (
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-5 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => navigate(`/designation/update/${id}`)}
                     >
                       Chỉnh sửa
                     </Button>
                   )}
                 </>
               )}
-              
             </div>
           </div>
         </div>
       </div>
-      {
-        openModal && dataPrint !== undefined ? (
-          <DesignationPrint
-            dataPrint = {dataPrint}
-            componentRef = {componentRef}
-          />
-        ) : (
-          <Modal
-            centered
-            open={openModal}
-            onOk={onOk}
-            onCancel={() => setOpenModal(false)}
-          >
-            <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-              Thông Báo
-            </h1>
-            {oneDesignation?.type == 'cancel' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc muốn huỷ đơn dịch vụ này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {oneDesignation?.name}
-                </span>
-              </div>
-            )}
-            {oneDesignation?.type == 'running' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
-                <p>Bạn có chắc chắn muốn thực hiện đơn dịch vụ này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {oneDesignation?.name}
-                </span>
-              </div>
-            )}
-            {oneDesignation?.type == 'done' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm" style={{textAlign: 'center'}}>
-                <p>Bạn có chắc chắn muốn hoàn thành đơn dịch vụ này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {oneDesignation?.name}
-                </span>
-              </div>
-            )}
-            
-          </Modal>
-        )
-      }
-      
+      {openModal && dataPrint !== undefined ? (
+        <DesignationPrint dataPrint={dataPrint} componentRef={componentRef} />
+      ) : (
+        <Modal
+          centered
+          open={openModal}
+          onOk={onOk}
+          onCancel={() => setOpenModal(false)}
+          confirmLoading={loading}
+        >
+          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+            Thông Báo
+          </h1>
+          {oneDesignation?.type == "cancel" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn huỷ đơn dịch vụ này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {oneDesignation?.name}
+              </span>
+            </div>
+          )}
+          {oneDesignation?.type == "running" && (
+            <div
+              className="flex flex-col items-center justify-center py-4 text-sm"
+              style={{ textAlign: "center" }}
+            >
+              <p>Bạn có chắc chắn muốn thực hiện đơn dịch vụ này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {oneDesignation?.name}
+              </span>
+            </div>
+          )}
+          {oneDesignation?.type == "done" && (
+            <div
+              className="flex flex-col items-center justify-center py-4 text-sm"
+              style={{ textAlign: "center" }}
+            >
+              <p>Bạn có chắc chắn muốn hoàn thành đơn dịch vụ này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {oneDesignation?.name}
+              </span>
+            </div>
+          )}
+        </Modal>
+      )}
     </Layout>
   );
 };

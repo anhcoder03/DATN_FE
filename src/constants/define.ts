@@ -10,3 +10,13 @@ export enum ROLE {
   STAFFRECEPTION = 2,
   STAFFSELL = 3,
 }
+
+export enum PAYMENT_METHOD {
+  BANK = 1,
+  CASH = 2,
+}
+
+export enum PAYMENT_STATUS {
+  PAID = "paid",
+  UNPAID = "unpai",
+}

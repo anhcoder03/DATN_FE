@@ -19,6 +19,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createCustomer } from "../../services/customer.service";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 type TDataCustomer = {
   _id?: string;
@@ -51,11 +53,13 @@ const CustomerAdd = () => {
   const onChange = (e: RadioChangeEvent) => {
     setGender(e.target.value);
   };
+  const auth = useSelector((state: RootState) => state.auth.auth?.user);
   const [gender, setGender] = useState("Nam");
   const [dataProvince, SetDataProvince] = useState([]);
   const [district, setDistrict] = useState([]);
   const navigate = useNavigate();
   const [ward, setWard] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     control,
     handleSubmit,
@@ -66,8 +70,10 @@ const CustomerAdd = () => {
     mode: "onChange",
   });
   const handleCreateCustomer = async (values: TDataCustomer) => {
-    const data = { ...values, gender, creator: "650835d91fa3c100012c83d6" };
+    const data = { ...values, gender, creator: auth?._id };
+    setLoading(true);
     const res = await createCustomer(data);
+    setLoading(false);
     if (res?.customer) {
       toast.success(res?.message);
       navigate("/customer/list");
@@ -125,13 +131,6 @@ const CustomerAdd = () => {
     });
     setWard(ListArr);
   };
-  // const handleChangeDate = (date: any) => {
-  //   console.log("datex", date);
-  //   setData({
-  //     ...data,
-  //     birthday: date[0] ? moment(date[0]) : undefined,
-  //   });
-  // };
 
   useEffect(() => {
     const arrayError = Object.values(errors);
@@ -294,6 +293,8 @@ const CustomerAdd = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreateCustomer)}
+                isLoading={loading}
+                disabled={loading}
               >
                 Lưu
               </Button>

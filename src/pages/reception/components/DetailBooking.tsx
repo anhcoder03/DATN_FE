@@ -25,6 +25,7 @@ import { RootState } from "../../../redux/store";
 const DetailBooking = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
   const [data, setData] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
   const [deltail, setDeltail] = useState<any>();
   const { control } = useForm({});
   const [openModal, setOpenModal] = useState(false);
@@ -67,7 +68,9 @@ const DetailBooking = () => {
       _id: id,
       day_welcome,
     };
+    setLoading(true);
     const response: any = await UpdateExamination(params);
+    setLoading(false);
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
       navigate(`/reception/${id}`);
@@ -78,10 +81,12 @@ const DetailBooking = () => {
 
   const onOk = async () => {
     if (deltail?.type == "remove") {
+      setLoading(true);
       const res = await UpdateExamination({
         _id: deltail?.data?._id,
         status: "cancel_schedule",
       });
+      setLoading(false);
       if (res?.examination) {
         toast.success("Huỷ đặt lịch thành công!");
         setOpenModal(false);
@@ -251,6 +256,8 @@ const DetailBooking = () => {
                     onClick={() =>
                       handleModal({ type: "statusReception", data: data })
                     }
+                    isLoading={loading}
+                    disabled={loading}
                   >
                     Tiếp đón
                   </Button>
@@ -258,6 +265,8 @@ const DetailBooking = () => {
                     type="submit"
                     className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
                     onClick={() => handleModal({ type: "remove", data: data })}
+                    isLoading={loading}
+                    disabled={loading}
                   >
                     Huỷ
                   </Button>
