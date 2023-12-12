@@ -53,7 +53,7 @@ export const getPrescriptionByExamination = async (
 ) => {
   try {
     const response = await http.get(
-      `/prescriptions-by-examination/${id}`,
+      `/prescriptions/examination/${id}`,
       params
     );
     return response.prescriptions;

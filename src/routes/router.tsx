@@ -51,6 +51,7 @@ import CategoryDetail from "../pages/category/components/CategoryDetail";
 import ClinicDetail from "../pages/clinic/components/ClinicDetail";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import Examination_view from "../pages/examination_view/Examination_view";
+import PrescriptionUpdate from "../pages/prescription/components/PrescriptionUpdate";
 export const doctorRouter: any[] = [
   {
     path: "reception",
@@ -165,6 +166,10 @@ export const publiRouter: any[] = [
     element: PrescriptionDetail,
   },
   {
+    path: "prescription/update/:id",
+    element: PrescriptionUpdate,
+  },
+  {
     path: "prescription/add/:id",
     element: PrescriptionAdd,
   },
@@ -257,6 +262,10 @@ export const sellerRouter: any[] = [
   {
     path: "prescription/view/:id",
     element: PrescriptionDetail,
+  },
+  {
+    path: "prescription/update/:id",
+    element: PrescriptionUpdate,
   },
   {
     path: "prescription/add/:id",

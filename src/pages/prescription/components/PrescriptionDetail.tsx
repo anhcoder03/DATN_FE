@@ -58,6 +58,19 @@ const PrescriptionDetail = () => {
     }, 500);
   };
 
+  const renderStatus = (status: any) => {
+    if(status == 0) {
+      return (
+        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
+      )
+    }
+    if(status == 1) {
+      return (
+        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
+      )
+    }
+  }
+
   return (
     <Layout>
       <div className="relative h-full">
@@ -79,16 +92,6 @@ const PrescriptionDetail = () => {
                 className="!border-transparent font-semibold text-black"
                 value={data?.medicalExaminationSlipId?.customer?.name}
               ></Input>
-            </Field>
-            <Field>
-              <Label className="font-semibold" htmlFor="_id">
-                Người bảo hộ
-              </Label>
-              <Input
-                control={control}
-                className="border-none font-semibold text-black"
-                value={"---"}
-              />
             </Field>
             <Field className={"only-view"}>
               <Label className="font-semibold" htmlFor="phone">
@@ -112,16 +115,6 @@ const PrescriptionDetail = () => {
                 control={control}
                 className="border-none font-semibold text-black"
                 value={"---"}
-              />
-            </Field>
-            <Field>
-              <Label className="font-semibold" htmlFor="_id">
-                Hình thức khám
-              </Label>
-              <Input
-                control={control}
-                className="border-none font-semibold text-black"
-                value={"Khám online"}
               />
             </Field>
             <Field className={"only-view"}>
@@ -173,12 +166,7 @@ const PrescriptionDetail = () => {
               <Label className="font-semibold" htmlFor="phone">
                 Trạng thái
               </Label>
-              <Input
-                control={control}
-                placeholder="--"
-                className="!border-transparent font-semibold text-black"
-                value={data?.status}
-              ></Input>
+              {renderStatus(data?.status)}
             </Field>
           </Row>
 
@@ -302,6 +290,12 @@ const PrescriptionDetail = () => {
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
               >
                 In đơn
+              </Button>
+              <Button
+                to={`/prescription/update/${data?._id}`}
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+              >
+                Chỉnh sửa
               </Button>
               {auth?.role?.roleNumber == 2 ||
               auth?.role?.roleNumber == 3 ? null : (

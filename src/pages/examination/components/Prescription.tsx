@@ -137,6 +137,19 @@ const Prescription = ({ id }: any) => {
     }
   };
 
+  const renderStatus = (status: any) => {
+    if(status == 0) {
+      return (
+        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
+      )
+    }
+    if(status == 1) {
+      return (
+        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
+      )
+    }
+  }
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between bg-white border-b-gray-200 p-5 rounded-tr-md rounded-tl-md  w-full">
@@ -183,7 +196,7 @@ const Prescription = ({ id }: any) => {
               <td onClick={() => gotoDetail(item)}>
                 {moment(item?.createdAt).format("DD/MM/YYYY")}
               </td>
-              <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+              <td onClick={() => gotoDetail(item)}>{renderStatus(item?.status)}</td>
               <td>
                 {auth?.role?.roleNumber == 2 ||
                 auth?.role?.roleNumber == 3 ? null : (
@@ -191,8 +204,7 @@ const Prescription = ({ id }: any) => {
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        // navigate(`/product/update/${item?._id}`);
-                        toast.info("đang làm nha");
+                        navigate(`/prescription/update/${item?._id}`);
                       }}
                     >
                       <img width={20} height={20} src={IconEdit} alt="edit" />

@@ -65,6 +65,7 @@ const PrescriptionList = () => {
     "Trạng Thái Đơn Thuốc",
     "Hành Động",
   ];
+
   const handleGetPrescription = async () => {
     try {
       setLoading(true);
@@ -77,6 +78,7 @@ const PrescriptionList = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     document.title = "Danh sách đơn thuốc";
     urlParams.set("page", query._page as any);
@@ -89,18 +91,22 @@ const PrescriptionList = () => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
+
   const handleDayChange = (date: any) => {
     setQuery({ ...query, createdAt: date });
     urlParams.set("createdAt", date);
     navigate(`?${urlParams}`);
   };
+
   const handleShowModel = (data: any) => {
     setOpenModal(true);
     setPrescription(data);
   };
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -111,6 +117,7 @@ const PrescriptionList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const onOk = async () => {
     const res = await deletePrescription(prescription?._id);
     if (res?.message) {
@@ -130,6 +137,25 @@ const PrescriptionList = () => {
       handlePrint();
     }, 500);
   };
+
+  const renderStatus = (status: any) => {
+    if(status == 0) {
+      return (
+        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
+      )
+    }
+    if(status == 1) {
+      return (
+        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
+      )
+    }
+    else {
+      return (
+        <span>---</span>
+      )
+    }
+  }
+
   return (
     <Layout>
       <Heading>Danh sách đơn thuốc</Heading>
@@ -157,7 +183,7 @@ const PrescriptionList = () => {
               <td onClick={() => gotoDetail(item)}>
                 {moment(item?.createdAt).format("DD/MM/YYYY")}
               </td>
-              <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+              <td onClick={() => gotoDetail(item)}>{renderStatus(item?.status)}</td>
               <td>
                 {
                   (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
@@ -165,8 +191,7 @@ const PrescriptionList = () => {
                       <div
                         className="button-nutri"
                         onClick={() => {
-                          // navigate(`/product/update/${item?._id}`);
-                          toast.info('ubbutiii')
+                          navigate(`/prescription/update/${item?._id}`);
                         }}
                       >
                         <img width={20} height={20} src={IconEdit} alt="edit" />
