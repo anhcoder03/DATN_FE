@@ -201,10 +201,12 @@ const PrescriptionAdd = () => {
         return toast.warning("Đơn vị sử dụng không được được để trống");
       }
 
+      setLoading(true);
       const res = await createPrescription(params);
+      setLoading(false);
       if (res?.prescription) {
         toast.success(res?.message);
-        navigate("/prescription");
+        navigate(`/examination/${id}/view`);
       } else {
         toast.error(res.message);
       }
@@ -473,6 +475,8 @@ const PrescriptionAdd = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreatePrescription)}
+                isLoading={loading}
+                disabled={loading}
               >
                 Lưu
               </Button>

@@ -22,13 +22,11 @@ import {
   getOneProduct,
   updateMedicine,
 } from "../../../services/medicine.service";
-import Select from 'react-select';
+import Select from "react-select";
 import { Textarea } from "../../../components/textarea";
 import { getAllCategory } from "../../../services/category.service";
 import { dataTypeImportProduct } from "../../../constants/options";
-import { log } from "console";
 import { IDataProduct } from "./ProductAdd";
-
 
 const ProductUpdate = () => {
   const schema = yup.object({
@@ -55,68 +53,74 @@ const ProductUpdate = () => {
   const [data, setData] = useState<any>();
   const [categories, setCategories] = useState([]);
   const [status, setStatus] = useState("work");
+  const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
   const {
     control,
     handleSubmit,
     reset,
     setValue,
-    formState: {errors}
+    formState: { errors },
   } = useForm<IDataProduct>({
     resolver: yupResolver<any>(schema),
     mode: "onChange",
   });
   const { image, setImage, handleDeleteImage, handleSelectImage, loading } =
     useUploadImage();
-    const { id } = useParams();
-    useEffect(() => {
-      async function handleGetProduct() {
-        const res = await getOneProduct(id);
-        reset(res);
-        setImage(res?.image);
-        setData(res)
-      }
-      handleGetProduct();
-    }, [id]);
+  const { id } = useParams();
+  useEffect(() => {
+    async function handleGetProduct() {
+      const res = await getOneProduct(id);
+      reset(res);
+      setImage(res?.image);
+      setData(res);
+    }
+    handleGetProduct();
+  }, [id]);
 
-    const handleUpdateProduct = async (values: any) => {
-      console.log("data", data)
-      console.log("value", values)
-      const cloneValue = {...values, categoryId: data?.categoryId?._id || data?.categoryId, unit_selling: data?.unit_selling, dateOfManufacture: data?.dateOfManufacture, dateExpiry: data?.dateExpiry}
-      console.log(cloneValue);
-      const res = await updateMedicine({ ...cloneValue, image });
-      if (res?.medicine) {
-        toast.success(res?.message);
-        navigate("/product/list");
-      } else {
-        toast.error(res?.message);
-      }
+  const handleUpdateProduct = async (values: any) => {
+    const cloneValue = {
+      ...values,
+      categoryId: data?.categoryId?._id || data?.categoryId,
+      unit_selling: data?.unit_selling,
+      dateOfManufacture: data?.dateOfManufacture,
+      dateExpiry: data?.dateExpiry,
     };
+    setLoadingBtn(true);
+    const res = await updateMedicine({ ...cloneValue, image });
+    setLoadingBtn(false);
+    if (res?.medicine) {
+      toast.success(res?.message);
+      navigate("/product/list");
+    } else {
+      toast.error(res?.message);
+    }
+  };
 
-    useEffect(() => {
-      async function getCategories() {
-        const response = await getAllCategory();
-        const ListArr: any = [];
-        response?.docs?.map((e: any) => {
-          ListArr?.push({
-            ...e,
-            value: e?._id,
-            label: e?.name,
-          });
+  useEffect(() => {
+    async function getCategories() {
+      const response = await getAllCategory();
+      const ListArr: any = [];
+      response?.docs?.map((e: any) => {
+        ListArr?.push({
+          ...e,
+          value: e?._id,
+          label: e?.name,
         });
-        setCategories(ListArr);
-      }
-  
-      getCategories();
-    }, []);
+      });
+      setCategories(ListArr);
+    }
 
-    const onChange = (e: any) => {
-      setStatus(e.target.value);
-    };
+    getCategories();
+  }, []);
+
+  const onChange = (e: any) => {
+    setStatus(e.target.value);
+  };
 
   return (
     <Layout>
-       {" "}
-       <div className="relative h-full">
+      {" "}
+      <div className="relative h-full">
         <Heading>Cập nhật sản phẩm</Heading>
         <form className="flex  justify-between gap-x-10 w-full pb-[70px]">
           <div className="p-5 bg-white w-[60%] rounded-xl">
@@ -134,8 +138,8 @@ const ProductUpdate = () => {
                 />
               </Field>
               <div className="text-red-500 text-xs h-5">
-                  {errors.name && errors.name.message}
-                </div>
+                {errors.name && errors.name.message}
+              </div>
             </Row>
             <Row className="grid-cols-3 mb-10">
               <Field>
@@ -149,11 +153,12 @@ const ProductUpdate = () => {
                   classNamePrefix="react-select"
                   options={categories}
                   onChange={(val: any) => {
-                    setData({...data, categoryId: val?.value}) 
+                    setData({ ...data, categoryId: val?.value });
                   }}
                   value={categories.find(
-                    (option : any) =>
-                      option.value === data?.categoryId?._id || option.value == data?.categoryId
+                    (option: any) =>
+                      option.value === data?.categoryId?._id ||
+                      option.value == data?.categoryId
                   )}
                 ></Select>
                 <div className="text-red-500 text-xs h-5">
@@ -171,11 +176,10 @@ const ProductUpdate = () => {
                   classNamePrefix="react-select"
                   options={dataTypeImportProduct}
                   onChange={(val: any) => {
-                    setData({...data, unit_selling: val?.value}) 
+                    setData({ ...data, unit_selling: val?.value });
                   }}
                   value={dataTypeImportProduct.find(
-                    (option : any) =>
-                      option.value === data?.unit_selling
+                    (option: any) => option.value === data?.unit_selling
                   )}
                 ></Select>
                 <div className="text-red-500 text-xs h-5">
@@ -196,7 +200,7 @@ const ProductUpdate = () => {
                     }}
                     onChange={([date]) => {
                       setValue("dateOfManufacture", date as any);
-                      setData({...data, dateOfManufacture: date})
+                      setData({ ...data, dateOfManufacture: date });
                     }}
                     value={data?.dateOfManufacture}
                     placeholder="dd/mm/yyyy"
@@ -222,7 +226,7 @@ const ProductUpdate = () => {
                     }}
                     onChange={([date]) => {
                       setValue("dateExpiry", date as any);
-                      setData({...data, dateExpiry: date})
+                      setData({ ...data, dateExpiry: date });
                     }}
                     value={data?.dateExpiry}
                     placeholder="dd/mm/yyyy"
@@ -249,8 +253,8 @@ const ProductUpdate = () => {
                   control={control}
                 />
                 <div className="text-red-500 text-xs h-5">
-                {errors.ingredient && errors.ingredient.message}
-              </div>
+                  {errors.ingredient && errors.ingredient.message}
+                </div>
               </Field>
             </Row>
             <Row className="grid-cols-3 mb-10">
@@ -286,7 +290,6 @@ const ProductUpdate = () => {
                     </Radio>
                   </div>
                 </Radio.Group>
-                
               </Field>
               <Field>
                 <Label htmlFor="quantity">
@@ -416,6 +419,8 @@ const ProductUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleUpdateProduct)}
+                isLoading={loadingBtn}
+                disabled={loadingBtn}
               >
                 Lưu
               </Button>
@@ -424,7 +429,7 @@ const ProductUpdate = () => {
         </div>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
 export default ProductUpdate;

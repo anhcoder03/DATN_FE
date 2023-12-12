@@ -181,8 +181,7 @@ const OrderDetail = () => {
                   <td>
                     <Input
                       control={control}
-                      placeholder="Ghi chú đơn hàng nel"
-                      // value={formatCurrency(item?.price)}
+                      value={item?.note ?? "---"}
                       className="border-none font-semibold text-black"
                     />
                   </td>
@@ -191,9 +190,9 @@ const OrderDetail = () => {
             </tbody>
           </table>
           <div className=" font-bold mt-4 ml-5">
-            <span>Tổng tiền hàng : {formatCurrency(totalPrice)}</span>
+            <span>Tổng tiền hàng : {formatCurrency(totalPrice ?? 0)}</span>
             <br />
-            <span>Thành tiền: {formatCurrency(totalPrice)}</span>
+            <span>Thành tiền: {formatCurrency(totalPrice ?? 0)}</span>
           </div>
         </div>
       </div>

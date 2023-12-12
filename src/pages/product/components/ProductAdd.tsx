@@ -67,6 +67,7 @@ export type IDataProduct = {
 function ProductAdd() {
   const [status, setStatus] = useState("work");
   const [categories, setCategories] = useState([]);
+  const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
   const navigate = useNavigate();
   const {
     control,
@@ -83,8 +84,9 @@ function ProductAdd() {
   console.log(isValid);
   const handleCreateProduct = async (values: any) => {
     const data = { ...values, status, image };
+    setLoadingBtn(true);
     const res = await createMedicine(data);
-    console.log(res);
+    setLoadingBtn(false);
     if (res?.medicine) {
       toast.success(res?.message);
       navigate("/product/list");
@@ -401,6 +403,8 @@ function ProductAdd() {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreateProduct)}
+                disabled={loadingBtn}
+                isLoading={loadingBtn}
               >
                 Lưu
               </Button>
