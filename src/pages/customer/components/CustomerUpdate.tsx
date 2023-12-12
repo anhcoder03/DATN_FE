@@ -17,10 +17,16 @@ import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { getOneCustomer, updateCustomer } from "../../../services/customer.service";
+import {
+  getOneCustomer,
+  updateCustomer,
+} from "../../../services/customer.service";
 import { useNavigate, useParams } from "react-router-dom";
 import CalcUtils from "../../../helpers/CalcULtils";
 import moment from "moment";
+import useSelection from "antd/es/table/hooks/useSelection";
+import { RootState } from "../../../redux/store";
+import { useSelector } from "react-redux";
 type TDataCustomer = {
   _id?: string;
   name: string;
@@ -49,6 +55,7 @@ const schema = yup.object({
 });
 
 const CustomerUpdate = () => {
+  const auth = useSelector((state: RootState) => state.auth.auth?.user);
   const onChange = (e: RadioChangeEvent) => {
     setGender(e.target.value);
   };
@@ -59,7 +66,7 @@ const CustomerUpdate = () => {
   const navigate = useNavigate();
   const [ward, setWard] = useState([]);
   const [data, setData] = useState<any>();
-  const {id} = useParams();
+  const { id } = useParams();
   const [date, setDate] = useState<any>();
   const {
     control,
@@ -71,7 +78,7 @@ const CustomerUpdate = () => {
     resolver: yupResolver<any>(schema),
   });
   const handleCreateCustomer = async (values: TDataCustomer) => {
-    const data = { ...values, gender, creator: "650835d91fa3c100012c83d6" };
+    const data = { ...values, gender, creator: auth?._id };
     const res = await updateCustomer(data);
     if (res?.customer) {
       toast.success(res?.message);
@@ -97,10 +104,8 @@ const CustomerUpdate = () => {
     }
     loadData(id);
     getProvince();
-    
   }, []);
-  console.log("siuData", data);
-  
+
   const fetchDistrict = async (province_code: any) => {
     const response: any = await axios.get(
       `https://nutribackend.staging.zsolution.vn/address/districts?page=1&limit=500&province_code=${province_code}`
@@ -132,28 +137,21 @@ const CustomerUpdate = () => {
     });
     setWard(ListArr);
   };
-  // const handleChangeDate = (date: any) => {
-  //   console.log("datex", date);
-  //   setData({
-  //     ...data,
-  //     birthday: date[0] ? moment(date[0]) : undefined,
-  //   });
-  // };
 
-  const loadData = async (id:any) => {
+  const loadData = async (id: any) => {
     try {
       setLoading(true);
       const data: any = await getOneCustomer(id);
       setLoading(false);
-      reset(data)
-      setData(data)
-      setDate(data?.dateOfBirth)
+      reset(data);
+      setData(data);
+      setDate(data?.dateOfBirth);
       await fetchDistrict(data?.province?.code);
       await fetchWard(data?.district?.code);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     const arrayError = Object.values(errors);
@@ -173,7 +171,7 @@ const CustomerUpdate = () => {
           <Heading>Thông tin khách hàng</Heading>
 
           <Row>
-            <Field className={'only-view'}>
+            <Field className={"only-view"}>
               <Label htmlFor="_id">Mã khách hàng</Label>
               <Input
                 control={control}
@@ -208,12 +206,12 @@ const CustomerUpdate = () => {
                 }}
                 placeholder="dd/mm/yyyy"
                 name="dateOfBirth"
-                value={date ? moment(date).format('DD/MM/YYYY') : ''}
+                value={date ? moment(date).format("DD/MM/YYYY") : ""}
               ></Flatpickr>
             </Field>
             <Field>
               <Label htmlFor="">Tuổi</Label>
-              <Input 
+              <Input
                 control={control}
                 value={CalcUtils.calculateAge(date)}
                 className="only-view"
@@ -271,10 +269,10 @@ const CustomerUpdate = () => {
                   fetchDistrict(val?.code);
                   setData({
                     ...data,
-                    district: '',
+                    district: "",
                     province: val,
-                    commune: ''
-                  })
+                    commune: "",
+                  });
                   setValue("province", val);
                 }}
                 value={data?.province}
@@ -294,8 +292,8 @@ const CustomerUpdate = () => {
                   setData({
                     ...data,
                     district: val,
-                    commune: ''
-                  })
+                    commune: "",
+                  });
                 }}
                 value={data?.district}
               ></Select>
@@ -312,8 +310,8 @@ const CustomerUpdate = () => {
                   setValue("commune", val);
                   setData({
                     ...data,
-                    commune: val
-                  })
+                    commune: val,
+                  });
                 }}
                 value={data?.commune}
               ></Select>
@@ -353,6 +351,8 @@ const CustomerUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreateCustomer)}
+                isLoading={loading}
+                disabled={loading}
               >
                 Lưu
               </Button>

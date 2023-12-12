@@ -26,18 +26,17 @@ import * as yup from "yup";
 
 const AddBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [staffs, setStaffs] = useState<any[]>([]);
-  const [data, setData] = useState<any>(
-    {
-      day_booking: new Date(),
-      gender: ''
-    }
-  );
+  const [data, setData] = useState<any>({
+    day_booking: new Date(),
+    gender: "",
+  });
 
   const schema = yup.object({
     customerId: yup.string().required("Bệnh nhân không được để trống!"),
     staffId: yup.string().required("Nhân viên tiếp đón không được để trống!"),
-  })
+  });
 
   const {
     control,
@@ -53,7 +52,7 @@ const AddBooking = () => {
   useEffect(() => {
     getCustomers();
     getStaffs();
-  }, [])
+  }, []);
 
   async function getCustomers() {
     const response = await getAllCustomer({ _limit: 3000 });
@@ -87,16 +86,18 @@ const AddBooking = () => {
       staffId: data?.staffId,
       note: data?.note,
       day_booking: data?.day_booking,
-      status: 'booking'
-    }
+      status: "booking",
+    };
+    setLoading(true);
     const res = await createExamination(params);
+    setLoading(false);
     if (res?.examination) {
-      toast.success('Tạo đặt lịch thành công!');
+      toast.success("Tạo đặt lịch thành công!");
       navigate("/reception");
     } else {
       toast.error(res?.message);
     }
-  }
+  };
 
   useEffect(() => {
     const arrayError: any = Object.values(errors);
@@ -106,14 +107,14 @@ const AddBooking = () => {
   }, [errors]);
 
   const handleChangeInput = (event?: any) => {
-    let { value, name } = event.target
+    let { value, name } = event.target;
     if (value === " ") return;
     setData({
-        ...data,
-        [name]: value
-    })
-  }
-  
+      ...data,
+      [name]: value,
+    });
+  };
+
   return (
     <Layout>
       <div className="relative h-full">
@@ -139,7 +140,7 @@ const AddBooking = () => {
                     customer: val?._id,
                     dateOfBirth: val?.dateOfBirth,
                     gender: val?.gender,
-                    phone: val?.phone
+                    phone: val?.phone,
                   });
                 }}
               ></Select>
@@ -159,7 +160,7 @@ const AddBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field className='only-view'>
+            <Field className="only-view">
               <Label htmlFor="phone">
                 <span className="star-field">*</span>
                 Số điện thoại
@@ -187,14 +188,14 @@ const AddBooking = () => {
                     dateFormat: "d/m/Y H:i",
                     altInputClass: "date-range",
                     time_24hr: true,
-                    minDate: 'today'
+                    minDate: "today",
                   }}
                   onChange={([date]) => {
                     setValue("day_booking", date);
                     setData({
                       ...data,
-                      day_booking: date
-                    })
+                      day_booking: date,
+                    });
                   }}
                   placeholder="dd/mm/yyyy"
                   name="day_booking"
@@ -206,7 +207,7 @@ const AddBooking = () => {
             </Field>
           </Row>
           <Row className="grid-cols-2 ">
-            <Field className='only-view'>
+            <Field className="only-view">
               <Label htmlFor="_id">Năm sinh</Label>
               <Input
                 control={control}
@@ -214,7 +215,7 @@ const AddBooking = () => {
                 name="date"
                 value={
                   data?.dateOfBirth
-                    ? moment(data?.dateOfBirth).format('DD/MM/YYYY')
+                    ? moment(data?.dateOfBirth).format("DD/MM/YYYY")
                     : "---"
                 }
               />
@@ -235,7 +236,9 @@ const AddBooking = () => {
           </Row>
           <Row className="grid-cols-2 ">
             <Field>
-              <Label htmlFor="staffId"><span className="star-field">*</span>Nhân viên tiếp đón</Label>
+              <Label htmlFor="staffId">
+                <span className="star-field">*</span>Nhân viên tiếp đón
+              </Label>
               <Select
                 placeholder="Chọn nhân viên tiếp đón"
                 className="mb-2 !text-xs hover:!border-transparent react-select"
@@ -245,10 +248,10 @@ const AddBooking = () => {
                   setValue("staffId", val?._id);
                   setData({
                     ...data,
-                    staffId: val?._id
-                  })
+                    staffId: val?._id,
+                  });
                 }}
-                value = {data?.staffId?.id}
+                value={data?.staffId?.id}
               ></Select>
             </Field>
             <Field>
@@ -259,7 +262,7 @@ const AddBooking = () => {
                 name="note"
                 placeholder="Nhập ghi chú"
                 onChange={(val: any) => {
-                  handleChangeInput(val)
+                  handleChangeInput(val);
                 }}
                 value={data?.note}
               />
@@ -274,6 +277,8 @@ const AddBooking = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleCreateBooking)}
+                isLoading={loading}
+                disabled={loading}
               >
                 Lưu
               </Button>

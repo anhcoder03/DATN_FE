@@ -72,11 +72,11 @@ const DesignationList = () => {
 
   const handlePrintDes = (data: any) => {
     setOpenModal(true);
-    setDataPrint(data)
+    setDataPrint(data);
     setTimeout(() => {
       handlePrint();
     }, 1000);
-  }
+  };
 
   const handlegetAllDesignation = async () => {
     try {
@@ -90,7 +90,7 @@ const DesignationList = () => {
       console.log(error);
     }
   };
-  
+
   const handleLimitChange = (data: any) => {
     setQuery({ ...query, _limit: data.value });
   };
@@ -199,7 +199,7 @@ const DesignationList = () => {
   const gotoDetail = (item: any) => {
     navigate(`/designation/${item?._id}/view`);
   };
-  
+
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
@@ -209,13 +209,13 @@ const DesignationList = () => {
     setOpenModal(true);
     setDesignation(data);
   };
-  
+
   const onOk = async () => {
-    if(designation?.type == 'cancel') {
-      console.log('designation', designation)
+    if (designation?.type == "cancel") {
+      console.log("designation", designation);
       const res = await deleteServiceByExamination(designation?.data?._id);
       if (res?.designation) {
-        toast.success('Huỷ dịch vụ thành công!');
+        toast.success("Huỷ dịch vụ thành công!");
         setOpenModal(false);
         handlegetAllDesignation();
       } else {
@@ -224,8 +224,6 @@ const DesignationList = () => {
     }
     setOpenModal(false);
   };
-
-  console.log("siudataPrint", dataPrint)
 
   return (
     <Layout>
@@ -240,11 +238,6 @@ const DesignationList = () => {
         handleStatusChange={handleStatusChange}
         handlePaymentStatusChange={handlePaymentStatusChange}
       ></Filter>
-      {/* <FilterCustomer
-        handleDayChange={handleDayChange}
-        handleGenderChange={handleGenderChange}
-        handleSearch={handleSearch}
-      ></FilterCustomer> */}
       <div className="bg-white">
         <Table headings={headings} loading={loading} length={data?.length}>
           {data?.map((item) => (
@@ -271,40 +264,46 @@ const DesignationList = () => {
               </td>
               <td>
                 <div className="table-action">
-                  {item?.status == 'done' && (
+                  {item?.status == "done" && (
                     <div
                       className="button-nutri"
                       onClick={() => {
-                        handlePrintDes(item)
+                        handlePrintDes(item);
                       }}
                     >
                       <img width={20} height={20} src={IconPrint} alt="print" />
                     </div>
                   )}
-                  {
-                    (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3 ) ? null : (
-                      <>
-                      {item?.status !== 'done' && (
+                  {auth?.role?.roleNumber == 2 ||
+                  auth?.role?.roleNumber == 3 ? null : (
+                    <>
+                      {item?.status !== "done" && (
                         <div
                           className="button-nutri"
                           onClick={() => {
                             navigate(`/designation/update/${item?._id}`);
                           }}
                         >
-                          <img width={20} height={20} src={IconEdit} alt="edit" />
+                          <img
+                            width={20}
+                            height={20}
+                            src={IconEdit}
+                            alt="edit"
+                          />
                         </div>
                       )}
-                      {item?.status == 'waiting' && (
+                      {item?.status == "waiting" && (
                         <button
                           className="button-nutri text-[#585858]"
-                          onClick={() => handleShowModel({type: 'cancel', data: item})}
+                          onClick={() =>
+                            handleShowModel({ type: "cancel", data: item })
+                          }
                         >
                           <IconTrash></IconTrash>
                         </button>
                       )}
-                      </>
-                    )
-                  }
+                    </>
+                  )}
                 </div>
               </td>
             </tr>
@@ -320,11 +319,8 @@ const DesignationList = () => {
         ></Pagination>
       </div>
       {openModal && dataPrint !== undefined ? (
-        <div style={{height: 0, overflow: 'hidden'}}>
-          <DesignationPrint
-            componentRef = {componentRef}
-            dataPrint = {dataPrint}
-          />
+        <div style={{ height: 0, overflow: "hidden" }}>
+          <DesignationPrint componentRef={componentRef} dataPrint={dataPrint} />
         </div>
       ) : (
         <Modal
@@ -348,25 +344,21 @@ const DesignationList = () => {
             </Button>,
           ]}
           onCancel={() => setOpenModal(false)}
-          style={{ width: '80%', maxHeight: '70vh' }}
+          style={{ width: "80%", maxHeight: "70vh" }}
         >
           <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
             Thông Báo
           </h1>
-          {
-            designation?.type == 'cancel' && (
-              <div className="flex flex-col items-center justify-center py-4 text-sm">
-                <p>Bạn có chắc hủy dịch vụ chỉ định này không?</p>
-                <span className="text-center text-[#ff5c75] font-bold">
-                  {designation?.data?._id}
-                </span>
-              </div>
-            )
-          }
-          
+          {designation?.type == "cancel" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc hủy dịch vụ chỉ định này không?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {designation?.data?._id}
+              </span>
+            </div>
+          )}
         </Modal>
       )}
-      
     </Layout>
   );
 };

@@ -43,6 +43,7 @@ const ReceptionAdd = () => {
   const [clinics, setClinics] = useState<any[]>([]);
   const [staffs, setStaffs] = useState<any[]>([]);
   const [doctorId, setDoctorId] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const [clinicId, setClinicId] = useState<any>(null);
   const navigate = useNavigate();
   const [dataServices, setDataServices] = useState([
@@ -132,9 +133,11 @@ const ReceptionAdd = () => {
 
   const handleRemoveService = (index: number) => {
     let newServiceExam = cloneDeep(dataServices);
-    newServiceExam.splice(index
-      
-      , 1);
+    newServiceExam.splice(
+      index,
+
+      1
+    );
     if (newServiceExam?.length === 0) {
       newServiceExam = [
         {
@@ -208,10 +211,12 @@ const ReceptionAdd = () => {
       examinationServiceId,
       day_welcome,
     };
+    setLoading(true);
     const res = await createExamination(data);
+    setLoading(false);
     if (res?.examination) {
       toast.success(res?.message);
-      navigate("/reception");
+      navigate(`/reception/${res?.examination?._id}`);
     } else {
       toast.error(res?.message);
     }
@@ -223,8 +228,6 @@ const ReceptionAdd = () => {
       toast.warning(arrayError[0]?.message);
     }
   }, [errors]);
-
-  console.log('siuData', data)
 
   return (
     <Layout>
@@ -489,6 +492,8 @@ const ReceptionAdd = () => {
               type="submit"
               className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
               onClick={handleSubmit(handleCreateReception)}
+              isLoading={loading}
+              disabled={loading}
             >
               Lưu
             </Button>
