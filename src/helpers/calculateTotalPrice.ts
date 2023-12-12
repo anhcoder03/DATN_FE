@@ -25,6 +25,15 @@ export function calculateTotalPricePrescription(data: any) {
   }
   return totalPrice;
 }
+
+export function calculateTotalPricePrescription2(data: any) {
+  let totalPrice = 0;
+  for (const item of data) {
+    totalPrice += item?.medicineId?.price;
+  }
+  const price = PriceUtils.format(totalPrice);
+  return price;
+}
 export function totalPrice(data: any) {
   let totalPrice = 0;
   for (const item of data) {

@@ -24,7 +24,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
 
     let years = today.getFullYear() - birthDate.getFullYear();
     let months = today.getMonth() - birthDate.getMonth();
-    let days = birthDate.getDate() - today.getDate();
+    const days = birthDate.getDate() - today.getDate();
 
     if (months < 0 || (months === 0 && days < 0)) {
       years--;
@@ -37,8 +37,8 @@ const ExaminationInfo = ({ data }: { data: any }) => {
   const dateOfBirth = data?.customerId?.dateOfBirth;
   const ageWithDetails = dateOfBirth ? calculateAge(dateOfBirth) : "---";
   return (
-    <form className="flex bg-grayF3  justify-between gap-x-10 w-full pb-16">
-      <div className="flex flex-col gap-y-10 w-1/2">
+    <form className="flex justify-between w-full pb-16 bg-grayF3 gap-x-10">
+      <div className="flex flex-col w-1/2 gap-y-10">
         <div className="p-5 bg-white rounded-xl">
           <Heading>
             Thông tin bệnh nhân
@@ -54,7 +54,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={data?.customerId?.name || "---"}
               />
             </Field>
@@ -64,7 +64,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={data?.staffId?.name || "---"}
               />
             </Field>
@@ -74,7 +74,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={data?.doctorId?.name || "---"}
               />
             </Field>
@@ -86,7 +86,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={moment(data?.customerId?.dateOfBirth).format(
                   "YYYY-MM-DD"
                 )}
@@ -98,7 +98,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={`${ageWithDetails}`}
               />
             </Field>
@@ -140,7 +140,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </Label>
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={
                   data?.customerId
                     ? `${data?.customerId?.commune.name}, ${data?.customerId?.district?.name}, ${data?.customerId?.province?.name}`
@@ -154,7 +154,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               <Label className="font-semibold" htmlFor="_id">
                 Thời gian tiếp đón
               </Label>
-              {/* <div className="relative border-b border-b-gray-200 pb-3">
+              {/* <div className="relative pb-3 border-b border-b-gray-200">
                 <Flatpickr
                   value={day_welcome}
                   options={{
@@ -177,10 +177,10 @@ const ExaminationInfo = ({ data }: { data: any }) => {
               </div> */}
               <Input
                 control={control}
-                className="border-none font-semibold text-black"
+                className="font-semibold text-black border-none"
                 value={
                   data?.day_welcome
-                    ? moment(data?.day_welcome).format('DD/MM/YYYY HH:mm')
+                    ? moment(data?.day_welcome).format("DD/MM/YYYY HH:mm")
                     : "---"
                 }
               />
@@ -249,7 +249,7 @@ const ExaminationInfo = ({ data }: { data: any }) => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-y-10 w-1/2">
+      <div className="flex flex-col w-1/2 gap-y-10">
         <div className="p-5 bg-white rounded-xl">
           <div className="flex flex-col pointer-events-none">
             <Heading>Thông tin khám bệnh</Heading>

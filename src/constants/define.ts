@@ -20,3 +20,9 @@ export enum PAYMENT_STATUS {
   PAID = "paid",
   UNPAID = "unpai",
 }
+
+export enum PRESCRIPTION_STATUS {
+  PENDDING = 1,
+  DONE = 2,
+  CANCEL = 3,
+}

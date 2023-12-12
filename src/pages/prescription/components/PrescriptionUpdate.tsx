@@ -10,7 +10,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/button";
 import {
-  createPrescription, getOnePrescription, updatePrescription
+  createPrescription,
+  getOnePrescription,
+  updatePrescription,
 } from "../../../services/prescription.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllCustomer } from "../../../services/customer.service";
@@ -20,13 +22,17 @@ import { dataTypeImportProduct } from "../../../constants/options";
 import { IconPlus, IconTrash } from "../../../components/icons";
 import { IMedicine } from "../../../types/menicine.type";
 import { getAllProduct } from "../../../services/medicine.service";
-import { renderStatus } from '../../../constants/label';
+import { renderStatus } from "../../../constants/label";
 
 const PrescriptionUpdate = () => {
   const { id } = useParams();
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [products, setProducts] = useState<IMedicine[]>([]);
   const [data, setData] = useState<any>();
+  console.log(
+    "🚀 ~ file: PrescriptionUpdate.tsx:32 ~ PrescriptionUpdate ~ data:",
+    data
+  );
 
   useEffect(() => {
     loadData(id);
@@ -39,20 +45,20 @@ const PrescriptionUpdate = () => {
       const data: any = await getOnePrescription(id);
       setLoading(false);
       setData(data);
-      if(data) {
+      if (data) {
         data?.medicines?.map((item: any) => {
           ArrMedicines.push({
-              medicineId: item?.medicineId?._id,
-              unit_using: item?.unit_using,
-              unit_selling: item?.unit_selling,
-              dosage: item?.dosage,
-              how_using: item?.how_using,
-              quantity: item?.quantity,
-              timesUsePerDay: item?.timesUsePerDay
-          })
-        })
+            medicineId: item?.medicineId?._id,
+            unit_using: item?.unit_using,
+            unit_selling: item?.unit_selling,
+            dosage: item?.dosage,
+            how_using: item?.how_using,
+            quantity: item?.quantity,
+            timesUsePerDay: item?.timesUsePerDay,
+          });
+        });
       }
-      setProduct(ArrMedicines)
+      setProduct(ArrMedicines);
     } catch (error) {
       console.log(error);
     }
@@ -134,7 +140,6 @@ const PrescriptionUpdate = () => {
           array.push({ ...item, label: item?.name, value: item?._id });
         });
       }
-      setLoading(false);
       setProducts(array);
     } catch (error) {
       console.log(error);
@@ -172,10 +177,42 @@ const PrescriptionUpdate = () => {
   }, []);
 
   const handleUpdatePrescription = async () => {
-    let totalAmount = product?.reduce((prev: any, item: any) => {
-      prev = prev + (item?.price * item?.quantity)
-      return prev
-    },0)
+    let checkMedicineId = false;
+    product.forEach((item: any) => {
+      if (item.medicineId === "") {
+        return (checkMedicineId = true);
+      }
+    });
+
+    if (checkMedicineId) {
+      return toast.warning("Thuốc không được được để trống");
+    }
+    let checkUnitSelling = false; // đơn vị bán
+    product.forEach((item: any) => {
+      if (item.unit_selling === "") {
+        return (checkUnitSelling = true);
+      }
+    });
+
+    if (checkUnitSelling) {
+      return toast.warning("Đơn vị bán không được được để trống");
+    }
+
+    let checkUnitUsing = false;
+    product.forEach((item: any) => {
+      if (item.unit_using === "") {
+        return (checkUnitUsing = true);
+      }
+    });
+
+    if (checkUnitUsing) {
+      return toast.warning("Đơn vị sử dụng không được được để trống");
+    }
+
+    const totalAmount: number = product?.reduce((prev: any, item: any) => {
+      prev = prev + item?.price * item?.quantity;
+      return prev;
+    }, 0);
     const converProduct = product?.map((item: any) => {
       return {
         medicineId: item?.medicineId,
@@ -185,57 +222,23 @@ const PrescriptionUpdate = () => {
         dosage: item?.dosage,
         timesUsePerDay: item?.timesUsePerDay,
         how_using: item?.how_using,
-      }
-    })
+      };
+    });
     const params = {
-      medicalExaminationSlipId: id,
-      doctorId: data?.doctorId?._id,
-      diagnostic: data?.diagnostic,
-      reExaminationDate: data?.reExaminationDate,
-      advice: data?.advice,
       note: data?.note,
       medicines: converProduct,
       status: 1,
       paymentStatus: 0,
-      totalAmount: totalAmount
+      totalAmount: totalAmount,
+      _id: id,
     };
     try {
-      let checkMedicineId = false;
-      product.forEach((item: any) => {
-        if (item.medicineId === "") {
-          return (checkMedicineId = true);
-        }
-      });
-
-      if (checkMedicineId) {
-        return toast.warning("Thuốc không được được để trống");
-      }
-      let checkUnitSelling = false; // đơn vị bán
-      product.forEach((item: any) => {
-        if (item.unit_selling === "") {
-          return (checkUnitSelling = true);
-        }
-      });
-
-      if (checkUnitSelling) {
-        return toast.warning("Đơn vị bán không được được để trống");
-      }
-
-      let checkUnitUsing = false;
-      product.forEach((item: any) => {
-        if (item.unit_using === "") {
-          return (checkUnitUsing = true);
-        }
-      });
-
-      if (checkUnitUsing) {
-        return toast.warning("Đơn vị sử dụng không được được để trống");
-      }
-
+      setLoading(true);
       const res = await updatePrescription(params);
+      setLoading(false);
       if (res?.prescription) {
-        toast.success(res?.message);
-        navigate("/prescription");
+        toast.success("Cập nhật thành công !");
+        navigate(`/prescription/view/${id}`);
       } else {
         toast.error(res.message);
       }
@@ -246,7 +249,7 @@ const PrescriptionUpdate = () => {
   };
 
   const handleChangeInput = (event?: any) => {
-    let { value, name } = event.target;
+    const { value, name } = event.target;
     if (value === " ") return;
     setData({
       ...data,
@@ -259,9 +262,9 @@ const PrescriptionUpdate = () => {
     if (fieldName === "quantity" || fieldName === "timesUsePerDay") {
       const parsedValue = isNaN(Number(value)) ? value : Number(value);
       updatedProduct[index][fieldName] = parsedValue;
-    } else if(fieldName == 'medicineId'){
-      updatedProduct[index]['medicineId'] = value?._id;
-      updatedProduct[index]['price'] = value?.price;
+    } else if (fieldName == "medicineId") {
+      updatedProduct[index]["medicineId"] = value?._id;
+      updatedProduct[index]["price"] = value?.price;
     } else {
       updatedProduct[index][fieldName] = value;
     }
@@ -292,7 +295,7 @@ const PrescriptionUpdate = () => {
                 <Input
                   control={control}
                   name="customerId"
-                  className="border-none font-semibold text-black"
+                  className="font-semibold text-black border-none"
                   value={data?.customerId?.name}
                 />
               </Field>
@@ -303,17 +306,17 @@ const PrescriptionUpdate = () => {
                 </Label>
                 <Input
                   control={control}
-                  className="border-none font-semibold text-black"
+                  className="font-semibold text-black border-none"
                   name="doctorId"
                   value={data?.doctorId?.name}
                 />
               </Field>
-                <Field className={"only-view"}>
-                    <Label className="font-semibold" htmlFor="phone">
-                        Trạng thái
-                    </Label>
-                    {renderStatus(data?.status)}
-                </Field>
+              <Field className={"only-view"}>
+                <Label className="font-semibold" htmlFor="phone">
+                  Trạng thái
+                </Label>
+                {renderStatus(data?.status)}
+              </Field>
             </Row>
             <Row>
               <Field>
@@ -323,7 +326,7 @@ const PrescriptionUpdate = () => {
                 </Label>
                 <Input
                   control={control}
-                  className="border-none font-semibold text-black"
+                  className="font-semibold text-black border-none"
                   value={combinedNames}
                 />
               </Field>
@@ -367,7 +370,7 @@ const PrescriptionUpdate = () => {
               />
             </Field>
           </div>
-          <div className="p-5 bg-white rounded-xl my-5">
+          <div className="p-5 my-5 bg-white rounded-xl">
             <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
             <table className="w-full custom-table">
               <thead className="bg-[#f4f6f8] text-sm">
@@ -390,10 +393,12 @@ const PrescriptionUpdate = () => {
                         menuPlacement="top"
                         options={products}
                         onChange={(selectedOption: any) =>
-                          handleChange(selectedOption._id, "medicineId", index)
+                          handleChange(selectedOption, "medicineId", index)
                         }
                         value={products?.filter(
-                          (option: any) => item?.medicineId == option.value || item?.medicineId?._id == option?.value
+                          (option: any) =>
+                            item?.medicineId == option.value ||
+                            item?.medicineId?._id == option?.value
                         )}
                       ></Select>
                     </td>
@@ -409,7 +414,7 @@ const PrescriptionUpdate = () => {
                             handleChange(inputValue, "quantity", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -421,7 +426,9 @@ const PrescriptionUpdate = () => {
                         onChange={(value: any) =>
                           handleChange(value?.value, "unit_selling", index)
                         }
-                        value={dataTypeImportProduct?.find((option: any) => option?.value == item?.unit_selling)}
+                        value={dataTypeImportProduct?.find(
+                          (option: any) => option?.value == item?.unit_selling
+                        )}
                       ></Select>
                     </td>
                     <td>
@@ -433,7 +440,9 @@ const PrescriptionUpdate = () => {
                         onChange={(value: any) =>
                           handleChange(value?.value, "unit_using", index)
                         }
-                        value={dataTypeImportProduct?.find((option: any) => option?.value == item?.unit_using)}
+                        value={dataTypeImportProduct?.find(
+                          (option: any) => option?.value == item?.unit_using
+                        )}
                       ></Select>
                     </td>
                     <td>
@@ -448,7 +457,7 @@ const PrescriptionUpdate = () => {
                             handleChange(inputValue, "dosage", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -463,7 +472,7 @@ const PrescriptionUpdate = () => {
                             handleChange(inputValue, "timesUsePerDay", index);
                           }
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -475,7 +484,7 @@ const PrescriptionUpdate = () => {
                           const inputValue = e.target.value;
                           handleChange(inputValue, "how_using", index);
                         }}
-                        className="border font-semibold text-black rounded-md px-3 mb-1"
+                        className="px-3 mb-1 font-semibold text-black border rounded-md"
                       />
                     </td>
                     <td>
@@ -513,6 +522,8 @@ const PrescriptionUpdate = () => {
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
                 onClick={handleSubmit(handleUpdatePrescription)}
+                isLoading={loading}
+                disabled={loading}
               >
                 Lưu
               </Button>

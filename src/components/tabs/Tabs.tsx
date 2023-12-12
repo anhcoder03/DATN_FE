@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs } from "antd";
 import { IDataTabs } from "../../pages/reception/ReceptionList";
 interface Props {
-  selectTab: (key: string) => void;
+  selectTab?: (key: string) => void;
   data: IDataTabs[];
   keyActive: string;
   className?: string;
@@ -12,7 +12,7 @@ const AppTaps = ({
   data,
   selectTab,
   keyActive,
-  className = "bg-white p-5",
+  className = "p-5 bg-white",
 }: Props) => {
   return (
     <div className={className}>
