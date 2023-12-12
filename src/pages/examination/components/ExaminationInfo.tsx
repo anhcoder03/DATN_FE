@@ -179,8 +179,8 @@ const ExaminationInfo = ({ data }: { data: any }) => {
                 control={control}
                 className="border-none font-semibold text-black"
                 value={
-                  day_welcome
-                    ? moment(day_welcome).format('DD/MM/YYYY HH:mm')
+                  data?.day_welcome
+                    ? moment(data?.day_welcome).format('DD/MM/YYYY HH:mm')
                     : "---"
                 }
               />

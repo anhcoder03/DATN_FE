@@ -40,7 +40,6 @@ const OrderDetail = () => {
       currency: "VND",
     }).format(number);
   }
-  console.log(order, "dataaVV");
 
   const totalPrice = order?.medicines?.reduce(
     (accumulator: any, currentValue: any) => {
@@ -48,6 +47,7 @@ const OrderDetail = () => {
     },
     0
   );
+  
   return (
     <Layout>
       <div className="relative h-full">

@@ -110,7 +110,7 @@ export const optionService: IOption[] = [
   { value: "0", label: "Không hoạt động" },
 ];
 
-export const Status_cancel: any[] = [
+export const Status_cancel: IOption[] = [
   {
     value: '',
     label: '-Trạng thái huỷ-'

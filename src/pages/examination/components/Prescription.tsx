@@ -7,6 +7,7 @@ import {
   deletePrescription,
   getAllPrescription,
   getPrescriptionByExamination,
+  updatePrescription,
 } from "../../../services/prescription.service";
 import moment from "moment";
 import { toast } from "react-toastify";
@@ -18,6 +19,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import Printprescription from "../../../components/print/Printprescription";
+import { renderStatus } from '../../../constants/label';
+import { Field } from "../../../components/field";
+import { Label } from "../../../components/label";
+import { Textarea } from "../../../components/textarea";
+import { useForm } from "react-hook-form";
 
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
@@ -43,6 +49,12 @@ const Prescription = ({ id }: any) => {
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const urlParams = new URLSearchParams(location.search);
+  const [data, setData] = useState<any>({
+    cancel_reason: ''
+  })
+  const {
+    control
+  } = useForm<any>()
   const [query, setQuery] = useState({
     _page: 1,
     _limit: 25,
@@ -111,10 +123,24 @@ const Prescription = ({ id }: any) => {
     }
   };
 
+  const handleChangeInput = (event?: any) => {
+    let { value, name } = event.target
+    if (value === " ") return;
+    setData({
+        ...data,
+        [name]: value
+    })
+  }
+
   const onOk = async () => {
-    const res = await deletePrescription(prescription?._id);
+    const params = {
+      status: 3,
+      _id: prescription?.data?._id,
+      cancel_reason: data?.cancel_reason
+    }
+    const res = await updatePrescription(params);
     if (res?.message) {
-      toast.success(res?.message);
+      toast.success('Huỷ đơn thuốc thành công!');
       setOpenModal(false);
       handleGetPrescription();
     } else {
@@ -183,26 +209,39 @@ const Prescription = ({ id }: any) => {
               <td onClick={() => gotoDetail(item)}>
                 {moment(item?.createdAt).format("DD/MM/YYYY")}
               </td>
-              <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+              <td onClick={() => gotoDetail(item)}>{renderStatus(item?.status)}</td>
               <td>
                 {auth?.role?.roleNumber == 2 ||
                 auth?.role?.roleNumber == 3 ? null : (
                   <div className="table-action">
-                    <div
-                      className="button-nutri"
-                      onClick={() => {
-                        // navigate(`/product/update/${item?._id}`);
-                        toast.info("đang làm nha");
-                      }}
-                    >
-                      <img width={20} height={20} src={IconEdit} alt="edit" />
-                    </div>
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
+                    {
+                      item?.status !== 3 && (
+                        <div
+                          className="button-nutri"
+                          onClick={() => {
+                            navigate(`/prescription/update/${item?._id}`);
+                          }}
+                        >
+                          <img width={20} height={20} src={IconEdit} alt="edit" />
+                        </div>
+                      )
+                    }
+                    {
+                      item?.status !== 3 && (
+                        <button
+                          className="button-nutri text-[#585858]"
+                          onClick={() => {
+                            if(item?.paymentStatus == 1) {
+                              toast.warning('Không thể huỷ kê đơn đã thanh toán!');
+                              return
+                            }
+                            handleShowModel({type: 'cancel', data: item})
+                          } }
+                        >
+                          <IconTrash></IconTrash>
+                        </button>
+                      )
+                    }
                     <button
                       onClick={() => handleClickPrint()}
                       className="button-nutri text-[#585858]"
@@ -230,15 +269,36 @@ const Prescription = ({ id }: any) => {
             onOk={onOk}
             onCancel={() => setOpenModal(false)}
           >
-            <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-              Thông Báo
-            </h1>
-            <div className="flex flex-col items-center justify-center py-4 text-sm">
-              <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
-              <span className="text-center text-[#ff5c75] font-bold">
-                {prescription?._id}
-              </span>
-            </div>
+            {
+              prescription?.type == 'cancel' && (
+                <>
+                  <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+                    Thông báo
+                  </h1>
+                  <div className="flex flex-col justify-center py-4 text-sm">
+                    <p className="text-center">Bạn có chắc muốn huỷ đơn thuốc này không</p>
+                    <span className="text-center text-[#ff5c75] font-bold">
+                      {prescription?.data?._id}
+                    </span>
+                    <Field>
+                      <Label className="font-semibold" htmlFor="note">
+                        Lời dặn
+                      </Label>
+                      <Textarea
+                        control={control}
+                        className="outline-none input-primary"
+                        name="cancel_reason"
+                        placeholder="Nhập lời dặn cho khách hàng"
+                        value={data?.cancel_reason}
+                        onChange={(val: any) => {
+                          handleChangeInput(val);
+                        }}
+                      />
+                    </Field>
+                  </div>
+                </>
+              )
+            }
           </Modal>
         )}
       </div>

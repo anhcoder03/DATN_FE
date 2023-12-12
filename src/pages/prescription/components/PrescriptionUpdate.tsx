@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Button } from "../../../components/button";
 import {
-  createPrescription
+  createPrescription, getOnePrescription, updatePrescription
 } from "../../../services/prescription.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllCustomer } from "../../../services/customer.service";
@@ -20,9 +20,9 @@ import { dataTypeImportProduct } from "../../../constants/options";
 import { IconPlus, IconTrash } from "../../../components/icons";
 import { IMedicine } from "../../../types/menicine.type";
 import { getAllProduct } from "../../../services/medicine.service";
-import { getOneExamination } from "../../../services/examination.service";
+import { renderStatus } from '../../../constants/label';
 
-const PrescriptionAdd = () => {
+const PrescriptionUpdate = () => {
   const { id } = useParams();
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [products, setProducts] = useState<IMedicine[]>([]);
@@ -31,20 +31,33 @@ const PrescriptionAdd = () => {
   useEffect(() => {
     loadData(id);
   }, [id]);
+
   const loadData = async (id: any) => {
     try {
       setLoading(true);
-      const data: any = await getOneExamination(id);
+      const ArrMedicines: any = [];
+      const data: any = await getOnePrescription(id);
       setLoading(false);
-      setData({
-        customer: data?.examination?.customer,
-        customerId: data?.examination?.customerId,
-        doctorId: data?.examination?.doctorId,
-      });
+      setData(data);
+      if(data) {
+        data?.medicines?.map((item: any) => {
+          ArrMedicines.push({
+              medicineId: item?.medicineId?._id,
+              unit_using: item?.unit_using,
+              unit_selling: item?.unit_selling,
+              dosage: item?.dosage,
+              how_using: item?.how_using,
+              quantity: item?.quantity,
+              timesUsePerDay: item?.timesUsePerDay
+          })
+        })
+      }
+      setProduct(ArrMedicines)
     } catch (error) {
       console.log(error);
     }
   };
+
   const [product, setProduct] = useState<any>([
     {
       medicineId: "",
@@ -54,7 +67,6 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      price: 0
     },
   ]);
 
@@ -69,6 +81,7 @@ const PrescriptionAdd = () => {
     search: "",
     _status: "",
   });
+
   const {
     control,
     setValue,
@@ -78,6 +91,7 @@ const PrescriptionAdd = () => {
     // resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+
   const handleAddMedicine = () => {
     const newData = {
       medicineId: "",
@@ -87,7 +101,6 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
-      price: 0
     };
     setProduct([...product, newData]);
   };
@@ -158,7 +171,7 @@ const PrescriptionAdd = () => {
     getCustomers();
   }, []);
 
-  const handleCreatePrescription = async () => {
+  const handleUpdatePrescription = async () => {
     let totalAmount = product?.reduce((prev: any, item: any) => {
       prev = prev + (item?.price * item?.quantity)
       return prev
@@ -219,12 +232,10 @@ const PrescriptionAdd = () => {
         return toast.warning("Đơn vị sử dụng không được được để trống");
       }
 
-      setLoading(true);
-      const res = await createPrescription(params);
-      setLoading(false);
+      const res = await updatePrescription(params);
       if (res?.prescription) {
         toast.success(res?.message);
-        navigate(`/examination/${id}/view`);
+        navigate("/prescription");
       } else {
         toast.error(res.message);
       }
@@ -265,10 +276,10 @@ const PrescriptionAdd = () => {
   return (
     <Layout>
       <div className="relative h-full">
-        <Heading>Thêm mới kê đơn</Heading>
+        <Heading>Chỉnh sửa kê đơn</Heading>
         <form
           className="w-full"
-          onSubmit={handleSubmit(handleCreatePrescription)}
+          onSubmit={handleSubmit(handleUpdatePrescription)}
         >
           <div className="p-5 bg-white rounded-xl">
             <Heading>Thông tin kê đơn</Heading>
@@ -297,6 +308,12 @@ const PrescriptionAdd = () => {
                   value={data?.doctorId?.name}
                 />
               </Field>
+                <Field className={"only-view"}>
+                    <Label className="font-semibold" htmlFor="phone">
+                        Trạng thái
+                    </Label>
+                    {renderStatus(data?.status)}
+                </Field>
             </Row>
             <Row>
               <Field>
@@ -310,8 +327,6 @@ const PrescriptionAdd = () => {
                   value={combinedNames}
                 />
               </Field>
-            </Row>
-            <Row>
               <Field>
                 <Label className="font-semibold" htmlFor="note">
                   Chẩn đoán
@@ -375,10 +390,10 @@ const PrescriptionAdd = () => {
                         menuPlacement="top"
                         options={products}
                         onChange={(selectedOption: any) =>
-                          handleChange(selectedOption, "medicineId", index)
+                          handleChange(selectedOption._id, "medicineId", index)
                         }
                         value={products?.filter(
-                          (option: any) => item?.medicineId == option.value
+                          (option: any) => item?.medicineId == option.value || item?.medicineId?._id == option?.value
                         )}
                       ></Select>
                     </td>
@@ -406,6 +421,7 @@ const PrescriptionAdd = () => {
                         onChange={(value: any) =>
                           handleChange(value?.value, "unit_selling", index)
                         }
+                        value={dataTypeImportProduct?.find((option: any) => option?.value == item?.unit_selling)}
                       ></Select>
                     </td>
                     <td>
@@ -417,6 +433,7 @@ const PrescriptionAdd = () => {
                         onChange={(value: any) =>
                           handleChange(value?.value, "unit_using", index)
                         }
+                        value={dataTypeImportProduct?.find((option: any) => option?.value == item?.unit_using)}
                       ></Select>
                     </td>
                     <td>
@@ -491,13 +508,11 @@ const PrescriptionAdd = () => {
         <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
           <div className="flex justify-end w-full px-5">
             <div className="flex items-center gap-x-5">
-              <Button to="/customer/list">Đóng</Button>
+              <Button to="/prescription">Đóng</Button>
               <Button
                 type="submit"
                 className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleCreatePrescription)}
-                isLoading={loading}
-                disabled={loading}
+                onClick={handleSubmit(handleUpdatePrescription)}
               >
                 Lưu
               </Button>
@@ -509,4 +524,4 @@ const PrescriptionAdd = () => {
   );
 };
 
-export default PrescriptionAdd;
+export default PrescriptionUpdate;
