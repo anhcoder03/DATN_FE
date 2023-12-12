@@ -54,6 +54,7 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
+      price: 0
     },
   ]);
 
@@ -86,6 +87,7 @@ const PrescriptionAdd = () => {
       dosage: "",
       timesUsePerDay: 1,
       how_using: "",
+      price: 0
     };
     setProduct([...product, newData]);
   };
@@ -157,6 +159,21 @@ const PrescriptionAdd = () => {
   }, []);
 
   const handleCreatePrescription = async () => {
+    let totalAmount = product?.reduce((prev: any, item: any) => {
+      prev = prev + (item?.price * item?.quantity)
+      return prev
+    },0)
+    const converProduct = product?.map((item: any) => {
+      return {
+        medicineId: item?.medicineId,
+        quantity: item?.quantity,
+        unit_selling: item?.unit_selling,
+        unit_using: item?.unit_using,
+        dosage: item?.dosage,
+        timesUsePerDay: item?.timesUsePerDay,
+        how_using: item?.how_using,
+      }
+    })
     const params = {
       medicalExaminationSlipId: id,
       doctorId: data?.doctorId?._id,
@@ -164,9 +181,10 @@ const PrescriptionAdd = () => {
       reExaminationDate: data?.reExaminationDate,
       advice: data?.advice,
       note: data?.note,
-      medicines: product,
-      status: 0,
-      paymentStatus: 0
+      medicines: converProduct,
+      status: 1,
+      paymentStatus: 0,
+      totalAmount: totalAmount
     };
     try {
       let checkMedicineId = false;
@@ -230,6 +248,9 @@ const PrescriptionAdd = () => {
     if (fieldName === "quantity" || fieldName === "timesUsePerDay") {
       const parsedValue = isNaN(Number(value)) ? value : Number(value);
       updatedProduct[index][fieldName] = parsedValue;
+    } else if(fieldName == 'medicineId'){
+      updatedProduct[index]['medicineId'] = value?._id;
+      updatedProduct[index]['price'] = value?.price;
     } else {
       updatedProduct[index][fieldName] = value;
     }
@@ -354,7 +375,7 @@ const PrescriptionAdd = () => {
                         menuPlacement="top"
                         options={products}
                         onChange={(selectedOption: any) =>
-                          handleChange(selectedOption._id, "medicineId", index)
+                          handleChange(selectedOption, "medicineId", index)
                         }
                         value={products?.filter(
                           (option: any) => item?.medicineId == option.value

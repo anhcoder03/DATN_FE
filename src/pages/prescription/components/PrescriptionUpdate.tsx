@@ -20,6 +20,7 @@ import { dataTypeImportProduct } from "../../../constants/options";
 import { IconPlus, IconTrash } from "../../../components/icons";
 import { IMedicine } from "../../../types/menicine.type";
 import { getAllProduct } from "../../../services/medicine.service";
+import { renderStatus } from '../../../constants/label';
 
 const PrescriptionUpdate = () => {
   const { id } = useParams();
@@ -40,15 +41,15 @@ const PrescriptionUpdate = () => {
       setData(data);
       if(data) {
         data?.medicines?.map((item: any) => {
-            ArrMedicines.push({
-                medicineId: item?.medicineId?._id,
-                unit_using: item?.unit_using,
-                unit_selling: item?.unit_selling,
-                dosage: item?.dosage,
-                how_using: item?.how_using,
-                quantity: item?.quantity,
-                timesUsePerDay: item?.timesUsePerDay
-            })
+          ArrMedicines.push({
+              medicineId: item?.medicineId?._id,
+              unit_using: item?.unit_using,
+              unit_selling: item?.unit_selling,
+              dosage: item?.dosage,
+              how_using: item?.how_using,
+              quantity: item?.quantity,
+              timesUsePerDay: item?.timesUsePerDay
+          })
         })
       }
       setProduct(ArrMedicines)
@@ -68,8 +69,6 @@ const PrescriptionUpdate = () => {
       how_using: "",
     },
   ]);
-
-  console.log('productne', data, product)
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -173,6 +172,21 @@ const PrescriptionUpdate = () => {
   }, []);
 
   const handleUpdatePrescription = async () => {
+    let totalAmount = product?.reduce((prev: any, item: any) => {
+      prev = prev + (item?.price * item?.quantity)
+      return prev
+    },0)
+    const converProduct = product?.map((item: any) => {
+      return {
+        medicineId: item?.medicineId,
+        quantity: item?.quantity,
+        unit_selling: item?.unit_selling,
+        unit_using: item?.unit_using,
+        dosage: item?.dosage,
+        timesUsePerDay: item?.timesUsePerDay,
+        how_using: item?.how_using,
+      }
+    })
     const params = {
       medicalExaminationSlipId: id,
       doctorId: data?.doctorId?._id,
@@ -180,12 +194,11 @@ const PrescriptionUpdate = () => {
       reExaminationDate: data?.reExaminationDate,
       advice: data?.advice,
       note: data?.note,
-      medicines: product,
-      status: data?.status,
-      paymentStatus: data?.paymentStatus,
-      _id: data?._id
+      medicines: converProduct,
+      status: 1,
+      paymentStatus: 0,
+      totalAmount: totalAmount
     };
-
     try {
       let checkMedicineId = false;
       product.forEach((item: any) => {
@@ -246,6 +259,9 @@ const PrescriptionUpdate = () => {
     if (fieldName === "quantity" || fieldName === "timesUsePerDay") {
       const parsedValue = isNaN(Number(value)) ? value : Number(value);
       updatedProduct[index][fieldName] = parsedValue;
+    } else if(fieldName == 'medicineId'){
+      updatedProduct[index]['medicineId'] = value?._id;
+      updatedProduct[index]['price'] = value?.price;
     } else {
       updatedProduct[index][fieldName] = value;
     }
@@ -256,24 +272,6 @@ const PrescriptionUpdate = () => {
   const districtName = data?.customerId?.district?.name ?? "";
   const provinceName = data?.customerId?.province?.name ?? "";
   const combinedNames = `${communeName}, ${districtName}, ${provinceName}`;
-
-  const renderStatus = (status: any) => {
-    if(status == 0) {
-      return (
-        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
-      )
-    }
-    if(status == 1) {
-      return (
-        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
-      )
-    }
-    else {
-        return (
-            <span>---</span>
-        )
-    }
-  }
 
   return (
     <Layout>

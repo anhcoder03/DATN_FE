@@ -8,13 +8,16 @@ import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { getOnePrescription } from "../../../services/prescription.service";
+import { getOnePrescription, updatePrescription } from "../../../services/prescription.service";
 import { Button } from "../../../components/button";
 import { Textarea } from "../../../components/textarea";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useReactToPrint } from "react-to-print";
 import Printprescription from "../../../components/print/Printprescription";
+import { renderStatus } from '../../../constants/label';
+import { Modal } from "antd";
+import { toast } from "react-toastify";
 
 const PrescriptionDetail = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
@@ -24,6 +27,7 @@ const PrescriptionDetail = () => {
   const { control, setValue, reset } = useForm<any>({});
   const [openModal, setOpenModal] = useState(false);
   const [action, setAction] = useState<any>();
+  const [prescription, setPrescription] = useState<any>();
 
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
@@ -58,17 +62,46 @@ const PrescriptionDetail = () => {
     }, 500);
   };
 
-  const renderStatus = (status: any) => {
-    if(status == 0) {
-      return (
-        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
-      )
+  const handleShowModel = (data: any) => {
+    setOpenModal(true);
+    setPrescription(data);
+  };
+
+  const onOk = async () => {
+    if(prescription?.type == 'cancel') {
+      const params = {
+        status : 3,
+        _id: prescription?.data?._id,
+        cancel_reason: data?.cancel_reason
+      }
+      const res = await updatePrescription(params);
+      if (res?.message) {
+        toast.success('Huỷ đơn thuốc thành công!');
+        setOpenModal(false);
+        setData({
+          cancel_reason: ''
+        })
+        loadData(id);
+      } else {
+        toast.error(res?.message);
+        setData({
+          cancel_reason: ''
+        })
+      }
+      setOpenModal(false);
+      return
     }
-    if(status == 1) {
-      return (
-        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
-      )
-    }
+    
+    
+  };;
+
+  const handleChangeInput = (event?: any) => {
+    let { value, name } = event.target
+    if (value === " ") return;
+    setData({
+        ...data,
+        [name]: value
+    })
   }
 
   return (
@@ -291,29 +324,85 @@ const PrescriptionDetail = () => {
               >
                 In đơn
               </Button>
-              <Button
-                to={`/prescription/update/${data?._id}`}
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-              >
-                Chỉnh sửa
-              </Button>
+              {
+                data?.status !== 3 && (
+                  <Button
+                    to={`/prescription/update/${data?._id}`}
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  >
+                    Chỉnh sửa
+                  </Button>
+                )
+              }
               {auth?.role?.roleNumber == 2 ||
               auth?.role?.roleNumber == 3 ? null : (
                 <>
-                  <Button to="">Tạo đơn Offline</Button>
                   <Button
                     type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                    // onClick={handleSubmit(handleCreatePrescription)}
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                    onClick={() => handleShowModel({type: 'done', data: data})}
                   >
-                    Tạo đơn Online
+                    Hoàn thành
                   </Button>
                 </>
               )}
+              {
+                data?.status !== 3 && (
+                  <Button
+                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                    onClick={() => {
+                      if(data?.paymentStatus == 1) {
+                        toast.warning('Không thể huỷ kê đơn đã thanh toán!');
+                        return
+                      }
+                      handleShowModel({type: 'cancel', data: data})
+                    } }
+                  >
+                    Huỷ
+                  </Button>
+                )
+              }
             </div>
           </div>
         </div>
       </div>
+      <Modal
+          centered
+          open={openModal}
+          onOk={onOk}
+          onCancel={() => setOpenModal(false)}
+        >
+          {
+            prescription?.type == 'cancel' && (
+              <>
+                <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+                  Thông báo
+                </h1>
+                <div className="flex flex-col justify-center py-4 text-sm">
+                  <p className="text-center">Bạn có chắc muốn huỷ đơn thuốc này không</p>
+                  <span className="text-center text-[#ff5c75] font-bold">
+                    {prescription?.data?._id}
+                  </span>
+                  <Field>
+                    <Label className="font-semibold" htmlFor="note">
+                      Lời dặn
+                    </Label>
+                    <Textarea
+                      control={control}
+                      className="outline-none input-primary"
+                      name="cancel_reason"
+                      placeholder="Nhập lời dặn cho khách hàng"
+                      value={data?.cancel_reason}
+                      onChange={(val: any) => {
+                        handleChangeInput(val);
+                      }}
+                    />
+                  </Field>
+                </div>
+              </>
+            )
+          }
+        </Modal>
       {action?.type == "print" && (
         <Printprescription
           componentRef={componentRef}

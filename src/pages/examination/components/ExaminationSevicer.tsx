@@ -41,6 +41,7 @@ const ExaminationSevicer = ({ data }: { data: any[] }) => {
                 <Link
                   to={`/designation/${item?._id}/view`}
                   style={{ color: "blue", textDecoration: "underline" }}
+                  target="_blank"
                 >
                   Xem
                 </Link>

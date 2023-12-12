@@ -9,6 +9,7 @@ import Heading from "../../../components/common/Heading";
 import {
   deletePrescription,
   getAllPrescription,
+  updatePrescription,
 } from "../../../services/prescription.service";
 import IconPrint from "../../../assets/images/ic-print.svg";
 import moment from "moment";
@@ -19,6 +20,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useReactToPrint } from "react-to-print";
 import Printprescription from "../../../components/print/Printprescription";
+import { Field } from "../../../components/field";
+import { Label } from "../../../components/label";
+import { Textarea } from "../../../components/textarea";
+import { renderStatus } from '../../../constants/label';
+import { useForm } from "react-hook-form";
 const optionsPagination = [
   { value: 25, label: "25 bản ghi" },
   { value: 50, label: "50 bản ghi" },
@@ -34,6 +40,9 @@ const PrescriptionList = () => {
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [action, setAction] = useState<any>();
+  const [data, setData] = useState<any>({
+    cancel_reason: ''
+  })
 
   const urlParams = new URLSearchParams(location.search);
   const [query, setQuery] = useState({
@@ -46,6 +55,10 @@ const PrescriptionList = () => {
   const gotoDetail = (item: any) => {
     navigate(`/prescription/view/${item?._id}`);
   };
+
+  const {
+    control
+  } = useForm<any>()
 
   const componentRef = useRef(null);
 
@@ -119,13 +132,24 @@ const PrescriptionList = () => {
   };
 
   const onOk = async () => {
-    const res = await deletePrescription(prescription?._id);
+    const params = {
+      status : 3,
+      _id: prescription?._id,
+      cancel_reason: data?.cancel_reason
+    }
+    const res = await updatePrescription(params);
     if (res?.message) {
-      toast.success(res?.message);
+      toast.success('Huỷ đơn thuốc thành công!');
       setOpenModal(false);
+      setData({
+        cancel_reason: ''
+      })
       handleGetPrescription();
     } else {
       toast.error(res?.message);
+      setData({
+        cancel_reason: ''
+      })
     }
     setOpenModal(false);
   };
@@ -138,22 +162,13 @@ const PrescriptionList = () => {
     }, 500);
   };
 
-  const renderStatus = (status: any) => {
-    if(status == 0) {
-      return (
-        <span style={{color: '#EDA119'}}>Chưa thực hiện</span>
-      )
-    }
-    if(status == 1) {
-      return (
-        <span style={{color: '#EDA119'}}>Đã thực hiện</span>
-      )
-    }
-    else {
-      return (
-        <span>---</span>
-      )
-    }
+  const handleChangeInput = (event?: any) => {
+    let { value, name } = event.target
+    if (value === " ") return;
+    setData({
+        ...data,
+        [name]: value
+    })
   }
 
   return (
@@ -188,26 +203,40 @@ const PrescriptionList = () => {
                 {
                   (auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
                     <div className="table-action">
-                      <div
-                        className="button-nutri"
-                        onClick={() => {
-                          navigate(`/prescription/update/${item?._id}`);
-                        }}
-                      >
-                        <img width={20} height={20} src={IconEdit} alt="edit" />
-                      </div>
+                      {
+                        (item?.paymentStatus !== 1 && item?.status !== 3) && (
+                          <div
+                            className="button-nutri"
+                            onClick={() => {
+                              navigate(`/prescription/update/${item?._id}`);
+                            }}
+                          >
+                            <img width={20} height={20} src={IconEdit} alt="edit" />
+                          </div>
+                        )
+                      }
                       <button
                         onClick={() => handleClickPrint(item)}
                         className="button-nutri text-[#585858]"
                       >
                         <img width={20} height={20} src={IconPrint} alt="print" />
                       </button>
-                      <button
-                        className="button-nutri text-[#585858]"
-                        onClick={() => handleShowModel(item)}
-                      >
-                        <IconTrash></IconTrash>
-                      </button>
+                      {
+                        item?.status !== 3 && (
+                          <button
+                            className="button-nutri text-[#585858]"
+                            onClick={() => {
+                              if(item?.paymentStatus == 1) {
+                                toast.warning('Không thể huỷ kê đơn đã thanh toán!');
+                                return
+                              }
+                              handleShowModel(item)
+                            }}
+                          >
+                            <IconTrash></IconTrash>
+                          </button>
+                        )
+                      }
                     </div>
                 )}
               </td>
@@ -233,11 +262,26 @@ const PrescriptionList = () => {
           <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
             Thông Báo
           </h1>
-          <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn xoá đơn thuốc này không</p>
+          <div className="flex flex-col justify-center py-4 text-sm">
+            <p className="text-center">Bạn có chắc muốn huỷ đơn thuốc này không </p>
             <span className="text-center text-[#ff5c75] font-bold">
               {prescription?._id}
             </span>
+            <Field>
+                <Label className="font-semibold" htmlFor="note">
+                  Lý do
+                </Label>
+                <Textarea
+                  control={control}
+                  className="outline-none input-primary"
+                  name="cancel_reason"
+                  placeholder="Nhập lý do"
+                  value={data?.cancel_reason}
+                  onChange={(val: any) => {
+                    handleChangeInput(val);
+                  }}
+                />
+            </Field>
           </div>
         </Modal>
       )}

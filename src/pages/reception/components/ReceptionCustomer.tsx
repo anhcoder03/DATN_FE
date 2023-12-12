@@ -204,6 +204,7 @@ const ReceptionCustomer = () => {
       console.log(error);
     }
   };
+  
   const handleUpdate = (data: any) => {
     service(data?.data?._id)
     setOpenModal(true);
