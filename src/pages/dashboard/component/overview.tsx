@@ -1,19 +1,20 @@
-import { Card, Col, Row, Statistic, StatisticProps, Typography } from 'antd';
+import { Card, Col, Row, Statistic, StatisticProps, Typography } from "antd";
 import React, {
   startTransition,
   useCallback,
   useEffect,
   useState,
-} from 'react';
-import TotalRevenue from './total-revenue';
-import TotalCustomer from './total-customer';
-import { statisticOverview } from '../../../services/dashboard.service';
-import CountUp from 'react-countup';
-import { formatMoney } from '../../../common/money';
-import DatePickerCustomSelect from '../../../components/custom-picker';
+} from "react";
+import { statisticOverview } from "../../../services/dashboard.service";
+import CountUp from "react-countup";
+import { formatMoney } from "../../../common/money";
+import DatePickerCustomSelect from "../../../components/custom-picker";
 
-const formatter: StatisticProps['formatter'] = (value) => (
-  <CountUp end={Number(value)} formattingFn={(v) => formatMoney(v) || '0'} />
+const formatter: StatisticProps["formatter"] = (value) => (
+  <CountUp
+    end={Number(value)}
+    formattingFn={(v) => `${formatMoney(v)}đ` || "0"}
+  />
 );
 type OverviewContainerProps = {
   totalRevenue?: { totalAmount: number; actualAmount: number };
@@ -77,7 +78,7 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
       loading={loading}
       extra={
         <DatePickerCustomSelect
-          defaultPicker='month'
+          defaultPicker="month"
           onChangeTime={(s, e) =>
             fetch({
               from: s,
@@ -86,7 +87,8 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
           }
         />
       }
-      title={<Typography.Title level={3}>Tổng quan</Typography.Title>}>
+      title={<Typography.Title level={3}>Tổng quan</Typography.Title>}
+    >
       <Row gutter={[24, 24]}>
         <Col xs={24} sm={24} md={8}>
           <Card>
@@ -114,7 +116,7 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
             />
           </Card>
         </Col>
-        <Col xs={24} sm={24} md={8}>
+        {/* <Col xs={24} sm={24} md={8}>
           <Card>
             <Statistic
               title={
@@ -152,6 +154,18 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
             />
           </Card>
         </Col>
+        <Col xs={24} sm={24} md={8}>
+          <Card>
+            <Statistic
+              title={
+                <Typography.Title level={4}>
+                  Số lượng khách hàng
+                </Typography.Title>
+              }
+              value={totalNewCustomer}
+            />
+          </Card>
+        </Col> */}
         <Col xs={24} sm={24} md={8}>
           <Card>
             <Statistic

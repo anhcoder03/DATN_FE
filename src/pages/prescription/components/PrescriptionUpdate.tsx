@@ -279,7 +279,7 @@ const PrescriptionUpdate = () => {
   return (
     <Layout>
       <div className="relative h-full">
-        <Heading>Chỉnh sửa kê đơn</Heading>
+        <Heading>Chỉnh sửa kê đơn: {id}</Heading>
         <form
           className="w-full"
           onSubmit={handleSubmit(handleUpdatePrescription)}

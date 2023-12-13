@@ -394,14 +394,14 @@ const PrescriptionDetail = () => {
                 {prescription?.data?._id}
               </span>
               <Field>
-                <Label className="font-semibold" htmlFor="note">
-                  Lời dặn
+                <Label className="font-semibold" htmlFor="cancel_reason">
+                  Lý do
                 </Label>
                 <Textarea
                   control={control}
                   className="outline-none input-primary"
                   name="cancel_reason"
-                  placeholder="Nhập lời dặn cho khách hàng"
+                  placeholder="Nhập lý do"
                   value={data?.cancel_reason}
                   onChange={(val: any) => {
                     handleChangeInput(val);
