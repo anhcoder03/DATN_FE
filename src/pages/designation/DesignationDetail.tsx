@@ -70,7 +70,6 @@ const DesignationDetail = () => {
 
   const handleShowModel = (data: any) => {
     setOpenModal(true);
-    setLoading(true);
     setOneDesignation(data);
   };
 
@@ -125,9 +124,9 @@ const DesignationDetail = () => {
     <Layout>
       <div className="relative-h-full">
         <Heading>Xem chi tiết đơn dịch vụ: {id}</Heading>
-        <form className="flex  justify-between gap-x-10 w-full pb-16">
+        <form className="flex justify-between w-full pb-16 gap-x-10">
           <div className="flex flex-col gap-y-5 w-[60%]">
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>
                 Thông tin chung
                 <LabelStatusDesignationDetail type={designation?.status} />
@@ -242,7 +241,7 @@ const DesignationDetail = () => {
                 </Field>
               </Row>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>Thông tin dịch vụ</Heading>
               <table className="w-full custom-table">
                 <thead className="bg-[#f4f6f8] text-sm">
@@ -261,7 +260,7 @@ const DesignationDetail = () => {
                 </tbody>
               </table>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>Kết quả và kết luận</Heading>
               <Field>
                 <Label htmlFor="mainResults">Nội dung kết quả</Label>
@@ -275,7 +274,7 @@ const DesignationDetail = () => {
                 ></Textarea>
               </Field>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>Hình ảnh và tệp kết quả</Heading>
               <Label htmlFor="mainResults">Chèn link</Label>
               <tbody style={{ lineHeight: 2 }}>
@@ -301,7 +300,7 @@ const DesignationDetail = () => {
             </div>
           </div>
           <div className="flex flex-col gap-y-5 w-[40%]">
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>Thông tin khách hàng</Heading>
               <Row>
                 <Field className={"only-view"}>
@@ -321,10 +320,10 @@ const DesignationDetail = () => {
                 </Field>
               </Row>
             </div>
-            <div className="p-5 bg-white w-full rounded-xl">
+            <div className="w-full p-5 bg-white rounded-xl">
               <Heading>
                 Thông tin thanh toán
-                <div className="inline-flex gap-x-3 items-center ml-10 ">
+                <div className="inline-flex items-center ml-10 gap-x-3 ">
                   {/* {PriceUtils.format(
                       designation?.service_examination?.price
                     ) || "---"} */}

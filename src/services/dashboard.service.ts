@@ -1,4 +1,4 @@
-import Http from '../helpers/http';
+import Http from "../helpers/http";
 
 const http = new Http();
 
@@ -10,31 +10,35 @@ type Params = {
 export const statisticAll = async (params?: Params) => {
   try {
     const promises = [
-      { name: 'statisticTotalRevenue', api: statisticTotalRevenue(params) },
+      { name: "statisticTotalRevenue", api: statisticTotalRevenue(params) },
       {
-        name: 'statisticCancellationRate',
+        name: "statisticCancellationRate",
         api: statisticCancellationRate(params),
       },
-      { name: 'statisticTotalCustomer', api: statisticTotalCustomer(params) },
+      { name: "statisticTotalCustomer", api: statisticTotalCustomer(params) },
       {
-        name: 'statisticTotalNewCustomer',
+        name: "statisticTotalNewCustomer",
         api: statisticTotalNewCustomer(params),
       },
       {
-        name: 'statisticTotalRevenueOrder',
+        name: "statisticTotalRevenueOrder",
         api: statisticTotalRevenueOrder(params),
       },
       {
-        name: 'statisticTotalExaminationSlip',
+        name: "statisticTotalExaminationSlip",
         api: statisticTotalExaminationSlip(params),
       },
       {
-        name: 'statisticTotalUser',
+        name: "statisticTotalUser",
         api: statisticTotalUser(params),
       },
       {
-        name: 'statisticTotalPrescription',
+        name: "statisticTotalPrescription",
         api: statisticTotalPrescription(params),
+      },
+      {
+        name: "statisticServiceUsage",
+        api: statisticServiceUsage(params),
       },
     ];
     const apiResults = {};
@@ -47,7 +51,7 @@ export const statisticAll = async (params?: Params) => {
         } catch (error) {
           console.log(error);
         }
-      }),
+      })
     );
 
     // Gộp kết quả từ mỗi cuộc gọi API vào object apiResults
@@ -57,28 +61,28 @@ export const statisticAll = async (params?: Params) => {
 
     return apiResults as any;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
   }
 };
 
 export const statisticOverview = async (params?: Params) => {
   try {
     const promises = [
-      { name: 'statisticTotalRevenue', api: statisticTotalRevenue(params) },
+      { name: "statisticTotalRevenue", api: statisticTotalRevenue(params) },
       {
-        name: 'statisticTotalNewCustomer',
+        name: "statisticTotalNewCustomer",
         api: statisticTotalNewCustomer(params),
       },
       {
-        name: 'statisticTotalRevenueOrder',
+        name: "statisticTotalRevenueOrder",
         api: statisticTotalRevenueOrder(params),
       },
       {
-        name: 'statisticTotalExaminationSlip',
+        name: "statisticTotalExaminationSlip",
         api: statisticTotalExaminationSlip(params),
       },
       {
-        name: 'statisticTotalPrescription',
+        name: "statisticTotalPrescription",
         api: statisticTotalPrescription(params),
       },
     ];
@@ -92,7 +96,7 @@ export const statisticOverview = async (params?: Params) => {
         } catch (error) {
           console.log(error);
         }
-      }),
+      })
     );
 
     // Gộp kết quả từ mỗi cuộc gọi API vào object apiResults
@@ -102,7 +106,7 @@ export const statisticOverview = async (params?: Params) => {
 
     return apiResults as any;
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error("Error fetching data:", error);
   }
 };
 
@@ -124,7 +128,7 @@ export const statisticCancellationRate = async (params?: Params) => {
 };
 export const statisticTotalCustomer = async (params?: Params) => {
   try {
-    const r = await http.get('statisticTotalCustomer', params);
+    const r = await http.get("statisticTotalCustomer", params);
     return r;
   } catch (error) {
     return error;
@@ -169,6 +173,15 @@ export const statisticTotalRevenueOrder = async (params?: Params) => {
 export const statisticTotalPrescription = async (params?: Params) => {
   try {
     const r = await http.get(`/statisticTotalPrescription`, params);
+    return r;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const statisticServiceUsage = async (params?: Params) => {
+  try {
+    const r = await http.get(`/statisticServiceUsage`, params);
     return r;
   } catch (error) {
     return error;

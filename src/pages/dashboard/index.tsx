@@ -1,14 +1,17 @@
-import { Col, Row } from 'antd';
-import moment from 'moment';
-import { startTransition, useCallback, useEffect, useState } from 'react';
-import { Layout } from '../../components/layout';
-import { statisticAll } from '../../services/dashboard.service';
-import CancellationRateContainer from './component/cancellation-rate';
-import OverviewContainer from './component/overview';
-import { Wrapper } from './component/style';
-import TotalUser from './component/total-user';
+import { Col, Row } from "antd";
+import moment from "moment";
+import { startTransition, useCallback, useEffect, useState } from "react";
+import { Layout } from "../../components/layout";
+import { statisticAll } from "../../services/dashboard.service";
+import CancellationRateContainer from "./component/cancellation-rate";
+import OverviewContainer from "./component/overview";
+import { Wrapper } from "./component/style";
+import TotalUser from "./component/total-user";
+import TotalOrderRevenue from "./component/total-order-revenue";
+import TotalOrderByPrescription from "./component/total-order-by-prescription";
+import StatisticServiceUsage from "./component/statistic-service-usage";
 
-type DashboardPageProps = {};
+type DashboardPageProps = object;
 
 const DashboardPage: React.FC<DashboardPageProps> = () => {
   const [cancellationRate, setCancellationRate] = useState<
@@ -20,11 +23,14 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
     totalAmount: number;
     actualAmount: number;
   }>();
-  const [totalRevenueOrder, setTotalRevenueOrder] = useState<number>();
-  const [totalRevenuePrescription, setTotalRevenuePrescription] =
-    useState<number>();
+  const [totalRevenueOrder, setTotalRevenueOrder] = useState<any[]>([]);
+  const [statisticServiceUsage, setStatisticServiceUsage] = useState<any[]>([]);
+
+  const [totalRevenuePrescription, setTotalRevenuePrescription] = useState<
+    any[]
+  >([]);
   const [totalUser, setTotalUser] = useState<{ name: string; value: number }[]>(
-    [],
+    []
   );
   const fetch = useCallback(({ from, to }: { from: string; to: string }) => {
     statisticAll({ from, to })
@@ -34,9 +40,10 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
           setTotalNewCustomer(r?.statisticTotalNewCustomer?.value);
           setTotalExaminationSlip(r?.statisticTotalExaminationSlip?.value);
           setTotalRevenue(r?.statisticTotalRevenue?.value);
-          setTotalRevenueOrder(r?.statisticTotalRevenueOrder?.value);
+          setTotalRevenueOrder(r?.statisticTotalRevenueOrder);
           setTotalUser(r?.statisticTotalUser?.value);
-          setTotalRevenuePrescription(r?.statisticTotalPrescription?.value);
+          setTotalRevenuePrescription(r?.statisticTotalPrescription);
+          setStatisticServiceUsage(r?.statisticServiceUsage);
         });
       })
       .catch((err) => {
@@ -46,8 +53,8 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
 
   useEffect(() => {
     fetch({
-      from: moment().startOf('month').utc().format(),
-      to: moment().endOf('month').utc().format(),
+      from: moment().startOf("month").utc().format(),
+      to: moment().endOf("month").utc().format(),
     });
   }, [fetch]);
 
@@ -57,9 +64,7 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
         <OverviewContainer
           totalRevenue={totalRevenue}
           totalNewCustomer={totalNewCustomer}
-          totalRevenueOrder={totalRevenueOrder}
           totalExaminationSlip={totalExaminationSlip}
-          totalRevenuePrescription={totalRevenuePrescription}
         />
         <Row gutter={14}>
           <Col span={12}>
@@ -67,6 +72,21 @@ const DashboardPage: React.FC<DashboardPageProps> = () => {
           </Col>
           <Col span={12}>
             <TotalUser data={totalUser} />
+          </Col>
+        </Row>
+        <Row gutter={[10, 10]}>
+          <Col span={24} xs={24} sm={24} md={24}>
+            <TotalOrderRevenue totalRevenueOrder={totalRevenueOrder} />
+          </Col>
+          <Col span={24} xs={24} sm={24} md={24}>
+            <TotalOrderByPrescription
+              datarderByPrescription={totalRevenuePrescription}
+            />
+          </Col>
+          <Col span={24} xs={24} sm={24} md={24}>
+            <StatisticServiceUsage
+              dataStatisticServiceUsage={statisticServiceUsage}
+            />
           </Col>
         </Row>
       </Wrapper>

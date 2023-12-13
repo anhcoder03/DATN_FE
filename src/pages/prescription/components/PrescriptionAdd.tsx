@@ -131,7 +131,7 @@ const PrescriptionAdd = () => {
   };
 
   useEffect(() => {
-    // document.title = "Danh sách sản phẩm";
+    document.title = "Thêm mới kê đơn";
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
     navigate(`?${urlParams}`);
