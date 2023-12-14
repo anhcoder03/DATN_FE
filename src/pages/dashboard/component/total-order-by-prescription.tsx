@@ -125,6 +125,13 @@ const TotalOrderByPrescription: React.FC<TotalOrderByPrescriptionProps> = ({
           },
         },
       },
+      dataZoom: [
+        {
+          type: "inside",
+          xAxisIndex: 0,
+          filterMode: "none",
+        },
+      ],
       media: [
         {
           query: {

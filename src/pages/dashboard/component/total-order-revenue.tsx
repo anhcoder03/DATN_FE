@@ -126,6 +126,13 @@ const TotalOrderRevenue: React.FC<TotalOrderRevenueProps> = ({
           },
         },
       },
+      dataZoom: [
+        {
+          type: "inside",
+          xAxisIndex: 0,
+          filterMode: "none",
+        },
+      ],
       media: [
         {
           query: {
