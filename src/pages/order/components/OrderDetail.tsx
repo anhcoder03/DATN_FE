@@ -42,13 +42,6 @@ const OrderDetail = () => {
     }).format(number);
   }
 
-  const totalPrice = order?.medicines?.reduce(
-    (accumulator: any, currentValue: any) => {
-      return accumulator + currentValue.price;
-    },
-    0
-  );
-  PAYMENT_METHOD
   return (
     <Layout>
       <div className="relative h-full">
@@ -59,7 +52,7 @@ const OrderDetail = () => {
             <Row>
               <Field className={"only-view"}>
                 <Label className="font-semibold" htmlFor="phone">
-                  <span className="star-field">*</span>
+                   
                   Khách hàng
                 </Label>
                 <Input
@@ -71,19 +64,8 @@ const OrderDetail = () => {
               </Field>
               <Field>
                 <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
+                   
                   Mã khách hàng
-                </Label>
-                <Input
-                  control={control}
-                  className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
-                />
-              </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Số điện thoại
                 </Label>
                 <Input
                   control={control}
@@ -93,44 +75,32 @@ const OrderDetail = () => {
               </Field>
             </Row>
           </div>
-
           <div className="w-1/2 p-4 bg-white rounded-lg ">
             <Heading>Thông tin thanh toán</Heading>
             <Row >
               <Field className={"only-view"}>
-                <Label className="font-semibold" htmlFor="phone">
-                  <span className="star-field w-80">*</span>
+                <Label className="font-semibold " htmlFor="phone">
                   Trạng thái thanh toán
                 </Label>
+                <span></span>
                 <Input
                   control={control}
                   placeholder=""
-                  className="!border-transparent font-semibold text-black "
-                  value={order?.customerId?.name}
+                  className="!border-transparent  font-semibold text-black  text-sm "
+                  value={order?.paymentMethod == 1 ? "Chuyển khoản" : "Tiền mặt" }
                 ></Input>
               </Field>
               <Field>
                 <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
                   Tổng tiền đơn hàng
                 </Label>
                 <Input
                   control={control}
                   className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
+                  value={formatCurrency(order?.totalAmount)}
                 />
               </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Số điện thoại
-                </Label>
-                <Input
-                  control={control}
-                  className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
-                />
-              </Field>
+              
             </Row>
           </div>
         </div>
