@@ -129,6 +129,14 @@ const StatisticServiceUsage: React.FC<StatisticServiceUsageProps> = ({
             data: newData?.map((i) => (i && i[index].value) ?? 0) ?? [],
           })
         ) ?? [],
+      dataZoom: [
+        {
+          type: "inside",
+          xAxisIndex: 0,
+          filterMode: "none",
+        },
+      ],
+
       media: [
         {
           query: {
