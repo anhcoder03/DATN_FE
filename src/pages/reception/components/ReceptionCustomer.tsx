@@ -204,7 +204,7 @@ const ReceptionCustomer = () => {
       console.log(error);
     }
   };
-  
+
   const handleUpdate = (data: any) => {
     service(data?.data?._id)
     setOpenModal(true);
@@ -369,18 +369,17 @@ const ReceptionCustomer = () => {
   };
 
   const onOk = () => {
-    if (reception?.type == "waiting" && services?.length > 0) {
+    if (reception?.type === "waiting" && services?.length > 0) {
       handleChangeStatus(reception?.type);
       setOpenModal(false);
       return;
-    }else {
-      toast.warning("Không được để trống chỉ định dịch vụ !")
-      setOpenModal(false);
-    }
-    if (reception?.type == "cancel") {
+    } else if (reception?.type === "cancel") {
       handleChangeStatus(reception?.type);
       setOpenModal(false);
       return;
+    } else {
+      toast.warning("Không được để trống chỉ định dịch vụ !");
+      setOpenModal(false);
     }
   };
 
