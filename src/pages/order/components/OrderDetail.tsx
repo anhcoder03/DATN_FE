@@ -8,6 +8,7 @@ import { Field } from "../../../components/field";
 import { Label } from "../../../components/label";
 import { Input } from "../../../components/input";
 import { useForm } from "react-hook-form";
+import { PAYMENT_METHOD } from "../../../constants/define";
 
 type Props = {};
 
@@ -47,7 +48,7 @@ const OrderDetail = () => {
     },
     0
   );
-  
+  PAYMENT_METHOD
   return (
     <Layout>
       <div className="relative h-full">
@@ -94,40 +95,29 @@ const OrderDetail = () => {
           </div>
 
           <div className="w-1/2 p-4 bg-white rounded-lg ">
-            <Heading>Thông tin khách hàng</Heading>
-            <Row>
+            <Heading>Thông tin thanh toán</Heading>
+            <Row >
               <Field className={"only-view"}>
                 <Label className="font-semibold" htmlFor="phone">
-                  <span className="star-field">*</span>
-                  Khách hàng
+                  <span className="star-field w-80">*</span>
+                  Trạng thái thanh toán
                 </Label>
                 <Input
                   control={control}
                   placeholder=""
                   className="!border-transparent font-semibold text-black "
-                  value={order?.customerId?.name}
+                  value={order?.paymentMethod == 1 ? "Chuyển khoản" : "Tiền mặt" }
                 ></Input>
               </Field>
               <Field>
                 <Label className="font-semibold" htmlFor="_id">
                   <span className="star-field">*</span>
-                  Mã khách hàng
+                  Tổng tiền đơn hàng
                 </Label>
                 <Input
                   control={control}
                   className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
-                />
-              </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Số điện thoại
-                </Label>
-                <Input
-                  control={control}
-                  className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
+                  value={formatCurrency(order?.totalAmount)}
                 />
               </Field>
             </Row>
@@ -137,15 +127,18 @@ const OrderDetail = () => {
           <Heading>Sản Phẩm</Heading>
           <table className="w-full custom-table">
             <thead className="bg-[#f4f6f8] text-sm">
+              <th style={{ width: "5%" }}>STT</th>
               <th style={{ width: "20%" }}>Tên thuốc</th>
-              <th style={{ width: "20" }}>Số lượng</th>
+              <th style={{ width: "10%" }}>Ảnh</th>
+              <th style={{ width: "10%" }}>Số lượng</th>
               <th style={{ width: "20%" }}>Đơn vị bán</th>
               <th style={{ width: "20%" }}>Thành tiền</th>
               <th style={{ width: "20%" }}>Ghi chú</th>
             </thead>
             <tbody>
-              {order?.medicines?.map((item: any) => (
+              {order?.medicines?.map((item: any , index : any) => (
                 <tr className="hover:bg-transparent">
+                  <td>{index+1}</td>
                   <td>
                     <Input
                       control={control}
@@ -153,6 +146,9 @@ const OrderDetail = () => {
                       value={item?.medicineId?.name}
                       className="border font-semibold text-black rounded-md px-3 mb-1"
                     />
+                  </td>
+                  <td>
+                    <img src={item?.medicineId?.image} alt="" />
                   </td>
                   <td>
                     <Input
@@ -189,11 +185,6 @@ const OrderDetail = () => {
               ))}
             </tbody>
           </table>
-          <div className=" font-bold mt-4 ml-5">
-            <span>Tổng tiền hàng : {formatCurrency(totalPrice ?? 0)}</span>
-            <br />
-            <span>Thành tiền: {formatCurrency(totalPrice ?? 0)}</span>
-          </div>
         </div>
       </div>
     </Layout>
