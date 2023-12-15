@@ -106,7 +106,7 @@ const OrderDetail = () => {
                   control={control}
                   placeholder=""
                   className="!border-transparent font-semibold text-black "
-                  value={order?.customerId?.name}
+                  value={order?.paymentMethod == 1 ? "Chuyển khoản" : "Tiền mặt" }
                 ></Input>
               </Field>
               <Field>
@@ -117,18 +117,7 @@ const OrderDetail = () => {
                 <Input
                   control={control}
                   className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
-                />
-              </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Số điện thoại
-                </Label>
-                <Input
-                  control={control}
-                  className="border-none font-semibold text-black"
-                  value={order?.customerId?._id}
+                  value={formatCurrency(order?.totalAmount)}
                 />
               </Field>
             </Row>

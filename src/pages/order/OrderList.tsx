@@ -18,7 +18,6 @@ const headings = [
   "Khách hàng",
   "Tổng tiền",
   "Trạng thái",
-  "Thao tác",
 ];
 
 const optionsPagination = [
