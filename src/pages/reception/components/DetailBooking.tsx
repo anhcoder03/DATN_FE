@@ -199,7 +199,7 @@ const DetailBooking = () => {
           </Row>
           <Row className="grid-cols-2 ">
             <Field>
-              <Label htmlFor="staffId">Nhân viên tiếp đón</Label>
+              <Label htmlFor="staffId"><span className="star-field">*</span>Nhân viên tiếp đón</Label>
               <Input
                 control={control}
                 name="phone"

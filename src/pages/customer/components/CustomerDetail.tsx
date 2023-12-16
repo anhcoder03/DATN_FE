@@ -18,7 +18,6 @@ const CustomerDetail = () => {
   const [data, setData] = useState<any>();
   const [date, setDate] = useState<any>();
   const [historyExams, setHistoryExams] = useState<any[]>([]);
-  console.log(historyExams);
   const { id } = useParams();
   useEffect(() => {
     loadData(id);
@@ -128,7 +127,7 @@ const CustomerDetail = () => {
 
               <Field>
                 <Label htmlFor="email">
-                  <span className="star-field">*</span>
+                <span className="star-field">*</span>
                   Email
                 </Label>
                 <Input
@@ -140,7 +139,7 @@ const CustomerDetail = () => {
             </Row>
             <Row>
               <Field>
-                <Label htmlFor="province">Tỉnh/ Thành phố</Label>
+                <Label htmlFor="province"><span className="star-field">*</span>Tỉnh/ Thành phố</Label>
                 <Input
                   control={control}
                   name="province"
@@ -148,7 +147,7 @@ const CustomerDetail = () => {
                 />
               </Field>
               <Field>
-                <Label htmlFor="district">Quận/Huyện</Label>
+                <Label htmlFor="district"><span className="star-field">*</span>Quận/Huyện</Label>
                 <Input
                   control={control}
                   name="district"
@@ -156,7 +155,7 @@ const CustomerDetail = () => {
                 />
               </Field>
               <Field>
-                <Label htmlFor="commune">Xã/Phường</Label>
+                <Label htmlFor="commune"><span className="star-field">*</span>Xã/Phường</Label>
                 <Input
                   control={control}
                   name="commune"

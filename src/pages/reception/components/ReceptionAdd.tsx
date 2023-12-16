@@ -256,7 +256,7 @@ const ReceptionAdd = () => {
               </Field>
               <Field>
                 <Label className="font-semibold" htmlFor="staffId">
-                  Nhân viên tiếp đón
+                <span className="star-field">*</span>Nhân viên tiếp đón
                 </Label>
                 <Select
                   placeholder="Chọn nhân viên tiếp đón"
