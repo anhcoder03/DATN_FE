@@ -1,45 +1,35 @@
-import { Card, Col, Row, Statistic, StatisticProps, Typography } from "antd";
+import { Card, Col, Row, Statistic, StatisticProps, Typography } from 'antd';
 import React, {
   startTransition,
   useCallback,
   useEffect,
   useState,
-} from "react";
-import { statisticOverview } from "../../../services/dashboard.service";
-import CountUp from "react-countup";
-import { formatMoney } from "../../../common/money";
-import DatePickerCustomSelect from "../../../components/custom-picker";
+} from 'react';
+import CountUp from 'react-countup';
+import { formatMoney } from '../../../common/money';
+import DatePickerCustomSelect from '../../../components/custom-picker';
+import { statisticOverview } from '../../../services/dashboard.service';
 
-const formatter: StatisticProps["formatter"] = (value) => (
+const formatter: StatisticProps['formatter'] = (value) => (
   <CountUp
     end={Number(value)}
-    formattingFn={(v) => `${formatMoney(v)}đ` || "0"}
+    formattingFn={(v) => `${formatMoney(v)}đ` || '0'}
   />
 );
 type OverviewContainerProps = {
   totalRevenue?: { totalAmount: number; actualAmount: number };
   totalNewCustomer?: number;
-  totalExaminationSlip?: number;
-  totalRevenueOrder?: number;
-  totalRevenuePrescription?: number;
 };
 
 const OverviewContainer: React.FC<OverviewContainerProps> = ({
   totalRevenue: revenuePrev,
   totalNewCustomer: newCustomerPrev,
-  totalExaminationSlip: examinationPrev,
-  totalRevenueOrder: revenueOrderPrev,
-  totalRevenuePrescription: revenuePrescription,
 }) => {
-  const [totalExaminationSlip, setTotalExaminationSlip] = useState<number>();
   const [totalNewCustomer, setTotalNewCustomer] = useState<number>();
   const [totalRevenue, setTotalRevenue] = useState<{
     totalAmount: number;
     actualAmount: number;
   }>();
-  const [totalRevenueOrder, setTotalRevenueOrder] = useState<number>();
-  const [totalRevenuePrescription, setTotalRevenuePrescription] =
-    useState<number>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetch = useCallback(({ from, to }: { from: string; to: string }) => {
@@ -48,10 +38,7 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
       .then((r) => {
         startTransition(() => {
           setTotalNewCustomer(r?.statisticTotalNewCustomer?.value);
-          setTotalExaminationSlip(r?.statisticTotalExaminationSlip?.value);
           setTotalRevenue(r?.statisticTotalRevenue?.value);
-          setTotalRevenueOrder(r?.statisticTotalRevenueOrder?.value);
-          setTotalRevenuePrescription(r?.statisticTotalPrescription?.value);
         });
       })
       .catch((err) => {
@@ -61,24 +48,15 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
   }, []);
 
   useEffect(() => {
-    setTotalExaminationSlip(examinationPrev);
     setTotalNewCustomer(newCustomerPrev);
     setTotalRevenue(revenuePrev);
-    setTotalRevenueOrder(revenueOrderPrev);
-    setTotalRevenuePrescription(revenuePrescription);
-  }, [
-    examinationPrev,
-    newCustomerPrev,
-    revenueOrderPrev,
-    revenuePrescription,
-    revenuePrev,
-  ]);
+  }, [newCustomerPrev, revenuePrev]);
   return (
     <Card
       loading={loading}
       extra={
         <DatePickerCustomSelect
-          defaultPicker="month"
+          defaultPicker='month'
           onChangeTime={(s, e) =>
             fetch({
               from: s,
@@ -87,18 +65,17 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
           }
         />
       }
-      title={<Typography.Title level={3}>Tổng quan</Typography.Title>}
-    >
+      title={<Typography.Title level={3}>Tổng quan</Typography.Title>}>
       <Row gutter={[24, 24]}>
         <Col xs={24} sm={24} md={8}>
           <Card>
             <Statistic
               title={
                 <Typography.Title level={4}>
-                  Doanh thu dự kiến (VNĐ)
+                  Doanh thu khám dự kiến (VNĐ)
                 </Typography.Title>
               }
-              value={totalRevenue?.totalAmount}
+              value={totalRevenue?.totalAmount ?? 0}
               formatter={formatter}
             />
           </Card>
@@ -108,7 +85,7 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
             <Statistic
               title={
                 <Typography.Title level={4}>
-                  Doanh thu thực tế (VNĐ)
+                  Doanh thu khám thực tế (VNĐ)
                 </Typography.Title>
               }
               value={totalRevenue?.actualAmount}
@@ -174,7 +151,7 @@ const OverviewContainer: React.FC<OverviewContainerProps> = ({
                   Số lượng khách hàng
                 </Typography.Title>
               }
-              value={totalNewCustomer}
+              value={totalNewCustomer ?? 0}
             />
           </Card>
         </Col>
