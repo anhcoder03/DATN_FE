@@ -1,62 +1,44 @@
-import firebase from "firebase/app";
-import "firebase/messaging";
+import { initializeApp } from "@firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
 import {
   createNotifyToken,
-  getAllNotifyToken,
+  getOneNotifyToken,
 } from "../services/notifyToken.service";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCXvOQf6nsQr42mwK_1bzABTcoJ-65dCOs",
-  authDomain: "medipro-fpoly.firebaseapp.com",
-  projectId: "medipro-fpoly",
-  storageBucket: "medipro-fpoly.appspot.com",
-  messagingSenderId: "576687108742",
-  appId: "1:576687108742:web:f0d29f3834ded1f8385707",
-  measurementId: "G-D443NCRH2R",
+  apiKey: "AIzaSyByC1PeyYFp9egNMgdrMZ4--mNAEsAQclU",
+  authDomain: "fpoly-medipro.firebaseapp.com",
+  projectId: "fpoly-medipro",
+  storageBucket: "fpoly-medipro.appspot.com",
+  messagingSenderId: "617861732796",
+  appId: "1:617861732796:web:f329bf742b95ff98d2f3b9",
+  measurementId: "G-3EFC71TGQV",
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-} else {
-  firebase.app(); // if already initialized, use that one
-}
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-let messaging: firebase.messaging.Messaging | null = null;
-
-if (typeof window !== "undefined" && firebase.messaging.isSupported()) {
-  messaging = firebase.messaging();
-}
+// Initialize Firebase Cloud Messaging and get a reference to the service
+const messaging = getMessaging(app);
 
 export const getMessagingToken = async () => {
-  let currentToken = "";
-  if (!messaging) return currentToken;
-
   try {
-    currentToken = await messaging.getToken({
+    const currentToken = await getToken(messaging, {
       vapidKey:
-        "BKMuGA7Z7GP2PV4Bh2AOQixlIsPScFXer7TSIsXb-cXZjxUbQAiQZH2Aw0iTDB234yFakgB8iKob6O8cE99DoBs",
+        "BMzM9oiKrAdybnTW_y0u9Edy5pJgEyth-MGRkRFj3td_bMsDc2JZwtkoTnleFQezcsOnpTfDEKEIKRD0JFzOD38",
     });
-    const registrationTokens = await getAllNotifyToken();
 
-    if (
-      !registrationTokens ||
-      (registrationTokens && !registrationTokens.includes(currentToken))
-    ) {
-      await createNotifyToken({ notifyToken: currentToken });
+    if (currentToken) {
+      const notifyToken = await getOneNotifyToken(currentToken);
+      if (!notifyToken) {
+        await createNotifyToken({ notifyToken: currentToken });
+      }
+    } else {
+      console.log(
+        "No registration token available. Request permission to generate one."
+      );
     }
-
-    console.log("FCM registration token", currentToken);
   } catch (error) {
-    console.error("An error occurred while retrieving token. ", error);
+    console.log("ERROR while retrieving token: ", error);
   }
-
-  return currentToken;
 };
-
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    if (!messaging) return;
-    messaging.onMessage((payload: any) => {
-      resolve(payload);
-    });
-  });

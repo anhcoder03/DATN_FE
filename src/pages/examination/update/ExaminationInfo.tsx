@@ -85,7 +85,7 @@ const ExaminationInfo = (props: any) => {
       toast.success("Cập nhật phiếu khám thành công!");
       navigate(`/examination/${data?._id}/view`);
     } else {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error("Đã có lỗi xảy ra!!!");
     }
   };
 

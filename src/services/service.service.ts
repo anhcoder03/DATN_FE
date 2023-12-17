@@ -31,8 +31,6 @@ export const updateService = async (data: any) => {
     const response = await http.update(`/services/${data?._id}`, data);
     return response;
   } catch (error) {
-    console.log("errorr", error);
-
     return error;
   }
 };

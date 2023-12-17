@@ -45,7 +45,6 @@ const OrderList = () => {
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
-  console.log(orders, "ordersĐ");
 
   const handleGetAllOrder = async () => {
     try {

@@ -167,9 +167,7 @@ const Examination_view = () => {
       currency: "VND",
     }).format(number);
   }
-  console.log("data", data);
-  console.log("services", services);
-  console.log("prescription", prescription);
+
 
   return (
     <div style={{ position: "relative" }}>

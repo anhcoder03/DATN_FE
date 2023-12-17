@@ -127,7 +127,6 @@ const ServiceList = () => {
     setOpenModal(false);
   };
   const gotoDetail = (item: any) => {
-    console.log(item?._id);
     navigate(`/service/${item?._id}`);
   };
   const StatusServicePack = (status: any) => {

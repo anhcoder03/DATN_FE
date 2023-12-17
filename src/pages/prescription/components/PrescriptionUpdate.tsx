@@ -29,10 +29,6 @@ const PrescriptionUpdate = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
   const [products, setProducts] = useState<IMedicine[]>([]);
   const [data, setData] = useState<any>();
-  console.log(
-    "🚀 ~ file: PrescriptionUpdate.tsx:32 ~ PrescriptionUpdate ~ data:",
-    data
-  );
 
   useEffect(() => {
     loadData(id);

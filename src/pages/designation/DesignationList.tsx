@@ -212,7 +212,6 @@ const DesignationList = () => {
 
   const onOk = async () => {
     if (designation?.type == "cancel") {
-      console.log("designation", designation);
       const res = await deleteServiceByExamination(designation?.data?._id);
       if (res?.designation) {
         toast.success("Huỷ dịch vụ thành công!");

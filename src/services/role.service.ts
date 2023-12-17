@@ -31,8 +31,6 @@ export const updateRole = async (data: any) => {
     const response = await http.update(`/role/${data?._id}`, data);
     return response;
   } catch (error) {
-    console.log("errorr", error);
-
     return error;
   }
 };

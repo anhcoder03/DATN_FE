@@ -17,6 +17,7 @@ import { ROLE } from "../../constants/define";
 import ModalLoginOTP, {
   ModalLoginOTPMethods,
 } from "./components/ModalLoginOTP";
+import { socketIO } from "../../App";
 
 type TLogin = {
   email: string;
@@ -56,6 +57,8 @@ const Login = () => {
       ).unwrap();
       setLoading(false);
       toast.success(response?.message);
+      socketIO.emit("authenticate", response.user._id);
+
       if (response?.user?.role.roleNumber === ROLE.ADMIN) {
         return navigate("/dashboard");
       }

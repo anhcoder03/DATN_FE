@@ -29,12 +29,8 @@ export const createPrescription = async (data: any) => {
 export const updatePrescription = async (data: any) => {
   try {
     const response = await http.update(`/prescriptions/${data?._id}`, data);
-    console.log("respon", response, data);
-
     return response;
   } catch (error) {
-    console.log("errorr", error);
-
     return error;
   }
 };

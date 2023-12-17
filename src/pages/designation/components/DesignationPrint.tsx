@@ -119,8 +119,6 @@ const DesignationPrint = ({ componentRef, dataPrint }: any) => {
     }
   };
 
-  console.log('dataPrint', dataPrint)
-
   return (
     <div style={{ position: "relative" }}>
       <div className="print-content reception-print" ref={componentRef}>
@@ -194,14 +192,12 @@ const DesignationPrint = ({ componentRef, dataPrint }: any) => {
             </div>
             <div>
               <span>Địa chỉ: </span>
-              <span className="font-semibold">
-                {getFullAddress()}
-              </span>
+              <span className="font-semibold">{getFullAddress()}</span>
             </div>
           </div>
           <div>
             <h1 className="uppercase my-3 font-semibold text-sm">
-                THÔNG TIN DỊCH VỤ
+              THÔNG TIN DỊCH VỤ
             </h1>
             <table className="border border-black">
               <thead>
@@ -212,32 +208,35 @@ const DesignationPrint = ({ componentRef, dataPrint }: any) => {
               </thead>
               <tbody>
                 <tr className="border border-black">
-                    <td>{dataPrint?.service_examination?.name}</td>
-                    <td>{PriceUtils.format(dataPrint?.service_examination?.price) || "---"}</td>
+                  <td>{dataPrint?.service_examination?.name}</td>
+                  <td>
+                    {PriceUtils.format(dataPrint?.service_examination?.price) ||
+                      "---"}
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-            <div className="text-sm mb-3 mt-5">
-                <div>
-                <span>Số tiền viết bằng chữ: </span>
-                <span className="uppercase font-semibold pl-3">
-                    {
-                        readNumberToVietnameseWords(dataPrint?.service_examination?.price) || '---'
-                    }
-                </span>
-                </div>
+          <div className="text-sm mb-3 mt-5">
+            <div>
+              <span>Số tiền viết bằng chữ: </span>
+              <span className="uppercase font-semibold pl-3">
+                {readNumberToVietnameseWords(
+                  dataPrint?.service_examination?.price
+                ) || "---"}
+              </span>
             </div>
-            <div className="text-sm">
-                <h1 className="uppercase mb-3 font-semibold text-sm pt-5">
-                    Thông tin khám bệnh
-                </h1>
-                <div className="pb-5">
-                <span className="pb-2 block">Kết quả và kết luận: </span>
-                <span className="font-medium">{dataPrint?.mainResults}</span>
-                </div>
+          </div>
+          <div className="text-sm">
+            <h1 className="uppercase mb-3 font-semibold text-sm pt-5">
+              Thông tin khám bệnh
+            </h1>
+            <div className="pb-5">
+              <span className="pb-2 block">Kết quả và kết luận: </span>
+              <span className="font-medium">{dataPrint?.mainResults}</span>
             </div>
-            <div className="flex mt-10 my-3 justify-between">
+          </div>
+          <div className="flex mt-10 my-3 justify-between">
             <div className="flex items-end justify-center">
               <h3 className="text-sm font-semibold">Bệnh nhân</h3>
               <p className="text-sm text-center">(Ký, họ tên)</p>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FilterReceptionBook } from "../../../components/filters";
-import { RootState } from "../../../redux/store";
+import { RootState, store } from "../../../redux/store";
 import { useSelector } from "react-redux";
 import {
   UpdateExamination,
@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import IconHand from "../../../assets/images/icon-hand.png";
 import { toast } from "react-toastify";
 import { getAllByName } from "../../../services/role.service";
+import { socketIO } from "../../../App";
+import { setLoadingNotification } from "../../../redux/notification/notificationSlice";
 
 const ReceptionBook = () => {
   const optionsPagination = [
@@ -217,6 +219,7 @@ const ReceptionBook = () => {
       });
       if (res?.examination) {
         toast.success("Huỷ đặt lịch thành công!");
+        socketIO.emit("client_newNotify", "Bạn có thông báo mới");
         setOpenModal(false);
         handleGetExamination();
       } else {
@@ -273,9 +276,9 @@ const ReceptionBook = () => {
         handleDayChange={handleDayChange}
         dataStaffs={dataStaffs}
         handleSearchByStaffId={handleSearchByStaffId}
-        day_booking = {query?.day_booking}
-        query = {query}
-        setQuery = {setQuery}
+        day_booking={query?.day_booking}
+        query={query}
+        setQuery={setQuery}
       ></FilterReceptionBook>
       <Table3
         isLoading={loading}

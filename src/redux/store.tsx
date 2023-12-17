@@ -17,6 +17,7 @@ import { headingWaiting } from "./layout/HeadingWaiting";
 import { headingDone } from "./layout/HeadingDone";
 import { headingCancelling } from "./layout/HeadingCancelling";
 import authSlice from "./auth/authSlice";
+import notificationReducer from "./notification/notificationSlice";
 
 const persistConfig = {
   key: "root",
@@ -39,6 +40,7 @@ const reducer = combineReducers({
   headingWaiting: headingWaiting.reducer,
   headingDone: headingDone.reducer,
   headingCancelling: headingCancelling.reducer,
+  notification: notificationReducer,
   auth: authSlice,
 });
 
