@@ -66,7 +66,7 @@ const CustomerAdd = () => {
     formState: { errors },
   } = useForm<TDataCustomer>({
     resolver: yupResolver<any>(schema),
-    mode: "onChange",
+    mode: "onSubmit",
   });
   const handleCreateCustomer = async (values: TDataCustomer) => {
     const data = { ...values, gender, creator: auth?._id };
@@ -77,9 +77,10 @@ const CustomerAdd = () => {
       toast.success(res?.message);
       navigate("/customer/list");
     } else {
-      if(res?.message?.[0]) {
+      if(res?.message instanceof Array) {
         toast.error(res.message?.[0])
       }else {
+        console.log('siuRes', res)
         toast.error(res.message);
       }
     }

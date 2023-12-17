@@ -126,6 +126,19 @@ const ProductList = () => {
     navigate(`/product/view/${item?._id}`);
   };
 
+  const renderStatus = (status: any) => {
+    if(status == 'work') {
+      return (
+        <span style={{color: '#48A800'}}>Đang hoạt động</span>
+      )
+    }
+    if(status == 'hidden') {
+      return (
+        <span style={{color: '#FD4858'}}>Ngừng hoạt động</span>
+      )
+    }
+  }
+
   return (
     <Layout>
       <Heading>Quản lý danh sách sản phẩm</Heading>
@@ -159,7 +172,7 @@ const ProductList = () => {
                   {moment(item?.dateExpiry).format("DD/MM/YYYY")}
                 </td>
                 <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
-                <td onClick={() => gotoDetail(item)}>{item?.status}</td>
+                <td onClick={() => gotoDetail(item)}>{renderStatus(item?.status)}</td>
                 <td>
                   {auth?.role?.roleNumber == 2 ? null : (
                     <div className="table-action">

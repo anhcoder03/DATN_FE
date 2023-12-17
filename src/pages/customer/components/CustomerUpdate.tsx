@@ -84,7 +84,7 @@ const CustomerUpdate = () => {
       toast.success(res?.message);
       navigate("/customer/list");
     } else {
-      if(res?.message?.[0]) {
+      if(res?.message instanceof Array) {
         toast.error(res.message?.[0])
       }else {
         toast.error(res.message);

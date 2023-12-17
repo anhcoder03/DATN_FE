@@ -86,6 +86,7 @@ const CustommerList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleGenderChange = (selectedOpiton: any) => {
     setQuery({ ...query, _gender: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
@@ -96,9 +97,17 @@ const CustommerList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleDayChange = (date: any) => {
-    setQuery({ ...query, _createdAt: date });
-    urlParams.set("createdAt", date);
+    if(date == undefined) {
+      setQuery({ ...query, _createdAt: "" });
+      urlParams.delete("createdAt");
+      navigate(`?${urlParams}`);
+      return
+    }
+    const dateInUtcPlus7 = moment(date).tz("Asia/Bangkok");
+    setQuery({ ...query, _createdAt: dateInUtcPlus7.format() as any });
+    urlParams.set("createdAt", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
 
@@ -110,6 +119,7 @@ const CustommerList = () => {
     setOpenModal(true);
     setCustomer(data);
   };
+
   const onOk = async () => {
     const res = await deleteCustomer(customer?._id);
     if (res?.customer) {
@@ -121,6 +131,7 @@ const CustommerList = () => {
     }
     setOpenModal(false);
   };
+
   const gotoDetail = (item: any) => {
     navigate(`/customer/${item?._id}`);
   };

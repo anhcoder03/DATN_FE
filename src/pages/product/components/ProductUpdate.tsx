@@ -52,7 +52,7 @@ const ProductUpdate = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<any>();
   const [categories, setCategories] = useState([]);
-  const [status, setStatus] = useState("work");
+  const [status, setStatus] = useState<any>();
   const [loadingBtn, setLoadingBtn] = useState<boolean>(false);
   const {
     control,
@@ -73,9 +73,12 @@ const ProductUpdate = () => {
       reset(res);
       setImage(res?.image);
       setData(res);
+      setStatus(res?.status);
     }
     handleGetProduct();
   }, [id]);
+
+  console.log('status', data)
 
   const handleUpdateProduct = async (values: any) => {
     const cloneValue = {
@@ -84,6 +87,7 @@ const ProductUpdate = () => {
       unit_selling: data?.unit_selling,
       dateOfManufacture: data?.dateOfManufacture,
       dateExpiry: data?.dateExpiry,
+      status: status
     };
     setLoadingBtn(true);
     const res = await updateMedicine({ ...cloneValue, image });
@@ -286,7 +290,7 @@ const ProductUpdate = () => {
                       className="flex items-center h-[34px]"
                       value={"hidden"}
                     >
-                      Ẩn
+                      Ngừng hoạt động
                     </Radio>
                   </div>
                 </Radio.Group>
@@ -309,7 +313,7 @@ const ProductUpdate = () => {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="how_using">Cách dùng</Label>
+                <Label htmlFor="how_using"><span className="star-field">*</span>Cách dùng</Label>
                 <Textarea
                   name="how_using"
                   placeholder="Nhập cách dùng..."
@@ -322,7 +326,7 @@ const ProductUpdate = () => {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="uses">Công dụng</Label>
+                <Label htmlFor="uses"><span className="star-field">*</span>Công dụng</Label>
                 <Textarea
                   name="uses"
                   placeholder="Nhập công dụng..."
