@@ -6,7 +6,6 @@ const App: React.FC = () => {
   const [value, setValue] = useState(1);
 
   const onChange = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
     setValue(e.target.value);
   };
 

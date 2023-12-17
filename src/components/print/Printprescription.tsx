@@ -1,7 +1,7 @@
 import moment from "moment";
 import styled from "styled-components";
 import Logo from "../../assets/logo-icon.png";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 const ReceptionPrint = styled.div`
   /* padding: 50px 100px; */
   background: #fff;
@@ -89,9 +89,9 @@ const ReceptionPrint = styled.div`
   }
 `;
 
-const Printprescription = ({ componentRef, dataPrint , check }: any) => {
+const Printprescription = ({ componentRef, dataPrint, check }: any) => {
   const [dataPrints, setDataPrints] = useState<any>();
-  console.log(dataPrint, "dataPrintSSSS");
+
   useEffect(() => {
     if (check) {
       setDataPrints([dataPrint]);
@@ -101,18 +101,22 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
   }, [dataPrint, check]);
   const getFullAddress = () => {
     const address: any[] = [
-      `${dataPrint?.customerId?.detailedAddress
-        ? `${dataPrint?.customerId?.detailedAddress},`
-        : ""
-      }${dataPrint?.customerId?.commune
-        ? `${dataPrint?.customerId?.commune?.name}, `
-        : ""
-      }${dataPrint?.customerId?.district
-        ? `${dataPrint?.customerId?.district?.name}, `
-        : ""
-      }${dataPrint?.customerId?.province
-        ? `${dataPrint?.customerId?.province?.name}`
-        : ""
+      `${
+        dataPrint?.customerId?.detailedAddress
+          ? `${dataPrint?.customerId?.detailedAddress},`
+          : ""
+      }${
+        dataPrint?.customerId?.commune
+          ? `${dataPrint?.customerId?.commune?.name}, `
+          : ""
+      }${
+        dataPrint?.customerId?.district
+          ? `${dataPrint?.customerId?.district?.name}, `
+          : ""
+      }${
+        dataPrint?.customerId?.province
+          ? `${dataPrint?.customerId?.province?.name}`
+          : ""
       }`,
     ];
 
@@ -211,7 +215,9 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
                 </h1>
                 <div>
                   <span>Triệu chứng: </span>
-                  <span className="font-medium">{data?.medicalExaminationSlipId?.symptom || "---"}</span>
+                  <span className="font-medium">
+                    {data?.medicalExaminationSlipId?.symptom || "---"}
+                  </span>
                 </div>
                 <br />
                 <div>
@@ -246,7 +252,9 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
                 <div>
                   <span>
                     Chuẩn đoán:{" "}
-                    <span className="font-semibold">{data?.medicalExaminationSlipId?.note}</span>
+                    <span className="font-semibold">
+                      {data?.medicalExaminationSlipId?.note}
+                    </span>
                   </span>
                 </div>
                 <div>
@@ -264,15 +272,25 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
                   </span>
                 </div>
                 <div>
-                  <span >
-                    <span style={{ fontStyle: 'italic', fontWeight: "bold" }}>Kê đơn thuốc</span>:{
-                      data?.medicines?.map((med: any, index: any) =>
-                        <div className="mt-2" key={index + 1} >
-                          <h2 style={{ fontWeight: "bold", fontStyle: 'italic' }} className="">{index + 1} / {med?.medicineId?.name}</h2>
-                          <h4 className="mt-1">{med?.dosage + med?.unit_using}/lần - {med?.timesUsePerDay}lần/ngày - {med?.how_using}</h4>
-                        </div>
-                      )
-                    }
+                  <span>
+                    <span style={{ fontStyle: "italic", fontWeight: "bold" }}>
+                      Kê đơn thuốc
+                    </span>
+                    :
+                    {data?.medicines?.map((med: any, index: any) => (
+                      <div className="mt-2" key={index + 1}>
+                        <h2
+                          style={{ fontWeight: "bold", fontStyle: "italic" }}
+                          className=""
+                        >
+                          {index + 1} / {med?.medicineId?.name}
+                        </h2>
+                        <h4 className="mt-1">
+                          {med?.dosage + med?.unit_using}/lần -{" "}
+                          {med?.timesUsePerDay}lần/ngày - {med?.how_using}
+                        </h4>
+                      </div>
+                    ))}
                     {/* <span className="font-semibold">
                       {data?.advice || "---"}
                     </span> */}
@@ -281,13 +299,22 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
               </div>
               <div className="flex mt-10 my-3 justify-center">
                 <div>
-                  <h3 className="text-sm font-semibold ml-3">Ký xác nhận bác sĩ</h3>
+                  <h3 className="text-sm font-semibold ml-3">
+                    Ký xác nhận bác sĩ
+                  </h3>
                   <p className="text-sm text-center mt-5">
                     <span>{data?.doctorId?.name}</span> <br /> <br />
                   </p>
                 </div>
               </div>
-              <div style={{fontSize : "13px"}} className="text-sm text-center mt-5"><span>Xin cảm ơn Quý Khách đã lựa chọn dịch vụ y tế của chúng tôi!</span></div>
+              <div
+                style={{ fontSize: "13px" }}
+                className="text-sm text-center mt-5"
+              >
+                <span>
+                  Xin cảm ơn Quý Khách đã lựa chọn dịch vụ y tế của chúng tôi!
+                </span>
+              </div>
             </div>
           ))}
         </ReceptionPrint>
@@ -296,4 +323,4 @@ const Printprescription = ({ componentRef, dataPrint , check }: any) => {
   );
 };
 
-export default Printprescription
+export default Printprescription;

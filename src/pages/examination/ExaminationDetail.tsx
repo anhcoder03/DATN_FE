@@ -31,6 +31,7 @@ import { calculateTotalPrice } from "../../helpers/calculateTotalPrice";
 import { Field } from "../../components/field";
 import { Label } from "../../components/label";
 import TextArea from "antd/es/input/TextArea";
+import { socketIO } from "../../App";
 
 export interface IDataTabs {
   title: string;
@@ -80,7 +81,7 @@ const ExaminationDetail = () => {
         ...resData,
       });
     } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error("Đã có lỗi xảy ra!");
     }
   }
 
@@ -90,7 +91,7 @@ const ExaminationDetail = () => {
       const resData = response?.docs;
       setServices(resData);
     } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error("Đã có lỗi xảy ra!");
     }
   }
 
@@ -145,11 +146,14 @@ const ExaminationDetail = () => {
       const response: any = await UpdateExamination(params);
       setLoading(false);
       if (response?.examination) {
-        toast.success("chuyển trạng thái thành công!");
+        if (response.examination && response.examination.status === "cancel") {
+          socketIO.emit("client_newNotify", "Bạn có thông báo mới");
+        }
+        toast.success("Chuyển trạng thái thành công!");
         setOpenModalExam(false);
         loadData();
       } else {
-        toast.error("Đã có lỗi sảy ra!!!");
+        toast.error("Đã có lỗi xảy ra!");
       }
     } else if (status === "done") {
       const noPayment = findPayment(services);
@@ -175,7 +179,7 @@ const ExaminationDetail = () => {
         loadData();
         setOpenModalExam(false);
       } else {
-        toast.error("Đã có lỗi xảy ra ra!!!");
+        toast.error("Đã có lỗi xảy ra!");
       }
     } else {
       const now = new Date();
@@ -196,7 +200,7 @@ const ExaminationDetail = () => {
         setOpenModalExam(false);
         loadData();
       } else {
-        toast.error("Đã có lỗi sảy ra!!!");
+        toast.error("Đã có lỗi xảy ra!");
       }
     }
   };
@@ -235,7 +239,7 @@ const ExaminationDetail = () => {
       getService();
       handleClickPrintBill();
     } else {
-      toast.error("Đã có lỗi xảy ra!!!");
+      toast.error("Đã có lỗi xảy ra!");
     }
   };
 

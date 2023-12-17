@@ -40,7 +40,6 @@ const ClinicUpdate = () => {
     async function handleGetClinic() {
       try {
         const res = await getOneClinic(id);
-        console.log("res", res);
         reset(res);
         setTempStatus(res.status);
         setDoctor(res?.doctorInClinic?._id);
@@ -73,7 +72,6 @@ const ClinicUpdate = () => {
       console.log(error);
     }
   };
-  console.log("ushfsdshgvds", user);
 
   useEffect(() => {
     handleGetUsers();

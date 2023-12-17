@@ -58,7 +58,6 @@ const ClinicList = () => {
       console.log(error);
     }
   };
-  console.log("clinics", clinics);
 
   useEffect(() => {
     urlParams.set("page", query._page as any);

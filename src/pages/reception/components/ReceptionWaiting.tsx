@@ -33,7 +33,7 @@ const ReceptionWaiting = () => {
     search: null,
     staffId: null,
     clinicId: null,
-    day_waiting: moment()
+    day_waiting: moment(),
   });
   const [totalPages, setTotalPages] = useState(1);
   const [totalDocs, setTotalDocs] = useState(1);
@@ -249,25 +249,23 @@ const ReceptionWaiting = () => {
     name: "Thao tác",
     cell: (row: { _id: any }) => (
       <>
-      {(auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3) ? null : (
-        <div className="flex items-center gap-x-[2px]">
-          <button
-            onClick={() => handleModal({ type: "cancel", data: row })}
-            className="button-nutri text-[#585858]"
-          >
-            <img
-              style={{ border: "none" }}
-              src={IconTrash2}
-              width={20}
-              height={20}
-              alt=""
-            />
-          </button>
-        </div>
-      )}
-      
+        {auth?.role?.roleNumber == 2 || auth?.role?.roleNumber == 3 ? null : (
+          <div className="flex items-center gap-x-[2px]">
+            <button
+              onClick={() => handleModal({ type: "cancel", data: row })}
+              className="button-nutri text-[#585858]"
+            >
+              <img
+                style={{ border: "none" }}
+                src={IconTrash2}
+                width={20}
+                height={20}
+                alt=""
+              />
+            </button>
+          </div>
+        )}
       </>
-      
     ),
   };
 

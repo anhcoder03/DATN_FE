@@ -29,6 +29,7 @@ import { getAllByName } from "../../services/role.service";
 import { getAllClinic } from "../../services/clinic.service";
 import { Field } from "../../components/field";
 import TextArea from "antd/es/input/TextArea";
+import { socketIO } from "../../App";
 
 const ExaminationList = () => {
   const [examinations, setExamination] = useState<any[]>([]);
@@ -82,7 +83,7 @@ const ExaminationList = () => {
       handleClickPrint(row, resData);
       setItemExamination({ type: "print" });
     } catch (error) {
-      toast.error("Đã có lỗi sảy ra!!!");
+      toast.error("Đã có lỗi xảy ra!");
     }
   }
 
@@ -348,7 +349,6 @@ const ExaminationList = () => {
 
   const handleChangeStatus = async (status: string, id: any) => {
     if (status === "cancel") {
-      console.log(cancelRequester);
       if (!cancelRequester || cancelRequester === "") {
         toast.error("Vui lòng chọn người yêu cầu hủy!");
         return;
@@ -372,10 +372,13 @@ const ExaminationList = () => {
       const response: any = await UpdateExamination(params);
       setOpenModal(false);
       if (response?.examination) {
-        toast.success("chuyển trạng thái thành công!");
+        if (response.examination && response.examination.status === "cancel") {
+          socketIO.emit("client_newNotify", "Bạn có thông báo mới");
+        }
+        toast.success("Chuyển trạng thái thành công!");
         handleGetExaminaton();
       } else {
-        toast.error("Đã có lỗi sảy ra!!!");
+        toast.error("Đã có lỗi xảy ra!");
       }
     } else {
       const now = new Date();
@@ -392,9 +395,10 @@ const ExaminationList = () => {
       setOpenModal(false);
       if (response?.examination) {
         toast.success("Chuyển trạng thái thành công!");
+        console.log(">>>response?.examination:", response?.examination);
         handleGetExaminaton();
       } else {
-        toast.error("Đã có lỗi sảy ra!!!");
+        toast.error("Đã có lỗi xảy ra!");
       }
     }
   };
@@ -464,9 +468,9 @@ const ExaminationList = () => {
     urlParams.set("day", dateInUtcPlus7.format());
     navigate(`?${urlParams}`);
   };
-  
+
   const onChange = (e: RadioChangeEvent) => {
-    console.log(e.target.value);
+   
     setCancelRequester(e.target.value);
   };
 

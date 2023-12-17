@@ -39,10 +39,6 @@ const StatisticServiceUsage: React.FC<StatisticServiceUsageProps> = ({
   dataStatisticServiceUsage: dataPrev,
 }) => {
   const [statisticService, setStatisticService] = useState<any[]>([]);
-  console.log(
-    "🚀 ~ file: statistic-service-usage.tsx:42 ~ statisticService:",
-    statisticService
-  );
   const [loading, setLoading] = useState<boolean>(false);
   const chartRef = useRef<HTMLDivElement | null>(null);
 

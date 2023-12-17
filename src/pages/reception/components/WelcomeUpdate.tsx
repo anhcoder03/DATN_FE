@@ -32,6 +32,7 @@ import {
   getServiceByIdExam,
   deleteServiceByExamination,
 } from "../../../services/designation.service";
+import { socketIO } from "../../../App";
 
 const WelcomeUpdate = () => {
   const { id } = useParams();
@@ -365,6 +366,7 @@ const WelcomeUpdate = () => {
     setLoading(false);
     if (response?.examination) {
       toast.success("Huỷ tiếp đón thành công!");
+      socketIO.emit("client_newNotify", "Bạn có thông báo mới");
       navigate("/reception");
       setOpenModal(false);
     } else {
@@ -422,7 +424,7 @@ const WelcomeUpdate = () => {
                 </Field>
                 <Field>
                   <Label className="font-semibold" htmlFor="staffId">
-                  <span className="star-field">*</span>Nhân viên tiếp đón
+                    <span className="star-field">*</span>Nhân viên tiếp đón
                   </Label>
                   <Select
                     placeholder="Chọn nhân viên tiếp đón"

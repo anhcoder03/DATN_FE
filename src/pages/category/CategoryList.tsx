@@ -85,7 +85,6 @@ const CategoryList = () => {
 
   const onOk = async () => {
     const res = await deleteCategory(category?._id);
-    console.log("onOk", res);
     if (res?.message) {
       toast.success(res?.message);
       setOpenModal(false);
@@ -140,7 +139,6 @@ const CategoryList = () => {
                     </button>
                   </div>
                 )}
-                
               </td>
             </tr>
           ))}

@@ -30,7 +30,6 @@ const ClinicDetail = () => {
       console.log(error);
     }
   };
-  console.log(data, "data");
 
   return (
     <Layout>

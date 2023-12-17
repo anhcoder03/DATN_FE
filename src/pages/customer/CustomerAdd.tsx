@@ -77,9 +77,9 @@ const CustomerAdd = () => {
       toast.success(res?.message);
       navigate("/customer/list");
     } else {
-      if(res?.message?.[0]) {
-        toast.error(res.message?.[0])
-      }else {
+      if (res?.message?.[0]) {
+        toast.error(res.message?.[0]);
+      } else {
         toast.error(res.message);
       }
     }
@@ -116,7 +116,6 @@ const CustomerAdd = () => {
         label: e?.name,
       });
     });
-    console.log(ListArr);
     setDistrict(ListArr);
   };
 
@@ -164,7 +163,9 @@ const CustomerAdd = () => {
               />
             </Field>
             <Field>
-              <Label htmlFor="_id"><span className="star-field">*</span>Ngày sinh</Label>
+              <Label htmlFor="_id">
+                <span className="star-field">*</span>Ngày sinh
+              </Label>
               <Flatpickr
                 options={{
                   locale: Vietnamese,
@@ -225,7 +226,7 @@ const CustomerAdd = () => {
 
             <Field>
               <Label htmlFor="email">
-              <span className="star-field">*</span>
+                <span className="star-field">*</span>
                 Email
               </Label>
               <Input control={control} name="email" placeholder="Nhập Email" />
@@ -233,7 +234,9 @@ const CustomerAdd = () => {
           </Row>
           <Row>
             <Field>
-              <Label htmlFor="province"><span className="star-field">*</span>Tỉnh/ Thành phố</Label>
+              <Label htmlFor="province">
+                <span className="star-field">*</span>Tỉnh/ Thành phố
+              </Label>
               <Select
                 placeholder="Chọn Tỉnh/ Thành phố"
                 className="mb-2 react-select"
@@ -246,7 +249,9 @@ const CustomerAdd = () => {
               ></Select>
             </Field>
             <Field>
-              <Label htmlFor="district"><span className="star-field">*</span>Quận/Huyện</Label>
+              <Label htmlFor="district">
+                <span className="star-field">*</span>Quận/Huyện
+              </Label>
               <Select
                 placeholder="Chọn Quận/ Huyện"
                 className="mb-2 react-select"
@@ -260,7 +265,9 @@ const CustomerAdd = () => {
               ></Select>
             </Field>
             <Field>
-              <Label htmlFor="commune"><span className="star-field">*</span>Xã/Phường</Label>
+              <Label htmlFor="commune">
+                <span className="star-field">*</span>Xã/Phường
+              </Label>
               <Select
                 placeholder="Chọn Xã/ Phường"
                 className="mb-2 react-select"

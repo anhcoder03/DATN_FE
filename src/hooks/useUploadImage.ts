@@ -19,7 +19,6 @@ export default function useUploadImage() {
     try {
       setLoading(true);
       const response = await uploadImage(formData);
-      console.log(response);
       setImage(response?.urls[0]?.url);
       setLoading(false);
     } catch (error) {

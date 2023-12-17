@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TDataResponse, handleLogin } from "./handler";
+import { socketIO } from "../../App";
 
 export interface AuthState {
   auth: TDataResponse | null;
@@ -20,6 +21,7 @@ const authSlice = createSlice({
     authLogout: (state) => {
       state.error = null;
       state.auth = null;
+      socketIO.emit("disconnected", "disconnect from client");
     },
     refreshToken: (state, { payload }) => {
       if (state.auth && payload.accessToken) {

@@ -51,7 +51,6 @@ const CustomerDetail = () => {
   };
   const handleGetHistoryExaminations = async () => {
     const data = await getAllExamination({ search: id, status: "done" });
-    console.log(data);
     setHistoryExams(data?.docs);
   };
   const { control, setValue, reset } = useForm<TDataCustomer>({});

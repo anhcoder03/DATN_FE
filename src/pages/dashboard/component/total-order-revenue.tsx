@@ -38,7 +38,6 @@ const TotalOrderRevenue: React.FC<TotalOrderRevenueProps> = ({
   totalRevenueOrder: revenueOrderPrev,
 }) => {
   const [totalRevenueOrder, setTotalRevenueOrder] = useState<any[]>([]);
-  console.log(totalRevenueOrder);
   const [loading, setLoading] = useState<boolean>(false);
   const chartRef = useRef<HTMLDivElement | null>(null);
 

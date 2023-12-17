@@ -1,4 +1,4 @@
-import Http from '../helpers/http';
+import Http from "../helpers/http";
 
 const http = new Http();
 
@@ -31,8 +31,6 @@ export const updateUser = async (data: any) => {
     const response = await http.update(`/user/${data?._id}`, data);
     return response;
   } catch (error) {
-    console.log('errorr', error);
-
     return error;
   }
 };
