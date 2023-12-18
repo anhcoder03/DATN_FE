@@ -6,11 +6,10 @@ import { Label } from "../../components/label";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo3.png";
-import { Button } from "../../components/button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TDataResponse, handleLogin } from "../../redux/auth/handler";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useRef, useState } from "react";
 import { ROLE } from "../../constants/define";
@@ -18,6 +17,8 @@ import ModalLoginOTP, {
   ModalLoginOTPMethods,
 } from "./components/ModalLoginOTP";
 import { socketIO } from "../../App";
+import { RootState } from "../../redux/store";
+import { Button } from "antd";
 
 type TLogin = {
   email: string;
@@ -43,19 +44,17 @@ const Login = () => {
     resolver: yupResolver<any>(schema),
     mode: "onSubmit",
   });
+  const loading = useSelector((state: RootState) => state.auth.isLoading);
   const [typePassWord, setTypePassWord] = useState("password");
-  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const modalRef = useRef<ModalLoginOTPMethods>(null);
   const handleSignin = async (values: TLogin) => {
     if (!isValid) return;
     try {
-      setLoading(true);
       const response: TDataResponse = await dispatch(
         handleLogin(values) as any
       ).unwrap();
-      setLoading(false);
       toast.success(response?.message);
       socketIO.emit("authenticate", response.user._id);
 
@@ -139,11 +138,11 @@ const Login = () => {
           </Field>
 
           <Button
-            type="button"
+            key={"submit"}
+            type="primary"
             className=" bg-primary text-white rounded-md font-medium  h-[50px]"
             onClick={handleSubmit(handleSignin)}
-            isLoading={loading}
-            disabled={loading}
+            loading={loading}
           >
             Đăng nhập
           </Button>
@@ -155,7 +154,6 @@ const Login = () => {
             </div>
           </Field>
           <Button
-            type="button"
             className=" bg-white text-primary border border-primary rounded-md font-medium  h-[50px]"
             onClick={() => modalRef.current?.setOpen()}
           >

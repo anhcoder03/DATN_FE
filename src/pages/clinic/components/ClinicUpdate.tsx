@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { getOneClinic, updateClinic } from "../../../services/clinic.service";
 import { getAllUser } from "../../../services/user.service";
 import { useNavigate, useParams } from "react-router-dom";
-import Select from 'react-select';
+import Select from "react-select";
 import { Spin } from "antd";
 import LoadingPage from "../../../components/common/LoadingPage";
 
@@ -50,7 +50,7 @@ const ClinicUpdate = () => {
         setTempStatus(res.status);
         setData({
           ...data,
-          doctorInClinic: res?.doctorInClinic?._id
+          doctorInClinic: res?.doctorInClinic?._id,
         });
       } catch (error) {
         console.error(error);
@@ -61,9 +61,7 @@ const ClinicUpdate = () => {
 
   const handleGetUsers = async () => {
     try {
-      setLoading(true);
       const data = await getAllUser({ limit: 1000 });
-      setLoading(false);
       const roleDoctor = data?.docs;
 
       const filteredUsers = roleDoctor.filter(
@@ -95,7 +93,11 @@ const ClinicUpdate = () => {
   const handleUpdateClinic = async (values: any) => {
     try {
       setLoading(true);
-      const res = await updateClinic({ ...values, status: tempStatus, doctorInClinic: data?.doctorInClinic  });
+      const res = await updateClinic({
+        ...values,
+        status: tempStatus,
+        doctorInClinic: data?.doctorInClinic,
+      });
       setLoading(false);
       if (res?.clinic) {
         toast.success(res?.message);
@@ -149,10 +151,12 @@ const ClinicUpdate = () => {
                   onChange={(val: any) => {
                     setData({
                       ...data,
-                      doctorInClinic: val?.value
-                    })
+                      doctorInClinic: val?.value,
+                    });
                   }}
-                  value={user?.find((item: any) => item?.value == data?.doctorInClinic)}
+                  value={user?.find(
+                    (item: any) => item?.value == data?.doctorInClinic
+                  )}
                 ></Select>
               </Field>
             </Row>
@@ -178,7 +182,10 @@ const ClinicUpdate = () => {
                     >
                       Active
                     </Radio>
-                    <Radio className="flex items-center h-[34px]" value={"stop"}>
+                    <Radio
+                      className="flex items-center h-[34px]"
+                      value={"stop"}
+                    >
                       Stop
                     </Radio>
                   </div>
@@ -203,7 +210,6 @@ const ClinicUpdate = () => {
         </div>
       </Layout>
     </Spin>
-    
   );
 };
 

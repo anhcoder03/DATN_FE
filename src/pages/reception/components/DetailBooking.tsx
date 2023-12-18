@@ -18,12 +18,11 @@ import {
 } from "../../../services/examination.service";
 import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import { useSelector } from "react-redux";
 import { RootState, store } from "../../../redux/store";
 import { socketIO } from "../../../App";
-import { getAllNotifications } from "../../../services/notifications.service";
-import { onSetNotifications } from "../../../redux/notification/notificationSlice";
+import LoadingPage from "../../../components/common/LoadingPage";
 
 const DetailBooking = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
@@ -115,201 +114,205 @@ const DetailBooking = () => {
   };
 
   return (
-    <Layout>
-      <div className="relative h-full only-view">
-        <Heading>Đặt trước lịch khám, Tư vấn</Heading>
-        <form className="w-[70%] p-5 bg-white ">
-          <Heading>Thông tin bệnh nhân</Heading>
-          <Row className="grid-cols-2 ">
-            <Field>
-              <Label htmlFor="_id">
-                <span className="star-field">*</span>
-                Họ và tên khách hàng/bệnh nhân
-              </Label>
-              <Input
-                control={control}
-                placeholder="Nhập mã khách hàng"
-                value={data?.customer?.name}
-              />
-            </Field>
-            <Field>
-              <Label htmlFor="gender">Giới tính</Label>
-              <Input
-                control={control}
-                placeholder="Nhập giới tính"
-                value={data?.gender}
-              />
-            </Field>
-          </Row>
-          <Row className="grid-cols-2 ">
-            <Field>
-              <Label htmlFor="phone">
-                <span className="star-field">*</span>
-                Số điện thoại
-              </Label>
-              <Input
-                control={control}
-                name="phone"
-                value={data?.phone}
-                placeholder="Nhập số điện thoại"
-              >
-                <div className="p-2 bg-white">
-                  <IconPhone></IconPhone>
-                </div>
-              </Input>
-            </Field>
-            <Field>
-              <Label htmlFor="_id">Ngày đặt lịch</Label>
-              <div className="relative pb-3">
+    <Spin indicator={<LoadingPage />} spinning={loading}>
+      <Layout>
+        <div className="relative h-full only-view">
+          <Heading>Đặt trước lịch khám, Tư vấn</Heading>
+          <form className="w-[70%] p-5 bg-white ">
+            <Heading>Thông tin bệnh nhân</Heading>
+            <Row className="grid-cols-2 ">
+              <Field>
+                <Label htmlFor="_id">
+                  <span className="star-field">*</span>
+                  Họ và tên khách hàng/bệnh nhân
+                </Label>
+                <Input
+                  control={control}
+                  placeholder="Nhập mã khách hàng"
+                  value={data?.customer?.name}
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="gender">Giới tính</Label>
+                <Input
+                  control={control}
+                  placeholder="Nhập giới tính"
+                  value={data?.gender}
+                />
+              </Field>
+            </Row>
+            <Row className="grid-cols-2 ">
+              <Field>
+                <Label htmlFor="phone">
+                  <span className="star-field">*</span>
+                  Số điện thoại
+                </Label>
                 <Input
                   control={control}
                   name="phone"
-                  value={moment(data?.dateOfBirth).format("DD/MM/YYYY")}
-                  placeholder="Nhập ngày đặt lịch"
-                />
-                <div className="absolute top-0 right-0">
-                  <img src={IconCalendar} alt="icon" />
+                  value={data?.phone}
+                  placeholder="Nhập số điện thoại"
+                >
+                  <div className="p-2 bg-white">
+                    <IconPhone></IconPhone>
+                  </div>
+                </Input>
+              </Field>
+              <Field>
+                <Label htmlFor="_id">Ngày đặt lịch</Label>
+                <div className="relative pb-3">
+                  <Input
+                    control={control}
+                    name="phone"
+                    value={moment(data?.dateOfBirth).format("DD/MM/YYYY")}
+                    placeholder="Nhập ngày đặt lịch"
+                  />
+                  <div className="absolute top-0 right-0">
+                    <img src={IconCalendar} alt="icon" />
+                  </div>
                 </div>
-              </div>
-            </Field>
-          </Row>
-          <Row className="grid-cols-2 ">
-            <Field>
-              <Label htmlFor="_id">Năm sinh</Label>
-              <div className="relative pb-3">
+              </Field>
+            </Row>
+            <Row className="grid-cols-2 ">
+              <Field>
+                <Label htmlFor="_id">Năm sinh</Label>
+                <div className="relative pb-3">
+                  <Input
+                    control={control}
+                    name="phone"
+                    value={moment(data?.day_booking).format("DD/MM/YYYY")}
+                    placeholder="Nhập năm sinh"
+                  />
+                  <div className="absolute top-0 right-0">
+                    <img src={IconCalendar} alt="icon" />
+                  </div>
+                </div>
+              </Field>
+              <Field>
+                <Label htmlFor="">Tuổi</Label>
+                <Input
+                  control={control}
+                  className="border-none"
+                  name="date"
+                  value={
+                    data?.dateOfBirth
+                      ? CalcUtils.calculateAge(data?.dateOfBirth)
+                      : "---"
+                  }
+                />
+              </Field>
+            </Row>
+            <Row className="grid-cols-2 ">
+              <Field>
+                <Label htmlFor="staffId">
+                  <span className="star-field">*</span>Nhân viên tiếp đón
+                </Label>
                 <Input
                   control={control}
                   name="phone"
-                  value={moment(data?.day_booking).format("DD/MM/YYYY")}
-                  placeholder="Nhập năm sinh"
+                  value={data?.staffId?.name}
+                  placeholder="Chọn nhân viên"
                 />
-                <div className="absolute top-0 right-0">
-                  <img src={IconCalendar} alt="icon" />
-                </div>
-              </div>
-            </Field>
-            <Field>
-              <Label htmlFor="">Tuổi</Label>
-              <Input
-                control={control}
-                className="border-none"
-                name="date"
-                value={
-                  data?.dateOfBirth
-                    ? CalcUtils.calculateAge(data?.dateOfBirth)
-                    : "---"
-                }
-              />
-            </Field>
-          </Row>
-          <Row className="grid-cols-2 ">
-            <Field>
-              <Label htmlFor="staffId">
-                <span className="star-field">*</span>Nhân viên tiếp đón
-              </Label>
-              <Input
-                control={control}
-                name="phone"
-                value={data?.staffId?.name}
-                placeholder="Chọn nhân viên"
-              />
-            </Field>
-            <Field>
-              <Label htmlFor="note">Ghi chú</Label>
-              <Textarea
-                control={control}
-                className="outline-none input-primary"
-                name="note"
-                placeholder="Nhập ghi chú"
-                onChange={(val: any) => {
-                  setData({
-                    ...data,
-                    note: val,
-                  });
-                }}
-                value={data?.note}
-              />
-            </Field>
-          </Row>
-        </form>
-        <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
-          <div className="flex justify-end w-full px-5">
-            <div className="flex items-center gap-x-5">
-              <Button to="/reception">Đóng</Button>
-              {auth?.role?.roleNumber == 1 ||
-              auth?.role?.roleNumber == 3 ? null : (
-                <>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                    onClick={() => {
-                      if (
-                        auth?.role?.roleNumber == 1 ||
-                        auth?.role?.roleNumber == 3
-                      ) {
-                        toast.warning(
-                          "Bạn không có quyền thực hiện hành động này!"
-                        );
-                        return;
+              </Field>
+              <Field>
+                <Label htmlFor="note">Ghi chú</Label>
+                <Textarea
+                  control={control}
+                  className="outline-none input-primary"
+                  name="note"
+                  placeholder="Nhập ghi chú"
+                  onChange={(val: any) => {
+                    setData({
+                      ...data,
+                      note: val,
+                    });
+                  }}
+                  value={data?.note}
+                />
+              </Field>
+            </Row>
+          </form>
+          <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
+            <div className="flex justify-end w-full px-5">
+              <div className="flex items-center gap-x-5">
+                <Button to="/reception">Đóng</Button>
+                {auth?.role?.roleNumber == 1 ||
+                auth?.role?.roleNumber == 3 ? null : (
+                  <>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={() => {
+                        if (
+                          auth?.role?.roleNumber == 1 ||
+                          auth?.role?.roleNumber == 3
+                        ) {
+                          toast.warning(
+                            "Bạn không có quyền thực hiện hành động này!"
+                          );
+                          return;
+                        }
+                        navigate(`/reception/booking/update/${id}`);
+                      }}
+                    >
+                      Chỉnh sửa
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
+                      onClick={() =>
+                        handleModal({ type: "statusReception", data: data })
                       }
-                      navigate(`/reception/booking/update/${id}`);
-                    }}
-                  >
-                    Chỉnh sửa
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none btn-info"
-                    onClick={() =>
-                      handleModal({ type: "statusReception", data: data })
-                    }
-                    isLoading={loading}
-                    disabled={loading}
-                  >
-                    Tiếp đón
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                    onClick={() => handleModal({ type: "remove", data: data })}
-                    isLoading={loading}
-                    disabled={loading}
-                  >
-                    Huỷ
-                  </Button>
-                </>
-              )}
+                      isLoading={loading}
+                      disabled={loading}
+                    >
+                      Tiếp đón
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                      onClick={() =>
+                        handleModal({ type: "remove", data: data })
+                      }
+                      isLoading={loading}
+                      disabled={loading}
+                    >
+                      Huỷ
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <Modal
-        centered
-        open={openModal}
-        onOk={onOk}
-        onCancel={() => setOpenModal(false)}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        {deltail?.type == "remove" && (
-          <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {deltail?.data?._id}
-            </span>
-          </div>
-        )}
-        {deltail?.type == "statusReception" && (
-          <div className="flex flex-col items-center justify-center py-4 text-sm">
-            <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
-            <span className="text-center text-[#ff5c75] font-bold">
-              {deltail?.data?._id}
-            </span>
-          </div>
-        )}
-      </Modal>
-    </Layout>
+        <Modal
+          centered
+          open={openModal}
+          onOk={onOk}
+          onCancel={() => setOpenModal(false)}
+        >
+          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+            Thông Báo
+          </h1>
+          {deltail?.type == "remove" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn huỷ phiếu đặt lịch này?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {deltail?.data?._id}
+              </span>
+            </div>
+          )}
+          {deltail?.type == "statusReception" && (
+            <div className="flex flex-col items-center justify-center py-4 text-sm">
+              <p>Bạn có chắc muốn tiếp đón phiếu đặt lịch này?</p>
+              <span className="text-center text-[#ff5c75] font-bold">
+                {deltail?.data?._id}
+              </span>
+            </div>
+          )}
+        </Modal>
+      </Layout>
+    </Spin>
   );
 };
 

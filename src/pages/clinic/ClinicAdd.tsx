@@ -14,7 +14,7 @@ import { createClinic } from "../../services/clinic.service";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { getAllUser } from "../../services/user.service";
-import Select from 'react-select';
+import Select from "react-select";
 import { Spin } from "antd";
 import LoadingPage from "../../components/common/LoadingPage";
 
@@ -26,7 +26,7 @@ type TDataClinic = {
 };
 
 const schema = yup.object({
-  name: yup.string().trim().required("Tên phòng khám không được để trống!")
+  name: yup.string().trim().required("Tên phòng khám không được để trống!"),
 });
 
 const ClinicAdd = () => {
@@ -51,9 +51,7 @@ const ClinicAdd = () => {
 
   const handleGetUsers = async () => {
     try {
-      setLoading(true);
       const data = await getAllUser({ limit: 1000 });
-      setLoading(false);
       const roleDoctor = data?.docs;
       const filteredUsers = roleDoctor.filter(
         (user: any) => user.role === "VT-00000002"
@@ -77,15 +75,15 @@ const ClinicAdd = () => {
   }, []);
 
   const handleCreateClinic = async (values: TDataClinic) => {
-    if(!data?.doctorInClinic) {
-      toast.warning('Bác sĩ không được để trống!');
-      return
+    if (!data?.doctorInClinic) {
+      toast.warning("Bác sĩ không được để trống!");
+      return;
     }
     try {
       const params = {
         ...values,
         status,
-        doctorInClinic: data?.doctorInClinic || '',
+        doctorInClinic: data?.doctorInClinic || "",
       };
       setLoading(true);
       const res = await createClinic(params);
@@ -140,10 +138,12 @@ const ClinicAdd = () => {
                   onChange={(val: any) => {
                     setData({
                       ...data,
-                      doctorInClinic: val?.value
-                    })
+                      doctorInClinic: val?.value,
+                    });
                   }}
-                  value={user?.find((item: any) => item?.value == data?.doctorInClinic)}
+                  value={user?.find(
+                    (item: any) => item?.value == data?.doctorInClinic
+                  )}
                 ></Select>
               </Field>
             </Row>
@@ -166,7 +166,10 @@ const ClinicAdd = () => {
                     >
                       Hoạt động
                     </Radio>
-                    <Radio className="flex items-center h-[34px]" value={"stop"}>
+                    <Radio
+                      className="flex items-center h-[34px]"
+                      value={"stop"}
+                    >
                       Ngừng hoạt động
                     </Radio>
                   </div>

@@ -19,6 +19,8 @@ import { IconPlus, IconTrash } from "../../../components/icons";
 import { IMedicine } from "../../../types/menicine.type";
 import { getAllProduct } from "../../../services/medicine.service";
 import { getOneExamination } from "../../../services/examination.service";
+import { Spin } from "antd";
+import LoadingPage from "../../../components/common/LoadingPage";
 
 const PrescriptionAdd = () => {
   const { id } = useParams();
@@ -264,246 +266,248 @@ const PrescriptionAdd = () => {
   const combinedNames = `${communeName}, ${districtName}, ${provinceName}`;
 
   return (
-    <Layout>
-      <div className="relative h-full">
-        <Heading>Thêm mới kê đơn</Heading>
-        <form
-          className="w-full"
-          onSubmit={handleSubmit(handleCreatePrescription)}
-        >
-          <div className="p-5 bg-white rounded-xl">
-            <Heading>Thông tin kê đơn</Heading>
-            <Row>
+    <Spin spinning={loading} indicator={<LoadingPage />}>
+      <Layout>
+        <div className="relative h-full">
+          <Heading>Thêm mới kê đơn</Heading>
+          <form
+            className="w-full"
+            onSubmit={handleSubmit(handleCreatePrescription)}
+          >
+            <div className="p-5 bg-white rounded-xl">
+              <Heading>Thông tin kê đơn</Heading>
+              <Row>
+                <Field>
+                  <Label className="font-semibold" htmlFor="_id">
+                    <span className="star-field">*</span>
+                    Khách hàng
+                  </Label>
+                  <Input
+                    control={control}
+                    name="customerId"
+                    className="font-semibold text-black border-none"
+                    value={data?.customerId?.name}
+                  />
+                </Field>
+                <Field>
+                  <Label className="font-semibold" htmlFor="_id">
+                    <span className="star-field">*</span>
+                    Bác sỹ
+                  </Label>
+                  <Input
+                    control={control}
+                    className="font-semibold text-black border-none"
+                    name="doctorId"
+                    value={data?.doctorId?.name}
+                  />
+                </Field>
+              </Row>
+              <Row>
+                <Field>
+                  <Label className="font-semibold" htmlFor="_id">
+                    <span className="star-field">*</span>
+                    Địa chỉ
+                  </Label>
+                  <Input
+                    control={control}
+                    className="font-semibold text-black border-none"
+                    value={
+                      data?.customerId
+                        ? `${data?.customerId?.commune.name}, ${data?.customerId?.district?.name}, ${data?.customerId?.province?.name}`
+                        : "---"
+                    }
+                  />
+                </Field>
+              </Row>
+              <Row>
+                <Field>
+                  <Label className="font-semibold" htmlFor="note">
+                    Chẩn đoán
+                  </Label>
+                  <div className="!border-transparent font-semibold text-black">
+                    {data?.diagnostic || "---"}
+                  </div>
+                </Field>
+                <Field>
+                  <Label className="font-semibold" htmlFor="note">
+                    Lời dặn
+                  </Label>
+                  <div className="!border-transparent font-semibold text-black">
+                    {data?.advice || "---"}
+                  </div>
+                </Field>
+              </Row>
               <Field>
                 <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Khách hàng
+                  Chú thích
                 </Label>
-                <Input
+                <Textarea
                   control={control}
-                  name="customerId"
-                  className="font-semibold text-black border-none"
-                  value={data?.customerId?.name}
+                  className="outline-none input-primary"
+                  name="note"
+                  placeholder="Nhập chú thích"
+                  value={data?.note}
+                  onChange={(val: any) => {
+                    handleChangeInput(val);
+                  }}
                 />
               </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Bác sỹ
-                </Label>
-                <Input
-                  control={control}
-                  className="font-semibold text-black border-none"
-                  name="doctorId"
-                  value={data?.doctorId?.name}
-                />
-              </Field>
-            </Row>
-            <Row>
-              <Field>
-                <Label className="font-semibold" htmlFor="_id">
-                  <span className="star-field">*</span>
-                  Địa chỉ
-                </Label>
-                <Input
-                  control={control}
-                  className="font-semibold text-black border-none"
-                  value={
-                    data?.customerId
-                      ? `${data?.customerId?.commune.name}, ${data?.customerId?.district?.name}, ${data?.customerId?.province?.name}`
-                      : "---"
-                  }
-                />
-              </Field>
-            </Row>
-            <Row>
-              <Field>
-                <Label className="font-semibold" htmlFor="note">
-                  Chẩn đoán
-                </Label>
-                <div className="!border-transparent font-semibold text-black">
-                  {data?.diagnostic || "---"}
-                </div>
-              </Field>
-              <Field>
-                <Label className="font-semibold" htmlFor="note">
-                  Lời dặn
-                </Label>
-                <div className="!border-transparent font-semibold text-black">
-                  {data?.advice || "---"}
-                </div>
-              </Field>
-            </Row>
-            <Field>
-              <Label className="font-semibold" htmlFor="_id">
-                Chú thích
-              </Label>
-              <Textarea
-                control={control}
-                className="outline-none input-primary"
-                name="note"
-                placeholder="Nhập chú thích"
-                value={data?.note}
-                onChange={(val: any) => {
-                  handleChangeInput(val);
-                }}
-              />
-            </Field>
-          </div>
-          <div className="p-5 my-5 bg-white rounded-xl">
-            <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
-            <table className="w-full custom-table">
-              <thead className="bg-[#f4f6f8] text-sm">
-                <th style={{ width: "20%" }}>Tên thuốc</th>
-                <th style={{ width: "8%" }}>Số lượng</th>
-                <th style={{ width: "13%" }}>Đơn vị bán</th>
-                <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
-                <th style={{ width: "8%" }}>Liều lượng</th>
-                <th>Số lần sử dụng/ngày</th>
-                <th style={{ width: "20%" }}>Cách sử dụng</th>
-                <th style={{ width: "10%" }}>Hành động</th>
-              </thead>
-              <tbody>
-                {product.map((item: any, index: any) => (
-                  <tr className="hover:bg-transparent">
-                    <td>
-                      <Select
-                        placeholder="Chọn sản phẩm"
-                        className="mb-2 react-select"
-                        menuPlacement="top"
-                        options={products}
-                        onChange={(selectedOption: any) =>
-                          handleChange(selectedOption, "medicineId", index)
-                        }
-                        value={products?.filter(
-                          (option: any) => item?.medicineId == option.value
-                        )}
-                      ></Select>
-                    </td>
-                    <td>
-                      <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.quantity}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === "") {
-                            handleChange(inputValue, "quantity", index);
+            </div>
+            <div className="p-5 my-5 bg-white rounded-xl">
+              <Heading>Danh sách thuốc/thực phẩm chức năng</Heading>
+              <table className="w-full custom-table">
+                <thead className="bg-[#f4f6f8] text-sm">
+                  <th style={{ width: "20%" }}>Tên thuốc</th>
+                  <th style={{ width: "8%" }}>Số lượng</th>
+                  <th style={{ width: "13%" }}>Đơn vị bán</th>
+                  <th style={{ width: "13%" }}>Đơn vị sử dụng</th>
+                  <th style={{ width: "8%" }}>Liều lượng</th>
+                  <th>Số lần sử dụng/ngày</th>
+                  <th style={{ width: "20%" }}>Cách sử dụng</th>
+                  <th style={{ width: "10%" }}>Hành động</th>
+                </thead>
+                <tbody>
+                  {product.map((item: any, index: any) => (
+                    <tr className="hover:bg-transparent">
+                      <td>
+                        <Select
+                          placeholder="Chọn sản phẩm"
+                          className="mb-2 react-select"
+                          menuPlacement="top"
+                          options={products}
+                          onChange={(selectedOption: any) =>
+                            handleChange(selectedOption, "medicineId", index)
                           }
-                        }}
-                        className="px-3 mb-1 font-semibold text-black border rounded-md"
-                      />
-                    </td>
-                    <td>
-                      <Select
-                        placeholder="Chọn"
-                        className="mb-2 react-select"
-                        menuPlacement="top"
-                        options={dataTypeImportProduct}
-                        onChange={(value: any) =>
-                          handleChange(value?.value, "unit_selling", index)
-                        }
-                      ></Select>
-                    </td>
-                    <td>
-                      <Select
-                        placeholder="Chọn"
-                        className="mb-2 react-select"
-                        menuPlacement="top"
-                        options={dataTypeImportProduct}
-                        onChange={(value: any) =>
-                          handleChange(value?.value, "unit_using", index)
-                        }
-                      ></Select>
-                    </td>
-                    <td>
-                      <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.dosage}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === "") {
-                            handleChange(inputValue, "dosage", index);
-                          }
-                        }}
-                        className="px-3 mb-1 font-semibold text-black border rounded-md"
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        control={control}
-                        placeholder="0"
-                        value={item?.timesUsePerDay}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          const regex = /^\d*$/;
-                          if (regex.test(inputValue) || inputValue === "") {
-                            handleChange(inputValue, "timesUsePerDay", index);
-                          }
-                        }}
-                        className="px-3 mb-1 font-semibold text-black border rounded-md"
-                      />
-                    </td>
-                    <td>
-                      <Input
-                        control={control}
-                        placeholder="Cách sử dụng"
-                        value={item?.how_using}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          handleChange(inputValue, "how_using", index);
-                        }}
-                        className="px-3 mb-1 font-semibold text-black border rounded-md"
-                      />
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-x-2">
-                        <button
-                          type="button"
-                          className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
-                          onClick={() => {
-                            handleRemoveMedicine(index);
+                          value={products?.filter(
+                            (option: any) => item?.medicineId == option.value
+                          )}
+                        ></Select>
+                      </td>
+                      <td>
+                        <Input
+                          control={control}
+                          placeholder="0"
+                          value={item?.quantity}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const regex = /^\d*$/;
+                            if (regex.test(inputValue) || inputValue === "") {
+                              handleChange(inputValue, "quantity", index);
+                            }
                           }}
-                        >
-                          <IconTrash />
-                        </button>
-                        {product?.length == index + 1 && (
+                          className="px-3 mb-1 font-semibold text-black border rounded-md"
+                        />
+                      </td>
+                      <td>
+                        <Select
+                          placeholder="Chọn"
+                          className="mb-2 react-select"
+                          menuPlacement="top"
+                          options={dataTypeImportProduct}
+                          onChange={(value: any) =>
+                            handleChange(value?.value, "unit_selling", index)
+                          }
+                        ></Select>
+                      </td>
+                      <td>
+                        <Select
+                          placeholder="Chọn"
+                          className="mb-2 react-select"
+                          menuPlacement="top"
+                          options={dataTypeImportProduct}
+                          onChange={(value: any) =>
+                            handleChange(value?.value, "unit_using", index)
+                          }
+                        ></Select>
+                      </td>
+                      <td>
+                        <Input
+                          control={control}
+                          placeholder="0"
+                          value={item?.dosage}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const regex = /^\d*$/;
+                            if (regex.test(inputValue) || inputValue === "") {
+                              handleChange(inputValue, "dosage", index);
+                            }
+                          }}
+                          className="px-3 mb-1 font-semibold text-black border rounded-md"
+                        />
+                      </td>
+                      <td>
+                        <Input
+                          control={control}
+                          placeholder="0"
+                          value={item?.timesUsePerDay}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const regex = /^\d*$/;
+                            if (regex.test(inputValue) || inputValue === "") {
+                              handleChange(inputValue, "timesUsePerDay", index);
+                            }
+                          }}
+                          className="px-3 mb-1 font-semibold text-black border rounded-md"
+                        />
+                      </td>
+                      <td>
+                        <Input
+                          control={control}
+                          placeholder="Cách sử dụng"
+                          value={item?.how_using}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            handleChange(inputValue, "how_using", index);
+                          }}
+                          className="px-3 mb-1 font-semibold text-black border rounded-md"
+                        />
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-x-2">
                           <button
-                            className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
-                            onClick={handleAddMedicine}
+                            type="button"
+                            className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
+                            onClick={() => {
+                              handleRemoveMedicine(index);
+                            }}
                           >
-                            <IconPlus></IconPlus>
+                            <IconTrash />
                           </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </form>
-        <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
-          <div className="flex justify-end w-full px-5">
-            <div className="flex items-center gap-x-5">
-              <Button to="/customer/list">Đóng</Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleCreatePrescription)}
-                isLoading={loading}
-                disabled={loading}
-              >
-                Lưu
-              </Button>
+                          {product?.length == index + 1 && (
+                            <button
+                              className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
+                              onClick={handleAddMedicine}
+                            >
+                              <IconPlus></IconPlus>
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </form>
+          <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
+            <div className="flex justify-end w-full px-5">
+              <div className="flex items-center gap-x-5">
+                <Button to="/customer/list">Đóng</Button>
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  onClick={handleSubmit(handleCreatePrescription)}
+                  isLoading={loading}
+                  disabled={loading}
+                >
+                  Lưu
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </Spin>
   );
 };
 

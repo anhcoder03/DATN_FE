@@ -14,8 +14,9 @@ import {
 import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
 import { IconPlus, IconTrash } from "../../../components/icons";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import { data } from "../../statitis";
+import LoadingPage from "../../../components/common/LoadingPage";
 
 const headings = [
   "STT",
@@ -251,110 +252,112 @@ const ExaminationSevicer = ({ id }: { id: any }) => {
   };
 
   return (
-    <div className="bg-white py-5 rounded-md">
-      <Table headings={headings} className="min-h-[500px]">
-        {dataServices?.map((item: any, index: any) => {
-          return (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>
-                <Select
-                  placeholder="Chọn dich vụ"
-                  className="mb-2 react-select"
-                  classNamePrefix="react-select"
-                  options={services}
-                  onChange={(value: any) => {
-                    handleChange(
-                      {
-                        target: { name: "service_id", value: value },
-                      },
-                      index
-                    );
-                  }}
-                  value={services?.filter(
-                    (option: any) => item?.service_id === option.value
-                  )}
-                ></Select>
-              </td>
-              <td>{serviceByExam[0]?.doctorId?.name}</td>
-              <td>
-                {item?.price ? `${item.price.toLocaleString()} đ` : "---"}
-              </td>
-              <td>
-                <Link
-                  to={`/designation/${item?._id}/view`}
-                  style={{ color: "blue", textDecoration: "underline" }}
-                >
-                  Xem
-                </Link>
-              </td>
-              <td>{checkpayment(item?.paymentStatus)}</td>
-              <td>
-                <LabelStatusDesignation type={item?.status} />
-              </td>
-              <td>
-                <div className="flex items-center gap-x-2">
-                  <button
-                    type="button"
-                    className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
-                    onClick={() => {
-                      if (serviceByExam[index]?._id) {
-                        handleShowModel(
-                          serviceByExam[index],
-                          serviceByExam[index]?.paymentStatus
-                        );
-                      } else {
-                        handleRemoveService(index);
-                      }
+    <Spin spinning={loading} indicator={<LoadingPage />}>
+      <div className="bg-white py-5 rounded-md">
+        <Table headings={headings} className="min-h-[500px]">
+          {dataServices?.map((item: any, index: any) => {
+            return (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>
+                  <Select
+                    placeholder="Chọn dich vụ"
+                    className="mb-2 react-select"
+                    classNamePrefix="react-select"
+                    options={services}
+                    onChange={(value: any) => {
+                      handleChange(
+                        {
+                          target: { name: "service_id", value: value },
+                        },
+                        index
+                      );
                     }}
+                    value={services?.filter(
+                      (option: any) => item?.service_id === option.value
+                    )}
+                  ></Select>
+                </td>
+                <td>{serviceByExam[0]?.doctorId?.name}</td>
+                <td>
+                  {item?.price ? `${item.price.toLocaleString()} đ` : "---"}
+                </td>
+                <td>
+                  <Link
+                    to={`/designation/${item?._id}/view`}
+                    style={{ color: "blue", textDecoration: "underline" }}
                   >
-                    <IconTrash />
-                  </button>
-                  {dataServices?.length == index + 1 && (
+                    Xem
+                  </Link>
+                </td>
+                <td>{checkpayment(item?.paymentStatus)}</td>
+                <td>
+                  <LabelStatusDesignation type={item?.status} />
+                </td>
+                <td>
+                  <div className="flex items-center gap-x-2">
                     <button
-                      className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
-                      onClick={handleAddService}
+                      type="button"
+                      className="w-[40px] h-[40px] border border-gray-200 rounded-lg flex justify-center items-center"
+                      onClick={() => {
+                        if (serviceByExam[index]?._id) {
+                          handleShowModel(
+                            serviceByExam[index],
+                            serviceByExam[index]?.paymentStatus
+                          );
+                        } else {
+                          handleRemoveService(index);
+                        }
+                      }}
                     >
-                      <IconPlus></IconPlus>
+                      <IconTrash />
                     </button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          );
-        })}
-      </Table>
-      <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
-        <div className="flex justify-end w-full px-5">
-          <div className="flex items-center gap-x-5">
-            <Button to="/examination">Đóng</Button>
-            <Button
-              type="submit"
-              className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-              onClick={() => handleCreateServiceByExamination()}
-              isLoading={loading}
-              disabled={loading}
-            >
-              Lưu
-            </Button>
+                    {dataServices?.length == index + 1 && (
+                      <button
+                        className="flex items-center w-[40px] h-[40px] bg-primary rounded-lg text-white justify-center"
+                        onClick={handleAddService}
+                      >
+                        <IconPlus></IconPlus>
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </Table>
+        <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0 action-bottom">
+          <div className="flex justify-end w-full px-5">
+            <div className="flex items-center gap-x-5">
+              <Button to="/examination">Đóng</Button>
+              <Button
+                type="submit"
+                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                onClick={() => handleCreateServiceByExamination()}
+                isLoading={loading}
+                disabled={loading}
+              >
+                Lưu
+              </Button>
+            </div>
           </div>
         </div>
+        <Modal
+          centered
+          open={openModal}
+          onOk={handleDeleteService}
+          onCancel={() => setOpenModal(false)}
+          confirmLoading={loading}
+        >
+          <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
+            Thông Báo
+          </h1>
+          <div className="flex flex-col items-center justify-center py-4 text-sm">
+            <p>Bạn có chắc muốn huỷ dịch vụ này</p>
+          </div>
+        </Modal>
       </div>
-      <Modal
-        centered
-        open={openModal}
-        onOk={handleDeleteService}
-        onCancel={() => setOpenModal(false)}
-        confirmLoading={loading}
-      >
-        <h1 className="text-[#4b4b5a] pb-4 border-b border-b-slate-200 font-bold text-center text-[18px]">
-          Thông Báo
-        </h1>
-        <div className="flex flex-col items-center justify-center py-4 text-sm">
-          <p>Bạn có chắc muốn huỷ dịch vụ này</p>
-        </div>
-      </Modal>
-    </div>
+    </Spin>
   );
 };
 
