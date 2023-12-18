@@ -81,7 +81,6 @@ function ProductAdd() {
   const { image, handleDeleteImage, handleSelectImage, loading } =
     useUploadImage();
 
-  console.log(isValid);
   const handleCreateProduct = async (values: any) => {
     const data = { ...values, status, image };
     setLoadingBtn(true);

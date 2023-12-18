@@ -23,6 +23,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { socketIO } from "../../../App";
 
 const AddBooking = () => {
   const [dataCustomers, setDataCustomers] = useState<any[]>([]);
@@ -92,6 +93,7 @@ const AddBooking = () => {
     const res = await createExamination(params);
     setLoading(false);
     if (res?.examination) {
+      socketIO.emit("client_newNotify", "Bạn có thông báo mới");
       toast.success("Tạo đặt lịch thành công!");
       navigate("/reception");
     } else {

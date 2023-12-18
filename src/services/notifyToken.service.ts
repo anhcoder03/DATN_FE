@@ -11,6 +11,15 @@ export const getAllNotifyToken = async () => {
   }
 };
 
+export const getOneNotifyToken = async (token: string) => {
+  try {
+    const response = await http.get(`/notifyTokens/${token}`);
+    return response.notifyToken;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const createNotifyToken = async (data?: any) => {
   try {
     const response = await http.post(`/notifyTokens`, data);

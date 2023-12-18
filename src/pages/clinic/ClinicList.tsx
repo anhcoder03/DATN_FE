@@ -65,8 +65,6 @@ const ClinicList = () => {
     }
   };
 
-  console.log("clinics", clinics);
-
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);

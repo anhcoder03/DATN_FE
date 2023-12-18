@@ -43,7 +43,6 @@ const ConfigUserAddContainer = () => {
     mode: "onSubmit",
   });
   const handleCreateUser = async (values: IUser) => {
-    console.log(values);
     const data = { ...values, role: values.role.value, avatar: "" };
 
     const res = await createUser(data);

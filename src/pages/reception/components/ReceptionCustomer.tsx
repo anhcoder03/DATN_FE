@@ -22,7 +22,7 @@ import { Button, Modal } from "antd";
 import { toast } from "react-toastify";
 import IconPrint from "../../../assets/images/ic-print.svg";
 import { getServiceByIdExam } from "../../../services/designation.service";
-
+import { socketIO } from "../../../App";
 
 const ReceptionCustomer = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
@@ -192,7 +192,7 @@ const ReceptionCustomer = () => {
     };
   });
 
-  const [services, setServices] = useState<any>()
+  const [services, setServices] = useState<any>();
 
   const service = async (val: any) => {
     try {
@@ -206,7 +206,7 @@ const ReceptionCustomer = () => {
   };
 
   const handleUpdate = (data: any) => {
-    service(data?.data?._id)
+    service(data?.data?._id);
     setOpenModal(true);
     setReception(data);
   };
@@ -218,6 +218,9 @@ const ReceptionCustomer = () => {
     };
     const res: any = await UpdateExamination(params);
     if (res?.examination) {
+      if (res.examination && res.examination.status === "cancel") {
+        socketIO.emit("client_newNotify", "Bạn có thông báo mới");
+      }
       handleGetExaminaton();
       toast.success(res?.message);
       return;

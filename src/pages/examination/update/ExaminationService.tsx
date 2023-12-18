@@ -45,7 +45,6 @@ const ExaminationSevicer = ({ id }: { id: any }) => {
       _id: null,
     },
   ]);
-  console.log(dataServices);
 
   useEffect(() => {
     handleGetServiceByExam();
@@ -142,7 +141,6 @@ const ExaminationSevicer = ({ id }: { id: any }) => {
 
   const handleChange = (e: any, index: any) => {
     const { name, value } = e?.target;
-    console.log(value);
     if (name == "service_id") {
       const check = dataServices?.findIndex((e: any) => {
         return e?.service_id == value?._id;

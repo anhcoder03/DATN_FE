@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconBell } from "../../icons";
 import {
   getAllNotifications,
@@ -7,11 +7,22 @@ import {
 import useClickOutSide from "../../../hooks/useClickOutSIde";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  onSetNotifications,
+  setLoadingNotification,
+  updateTotalElements,
+} from "../../../redux/notification/notificationSlice";
+import { socketIO } from "../../../App";
+import { message } from "antd";
+import { store } from "../../../redux/store";
 const Notification = () => {
+  const dispatch = useDispatch();
   const [isOpenNoti, setIsOpenNoti] = useState(false);
   const dropdownRef = useRef<any>(null);
-  const [dataNoti, setDataNoti] = useState<any>([]);
-  const [totalElements, setTotalElements] = useState<any>(0);
+  const { notifications: dataNoti, totalElements } = useSelector(
+    (state: any) => state.notification
+  );
 
   const {
     show: showMenuNoti,
@@ -26,7 +37,22 @@ const Notification = () => {
   };
 
   useEffect(() => {
+    console.log("aaaa1");
+    socketIO.on("server_newNotify", (data) => {
+      loadData();
+      message.info(data);
+
+      console.log("aaaa2");
+    });
+
+    return () => {
+      socketIO.off("server_newNotify");
+    };
+  }, []);
+
+  useEffect(() => {
     loadData();
+    console.log("aaaa");
   }, []);
 
   useEffect(() => {
@@ -48,11 +74,7 @@ const Notification = () => {
   const loadData = async () => {
     const response = await getAllNotifications();
     if (response.docs) {
-      setDataNoti(response.docs);
-      const unread_messages = response.docs?.filter(
-        (item: any) => item?.status === 0
-      );
-      setTotalElements(unread_messages?.length);
+      dispatch(onSetNotifications(response.docs));
     }
   };
 
@@ -92,8 +114,12 @@ const notiMenu = (dropdownRef: any, showMenuNoti: any, dataNoti: any) => {
       _id: id,
       status: 1,
     };
-    const response: any = await updateNotifications(params);
-    console.log("responsesíuiu", response);
+
+    const seenNotify = dataNoti.find((item: any) => item._id === id);
+    if (seenNotify && seenNotify.status === 0) {
+      await updateNotifications(params);
+      store.dispatch(updateTotalElements(id));
+    }
   };
 
   return (

@@ -111,7 +111,6 @@ const ProductList = () => {
 
   const onOk = async () => {
     const res = await deleteProduct(product?._id);
-    console.log(res);
     if (res?.medicine) {
       toast.success(res?.message);
       setOpenModal(false);
@@ -192,7 +191,6 @@ const ProductList = () => {
                       </button>
                     </div>
                   )}
-                  
                 </td>
               </tr>
             ))}

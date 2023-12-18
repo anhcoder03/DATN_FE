@@ -20,7 +20,10 @@ import { toast } from "react-toastify";
 import { useParams, useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import { RootState, store } from "../../../redux/store";
+import { socketIO } from "../../../App";
+import { getAllNotifications } from "../../../services/notifications.service";
+import { onSetNotifications } from "../../../redux/notification/notificationSlice";
 
 const DetailBooking = () => {
   const auth: any = useSelector((state: RootState) => state.auth.auth?.user);
@@ -73,6 +76,7 @@ const DetailBooking = () => {
     setLoading(false);
     if (response?.examination) {
       toast.success("chuyển trạng thái thành công!");
+
       navigate(`/reception/${id}`);
     } else {
       toast.error(response?.message);
@@ -89,6 +93,7 @@ const DetailBooking = () => {
       setLoading(false);
       if (res?.examination) {
         toast.success("Huỷ đặt lịch thành công!");
+        socketIO.emit("client_newNotify", "Bạn có thông báo mới");
         setOpenModal(false);
         navigate(`/reception`);
       } else {
@@ -199,7 +204,9 @@ const DetailBooking = () => {
           </Row>
           <Row className="grid-cols-2 ">
             <Field>
-              <Label htmlFor="staffId"><span className="star-field">*</span>Nhân viên tiếp đón</Label>
+              <Label htmlFor="staffId">
+                <span className="star-field">*</span>Nhân viên tiếp đón
+              </Label>
               <Input
                 control={control}
                 name="phone"

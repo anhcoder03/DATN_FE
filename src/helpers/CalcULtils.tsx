@@ -36,7 +36,6 @@ export default class CalcUtils {
         const months = Math.max((currentDate.getMonth() + 12 - birthDate.getMonth()) % 12, 0);
         const days = Math.max(currentDate.getDate() - birthDate.getDate(), 0);
         const totalMonths = Math.max((age * 12) + months, 0);
-        console.log(`calculateAge`, age, months, days)
         if (currentDate.getFullYear() - birthDate.getFullYear() === 1 && currentDate.getMonth() - birthDate.getMonth() === 0 && dayDiff < 0) {
             return 1 + " tuổi, " + 0 + " tháng, " + days + " ngày 1"
         }
@@ -63,7 +62,6 @@ export default class CalcUtils {
         const yearNow = moment().format("YYYY")
         let ageYear: number = 0;
         let ageMonth: number = 0;
-        console.log("months", months, years);
         if (months > monthNow) {
             ageYear = Number(yearNow) - Number(years) - 1;
             ageMonth = 12 - Number(months) + Number(monthNow)
@@ -72,8 +70,6 @@ export default class CalcUtils {
             ageYear = Number(yearNow) - Number(years);
             ageMonth = Number(monthNow) - Number(months)
         }
-
-        console.log(`ageYear`, ageYear, ageMonth)
 
         if (ageYear <= 5) {
             return `${ageYear} tuổi ${ageMonth} tháng (${Number(ageYear) * 12 + Number(ageMonth)} tháng)`
