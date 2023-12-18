@@ -19,7 +19,7 @@ const TitleList = () => {
   const urlParams = new URLSearchParams(location.search);
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
-  const headings = ["Mã Chức danh", "Tên Chức danh", "Trạng thái", "Thao Tác"];
+  const headings = ["Mã Chức danh", "Tên Chức danh", "Trạng thái"];
   const optionsPagination = [
     { value: 25, label: "25 bản ghi" },
     { value: 50, label: "50 bản ghi" },
@@ -123,16 +123,6 @@ const TitleList = () => {
                   }}
                 >
                   {item?.status === 1 ? "Đang hoạt động" : "Ngừng hoạt động"}
-                </td>
-                <td>
-                  <div className="table-action">
-                    <button
-                      className="button-nutri text-[#585858]"
-                      onClick={() => handleShowModel(item)}
-                    >
-                      <IconTrash></IconTrash>
-                    </button>
-                  </div>
                 </td>
               </tr>
             ))}

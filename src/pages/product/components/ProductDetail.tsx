@@ -45,9 +45,29 @@ function ProductDetail() {
     handleGetProduct();
   }, [id]);
   const { control, reset } = useForm<any>({});
+
   const handleGotoUpdate = () => {
     navigate(`/product/update/${id}`);
   };
+
+  const renderStatus : any = (status: any) => {
+    if(status == 'work') {
+      return (
+        <span style={{color: '#48A800', marginTop: 5}}>Đang hoạt động</span>
+      )
+    }
+    if(status == 'hidden') {
+      return (
+        <span style={{color: '#FD4858', marginTop: 5}}>Ngừng hoạt động</span>
+      )
+    }
+    else {
+      return(
+        <span style={{marginTop: 5}}>---</span>
+      )
+    }
+  }
+
   return (
     <Layout>
       <div className="relative h-full only-view">
@@ -139,11 +159,7 @@ function ProductDetail() {
               </Field>
               <Field>
                 <Label htmlFor="status">Trạng thái</Label>
-                <Input
-                  name=""
-                  control={control}
-                  value={status == "work" ? "Đang hoạt động" : "Không hoạt động"}
-                />
+                {renderStatus(status)}
               </Field>
               <Field>
                 <Label htmlFor="quantity">
@@ -160,7 +176,7 @@ function ProductDetail() {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="how_using">Cách dùng</Label>
+                <Label htmlFor="how_using"><span className="star-field">*</span>Cách dùng</Label>
                 <Textarea
                   name="how_using"
                   placeholder="Nhập cách dùng..."
@@ -170,7 +186,7 @@ function ProductDetail() {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="uses">Công dụng</Label>
+                <Label htmlFor="uses"><span className="star-field">*</span>Công dụng</Label>
                 <Textarea
                   name="uses"
                   placeholder="Nhập công dụng..."

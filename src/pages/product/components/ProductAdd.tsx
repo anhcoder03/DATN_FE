@@ -269,7 +269,7 @@ function ProductAdd() {
                       className="flex items-center h-[34px]"
                       value={"hidden"}
                     >
-                      Ẩn
+                      Ngừng hoạt động
                     </Radio>
                   </div>
                 </Radio.Group>
@@ -292,7 +292,7 @@ function ProductAdd() {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="how_using">Cách dùng</Label>
+                <Label htmlFor="how_using"><span className="star-field">*</span>Cách dùng</Label>
                 <Textarea
                   name="how_using"
                   placeholder="Nhập cách dùng..."
@@ -305,7 +305,7 @@ function ProductAdd() {
             </Row>
             <Row className="grid-cols-1 mb-10">
               <Field>
-                <Label htmlFor="uses">Công dụng</Label>
+                <Label htmlFor="uses"><span className="star-field">*</span>Công dụng</Label>
                 <Textarea
                   name="uses"
                   placeholder="Nhập công dụng..."

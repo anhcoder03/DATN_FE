@@ -49,10 +49,12 @@ const ServiceList = () => {
     "Trạng thái",
     "Thao tác",
   ];
+  
   const handlePageClick = (event: any) => {
     const page = event.selected + 1;
     setQuery({ ...query, _page: page });
   };
+
   const handleGetservices = async () => {
     try {
       setLoading(true);
@@ -65,6 +67,7 @@ const ServiceList = () => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     document.title = "Danh sách dịch vụ";
     urlParams.set("page", query._page as any);
@@ -72,6 +75,7 @@ const ServiceList = () => {
     navigate(`?${urlParams}`);
     handleGetservices();
   }, [query]);
+
   const handleSearch = (e: any) => {
     setQuery({ ...query, search: e });
     if (e !== "") {
@@ -82,6 +86,7 @@ const ServiceList = () => {
       navigate(`?${urlParams}`);
     }
   };
+
   const handleStatusChange = (selectedOpiton: any) => {
     setQuery({ ...query, _status: selectedOpiton.value });
     if (selectedOpiton.value != "") {
@@ -101,6 +106,7 @@ const ServiceList = () => {
     setOpenModal(true);
     setservice(data);
   };
+
   const onOk = async () => {
     if (service?.type === "stop" || service?.type === "active") {
       const res = await updateService({
@@ -126,9 +132,11 @@ const ServiceList = () => {
     }
     setOpenModal(false);
   };
+
   const gotoDetail = (item: any) => {
     navigate(`/service/${item?._id}`);
   };
+
   const StatusServicePack = (status: any) => {
     if (status == 1) {
       return <span className="text-success">Đang hoạt động</span>;
