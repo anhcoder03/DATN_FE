@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Layout } from "../../../components/layout";
 import Heading from "../../../components/common/Heading";
 import { Button } from "../../../components/button";
@@ -34,6 +34,8 @@ import {
 } from "../../../services/designation.service";
 import { socketIO } from "../../../App";
 import LoadingPage from "../../../components/common/LoadingPage";
+import { useReactToPrint } from "react-to-print";
+import { PrintCompoent } from "../../../components/print";
 
 const WelcomeUpdate = () => {
   const { id } = useParams();
@@ -46,6 +48,7 @@ const WelcomeUpdate = () => {
   const [serviceByExam, setServiceByExam] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openModalPrint, setOpenModalPrint] = useState<boolean>(false);
   const [service, setService] = useState<any>(null);
   const [isPayment, setIsPayment] = useState(false);
   const [lengthService, setLengthService] = useState(0);
@@ -60,6 +63,7 @@ const WelcomeUpdate = () => {
 
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
+  console.log("🚀 ~ file: WelcomeUpdate.tsx:66 ~ WelcomeUpdate ~ data:", data);
   const {
     control,
     handleSubmit,
@@ -69,22 +73,30 @@ const WelcomeUpdate = () => {
   } = useForm({
     mode: "onChange",
   });
-
+  const getExamination = async () => {
+    setLoading(true);
+    const response = await getOneExamination(id);
+    setLoading(false);
+    const resData = response?.examination;
+    setValue("customerId", resData?.customerId?._id);
+    setValue("staffId", resData?.staffId?._id);
+    setValue("clinicId", resData?.clinicId?._id);
+    setDoctorId(resData?.doctorId?._id);
+    setClinicId(resData?.clinicId?._id);
+    setDayWelcome(resData?.day_welcome || new Date());
+    setData(resData);
+    reset(resData);
+  };
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    onAfterPrint: () => {
+      setOpenModalPrint(false);
+      getExamination();
+    },
+    copyStyles: true,
+  });
   useEffect(() => {
-    async function getExamination() {
-      setLoading(true);
-      const response = await getOneExamination(id);
-      setLoading(false);
-      const resData = response?.examination;
-      setValue("customerId", resData?.customerId?._id);
-      setValue("staffId", resData?.staffId?._id);
-      setValue("clinicId", resData?.clinicId?._id);
-      setDoctorId(resData?.doctorId?._id);
-      setClinicId(resData?.clinicId?._id);
-      setDayWelcome(resData?.day_welcome || new Date());
-      setData(resData);
-      reset(resData);
-    }
     getExamination();
   }, []);
 
@@ -331,7 +343,7 @@ const WelcomeUpdate = () => {
     setLoading(false);
     if (res?.examination) {
       toast.success("Tạo phiếu khám thành công!");
-      navigate(`/examination/${id}/view`);
+      handlePrint();
     } else {
       toast.error(res?.message);
     }
@@ -689,33 +701,38 @@ const WelcomeUpdate = () => {
             <div className="flex justify-end w-full px-5">
               <div className="flex items-center gap-x-5">
                 <Button to="/reception">Đóng</Button>
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                  onClick={handleSubmit(handleUpdate)}
-                  disabled={loading}
-                  isLoading={loading}
-                >
-                  Lưu
-                </Button>
-                <Button
-                  type="button"
-                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                  onClick={handleSubmit(handleCreateWaiting)}
-                  disabled={loading}
-                  isLoading={loading}
-                >
-                  Tạo phiếu khám
-                </Button>
-                <Button
-                  type="submit"
-                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
-                  onClick={() => {
-                    handleModal({ type: "cancel", data: data });
-                  }}
-                >
-                  Hủy
-                </Button>
+                {data?.status === "recetion" && (
+                  <>
+                    {" "}
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={handleSubmit(handleUpdate)}
+                      disabled={loading}
+                      isLoading={loading}
+                    >
+                      Lưu
+                    </Button>
+                    <Button
+                      type="button"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                      onClick={handleSubmit(handleCreateWaiting)}
+                      disabled={loading}
+                      isLoading={loading}
+                    >
+                      Tạo phiếu khám
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-[#fd4858] rounded-md disabled:opacity-50 disabled:pointer-events-none bg-[#fd485833]"
+                      onClick={() => {
+                        handleModal({ type: "cancel", data: data });
+                      }}
+                    >
+                      Hủy
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -744,6 +761,10 @@ const WelcomeUpdate = () => {
             </div>
           )}
         </Modal>
+        <PrintCompoent
+          componentRef={componentRef}
+          dataPrint={data}
+        ></PrintCompoent>
       </Layout>
     </Spin>
   );

@@ -5,6 +5,13 @@ export const findPayment = (data: any[]) => {
   return noPayment;
 };
 
+export const findDoneService = (data: any[]) => {
+  const done = data.find(
+    (i) => i.status === "waiting" || i.status === "running"
+  );
+  return done;
+};
+
 export const fintPricePaymented = (data: any[]) => {
   const list = data?.filter((i) => i.paymentStatus === "paid");
   if (!list) return PriceUtils.format(0);
