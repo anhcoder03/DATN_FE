@@ -52,9 +52,10 @@ const ClinicAdd = () => {
   const handleGetUsers = async () => {
     try {
       const data = await getAllUser({ limit: 1000 });
+      console.log("🚀 ~ file: ClinicAdd.tsx:55 ~ handleGetUsers ~ data:", data);
       const roleDoctor = data?.docs;
       const filteredUsers = roleDoctor.filter(
-        (user: any) => user.role === "VT-00000002"
+        (user: any) => user.role._id === "VT-00000002"
       );
       if (filteredUsers.length > 0) {
         const array: any = [];
@@ -141,9 +142,9 @@ const ClinicAdd = () => {
                       doctorInClinic: val?.value,
                     });
                   }}
-                  value={user?.find(
-                    (item: any) => item?.value == data?.doctorInClinic
-                  )}
+                  // value={user?.find(
+                  //   (item: any) => item?.value == data?.doctorInClinic
+                  // )}
                 ></Select>
               </Field>
             </Row>

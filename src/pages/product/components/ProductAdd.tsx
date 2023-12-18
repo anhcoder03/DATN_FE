@@ -276,7 +276,7 @@ function ProductAdd() {
                         className="flex items-center h-[34px]"
                         value={"hidden"}
                       >
-                        Ngừng hoạt động
+                        Ngừng kinh doanh
                       </Radio>
                     </div>
                   </Radio.Group>

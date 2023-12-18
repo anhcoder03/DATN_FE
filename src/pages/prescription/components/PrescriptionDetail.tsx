@@ -88,7 +88,7 @@ const PrescriptionDetail = () => {
       setLoading(true);
       const res = await updatePrescription(params);
       setLoading(false);
-      if (res?.message) {
+      if (res?.success) {
         toast.success("Huỷ đơn thuốc thành công!");
         setData({
           cancel_reason: "",
@@ -345,7 +345,7 @@ const PrescriptionDetail = () => {
                   </Button>
                 )}
                 {auth?.role?.roleNumber == 2 ||
-                auth?.role?.roleNumber == 3 ? null : (
+                auth?.role?.roleNumber === 1 ? null : (
                   <>
                     {data?.status == 1 && (
                       <Button

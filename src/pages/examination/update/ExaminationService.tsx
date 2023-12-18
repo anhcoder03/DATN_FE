@@ -29,7 +29,7 @@ const headings = [
   "Thao tác",
 ];
 
-const ExaminationSevicer = ({ id }: { id: any }) => {
+const ExaminationSevicer = ({ id, dataExam }: { id: any; dataExam: any }) => {
   const [lengthService, setLengthService] = useState(0);
   const [services, setServices] = useState<any[]>([]);
   const [serviceByExam, setServiceByExam] = useState<any>([]);
@@ -232,10 +232,10 @@ const ExaminationSevicer = ({ id }: { id: any }) => {
       (i) => i.status === "waiting" && i.paymentStatus === "unpaid"
     );
     const value = {
-      doctorId: serviceByExam[0].doctorId?._id,
-      staffId: serviceByExam[0].staffId?._id,
-      customerId: serviceByExam[0].customerId?._id,
-      clinicId: serviceByExam[0].clinicId?._id,
+      doctorId: dataExam.doctorId?._id,
+      staffId: dataExam.staffId?._id,
+      customerId: dataExam.customerId?._id,
+      clinicId: dataExam.clinicId?._id,
       examinationId: id,
       paymentStatus: "unpaid",
       services: newService,

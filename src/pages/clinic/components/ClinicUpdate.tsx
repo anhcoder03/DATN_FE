@@ -25,7 +25,7 @@ const schema = yup.object({
 const ClinicUpdate = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>([]);
+  const [user, setUser] = useState<any[]>([]);
   const [data, setData] = useState<any>();
   const [tempStatus, setTempStatus] = useState("active");
   const [loading, setLoading] = useState<any>(false);
@@ -49,7 +49,7 @@ const ClinicUpdate = () => {
         reset(res);
         setTempStatus(res.status);
         setData({
-          ...data,
+          ...res,
           doctorInClinic: res?.doctorInClinic?._id,
         });
       } catch (error) {
@@ -65,7 +65,7 @@ const ClinicUpdate = () => {
       const roleDoctor = data?.docs;
 
       const filteredUsers = roleDoctor.filter(
-        (user: any) => user.role === "VT-00000002"
+        (user: any) => user.role._id === "VT-00000002"
       );
 
       if (filteredUsers.length > 0) {
@@ -155,7 +155,7 @@ const ClinicUpdate = () => {
                     });
                   }}
                   value={user?.find(
-                    (item: any) => item?.value == data?.doctorInClinic
+                    (item: any) => item?._id == data?.doctorInClinic
                   )}
                 ></Select>
               </Field>

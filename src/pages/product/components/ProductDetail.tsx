@@ -62,8 +62,11 @@ function ProductDetail() {
     }
     if (status == "hidden") {
       return (
-        <span style={{ color: "#FD4858", marginTop: 5 }}>Ngừng hoạt động</span>
+        <span style={{ color: "#FD4858", marginTop: 5 }}>Ngừng kinh doanh</span>
       );
+    }
+    if (status == "empty") {
+      return <span style={{ color: "#FD4858", marginTop: 5 }}>Hết hàng</span>;
     } else {
       return <span style={{ marginTop: 5 }}>---</span>;
     }

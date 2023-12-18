@@ -115,6 +115,10 @@ const ModalLoginOTP = React.forwardRef<
     >
       {hasOTP ? (
         <form className="max-w-[400px] mx-auto my-5">
+          <p className="py-3 font-medium text-primary">
+            Mã OTP đã được gửi đến email của bạn.Vui lòng kiểm tra trong hộp thư
+            email.
+          </p>
           <Field>
             <Label htmlFor="email">Nhập mã OTP</Label>
             <div className="flex items-center justify-center mt-5">
@@ -132,6 +136,7 @@ const ModalLoginOTP = React.forwardRef<
               />
             </div>
           </Field>
+
           <p className="flex items-center gap-x-5 mt-4">
             <span className="text-gray16 font-medium">
               Mã OTP sẽ hết hạn sau:

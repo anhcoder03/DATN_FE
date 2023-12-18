@@ -64,7 +64,8 @@ export const optionGender: IOption[] = [
 
 export const optionStatus: IOption[] = [
   { value: "", label: "-Trạng thái-" },
-  { value: "work", label: "Còn hàng" },
+  { value: "work", label: "Đang hoạt động" },
+  { value: "hidden", label: "Ngừng hoạt động" },
   { value: "empty", label: "Hết hàng" },
 ];
 
@@ -112,15 +113,15 @@ export const optionService: IOption[] = [
 
 export const Status_cancel: IOption[] = [
   {
-    value: '',
-    label: '-Trạng thái huỷ-'
+    value: "",
+    label: "-Trạng thái huỷ-",
   },
   {
-    value: 'cancel',
-    label: 'Huỷ phiếu khám'
+    value: "cancel",
+    label: "Huỷ phiếu khám",
   },
   {
-    value: 'cancel_schedule',
-    label: 'Huỷ đặt lịch'
-  }
-]
+    value: "cancel_schedule",
+    label: "Huỷ đặt lịch",
+  },
+];

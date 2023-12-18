@@ -10,6 +10,7 @@ import { getAllUser } from "../../../../services/user.service";
 import { IUser } from "../../../../types/user.type";
 import ConfigUserModal, { ConfigUserModalMethod } from "../components/modal";
 import FilterConfigUser from "../components/filter";
+import { getAllRole } from "../../../../services/role.service";
 
 type ConfigUserListContainerProps = {};
 
@@ -25,6 +26,7 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalDocs, setTotalDocs] = useState<number>(1);
   const urlParams = new URLSearchParams(location.search);
+  const [dataRole, setDataRole] = useState<any[]>([]);
   const navigate = useNavigate();
 
   const deleteRef = useRef<ConfigUserModalMethod>(null);
@@ -38,7 +40,7 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
     _sort: "createdAt",
     _order: "asc",
     search: "",
-    _role: "",
+    _roleNumber: "",
   });
   const headings = [
     "Mã người dùng",
@@ -65,10 +67,23 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
       .catch((error) => console.log(error));
   }, [query]);
 
+  const getAllRoles = async () => {
+    const data = await getAllRole({ limit: 100 });
+    const convertData = data?.docs?.map((i: any) => {
+      return {
+        label: i.name,
+        value: i.roleNumber,
+        ...i,
+      };
+    });
+    setDataRole([{ label: "-Chức danh-", value: "" }, ...convertData]);
+  };
+
   useEffect(() => {
     urlParams.set("page", query._page as any);
     urlParams.set("limit", query._limit as any);
     fetch();
+    getAllRoles();
   }, [query, fetch]);
 
   const handleSearch = (e: any) => {
@@ -82,7 +97,7 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
     }
   };
   const handleRoleChange = (selectedOpiton: any) => {
-    setQuery({ ...query, _role: selectedOpiton.value });
+    setQuery({ ...query, _roleNumber: selectedOpiton.value });
     if (selectedOpiton.value !== "") {
       urlParams.set("role", selectedOpiton.value);
       navigate(`?${urlParams}`);
@@ -102,6 +117,7 @@ const ConfigUserListContainer: React.FC<ConfigUserListContainerProps> = () => {
       <FilterConfigUser
         handleSearch={handleSearch}
         handleRoleChange={handleRoleChange}
+        dataRole={dataRole}
       />
       <div className="bg-white">
         <Table headings={headings} loading={loading} length={users?.length}>

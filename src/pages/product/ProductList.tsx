@@ -126,17 +126,16 @@ const ProductList = () => {
   };
 
   const renderStatus = (status: any) => {
-    if(status == 'work') {
-      return (
-        <span style={{color: '#48A800'}}>Đang hoạt động</span>
-      )
+    if (status == "work") {
+      return <span style={{ color: "#48A800" }}>Đang hoạt động</span>;
     }
-    if(status == 'hidden') {
-      return (
-        <span style={{color: '#FD4858'}}>Ngừng hoạt động</span>
-      )
+    if (status == "hidden") {
+      return <span style={{ color: "#FD4858" }}>Ngừng hoạt động</span>;
     }
-  }
+    if (status == "empty") {
+      return <span style={{ color: "#FD4858" }}>Hết hàng</span>;
+    }
+  };
 
   return (
     <Layout>
@@ -166,12 +165,21 @@ const ProductList = () => {
                     alt=""
                   />
                 </td>
-                <td onClick={() => gotoDetail(item)}>{item?.name}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  <p>{item?.name}</p>
+                  {item?.quantity < 3 && (
+                    <p className="text-red-500 font-semibold text-xs py-2">
+                      Sản phẩm sắp hết hàng
+                    </p>
+                  )}
+                </td>
                 <td onClick={() => gotoDetail(item)}>
                   {moment(item?.dateExpiry).format("DD/MM/YYYY")}
                 </td>
                 <td onClick={() => gotoDetail(item)}>{item?.quantity}</td>
-                <td onClick={() => gotoDetail(item)}>{renderStatus(item?.status)}</td>
+                <td onClick={() => gotoDetail(item)}>
+                  {renderStatus(item?.status)}
+                </td>
                 <td>
                   {auth?.role?.roleNumber == 2 ? null : (
                     <div className="table-action">
