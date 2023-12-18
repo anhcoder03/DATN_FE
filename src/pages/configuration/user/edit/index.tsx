@@ -27,8 +27,6 @@ const ConfigUserUpdateContainer = () => {
   const [data, setData] = useState<IUser>();
   const [role, setRole] = useState<IRole[]>();
 
-  console.log('🚀 ~ role:', role);
-
   const { id } = useParams();
   const {
     control,
