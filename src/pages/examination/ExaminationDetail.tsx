@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Modal, Radio, Spin } from "antd";
 import {
+  findDoneService,
   findPayment,
   findPriceTotal,
   fintPricePaymented,
@@ -159,6 +160,11 @@ const ExaminationDetail = () => {
         toast.error("Đã có lỗi xảy ra!");
       }
     } else if (status === "done") {
+      const doneService = findDoneService(services);
+      if (doneService) {
+        toast.warning("Vui lòng khám hết dịch vụ trước khi hoàn thành");
+        return;
+      }
       const noPayment = findPayment(services);
       if (noPayment) {
         toast.warning("Vui lòng thanh toán trước khi hoàn thành");
