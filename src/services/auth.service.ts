@@ -5,32 +5,6 @@ export const login = (data: any) => {
   return axios.post("http://localhost:8000/signin", data);
 };
 
-export const changePassword = async (
-  _id: any,
-  password: any,
-  newPassword: any,
-  accessToken: any
-) => {
-  try {
-    const response: TDataResponse = await axios.put(
-      "http://localhost:8000/changePassword",
-      {
-        _id,
-        password,
-        newPassword,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return response;
-  } catch (error) {
-    return error;
-  }
-};
-
 export const loginOTP = async (data: any) => {
   try {
     const response = await axios.post(`http://localhost:8000/sendOTP`, data);

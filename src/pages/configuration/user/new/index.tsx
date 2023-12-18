@@ -31,7 +31,11 @@ export const schemaConfigUser = yup.object({
     .email("Email không đúng định dạng")
     .required("Email không được để trống!"),
   role: yup.object().required("Chức danh không được để trống!"),
-  password: yup.string().required("Mật khẩu không được để trống!"),
+  password: yup
+    .string()
+    .required("Mật khẩu không được để trống!")
+    .min(6, "Mật khẩu ít nhất 6 ký tự")
+    .max(20, "Mật khẩu không được vượt quá 20 ký tự"),
 });
 
 const ConfigUserAddContainer = () => {
@@ -46,7 +50,7 @@ const ConfigUserAddContainer = () => {
     mode: "onSubmit",
   });
   const handleCreateUser = async (values: IUser) => {
-    const data = { ...values, role: values.role.value, avatar: "" };
+    const data = { ...values, role: values.role?.value, avatar: "" };
     setLoading(true);
     const res = await createUser(data);
     setLoading(false);

@@ -37,12 +37,9 @@ const Notification = () => {
   };
 
   useEffect(() => {
-    console.log("aaaa1");
     socketIO.on("server_newNotify", (data) => {
       loadData();
       message.info(data);
-
-      console.log("aaaa2");
     });
 
     return () => {
@@ -52,7 +49,6 @@ const Notification = () => {
 
   useEffect(() => {
     loadData();
-    console.log("aaaa");
   }, []);
 
   useEffect(() => {
@@ -167,7 +163,6 @@ const notiMenu = (dropdownRef: any, showMenuNoti: any, dataNoti: any) => {
                 </div>
               </div>
               <div className="w-full ps-3">
-                {/* <div className="text-gray-500 text-sm mb-1.5 dark:text-gray-400">New message from <span className="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's up? All set for the presentation?"</div> */}
                 <div className="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
                   {item?.content}
                 </div>

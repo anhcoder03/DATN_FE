@@ -54,7 +54,7 @@ const ExaminationUpdate = () => {
     },
     {
       title: "CHỈ ĐỊNH DỊCH VỤ",
-      children: <ExaminationSevicer id={id} />,
+      children: <ExaminationSevicer id={id} dataExam={data} />,
       id: "2",
       name: "designation",
     },
