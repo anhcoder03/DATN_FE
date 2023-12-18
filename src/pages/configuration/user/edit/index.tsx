@@ -15,6 +15,8 @@ import RoleSelect from "../../../../components/select/role";
 import { getOneUser, updateUser } from "../../../../services/user.service";
 import { IUser } from "../../../../types/user.type";
 import { schemaConfigUser } from "../new";
+import { Spin } from "antd";
+import LoadingPage from "../../../../components/common/LoadingPage";
 
 const ConfigUserUpdateContainer = () => {
   const [loading, setLoading] = useState(false);
@@ -40,7 +42,9 @@ const ConfigUserUpdateContainer = () => {
       role: values.role.value,
       avatar: "",
     };
+    setLoading(true);
     const res = await updateUser(data);
+    setLoading(false);
     if (res?.user) {
       toast.success(res?.message);
       navigate("/configuration/user");
@@ -54,11 +58,11 @@ const ConfigUserUpdateContainer = () => {
       setLoading(true);
       getOneUser(id)
         .then((r) => {
-          setLoading(false);
           reset(r);
           setData(r);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
     },
     [reset]
   );
@@ -75,92 +79,98 @@ const ConfigUserUpdateContainer = () => {
   });
 
   return (
-    <Layout>
-      <div className="relative h-full">
-        <Heading>Chỉnh sửa thông tin người dùng</Heading>
-        <form
-          className="w-full p-5 bg-white "
-          onSubmit={handleSubmit(handleUpdateConfigUser)}
-        >
-          <Heading>Thông tin người dùng</Heading>
+    <Spin spinning={loading} indicator={<LoadingPage />}>
+      <Layout>
+        <div className="relative h-full">
+          <Heading>Chỉnh sửa thông tin người dùng</Heading>
+          <form
+            className="w-full p-5 bg-white min-h-[400px] "
+            onSubmit={handleSubmit(handleUpdateConfigUser)}
+          >
+            <Heading>Thông tin người dùng</Heading>
 
-          <Row>
-            <Field>
-              <Label htmlFor="name">
-                <span className="star-field">*</span>
-                Tên người dùng
-              </Label>
-              <Input
-                control={control}
-                name="name"
-                placeholder="Nhập tên người dùng"
-              />
-            </Field>
-            <Field>
-              <Label htmlFor="phone">
-                <span className="star-field">*</span>
-                Số điện thoại
-              </Label>
-              <Input
-                control={control}
-                name="phone"
-                placeholder="Nhập số điện thoại"
-              >
-                <div className="p-2 bg-white">
-                  <IconPhone></IconPhone>
-                </div>
-              </Input>
-            </Field>
+            <Row>
+              <Field>
+                <Label htmlFor="name">
+                  <span className="star-field">*</span>
+                  Tên người dùng
+                </Label>
+                <Input
+                  control={control}
+                  name="name"
+                  placeholder="Nhập tên người dùng"
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="phone">
+                  <span className="star-field">*</span>
+                  Số điện thoại
+                </Label>
+                <Input
+                  control={control}
+                  name="phone"
+                  placeholder="Nhập số điện thoại"
+                >
+                  <div className="p-2 bg-white">
+                    <IconPhone></IconPhone>
+                  </div>
+                </Input>
+              </Field>
 
-            <Field>
-              <Label htmlFor="email">
-                <span className="star-field">*</span>
-                Email
-              </Label>
-              <Input control={control} name="email" placeholder="Nhập Email" />
-            </Field>
-            <Field>
-              <Label htmlFor="password">
-                <span className="star-field">*</span>
-                password
-              </Label>
-              <Input
-                type="password"
-                control={control}
-                name="password"
-                placeholder="Nhập password"
-              />
-            </Field>
-          </Row>
-          <Row>
-            <Field>
-              <Label htmlFor="role">
-                <span className="star-field">*</span>Chức danh
-              </Label>
-              <Controller
-                name="role"
-                control={control}
-                render={({ field }) => <RoleSelect {...field} />}
-              />
-            </Field>
-          </Row>
-        </form>
-        <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
-          <div className="flex justify-end w-full px-5">
-            <div className="flex items-center gap-x-5">
-              <Button to="/configuration/user">Đóng</Button>
-              <Button
-                type="submit"
-                className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
-                onClick={handleSubmit(handleUpdateConfigUser)}
-              >
-                Lưu
-              </Button>
+              <Field>
+                <Label htmlFor="email">
+                  <span className="star-field">*</span>
+                  Email
+                </Label>
+                <Input
+                  control={control}
+                  name="email"
+                  placeholder="Nhập Email"
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="password">
+                  <span className="star-field">*</span>
+                  password
+                </Label>
+                <Input
+                  type="password"
+                  control={control}
+                  name="password"
+                  placeholder="Nhập password"
+                />
+              </Field>
+            </Row>
+            <Row>
+              <Field>
+                <Label htmlFor="role">
+                  <span className="star-field">*</span>Chức danh
+                </Label>
+                <Controller
+                  name="role"
+                  control={control}
+                  render={({ field }) => <RoleSelect {...field} />}
+                />
+              </Field>
+            </Row>
+          </form>
+          <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
+            <div className="flex justify-end w-full px-5">
+              <div className="flex items-center gap-x-5">
+                <Button to="/configuration/user">Đóng</Button>
+                <Button
+                  type="submit"
+                  className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"
+                  onClick={handleSubmit(handleUpdateConfigUser)}
+                >
+                  Lưu
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </Spin>
   );
 };
 

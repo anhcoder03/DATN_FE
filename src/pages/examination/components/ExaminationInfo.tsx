@@ -5,10 +5,7 @@ import { Field } from "../../../components/field";
 import { Label, LabelStatus } from "../../../components/label";
 import { Input } from "../../../components/input";
 import { IconPhone } from "../../../components/icons";
-import Flatpickr from "react-flatpickr";
-import { Vietnamese } from "flatpickr/dist/l10n/vn";
 import moment from "moment";
-import IconCalendar from "../../../assets/images/icon/ic_calendar-black.svg";
 import { useForm } from "react-hook-form";
 import { Textarea } from "../../../components/textarea";
 
