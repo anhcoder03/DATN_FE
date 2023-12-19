@@ -7,7 +7,7 @@ class Http {
   [x: string]: any;
   constructor() {
     this.api = axios.create({
-      baseURL: `http://localhost:8000`,
+      baseURL: `https://api-medipro.onrender.com`,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",

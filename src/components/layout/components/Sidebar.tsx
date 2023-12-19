@@ -148,7 +148,7 @@ const Sidebar = () => {
                 </NavLink>
               ))}
               <NavLink
-                to={"http://localhost:5174"}
+                to={"https://medipro-pos.vercel.app"}
                 target="_blank"
                 className={({ isActive }) =>
                   isActive

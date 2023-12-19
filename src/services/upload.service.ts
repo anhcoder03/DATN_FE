@@ -6,7 +6,7 @@ const http = new Http();
 export const uploadImage = async (data: any) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/images/upload",
+      "https://api-medipro.onrender.com/images/upload",
       data
     );
     return response.data;
