@@ -492,7 +492,7 @@ const PrescriptionAdd = () => {
           <div className="fixed bottom-0  py-5 bg-white left-[251px] shadowSidebar right-0">
             <div className="flex justify-end w-full px-5">
               <div className="flex items-center gap-x-5">
-                <Button to="/customer/list">Đóng</Button>
+                <Button to={`/examination/${id}/view`}>Đóng</Button>
                 <Button
                   type="submit"
                   className="flex items-center justify-center px-10 py-3 text-base font-semibold leading-4 text-white rounded-md disabled:opacity-50 disabled:pointer-events-none bg-primary"

@@ -63,7 +63,6 @@ const WelcomeUpdate = () => {
 
   const [day_welcome, setDayWelcome] = useState(new Date());
   const [data, setData] = useState<any>();
-  console.log("🚀 ~ file: WelcomeUpdate.tsx:66 ~ WelcomeUpdate ~ data:", data);
   const {
     control,
     handleSubmit,
@@ -92,7 +91,7 @@ const WelcomeUpdate = () => {
     content: () => componentRef.current,
     onAfterPrint: () => {
       setOpenModalPrint(false);
-      getExamination();
+      navigate("/reception");
     },
     copyStyles: true,
   });
@@ -343,6 +342,7 @@ const WelcomeUpdate = () => {
     setLoading(false);
     if (res?.examination) {
       toast.success("Tạo phiếu khám thành công!");
+      await getExamination();
       handlePrint();
     } else {
       toast.error(res?.message);

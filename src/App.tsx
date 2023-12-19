@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import { message } from "antd";
 
-export const socketIO = io("http://localhost:8000/", {
+export const socketIO = io("https://api-medipro.onrender.com/", {
   transports: ["websocket"],
 });
 
